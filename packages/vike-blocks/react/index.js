@@ -11,6 +11,7 @@ import './RadioGroupView.jsx' // side-effect: register the radio renderer
 import './SwitchView.jsx' // side-effect: register the switch renderer
 import './SliderView.jsx' // side-effect: register the slider renderer
 import './CalendarView.jsx' // side-effect: register the calendar renderer
+import './DatePickerView.jsx' // side-effect: register the date-picker renderer
 import './KbdView.jsx' // side-effect: register the kbd renderer
 import './ItemView.jsx' // side-effect: register the item renderer
 import './BubbleView.jsx' // side-effect: register the bubble renderer
@@ -36,6 +37,7 @@ export { RadioGroupView } from './RadioGroupView.jsx'
 export { SwitchView } from './SwitchView.jsx'
 export { SliderView } from './SliderView.jsx'
 export { CalendarView } from './CalendarView.jsx'
+export { DatePickerView } from './DatePickerView.jsx'
 export { KbdView } from './KbdView.jsx'
 export { ItemView } from './ItemView.jsx'
 export { BubbleView } from './BubbleView.jsx'
@@ -48,6 +50,7 @@ export { DialogView } from './DialogView.jsx'
 export { SheetView } from './SheetView.jsx'
 export { DrawerView } from './DrawerView.jsx'
 export { Overlay, useOverlay } from './overlay.jsx'
+export { Popover, usePopover } from './popover.jsx'
 export { CardView } from './CardView.jsx'
 export { FieldView } from './FieldView.jsx'
 export { AttachmentView } from './AttachmentView.jsx'

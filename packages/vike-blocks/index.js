@@ -13,6 +13,7 @@ import './radio.js' // side-effect: register the radio block
 import './switch.js' // side-effect: register the switch block
 import './slider.js' // side-effect: register the slider block
 import './calendar.js' // side-effect: register the calendar block
+import './date-picker.js' // side-effect: register the date-picker block
 import './kbd.js' // side-effect: register the kbd block
 import './item.js' // side-effect: register the item block
 import './bubble.js' // side-effect: register the bubble block
@@ -39,6 +40,7 @@ export { radioGroup } from './radio.js'
 export { toggle } from './switch.js'
 export { slider } from './slider.js'
 export { calendar } from './calendar.js'
+export { datePicker } from './date-picker.js'
 export { kbd } from './kbd.js'
 export { item } from './item.js'
 export { bubble } from './bubble.js'
