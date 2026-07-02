@@ -15,6 +15,7 @@
     "./dropdown": "./dropdown.js",
     "./nav-menu": "./nav-menu.js",
     "./toast": "./toast-store.js",
+    "./chart": "./chart.js",
     "./card": "./card.js",
     "./button": "./button.js",
     "./alert": "./alert.js",
@@ -31,6 +32,7 @@
     "./react/NavMenuView": "./react/NavMenuView.jsx",
     "./react/popover": "./react/popover.jsx",
     "./react/Toaster": "./react/Toaster.jsx",
+    "./react/ChartView": "./react/ChartView.jsx",
     "./react/CardView": "./react/CardView.jsx",
     "./react/ButtonView": "./react/ButtonView.jsx",
     "./react/AlertView": "./react/AlertView.jsx",
@@ -47,6 +49,7 @@
     "./vue/NavMenuView": "./vue/NavMenuView.js",
     "./vue/popover": "./vue/popover.js",
     "./vue/Toaster": "./vue/Toaster.js",
+    "./vue/ChartView": "./vue/ChartView.js",
     "./vue/CardView": "./vue/CardView.js",
     "./vue/ButtonView": "./vue/ButtonView.js",
     "./vue/AlertView": "./vue/AlertView.js"
