@@ -10,6 +10,7 @@ import './RadioGroupView.js' // side-effect: register the radio renderer
 import './SwitchView.js' // side-effect: register the switch renderer
 import './KbdView.js' // side-effect: register the kbd renderer
 import './ItemView.js' // side-effect: register the item renderer
+import './BubbleView.js' // side-effect: register the bubble renderer
 import './AlertView.js' // side-effect: register the alert renderer
 import './TabsView.js' // side-effect: register the tabs renderer
 import './AccordionView.js' // side-effect: register the accordion renderer
@@ -27,6 +28,7 @@ export { RadioGroupView } from './RadioGroupView.js'
 export { SwitchView } from './SwitchView.js'
 export { KbdView } from './KbdView.js'
 export { ItemView } from './ItemView.js'
+export { BubbleView } from './BubbleView.js'
 export { AlertView } from './AlertView.js'
 export { TabsView } from './TabsView.js'
 export { AccordionView } from './AccordionView.js'
