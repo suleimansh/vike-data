@@ -15,6 +15,7 @@ import './slider.js' // side-effect: register the slider block
 import './calendar.js' // side-effect: register the calendar block
 import './date-picker.js' // side-effect: register the date-picker block
 import './dropdown.js' // side-effect: register the dropdown block
+import './nav-menu.js' // side-effect: register the nav-menu block
 import './kbd.js' // side-effect: register the kbd block
 import './item.js' // side-effect: register the item block
 import './bubble.js' // side-effect: register the bubble block
@@ -43,6 +44,7 @@ export { slider } from './slider.js'
 export { calendar } from './calendar.js'
 export { datePicker } from './date-picker.js'
 export { dropdown } from './dropdown.js'
+export { navMenu } from './nav-menu.js'
 export { kbd } from './kbd.js'
 export { item } from './item.js'
 export { bubble } from './bubble.js'
