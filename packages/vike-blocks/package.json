@@ -20,6 +20,7 @@
     "./button": "./button.js",
     "./alert": "./alert.js",
     "./code": "./code.js",
+    "./markdown": "./markdown.js",
     "./react": "./react/index.js",
     "./react/registry": "./react/registry.js",
     "./react/Blocks": "./react/Blocks.jsx",

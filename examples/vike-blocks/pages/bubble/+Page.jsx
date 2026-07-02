@@ -2,11 +2,8 @@
 // + <Blocks>): a sender-aligned chat bubble for AI chat UIs. `bubble(text).from('user')` right-aligns
 // with the primary color; assistant bubbles left-align on the surface color. A bubble can also hold a
 // rich body of nested blocks (here a markdown block). Theme-native — every color reads a vike-themes CSS var.
-import { definePage, resolvePage, bubble } from 'vike-blocks'
+import { definePage, resolvePage, bubble, markdown } from 'vike-blocks'
 import { Blocks } from 'vike-blocks/react'
-
-// The bespoke `markdown` block is authored as a raw descriptor (it has no fluent builder).
-const md = (source) => ({ block: 'markdown', source })
 
 const Show = (builders) => <Blocks sections={resolvePage(definePage({ sections: builders })).sections} />
 
@@ -22,7 +19,7 @@ export default function BubblePage() {
       <div style={{ margin: '1rem 0' }}>
         {Show([
           bubble('How do I add a migration in Rudder?').from('user'),
-          bubble([md('Run `pnpm rudder migrate` — it applies pending migrations and regenerates the typed registry.')]).from('assistant'),
+          bubble([markdown('Run `pnpm rudder migrate` — it applies pending migrations and regenerates the typed registry.')]).from('assistant'),
           bubble('And to just regenerate the types?').from('user'),
           bubble('Use `pnpm rudder schema:types`, no migration needed.').from('assistant'),
         ])}

@@ -2,11 +2,10 @@
 // (resolvePage + <Blocks>): a chat bubble plus its avatar, author, and timestamp, aligned by sender.
 // A message composes the `bubble` block for its body, which can be plain text or nested blocks (here a
 // markdown block). Theme-native — every color reads a vike-themes CSS var.
-import { definePage, resolvePage, message } from 'vike-blocks'
+import { definePage, resolvePage, message, markdown } from 'vike-blocks'
 import { Blocks } from 'vike-blocks/react'
 
 const Show = (builders) => <Blocks sections={resolvePage(definePage({ sections: builders })).sections} />
-const md = (source) => ({ block: 'markdown', source })
 
 export default function MessagePage() {
   return (
@@ -24,7 +23,7 @@ export default function MessagePage() {
             .from('assistant')
             .author('Rudder')
             .at('9:41 AM')
-            .body([md('Run `pnpm rudder migrate` — it applies pending migrations and regenerates the typed registry.')]),
+            .body([markdown('Run `pnpm rudder migrate` — it applies pending migrations and regenerates the typed registry.')]),
           message().from('user').author('You').at('9:42 AM').body('And to just regenerate the types?'),
           message().from('assistant').author('Rudder').at('9:42 AM').body('Use `pnpm rudder schema:types`, no migration needed.'),
         ])}
