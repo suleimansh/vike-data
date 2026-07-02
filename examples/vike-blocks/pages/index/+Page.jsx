@@ -5,6 +5,7 @@ const catalog = [
   { name: 'Accordion', href: '/accordion', tag: 'interactive', desc: 'Expand/collapse sections with an animated height morph. Single or multi-open; each panel composes other blocks.' },
   { name: 'Dialog', href: '/dialog', tag: 'interactive', desc: 'A modal overlay with a portal, focus trap, Escape / outside-click, and scroll-lock. Dep-free; holds nested blocks.' },
   { name: 'Sheet', href: '/sheet', tag: 'interactive', desc: 'A side panel anchored to a screen edge (right / left / top / bottom), sliding in. Shares the dialog overlay; holds nested blocks.' },
+  { name: 'Drawer', href: '/drawer', tag: 'interactive', desc: 'An edge-anchored panel with a drag-to-dismiss grabber (default bottom). Drag the handle toward the edge to flick it closed.' },
   { name: 'Card', href: '/card', tag: 'container', desc: 'A bordered surface with an optional header + footer, wrapping nested blocks. The most-used building block; cards compose recursively.' },
   { name: 'Field', href: '/field', tag: 'container', desc: 'A form-field shell: a label + control slot + description + error, wrapping a control block. The hand-authored field shell that schema forms share.' },
   { name: 'Attachment', href: '/attachment', tag: 'form', desc: 'A file-upload control — a dashed drop zone (click or drag) plus a removable list of selected files. accept / multiple, theme-native.' },
