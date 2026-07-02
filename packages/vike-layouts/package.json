@@ -20,12 +20,23 @@
     "vike-vue": ">=0.9"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "vike-react": { "optional": true },
-    "vue": { "optional": true },
-    "vike-vue": { "optional": true }
+    "react": {
+      "optional": true
+    },
+    "vike-react": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    },
+    "vike-vue": {
+      "optional": true
+    }
   },
   "scripts": {
     "test": "node --test"
+  },
+  "dependencies": {
+    "vike-blocks": "workspace:*"
   }
 }

@@ -26,6 +26,10 @@ export default ({ mode }) => {
     // vike-react renders with the automatic JSX runtime (imports react/jsx-runtime),
     // so no `import React` is needed in components. Applies to app + workspace .jsx.
     esbuild: { jsx: 'automatic' },
+    // Force ONE React copy. The workspace UI packages are served as source (below) and each
+    // has its own react peer link; without dedupe a cross-package import (e.g. vike-layouts ->
+    // vike-blocks) can resolve a second React and crash SSR with a null `useContext`.
+    resolve: { dedupe: ['react', 'react-dom', 'react/jsx-runtime'] },
     // The workspace UI packages are plain .jsx source (incl. the pointer-imported
     // Wrapper/Layout components Vike pulls in); serve them as source instead of
     // pre-bundling, so esbuild's automatic-JSX transform applies uniformly.

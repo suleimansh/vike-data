@@ -5,7 +5,7 @@
 // node:test-tested (JSX); this covers the agnostic authoring + resolve.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { layout, slot, heading, text, button, definePage, resolvePage, hasBlock, listBlocks } from '../index.js'
+import { layout, slot, heading, text, button, definePage, resolvePage, hasBlock, listBlocks, isActivePath } from '../index.js'
 
 test('layout and slot are registered blocks', () => {
   assert.ok(hasBlock('layout'))
@@ -112,4 +112,28 @@ test('layout and slot appear in the registry listing', () => {
   const all = listBlocks()
   assert.ok(all.includes('layout'))
   assert.ok(all.includes('slot'))
+})
+
+test("slot from('content') carries the content wiring (the live page body, filled by the renderer)", () => {
+  const model = resolvePage(definePage({ sections: [slot('body').from('content')] })).sections[0].resolved
+  assert.equal(model.from, 'content')
+  assert.deepEqual(model.sections, [])
+})
+
+test("slot .only('start'|'end') is preserved on the descriptor and resolved model", () => {
+  assert.equal(slot('nav').from('config').only('start').build().only, 'start')
+  const model = resolvePage(definePage({ sections: [slot('nav').from('config').only('end')] })).sections[0].resolved
+  assert.equal(model.only, 'end')
+})
+
+test('isActivePath: root is exact-match, others match self + descendants, trailing slash/query ignored', () => {
+  assert.equal(isActivePath('/', '/'), true)
+  assert.equal(isActivePath('/admin', '/'), false) // root does not light up everywhere
+  assert.equal(isActivePath('/admin/users', '/admin'), true) // descendant
+  assert.equal(isActivePath('/admin', '/admin'), true)
+  assert.equal(isActivePath('/adminium', '/admin'), false) // prefix but not a path segment
+  assert.equal(isActivePath('/admin/', '/admin'), true) // trailing slash ignored
+  assert.equal(isActivePath('/admin?tab=1', '/admin'), true) // query ignored
+  assert.equal(isActivePath('', '/admin'), false)
+  assert.equal(isActivePath('/admin', ''), false)
 })

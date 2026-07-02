@@ -15,6 +15,10 @@ export default ({ mode }) => {
     // vike-rbac's Telefunc seam (#110/#128) is wired in pages/+config.js (`middleware` +
     // `client`), one universal middleware for dev AND prod; no dev-only Vite plugin.
     plugins: [vike(), vue(), vikeI18n(), telefunc()],
+    // Force ONE Vue copy: the workspace UI packages are served as source and each has its own vue
+    // peer link, so a cross-package import (vike-layouts -> vike-blocks) could otherwise resolve a
+    // second Vue and break provide/inject across the boundary.
+    resolve: { dedupe: ['vue'] },
     optimizeDeps: {
       exclude: ['vike-admin', 'vike-auth', 'vike-themes', 'vike-layouts', 'vike-toolbar', 'vike-i18n', 'vike-theme-emerald', 'vike-push'],
     },

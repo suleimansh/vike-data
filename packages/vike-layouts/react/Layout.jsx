@@ -1,19 +1,19 @@
-// <Layout> — picks the shell by name and renders the children inside it. The
-// SELECTION + slot resolution is the framework-agnostic core's job (vike-layouts
-// defineLayout); this only maps a resolved shell name to its React component.
-//
-// The component map mirrors vike-layouts' open registry: pass `shells` to add a
-// component for a shell a third-party registered via registerShell().
+// <Layout> — the manual wrapper: pick a frame by name and render children inside it, for a page
+// that mounts the shell itself instead of via the `layout:` config + ConfigLayout. Since #401 it
+// renders through the block LayoutView like ConfigLayout does, so both paths share one engine.
+// Importing ./ConfigLayout registers the topbar/sidebar variants (centered is the block builtin).
+// A manual mount has no pageContext, so a config nav won't highlight here — use the `layout:` config
+// path (ConfigLayout) when you want active-nav.
+import { LayoutConfigProvider, LayoutView } from 'vike-blocks/react/LayoutView'
 import { defineLayout } from '../index.js'
-import { CenteredShell } from './shells/CenteredShell.jsx'
-import { TopbarShell } from './shells/TopbarShell.jsx'
-import { SidebarShell } from './shells/SidebarShell.jsx'
-
-const BUILTIN = { centered: CenteredShell, topbar: TopbarShell, sidebar: SidebarShell }
+import './ConfigLayout.jsx' // side-effect: registers the topbar/sidebar shells
 
 export function Layout({ children, shells = {}, ...config }) {
   const resolved = defineLayout(config)
-  const components = { ...BUILTIN, ...shells }
-  const Shell = components[resolved.shell] || CenteredShell
-  return <Shell layout={resolved}>{children}</Shell>
+  const chrome = { ...resolved.slots, dir: resolved.dir }
+  return (
+    <LayoutConfigProvider config={chrome}>
+      <LayoutView variant={resolved.shell} content={children} shells={shells} />
+    </LayoutConfigProvider>
+  )
 }

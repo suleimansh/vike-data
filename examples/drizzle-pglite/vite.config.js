@@ -14,6 +14,10 @@ export default {
   // (English ships inline as the fallback). It must come after vike().
   plugins: [vike(), vikeI18n(), vikeSchema()],
   esbuild: { jsx: 'automatic' },
+  // Force ONE React copy: the workspace UI packages are served as source and each has its own
+  // react peer link, so a cross-package import (vike-layouts -> vike-blocks) could otherwise
+  // resolve a second React and crash SSR with a null `useContext`.
+  resolve: { dedupe: ['react', 'react-dom', 'react/jsx-runtime'] },
   optimizeDeps: {
     exclude: ['vike-admin', 'vike-auth', 'vike-themes', 'vike-layouts', 'vike-theme-emerald', 'vike-i18n'],
   },
