@@ -45,9 +45,7 @@ top and chooses the concrete ORM.
 
 > The UI substrate is its own small spine: `vike-blocks` (render) + `vike-actions` (mutate)
 > are schema-agnostic primitives; `vike-crud` is the reusable schema → CRUD engine over both;
-> `vike-admin` is a thin preset that points it at every composed table. See the README's
-> [How the packages fit together](README.md#how-the-packages-fit-together) for the graph as a
-> diagram.
+> `vike-admin` is a thin preset that points it at every composed table.
 
 **Three npm scopes, by role:**
 
