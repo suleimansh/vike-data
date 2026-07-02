@@ -34,8 +34,10 @@ function initialView(month, value) {
   return { year: now.getFullYear(), monthIndex: now.getMonth() }
 }
 
+// `onSelect(iso)` (optional) fires when a day is picked, so a host like `date-picker` can reflect the
+// selection in its trigger and close the popover; the grid still tracks its own selection for standalone use.
 export const CalendarView = {
-  props: ['value', 'month', 'min', 'max', 'weekStartsOn', 'name'],
+  props: ['value', 'month', 'min', 'max', 'weekStartsOn', 'name', 'onSelect'],
   setup(props) {
     const selected = ref(props.value ?? null)
     const view = ref(initialView(props.month, props.value))
@@ -50,6 +52,7 @@ export const CalendarView = {
         if (isDisabled(day.iso, props.min, props.max)) return
         selected.value = day.iso
         if (!day.inMonth) view.value = { year: day.year, monthIndex: day.monthIndex }
+        props.onSelect?.(day.iso)
       }
 
       const header = h('div', { style: calendarHeaderStyle() }, [
