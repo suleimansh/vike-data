@@ -17,10 +17,19 @@
 // serializable config); `link().to(path)` covers declarative navigation meanwhile.
 import { defineBlock } from './registry.js'
 
-// A run of text. `.tone()` is an advisory style token ('muted' / 'danger' / ...).
+// A run of text on the shadcn Base typography surface. `.variant()` picks the text style
+// ('lead' / 'muted' / 'blockquote' / 'code'; default is a plain span); `.tone()` is the advisory
+// color token ('muted' / 'danger' / ...) and composes with a variant.
 export const text = defineBlock('text', {
   build: (value) => ({ value }),
-  refine: { tone: (token) => ({ tone: token }) },
+  refine: { variant: (v) => ({ variant: v }), tone: (token) => ({ tone: token }) },
+})
+
+// A list, unordered by default. `.ordered()` makes it a numbered (<ol>) list. `items` is an array
+// of strings — the display-only shadcn list surface (indented, spaced items).
+export const list = defineBlock('list', {
+  build: (items) => ({ items: items ?? [], ordered: false }),
+  refine: { ordered: () => ({ ordered: true }) },
 })
 
 // A section heading. `.level()` sets the rank (1-6); defaults to 2.

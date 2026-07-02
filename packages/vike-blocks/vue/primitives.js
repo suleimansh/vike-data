@@ -6,11 +6,26 @@
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
 import { badgeStyle } from '../badge-styles.js'
+import { resolveTextStyle, listStyle, listItemStyle } from '../typography-styles.js'
 
 const TONE = { muted: 'var(--color-muted)', danger: 'var(--color-danger, #dc2626)', success: 'var(--color-success, #16a34a)', info: 'var(--color-primary, #2563eb)' }
 
-export const Text = (props) => h('span', { style: { color: props.tone ? (TONE[props.tone] ?? 'inherit') : 'var(--color-text, inherit)' } }, props.value)
-Text.props = ['value', 'tone']
+// A run of text on the shadcn Base typography surface: `.variant()` picks lead / muted /
+// blockquote / inline code (default is a plain span); a known `.tone()` tints the color.
+export const Text = (props) => {
+  const { tag, style } = resolveTextStyle(props.variant, props.tone)
+  return h(tag, { style }, props.value)
+}
+Text.props = ['value', 'variant', 'tone']
+
+// An ordered/unordered list of strings on the shadcn list surface.
+export const List = (props) =>
+  h(
+    props.ordered ? 'ol' : 'ul',
+    { style: listStyle(props.ordered) },
+    (props.items ?? []).map((item) => h('li', { style: listItemStyle }, item)),
+  )
+List.props = ['items', 'ordered']
 
 // Top margin scales with level so sections breathe: a page-title h1 stays flush (usually the first
 // block on a page), while an h2/h3 section heading separates from the block above it.
@@ -42,6 +57,7 @@ export const Stat = (props) =>
 Stat.props = ['title', 'value']
 
 registerBlockRenderer('text', Text)
+registerBlockRenderer('list', List)
 registerBlockRenderer('heading', Heading)
 registerBlockRenderer('badge', Badge)
 registerBlockRenderer('divider', Divider)

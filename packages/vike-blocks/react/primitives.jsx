@@ -5,11 +5,27 @@
 // built-ins as a side effect (Blocks.jsx imports it for exactly that).
 import { registerBlockRenderer } from './registry.js'
 import { badgeStyle } from '../badge-styles.js'
+import { resolveTextStyle, listStyle, listItemStyle } from '../typography-styles.js'
 
 const TONE = { muted: 'var(--color-muted)', danger: 'var(--color-danger, #dc2626)', success: 'var(--color-success, #16a34a)', info: 'var(--color-primary, #2563eb)' }
 
-export function Text({ value, tone }) {
-  return <span style={{ color: tone ? (TONE[tone] ?? 'inherit') : 'var(--color-text, inherit)' }}>{value}</span>
+// A run of text on the shadcn Base typography surface: `.variant()` picks lead / muted /
+// blockquote / inline code (default is a plain span); a known `.tone()` tints the color.
+export function Text({ value, variant, tone }) {
+  const { tag: Tag, style } = resolveTextStyle(variant, tone)
+  return <Tag style={style}>{value}</Tag>
+}
+
+// An ordered/unordered list of strings on the shadcn list surface.
+export function List({ items = [], ordered }) {
+  const Tag = ordered ? 'ol' : 'ul'
+  return (
+    <Tag style={listStyle(ordered)}>
+      {items.map((item, i) => (
+        <li key={i} style={listItemStyle}>{item}</li>
+      ))}
+    </Tag>
+  )
 }
 
 // Top margin scales with level so sections breathe: a page-title h1 stays flush (usually the first
@@ -56,6 +72,7 @@ export function Stat({ title, value }) {
 }
 
 registerBlockRenderer('text', Text)
+registerBlockRenderer('list', List)
 registerBlockRenderer('heading', Heading)
 registerBlockRenderer('badge', Badge)
 registerBlockRenderer('divider', Divider)

@@ -8,7 +8,7 @@ import { Page } from 'vike-blocks/react'
 const page = definePage({
   sections: [
     heading('Heading block').level(1),
-    text('Six levels, h1 through h6. The top margin scales with the level, so section headings separate from the block above them while the page title stays flush at the top.').tone('muted'),
+    text('Six levels, h1 through h6. The top margin scales with the level, so section headings separate from the block above them while the page title stays flush at the top.').variant('lead'),
 
     heading('Section (h2)').level(2),
     text('An h2 gets the most top space — it reads as a new section after the text above it.'),
