@@ -20,7 +20,7 @@ export default function ActionsDemoPage() {
       .empty('No posts yet.')
       .rowActions([
         button('Publish').variant('default').size('sm').action('publish').params({ id: '$row.id' }),
-        button('Delete').variant('destructive').size('sm').action('delete-post').params({ id: '$row.id' }),
+        button('Delete').variant('destructive').size('sm').action('posts.delete').params({ id: '$row.id' }),
       ]),
   ]
 

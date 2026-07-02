@@ -5,7 +5,7 @@
 // we hand-build the handler only to inject the same fixed demo identity as +onCreatePageContext.js,
 // since this example carries no auth.
 import { defineAction, createActionsHandler } from 'vike-actions'
-import { buildDb, resolveViewTables } from 'vike-view/resolve'
+import { buildDb, resolveViewTables, crudActions } from 'vike-view'
 import { postsSchema } from './posts.schema.js'
 
 // The same demo identity +onCreatePageContext.js puts on pageContext.user. A real app deletes this
@@ -32,17 +32,10 @@ defineAction('publish', {
   onSuccess: (post) => ({ toast: post ? `Published "${post.title}"` : 'Published', reload: true }),
 })
 
-// Delete, owner-scoped the same way. Shown as a per-row action on the table demo.
-defineAction('delete-post', {
-  input: { id: 'string' },
-  guard: 'authed',
-  async run({ input, user }) {
-    const db = buildDb(tables)
-    const post = await db.posts.findOne({ id: input.id, user_id: user.id })
-    await db.posts.delete({ id: input.id, user_id: user.id })
-    return post
-  },
-  onSuccess: (post) => ({ toast: post ? `Deleted "${post.title}"` : 'Deleted', reload: true }),
-})
+// Generic create/update/delete for posts, owner-scoped, in ONE call — the crudActions preset (vs the
+// hand-written `publish` domain action above). Registers posts.create / posts.update / posts.delete;
+// the table demo points its Delete button at `posts.delete`. The scope is the same owner contract as
+// +views.js. A result-naming toast is left to the default 'reload'; override per action if wanted.
+crudActions({ table: 'posts', tables, scope: (table, ctx) => ({ user_id: ctx.user.id }) })
 
 export default createActionsHandler({ resolveUser: async () => demoUser })
