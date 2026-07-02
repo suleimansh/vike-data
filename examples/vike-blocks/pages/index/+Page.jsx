@@ -22,6 +22,7 @@ const catalog = [
   { name: 'Date-picker', href: '/date-picker', tag: 'form', desc: 'A calendar in a popover — click the input-like trigger to open the grid, pick a day to fill it. Outside-click / Escape close. Reuses usePopover.' },
   { name: 'Dropdown-menu', href: '/dropdown', tag: 'interactive', desc: 'A trigger that opens a floating menu of items (links or buttons) anchored below it. Arrow-key nav, outside-click / Escape close. Reuses usePopover.' },
   { name: 'Navigation-menu', href: '/nav-menu', tag: 'interactive', desc: 'A horizontal bar of links + dropdown sections (title + description per link), one open at a time. Arrow-key nav, outside-click / Escape close.' },
+  { name: 'Toast', href: '/toast', tag: 'interactive', desc: 'Transient notifications fired imperatively (Sonner-style) — toast("Saved") / toast.success(...). Stack in a corner, auto-dismiss, closeable. Mount <Toaster> once.' },
   { name: 'Kbd', href: '/kbd', tag: 'leaf', desc: 'Keyboard key caps for documenting shortcuts — kbd("Esc") or kbd(["Cmd", "K"]). Static, theme-native.' },
   { name: 'Item', href: '/item', tag: 'leaf', desc: 'A reusable list row — leading media + title + description + trailing note. Composes in any container. Theme-native.' },
   { name: 'Bubble', href: '/bubble', tag: 'leaf', desc: 'A chat message bubble, sender-aligned (user / assistant). Holds text or nested blocks (markdown). For AI chat UIs.' },
