@@ -12,6 +12,7 @@ import './SwitchView.jsx' // side-effect: register the switch renderer
 import './KbdView.jsx' // side-effect: register the kbd renderer
 import './ItemView.jsx' // side-effect: register the item renderer
 import './BubbleView.jsx' // side-effect: register the bubble renderer
+import './MessageView.jsx' // side-effect: register the message renderer
 import './AlertView.jsx' // side-effect: register the alert renderer
 import './TabsView.jsx' // side-effect: register the tabs renderer
 import './AccordionView.jsx' // side-effect: register the accordion renderer
@@ -30,6 +31,7 @@ export { SwitchView } from './SwitchView.jsx'
 export { KbdView } from './KbdView.jsx'
 export { ItemView } from './ItemView.jsx'
 export { BubbleView } from './BubbleView.jsx'
+export { MessageView } from './MessageView.jsx'
 export { AlertView } from './AlertView.jsx'
 export { TabsView } from './TabsView.jsx'
 export { AccordionView } from './AccordionView.jsx'
