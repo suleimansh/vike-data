@@ -1,0 +1,5 @@
+---
+'vike-blocks': minor
+---
+
+vike-blocks: add the `attachment` block (#437) — a dep-free, theme-native file-upload control. `attachment('Drop files').accept('image/*,.pdf').multiple()` sets the drop-zone prompt, the accepted types, and single/multiple, with `.disabled()`, `.name(...)`, and `.files([...])` to declare pre-selected attachments (each `{ name, size, type }`). It renders a dashed drop zone (a `<label>` wrapping a hidden file input, so a click opens the picker and a drag highlights the border going primary) above the list of selected files, each with its formatted size and a remove button. It lists its own selection (local UI state), so declared `files` are the initial list and SSR agrees with the first client render; value binding and the real upload are the data/actions axis (#385). The zone, the file rows, the upload icon, and the byte formatter live in a shared `attachment-styles.js` module imported by both the React and Vue renderers, so the surface can't drift. Every color reads a vike-themes CSS var; composes inside the `field` block (#426).
