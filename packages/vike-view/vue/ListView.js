@@ -2,7 +2,9 @@
 // it draws columns + rows; it also carries the options a full admin list needs (fkLabels,
 // sort/dir/sortHref for sortable header links, rowHref for a per-row action), all optional, so
 // vike-admin/vue can render its list THROUGH this one component.
+import './widgets.js' // side-effect: registers the built-in widgets (and any app slot registers alongside)
 import { h } from 'vue'
+import { getFieldWidget } from './widget-registry.js'
 
 const cell = { padding: '0.5rem 0.75rem', borderBottom: '1px solid var(--color-border)', textAlign: 'left', fontSize: '14px' }
 const th = { ...cell, color: 'var(--color-muted)', fontWeight: 600 }
@@ -48,9 +50,13 @@ export const ListView = (props) => {
     rows.length === 0
       ? [h('tr', [h('td', { style: { ...cell, color: 'var(--color-muted)' }, colspan: columns.length + (hasActions ? 1 : 0) || 1 }, emptyLabel)])]
       : rows.map((row, i) => {
-          const tds = columns.map((c) =>
-            h('td', { key: c.name, style: cell }, props.fkLabels?.[c.name]?.[row[c.name]] ?? formatValue(row[c.name], c.format)),
-          )
+          const tds = columns.map((c) => {
+            // A slot override renders the app's registered cell component with `{ field, value, row }`;
+            // an unregistered token falls back to the derived cell.
+            const Slot = c.slot ? getFieldWidget(c.slot) : null
+            const content = Slot ? h(Slot, { field: c, value: row[c.name], row }) : (props.fkLabels?.[c.name]?.[row[c.name]] ?? formatValue(row[c.name], c.format))
+            return h('td', { key: c.name, style: cell }, content)
+          })
           if (hasActions) {
             tds.push(
               h('td', { style: { ...cell, textAlign: 'right', whiteSpace: 'nowrap' } }, h('a', { href: props.rowHref(row), style: { color: 'var(--color-primary)', fontSize: '14px' } }, props.rowActionLabel ?? 'Edit')),

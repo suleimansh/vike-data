@@ -55,9 +55,12 @@ export function crudBlocks(opts) {
   // that boundary. resolve.js already accepts either a builder or a plain spec, so nothing downstream
   // changes. (A view built by hand can also pass plain specs directly.)
   const plain = (arr) => arr?.map((e) => (typeof e?.build === 'function' ? e.build() : e))
+  // A view-level `slots: { field: token }` map is plain, serializable data (string tokens,
+  // not components), so it rides into each block descriptor and the field derivation reads it.
+  const slots = cfg.slots ? { slots: cfg.slots } : {}
   return [
-    { block: 'list', table: cfg.table, ...(cfg.list ? { list: plain(cfg.list) } : {}) },
-    { block: 'record', table: cfg.table, ...(cfg.record ? { record: plain(cfg.record) } : {}) },
-    { block: 'form', table: cfg.table, ...(cfg.form ? { form: plain(cfg.form) } : {}) },
+    { block: 'list', table: cfg.table, ...slots, ...(cfg.list ? { list: plain(cfg.list) } : {}) },
+    { block: 'record', table: cfg.table, ...slots, ...(cfg.record ? { record: plain(cfg.record) } : {}) },
+    { block: 'form', table: cfg.table, ...slots, ...(cfg.form ? { form: plain(cfg.form) } : {}) },
   ]
 }

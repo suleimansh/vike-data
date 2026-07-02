@@ -4,6 +4,7 @@
 // blocks are not lock-in: adopt one on a page you already have, keep everything else.
 import { useData } from 'vike-react/useData'
 import { ListView } from 'vike-view/react'
+import './PublishedBadge.jsx' // side-effect: registers the 'published-badge' slot component (server + client)
 
 export default function InlinePage() {
   const { columns, rows } = useData()
@@ -12,7 +13,9 @@ export default function InlinePage() {
       <h1 style={{ marginTop: 0 }}>Inline block (no page-gen)</h1>
       <p>
         This page is ordinary vike-react code. The table below is vike-view's <code>&lt;ListView&gt;</code> block, dropped
-        in directly -- same <code>posts</code> schema, no generated page.
+        in directly -- same <code>posts</code> schema, no generated page. The <b>Published</b> column is a <b>slot
+        override</b>: <code>column('published').slot('published-badge')</code> renders our own pill component instead of
+        the derived cell.
       </p>
       <ListView table="posts" columns={columns} rows={rows} emptyLabel="No posts yet." />
       <p style={{ marginTop: '1.5rem' }}>
