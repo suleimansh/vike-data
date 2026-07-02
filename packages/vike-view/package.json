@@ -8,6 +8,7 @@
     ".": "./index.js",
     "./view": "./view.js",
     "./schema-blocks": "./schema-blocks.js",
+    "./actions": "./actions.js",
     "./define": "./define.js",
     "./resolve": "./resolve.js",
     "./project": "./project.js",
@@ -41,6 +42,7 @@
     "@universal-orm/memory": "workspace:*",
     "@vike-data/kit": "workspace:*",
     "@vike-data/vike-schema": "workspace:*",
+    "vike-actions": "workspace:*",
     "vike-blocks": "workspace:*"
   },
   "peerDependencies": {

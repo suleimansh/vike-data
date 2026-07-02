@@ -8,6 +8,7 @@ export { definePage, resolvePage, registerBlock, getBlock, hasBlock, listBlocks,
 export { resolvePage as resolveView } from 'vike-blocks'
 export { defineView } from './view.js' // side-effect: registers list / record / form
 export { crudBlocks } from './schema-blocks.js'
+export { crudActions } from './actions.js' // register owner-scoped create/update/delete actions for a table
 export { crud, column, display, field } from './define.js'
 export {
   resolveViewTables,
