@@ -3,7 +3,7 @@
 // Importing this root registers the bespoke blocks (stat/markdown/custom), the leaf
 // primitives (text/heading/badge/divider/link), and the tabs container block. vike-view
 // layers schema-driven blocks on top; a per-framework package registers the renderers.
-import './blocks.js' // side-effect: register stat / markdown / custom
+import './blocks.js' // side-effect: register stat / custom
 import './primitives.js' // side-effect: register text / heading / badge / divider / link / list
 import './button.js' // side-effect: register the button block
 import './input.js' // side-effect: register the input block
@@ -32,6 +32,7 @@ import './card.js' // side-effect: register the card container block
 import './field.js' // side-effect: register the field container block
 import './attachment.js' // side-effect: register the attachment block
 import './code.js' // side-effect: register the code block
+import './markdown.js' // side-effect: register the markdown block
 
 export { definePage, resolvePage } from './page.js'
 export { registerBlock, getBlock, hasBlock, listBlocks, defineBlock } from './registry.js'
@@ -64,3 +65,4 @@ export { card } from './card.js'
 export { field } from './field.js'
 export { attachment } from './attachment.js'
 export { code } from './code.js'
+export { markdown } from './markdown.js'
