@@ -8,6 +8,7 @@ const catalog = [
   { name: 'Drawer', href: '/drawer', tag: 'interactive', desc: 'An edge-anchored panel with a drag-to-dismiss grabber (default bottom). Drag the handle toward the edge to flick it closed.' },
   { name: 'Card', href: '/card', tag: 'container', desc: 'A bordered surface with an optional header + footer, wrapping nested blocks. The most-used building block; cards compose recursively.' },
   { name: 'Field', href: '/field', tag: 'container', desc: 'A form-field shell: a label + control slot + description + error, wrapping a control block. The hand-authored field shell that schema forms share.' },
+  { name: 'Form', href: '/form', tag: 'container', desc: 'A non-schema form: group field + control blocks in a real, ready-to-post <form> with a submit button. Native HTML POST (method / action) — works with progressive enhancement, zero client JS. The create/edit workhorse.' },
   { name: 'Attachment', href: '/attachment', tag: 'form', desc: 'A file-upload control — a dashed drop zone (click or drag) plus a removable list of selected files. accept / multiple, theme-native.' },
   { name: 'Headings', href: '/heading', tag: 'leaf', desc: 'Six levels (h1-h6) with level-scaled top spacing, so sections breathe. Theme-native text color.' },
   { name: 'Alert', href: '/alert', tag: 'leaf', desc: 'The shadcn Radix alert — a bordered notice with an accent icon, title, and description; info / success / warning / danger. Dep-free.' },

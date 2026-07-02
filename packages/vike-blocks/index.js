@@ -30,6 +30,7 @@ import './sheet.js' // side-effect: register the sheet container block
 import './drawer.js' // side-effect: register the drawer container block
 import './card.js' // side-effect: register the card container block
 import './field.js' // side-effect: register the field container block
+import './form.js' // side-effect: register the form container block
 import './attachment.js' // side-effect: register the attachment block
 import './code.js' // side-effect: register the code block
 import './markdown.js' // side-effect: register the markdown block
@@ -64,6 +65,7 @@ export { sheet } from './sheet.js'
 export { drawer } from './drawer.js'
 export { card } from './card.js'
 export { field } from './field.js'
+export { form } from './form.js'
 export { attachment } from './attachment.js'
 export { code } from './code.js'
 export { markdown } from './markdown.js'
