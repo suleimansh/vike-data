@@ -12,6 +12,7 @@ import './checkbox.js' // side-effect: register the checkbox block
 import './radio.js' // side-effect: register the radio block
 import './switch.js' // side-effect: register the switch block
 import './kbd.js' // side-effect: register the kbd block
+import './item.js' // side-effect: register the item block
 import './alert.js' // side-effect: register the alert block
 import './tabs.js' // side-effect: register the tabs container block
 import './accordion.js' // side-effect: register the accordion container block
@@ -29,6 +30,7 @@ export { checkbox } from './checkbox.js'
 export { radioGroup } from './radio.js'
 export { toggle } from './switch.js'
 export { kbd } from './kbd.js'
+export { item } from './item.js'
 export { alert } from './alert.js'
 export { tabs } from './tabs.js'
 export { accordion } from './accordion.js'
