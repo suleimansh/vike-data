@@ -27,6 +27,7 @@ import './SheetView.js' // side-effect: register the sheet renderer
 import './DrawerView.js' // side-effect: register the drawer renderer
 import './CardView.js' // side-effect: register the card renderer
 import './FieldView.js' // side-effect: register the field renderer
+import './FormView.js' // side-effect: register the form renderer
 import './AttachmentView.js' // side-effect: register the attachment renderer
 import './CodeView.js' // side-effect: register the code renderer
 import './TableView.js' // side-effect: register the table renderer
@@ -61,6 +62,7 @@ export { Popover, usePopover } from './popover.js'
 export { Toaster } from './Toaster.js'
 export { CardView } from './CardView.js'
 export { FieldView } from './FieldView.js'
+export { FormView } from './FormView.js'
 export { AttachmentView } from './AttachmentView.js'
 export { CodeView } from './CodeView.js'
 export { TableView } from './TableView.js'

@@ -22,6 +22,7 @@
     "./code": "./code.js",
     "./markdown": "./markdown.js",
     "./table": "./table.js",
+    "./form": "./form.js",
     "./react": "./react/index.js",
     "./react/registry": "./react/registry.js",
     "./react/Blocks": "./react/Blocks.jsx",
@@ -41,6 +42,7 @@
     "./react/AlertView": "./react/AlertView.jsx",
     "./react/CodeView": "./react/CodeView.jsx",
     "./react/TableView": "./react/TableView.jsx",
+    "./react/FormView": "./react/FormView.jsx",
     "./vue": "./vue/index.js",
     "./vue/registry": "./vue/registry.js",
     "./vue/Blocks": "./vue/Blocks.js",
@@ -59,7 +61,8 @@
     "./vue/ButtonView": "./vue/ButtonView.js",
     "./vue/AlertView": "./vue/AlertView.js",
     "./vue/CodeView": "./vue/CodeView.js",
-    "./vue/TableView": "./vue/TableView.js"
+    "./vue/TableView": "./vue/TableView.js",
+    "./vue/FormView": "./vue/FormView.js"
   },
   "scripts": {
     "test": "node --test"
