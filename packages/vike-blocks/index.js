@@ -10,6 +10,7 @@ import './input.js' // side-effect: register the input block
 import './textarea.js' // side-effect: register the textarea block
 import './checkbox.js' // side-effect: register the checkbox block
 import './radio.js' // side-effect: register the radio block
+import './switch.js' // side-effect: register the switch block
 import './alert.js' // side-effect: register the alert block
 import './tabs.js' // side-effect: register the tabs container block
 import './accordion.js' // side-effect: register the accordion container block
@@ -25,6 +26,7 @@ export { input } from './input.js'
 export { textarea } from './textarea.js'
 export { checkbox } from './checkbox.js'
 export { radioGroup } from './radio.js'
+export { toggle } from './switch.js'
 export { alert } from './alert.js'
 export { tabs } from './tabs.js'
 export { accordion } from './accordion.js'
