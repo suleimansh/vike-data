@@ -1,0 +1,5 @@
+---
+'vike-blocks': minor
+---
+
+vike-blocks: add the `slider` block (#434) — a dep-free, theme-native range form control. `slider('Volume').min(0).max(100).step(1).value(70)` sets an optional inline label, the range bounds (defaults 0 / 100 / 1), and the initial position, with `.disabled()` and `.name(...)`. It renders a rail whose left portion fills with the primary color up to a draggable thumb: click or drag anywhere on the rail sets the value, and the thumb is a focusable `role="slider"` driven by the arrow keys (Home / End jump to the ends), with `aria-valuemin/max/now` and a `:focus-visible` ring. It tracks its own position (local UI state), so `value` is the initial position and SSR agrees with the first client render; value binding and submit are the data/actions axis (#385). The percent/step math, the rail fill, and the thumb live in a shared `slider-styles.js` module imported by both the React and Vue renderers, so the surface can't drift. Every color reads a vike-themes CSS var; composes inside the `field` block (#426), and a `.name(...)` emits a hidden input so it submits with a form.
