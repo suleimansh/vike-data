@@ -1,0 +1,60 @@
+{
+  "name": "vike-crud",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "vike-crud: schema-driven views (list / record / form) for any framework. The schema layer over vike-blocks — it derives a view-model from the composed schema (crud + column/field/display refinements, schema->widget mapping, row scoping, FK-aware selects, projection, a validated list query) and registers list/record/form blocks. vike-admin is a preset over it; per-framework renderers draw it.",
+  "exports": {
+    ".": "./index.js",
+    "./schema-blocks": "./schema-blocks.js",
+    "./actions": "./actions.js",
+    "./define": "./define.js",
+    "./resolve": "./resolve.js",
+    "./project": "./project.js",
+    "./query": "./query.js",
+    "./data": "./data.js",
+    "./eject": "./eject.js",
+    "./react": "./react/index.js",
+    "./react/config": "./react/+config.js",
+    "./react/ViewPage": "./react/ViewPage.jsx",
+    "./react/viewData": "./react/viewData.js",
+    "./react/pages": "./react/pages.js",
+    "./react/widget-registry": "./react/widget-registry.js",
+    "./react/widgets": "./react/widgets.jsx",
+    "./react/FormFields": "./react/FormFields.jsx",
+    "./react/ListView": "./react/ListView.jsx",
+    "./react/RecordView": "./react/RecordView.jsx",
+    "./react/FormView": "./react/FormView.jsx",
+    "./vue": "./vue/index.js",
+    "./vue/widget-registry": "./vue/widget-registry.js",
+    "./vue/widgets": "./vue/widgets.js",
+    "./vue/FormFields": "./vue/FormFields.js",
+    "./vue/ListView": "./vue/ListView.js",
+    "./vue/RecordView": "./vue/RecordView.js",
+    "./vue/FormView": "./vue/FormView.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@universal-orm/core": "workspace:*",
+    "@universal-orm/memory": "workspace:*",
+    "@vike-data/kit": "workspace:*",
+    "@vike-data/vike-schema": "workspace:*",
+    "vike-actions": "workspace:*",
+    "vike-blocks": "workspace:*"
+  },
+  "peerDependencies": {
+    "vike": "*",
+    "react": ">=18",
+    "vike-react": ">=0.6",
+    "vue": ">=3.5",
+    "vike-vue": ">=0.9"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "vike-react": { "optional": true },
+    "vue": { "optional": true },
+    "vike-vue": { "optional": true }
+  }
+}

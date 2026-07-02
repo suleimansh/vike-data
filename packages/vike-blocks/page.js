@@ -1,7 +1,7 @@
 // The composer: a PAGE is a composition of BLOCKS — the UI/UX schema, distinct from any data
 // schema. `definePage({ route, sections })` declares which blocks a page is made of and,
 // optionally, the route it mounts at; `resolvePage` turns those block descriptors into plain,
-// serializable view-models a renderer can draw. vike-view wraps this as `defineView`, its
+// serializable view-models a renderer can draw. vike-crud wraps this as `definePage`, its
 // schema-flavored entry.
 //
 //   definePage({

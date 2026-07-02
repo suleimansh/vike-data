@@ -16,7 +16,7 @@ export default function FieldPage() {
         A form-field shell: <code>field(label).description(...).error(...).control(block)</code>. It wraps a control block with its
         label, an optional description, and an optional error, and is control-agnostic. The typical control is the editable{' '}
         <code>input</code> block (#427); below it wraps <code>text</code> (read-only value fields) and a <code>button</code>. It is the
-        hand-authored field shell that vike-view's schema-derived forms can share.
+        hand-authored field shell that vike-crud's schema-derived forms can share.
       </p>
 
       {One(field('Plan').description('Your current subscription tier.').control(text('Pro')))}

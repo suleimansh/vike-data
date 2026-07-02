@@ -1,5 +1,5 @@
 // The form block: a non-schema form container — group field/control blocks in a real, ready-to-post
-// <form> with a submit button. The hand-authored counterpart to vike-view's schema-derived form; it
+// <form> with a submit button. The hand-authored counterpart to vike-crud's schema-derived form; it
 // takes the fields you compose. Scoped to NATIVE HTML submission (method + action), so it works with
 // progressive enhancement and zero client JS. The richer JS submission (named actions, optimistic UI,
 // inline validation) is the actions axis (#385).

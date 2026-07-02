@@ -1,12 +1,12 @@
 // /admin/:table — the list. The TABLE (columns, sortable headers, FK cells, per-row edit link,
-// empty state) is rendered by vike-view's ListView — vike-admin is a preset over vike-view, so
+// empty state) is rendered by vike-crud's ListView — vike-admin is a preset over vike-crud, so
 // it draws its list through the same component instead of a second table. This page keeps the
 // admin CHROME around it: the title, the "New" button, and prev/next paging. The data hook
 // (vike-admin/data:listData) reads just the page through universal-orm and hands over the
 // page/sort state; navigation is plain query-string links (`?page=&sort=&dir=`), so it works
 // without client JS.
 import { useData } from 'vike-react/useData'
-import { ListView } from 'vike-view/react'
+import { ListView } from 'vike-crud/react'
 
 // Build an /admin/:table URL carrying the paging/sort state; empty params are dropped so a
 // default view stays a clean `/admin/:table`.

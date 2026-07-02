@@ -1,6 +1,6 @@
 // The Vue binding for vike-blocks: the block-renderer registry (registerBlockRenderer), the
 // <Blocks>/<Page> dispatch, and the built-in primitive block components. Importing this
-// registers the built-in block renderers. vike-view/vue registers the schema renderers
+// registers the built-in block renderers. vike-crud/vue registers the schema renderers
 // (list/record/form) into the same shared 'blocks'/'vue' registry.
 import './ButtonView.js' // side-effect: register the button renderer
 import './InputView.js' // side-effect: register the input renderer

@@ -1,6 +1,6 @@
 // The generic substrate: definePage composes a page from blocks, resolvePage turns block
 // descriptors into serializable view-models, the registry is open, and defineBlock gives
-// a leaf block a fluent builder. No schema here — the schema-derived blocks live in vike-view.
+// a leaf block a fluent builder. No schema here — the schema-derived blocks live in vike-crud.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import {

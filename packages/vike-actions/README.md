@@ -91,7 +91,7 @@ The default endpoint gives an action `{ input, user }`; an action's `run` can im
 
 ```js
 import { createActionsHandler } from 'vike-actions'
-import { buildDb } from 'vike-view/resolve'
+import { buildDb } from 'vike-crud/resolve'
 
 export default createActionsHandler({
   buildContext: async () => ({ db: buildDb(tables) }),

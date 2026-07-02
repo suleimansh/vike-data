@@ -1,7 +1,7 @@
 // The `table` block — a NON-schema data table: feed it rows + columns directly (API results,
-// computed data) and it draws a themed table. This is the plain-data counterpart to vike-view's
+// computed data) and it draws a themed table. This is the plain-data counterpart to vike-crud's
 // schema-driven `list`/`record`/`form` (which derive their columns from a table). It shares the
-// visual chrome of vike-view's ListView (headers, cell padding, empty state, named formatters)
+// visual chrome of vike-crud's ListView (headers, cell padding, empty state, named formatters)
 // without pulling in the schema path, so a hand-fed table themes identically. Dep-free,
 // theme-native, cross-framework.
 //

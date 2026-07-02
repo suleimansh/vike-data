@@ -1,6 +1,6 @@
 // The `field` block — a form-field CONTAINER: a label + a control slot + an optional description and
 // error message, wrapping a single control block (input, select, ...) with its metadata. The
-// hand-authored primitive that vike-view's schema-derived form blocks can share as the field shell.
+// hand-authored primitive that vike-crud's schema-derived form blocks can share as the field shell.
 // From-scratch + theme-native. Like card/dialog it composes a nested block, but a field holds ONE
 // control (not a section list).
 //

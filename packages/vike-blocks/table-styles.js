@@ -1,4 +1,4 @@
-// Shared chrome for the `table` block renderers (the React + Vue twins), mirroring vike-view's
+// Shared chrome for the `table` block renderers (the React + Vue twins), mirroring vike-crud's
 // ListView so a non-schema table themes identically. Cell/header styles read the `var(--color-*)`
 // contract; formatValue mirrors ListView's named formatters; compareRows is the client-side sort
 // comparator. Kept in one module so the two renderers can't drift.

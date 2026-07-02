@@ -14,7 +14,7 @@ test('registerBlockRenderer / getBlockRenderer round-trip', () => {
   assert.ok(blockRendererTokens().includes('test-gauge'))
 })
 
-test('it registers into kit’s shared blocks/react slot (so vike-view + third parties compose)', () => {
+test('it registers into kit’s shared blocks/react slot (so vike-crud + third parties compose)', () => {
   const Rating = () => null
   registerBlockRenderer('test-rating', Rating)
   // a fresh handle to the same (namespace, name) sees it — the cross-package guarantee
