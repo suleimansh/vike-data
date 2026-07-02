@@ -6,6 +6,7 @@ import './ButtonView.js' // side-effect: register the button renderer
 import './InputView.js' // side-effect: register the input renderer
 import './TextareaView.js' // side-effect: register the textarea renderer
 import './CheckboxView.js' // side-effect: register the checkbox renderer
+import './RadioGroupView.js' // side-effect: register the radio renderer
 import './AlertView.js' // side-effect: register the alert renderer
 import './TabsView.js' // side-effect: register the tabs renderer
 import './AccordionView.js' // side-effect: register the accordion renderer
@@ -19,6 +20,7 @@ export { ButtonView } from './ButtonView.js'
 export { InputView } from './InputView.js'
 export { TextareaView } from './TextareaView.js'
 export { CheckboxView } from './CheckboxView.js'
+export { RadioGroupView } from './RadioGroupView.js'
 export { AlertView } from './AlertView.js'
 export { TabsView } from './TabsView.js'
 export { AccordionView } from './AccordionView.js'

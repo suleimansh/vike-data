@@ -12,6 +12,7 @@ const catalog = [
   { name: 'Input', href: '/input', tag: 'form', desc: 'A from-scratch text input — type / placeholder / value / disabled, a focus-visible ring, theme-native. Pairs with field.' },
   { name: 'Textarea', href: '/textarea', tag: 'form', desc: 'A from-scratch multi-line input — placeholder / rows / value / disabled, resizable, a focus-visible ring. Composes inside a field.' },
   { name: 'Checkbox', href: '/checkbox', tag: 'form', desc: 'A dep-free boolean control with an animated check — click to toggle. label / checked / disabled, theme-native. Pairs with field.' },
+  { name: 'Radio', href: '/radio', tag: 'form', desc: 'A dep-free radio group with an animated selection — pick one option and the dot springs in. option / value / disabled, theme-native.' },
   { name: 'Primitives', href: '/primitives', tag: 'leaf', desc: 'heading · text (lead / muted / blockquote / code) · badge · list · divider · link — the built-in leaf blocks, composed with definePage.' },
   { name: 'Custom blocks', href: '/raw', tag: 'extend', desc: 'Define your own with defineBlock, or author a page as plain { block, ...props } descriptors.' },
 ]
