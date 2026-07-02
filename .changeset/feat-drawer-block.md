@@ -1,0 +1,5 @@
+---
+'vike-blocks': minor
+---
+
+vike-blocks: add the `drawer` block (#423) — an edge-anchored sliding panel with a drag-to-dismiss grabber handle. `drawer().trigger('Menu').side('bottom').title(...).sections([...])` anchors the panel to a screen edge (bottom / top / left / right, default bottom) and holds a nested composition of blocks, with `.description()` and `.defaultOpen()`. It is built on the shared overlay primitive (portal + focus trap + Escape + outside-click + scroll-lock + enter/exit) and reuses the sheet's edge-slide geometry, so it can't drift from its siblings; its defining affordance is the grabber, which you drag toward the anchored edge to flick the drawer closed (past a threshold it dismisses; short of it, it snaps back). Open/close and the drag are local UI state; keyboard users close via the × button. The drag math (dismiss offset/transform, close threshold) and the handle geometry live in a shared `drawer-styles.js` module imported by both the React and Vue renderers; every color reads a vike-themes CSS var.
