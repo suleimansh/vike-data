@@ -87,44 +87,6 @@ bundle entirely.
 
 ---
 
-## How the packages fit together
-
-Arrows point to what a package depends on; **nothing points up**. The UI substrate is shown
-in full (it is the recent, load-bearing spine); the domain, async, and data layers are
-collapsed to one box each.
-
-```mermaid
-graph TD
-    admin["<b>vike-admin</b> · CRUD over every table"]
-    crud["<b>vike-crud</b> · schema → list / record / form"]
-    blocks["<b>vike-blocks</b> · render"]
-    actions["<b>vike-actions</b> · mutate"]
-    domain["<b>vike-auth</b> + domain extensions<br/>teams · rbac · stripe · storage · notifications · push"]
-    async["<b>async base</b><br/>vike-queue · vike-mail · vike-ai"]
-    dataL["<b>data layer</b> · zero framework<br/>vike-schema · universal-orm + adapters · kit"]
-
-    admin --> crud
-    crud --> blocks
-    crud --> actions
-    actions --> domain
-    crud --> dataL
-    domain --> async
-    domain --> dataL
-    async --> dataL
-```
-
-- **The UI substrate is a spine, not one package.** `vike-blocks` renders (a serializable
-  block IR + per-framework renderers), `vike-actions` mutates (named, owner-scoped server
-  actions), `vike-crud` is the schema → CRUD engine over both, and `vike-admin` is a thin
-  preset that points it at every composed table. Load-bearing: `vike-crud` was extracted
-  *out of* `vike-admin` to be reused.
-- **Below it, `vike-auth` is the domain hub** (teams, RBAC, billing, storage, notifications,
-  push all self-install it), the async base carries jobs + delivery, and everything rests on
-  the data layer. App chrome (`vike-themes` / `vike-layouts` / `vike-toolbar` / `vike-i18n`)
-  composes alongside and is omitted here for clarity.
-
----
-
 ## Structure
 
 > For the layering, the composition mechanism, and the runtime + codegen lifecycle, see
