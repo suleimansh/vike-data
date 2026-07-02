@@ -11,6 +11,7 @@ import './SwitchView.js' // side-effect: register the switch renderer
 import './SliderView.js' // side-effect: register the slider renderer
 import './CalendarView.js' // side-effect: register the calendar renderer
 import './DatePickerView.js' // side-effect: register the date-picker renderer
+import './DropdownView.js' // side-effect: register the dropdown renderer
 import './KbdView.js' // side-effect: register the kbd renderer
 import './ItemView.js' // side-effect: register the item renderer
 import './BubbleView.js' // side-effect: register the bubble renderer
@@ -37,6 +38,7 @@ export { SwitchView } from './SwitchView.js'
 export { SliderView } from './SliderView.js'
 export { CalendarView } from './CalendarView.js'
 export { DatePickerView } from './DatePickerView.js'
+export { DropdownView } from './DropdownView.js'
 export { KbdView } from './KbdView.js'
 export { ItemView } from './ItemView.js'
 export { BubbleView } from './BubbleView.js'
