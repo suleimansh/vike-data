@@ -14,8 +14,11 @@
 //     .submit('Create member')
 //
 // The body is ordinary blocks (usually `field` + a control, but any block composes), so a form nests
-// like card. `.action()` is the submit target; `.method()` is get|post (native forms support no
+// like card. `.action()` is the native submit URL; `.method()` is get|post (native forms support no
 // others). `.submit(false)` drops the built-in button for a form that composes its own footer.
+// `.onSubmit(name)` references a named action (the actions axis, #385): when a vike-actions provider
+// is present the renderer submits the form's values to that action via JS; otherwise the native
+// `action`/`method` POST is the progressive-enhancement fallback, so a form works with no client JS.
 import { registerBlock } from './registry.js'
 import { resolvePage } from './page.js'
 
@@ -26,11 +29,12 @@ const collapse = (blocks) => (blocks ?? []).map((b) => (typeof b?.build === 'fun
 // A fluent builder for a form block. `form({ action, method, fields })` seeds it; the chainable
 // setters override. `.fields()` collapses now so nested builders work; `.submit(label)` sets the
 // primary submit label (or `false` to omit the button).
-export function form({ action, method, fields } = {}) {
+export function form({ action, method, fields, onSubmit } = {}) {
   let body = collapse(fields)
   let act = action
   let httpMethod = method
   let submitLabel
+  let submitAction = onSubmit
   const self = {
     action(url) {
       act = url
@@ -48,12 +52,17 @@ export function form({ action, method, fields } = {}) {
       submitLabel = label
       return self
     },
+    onSubmit(name) {
+      submitAction = name
+      return self
+    },
     build() {
       return {
         block: 'form',
         ...(act !== undefined ? { action: act } : {}),
         ...(httpMethod !== undefined ? { method: httpMethod } : {}),
         ...(submitLabel !== undefined ? { submitLabel } : {}),
+        ...(submitAction !== undefined ? { onSubmit: submitAction } : {}),
         fields: body.map((b) => ({ ...b })),
       }
     },
@@ -70,6 +79,7 @@ registerBlock('form', {
       action: props.action ?? null,
       method: String(props.method ?? 'post').toLowerCase(),
       submitLabel: props.submitLabel === undefined ? 'Save' : props.submitLabel,
+      onSubmit: props.onSubmit ?? null,
       sections: resolvePage({ sections: collapse(props.fields) }, tables).sections,
     }
   },

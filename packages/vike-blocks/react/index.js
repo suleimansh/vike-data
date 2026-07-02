@@ -33,6 +33,7 @@ import './AttachmentView.jsx' // side-effect: register the attachment renderer
 import './CodeView.jsx' // side-effect: register the code renderer
 import './TableView.jsx' // side-effect: register the table renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
+export { ActionRunnerContext, ActionRunnerProvider, useActionRunner } from './action-context.js' // the actions seam (#385)
 export { Blocks, Page } from './Blocks.jsx' // importing Blocks registers the built-in blocks
 export { Text, Heading, Badge, Divider, Link, Markdown, Stat } from './primitives.jsx'
 export { ButtonView } from './ButtonView.jsx'
