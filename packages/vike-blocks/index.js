@@ -33,6 +33,7 @@ import './field.js' // side-effect: register the field container block
 import './attachment.js' // side-effect: register the attachment block
 import './code.js' // side-effect: register the code block
 import './markdown.js' // side-effect: register the markdown block
+import './table.js' // side-effect: register the table block
 
 export { definePage, resolvePage } from './page.js'
 export { registerBlock, getBlock, hasBlock, listBlocks, defineBlock } from './registry.js'
@@ -66,3 +67,4 @@ export { field } from './field.js'
 export { attachment } from './attachment.js'
 export { code } from './code.js'
 export { markdown } from './markdown.js'
+export { table } from './table.js'
