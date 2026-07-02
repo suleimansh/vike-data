@@ -8,6 +8,37 @@
 import { useData } from 'vike-react/useData'
 import { ListView } from 'vike-crud/react'
 
+// Confirm before a destructive submit. Progressive enhancement: after hydration it asks
+// before deleting; with no client JS the form just submits (still owner-scoped server-side).
+function confirmDelete(e) {
+  if (typeof window !== 'undefined' && !window.confirm('Delete this row?')) e.preventDefault()
+}
+
+// A per-row Delete control: its own no-JS form POSTing `_action=delete` to the row's edit
+// route, so it reuses the admin's existing owner-scoped delete (data:editData) — no new
+// endpoint and no widening of the write surface. Keyed on the row's primary key AND the
+// resource scope server-side, so a scoped user can only delete a row they own.
+function DeleteRowForm({ action }) {
+  return (
+    <form method="post" action={action} onSubmit={confirmDelete} style={{ display: 'inline', margin: 0 }}>
+      <input type="hidden" name="_action" value="delete" />
+      <button
+        type="submit"
+        style={{
+          background: 'transparent',
+          color: 'var(--color-danger, #c0392b)',
+          border: 'none',
+          padding: 0,
+          fontSize: 14,
+          cursor: 'pointer',
+        }}
+      >
+        Delete
+      </button>
+    </form>
+  )
+}
+
 // Build an /admin/:table URL carrying the paging/sort state; empty params are dropped so a
 // default view stays a clean `/admin/:table`.
 function listUrl(table, { page, sort, dir }) {
@@ -92,6 +123,7 @@ export default function ListPage() {
           dir={dir}
           sortHref={(name, nextDir) => listUrl(table, { page: 1, sort: name, dir: nextDir })}
           rowHref={canEdit ? (row) => `/admin/${table}/${row[pk]}` : undefined}
+          rowActions={canEdit ? (row) => <DeleteRowForm action={`/admin/${table}/${row[pk]}`} /> : undefined}
           emptyLabel="No rows yet."
         />
       </div>
