@@ -9,6 +9,7 @@ import './TextareaView.jsx' // side-effect: register the textarea renderer
 import './CheckboxView.jsx' // side-effect: register the checkbox renderer
 import './RadioGroupView.jsx' // side-effect: register the radio renderer
 import './SwitchView.jsx' // side-effect: register the switch renderer
+import './KbdView.jsx' // side-effect: register the kbd renderer
 import './AlertView.jsx' // side-effect: register the alert renderer
 import './TabsView.jsx' // side-effect: register the tabs renderer
 import './AccordionView.jsx' // side-effect: register the accordion renderer
@@ -24,6 +25,7 @@ export { TextareaView } from './TextareaView.jsx'
 export { CheckboxView } from './CheckboxView.jsx'
 export { RadioGroupView } from './RadioGroupView.jsx'
 export { SwitchView } from './SwitchView.jsx'
+export { KbdView } from './KbdView.jsx'
 export { AlertView } from './AlertView.jsx'
 export { TabsView } from './TabsView.jsx'
 export { AccordionView } from './AccordionView.jsx'
