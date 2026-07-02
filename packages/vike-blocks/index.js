@@ -21,6 +21,7 @@ import './item.js' // side-effect: register the item block
 import './bubble.js' // side-effect: register the bubble block
 import './message.js' // side-effect: register the message block
 import './message-scroller.js' // side-effect: register the message-scroller block
+import './chart.js' // side-effect: register the chart block
 import './alert.js' // side-effect: register the alert block
 import './tabs.js' // side-effect: register the tabs container block
 import './accordion.js' // side-effect: register the accordion container block
@@ -51,6 +52,7 @@ export { item } from './item.js'
 export { bubble } from './bubble.js'
 export { message } from './message.js'
 export { messageScroller } from './message-scroller.js'
+export { chart } from './chart.js'
 export { alert } from './alert.js'
 export { tabs } from './tabs.js'
 export { accordion } from './accordion.js'
