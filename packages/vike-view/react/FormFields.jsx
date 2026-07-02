@@ -13,7 +13,11 @@ import { getFieldWidget } from './widget-registry.js'
 
 export function FormFields({ fields, values = {} }) {
   return fields.map((f) => {
-    const Widget = getFieldWidget(f.fk ? 'select' : (f.widget ?? f.type)) ?? getFieldWidget('text')
+    // A slot override wins: dispatch on its token so a `field('body').slot('rich-editor')`
+    // renders the app's registered control. It falls back to the derived widget when no
+    // component is registered under the slot token, so a typo degrades to the default input.
+    const token = f.slot ?? (f.fk ? 'select' : (f.widget ?? f.type))
+    const Widget = getFieldWidget(token) ?? getFieldWidget(f.fk ? 'select' : (f.widget ?? f.type)) ?? getFieldWidget('text')
     return <Widget key={f.name} field={f} value={values[f.name]} />
   })
 }

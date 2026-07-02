@@ -78,17 +78,25 @@ export function viewColumns(view, table) {
         sortable: !!spec.sortable,
         searchable: !!spec.searchable,
         format: spec.format ?? null,
+        slot: slotFor(view, spec.name, spec),
       }
     })
   }
   return table.columns
     .filter((c) => !isHiddenColumn(c.name))
-    .map((c) => ({ name: c.name, label: titleCase(c.name), type: c.type, sortable: false, searchable: false, format: null }))
+    .map((c) => ({ name: c.name, label: titleCase(c.name), type: c.type, sortable: false, searchable: false, format: null, slot: slotFor(view, c.name) }))
 }
 
 // A foreign-key descriptor for a column, or null. `fk` carries where a select/record cell
 // reads the referenced row's label from.
 const fkOf = (col) => (col?.references ? { table: col.references.table, column: col.references.column } : null)
+
+// The slot token for a field (customization tier 2): a per-field `.slot(token)` on the
+// column/display/field builder wins; otherwise a view-level `slots: { name: token }` map.
+// A string token (register the component with `registerFieldWidget`), so the resolved
+// view-model stays serializable; the renderer dispatches on it, falling back to the
+// derived cell/control when no component is registered.
+const slotFor = (view, name, spec) => spec?.slot ?? view?.slots?.[name] ?? null
 
 // Derive the RECORD (detail) fields for a view — the READ-ONLY display of one row. With
 // `view.record`, honor that selection (label/format refinements); otherwise every
@@ -109,6 +117,7 @@ export function viewRecord(view, table) {
       type: schemaCol?.type ?? 'string',
       widget,
       format: spec.format ?? null,
+      slot: slotFor(view, name, spec),
       ...(fk ? { fk } : {}),
     }
   }
@@ -141,6 +150,7 @@ export function viewFields(view, table) {
         type,
         widget,
         required: spec.required ?? requiredBySchema(schemaCol),
+        slot: slotFor(view, spec.name, spec),
         ...(fk ? { fk } : {}),
         ...(options ? { options } : {}),
       }
@@ -157,6 +167,7 @@ export function viewFields(view, table) {
         type,
         widget,
         required: requiredBySchema(c),
+        slot: slotFor(view, c.name),
         ...(fk ? { fk } : {}),
         ...(options ? { options } : {}),
       }

@@ -36,6 +36,14 @@ export function column(name) {
       spec.format = token
       return self
     },
+    // Slot override (tier 2): render this column's cell with your own registered
+    // component instead of the derived one. A string TOKEN (register the component with
+    // `registerFieldWidget(token, Cmp)`), not a function, so the column stays
+    // serializable. The cell component gets `{ field, value, row }`.
+    slot(token) {
+      spec.slot = token
+      return self
+    },
     build() {
       return { ...spec }
     },
@@ -55,6 +63,13 @@ export function display(name) {
     },
     format(token) {
       spec.format = token
+      return self
+    },
+    // Slot override (tier 2): render this field's value with your own registered
+    // component instead of the derived cell. A string TOKEN; the component gets
+    // `{ field, value, row }`.
+    slot(token) {
+      spec.slot = token
       return self
     },
     build() {
@@ -82,6 +97,14 @@ export function field(name) {
       spec.required = isRequired
       return self
     },
+    // Slot override (tier 2): render this field's INPUT with your own registered control
+    // instead of the derived widget. A string TOKEN (register with
+    // `registerFieldWidget(token, Cmp)`); the control gets the widget contract
+    // `{ field, value }`.
+    slot(token) {
+      spec.slot = token
+      return self
+    },
     build() {
       return { ...spec }
     },
@@ -95,9 +118,12 @@ export function field(name) {
 //   crud({
 //     table: 'posts',
 //     label: 'Posts',
-//     list:   [ column('title').sortable(), column('created_at').format('since') ],
+//     list:   [ column('title').sortable(), column('status').slot('status-badge') ],
 //     record: [ display('title'), display('body'), display('author') ],
 //     form:   [ field('title').required(), field('body'), field('status').type('select') ],
+//     // Slot overrides (tier 2): a view-level map from field name -> a registered component
+//     // token, applied across list/record/form. A per-field `.slot()` above wins over this.
+//     slots:  { author: 'author-chip' },
 //     canView: (user) => !!user,
 //     canEdit: (user) => user?.role === 'admin',
 //     // Row scoping (#104): bound a user to their OWN rows. Return a universal-orm filter,

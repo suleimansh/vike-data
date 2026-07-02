@@ -6,6 +6,9 @@
 //   - `rowHref(row)` adds a trailing actions column linking each row (e.g. to its edit page)
 // All optional, so a bare `<ListView columns rows />` still works. `rows` default to none (the
 // data layer supplies them), so with none it shows the columns and an empty state.
+import './widgets.jsx' // side-effect: registers the built-in widgets (and any app slot registers alongside)
+import { getFieldWidget } from './widget-registry.js'
+
 const cell = { padding: '0.5rem 0.75rem', borderBottom: '1px solid var(--color-border)', textAlign: 'left', fontSize: 14 }
 const th = { ...cell, color: 'var(--color-muted)', fontWeight: 600 }
 
@@ -86,11 +89,16 @@ export function ListView({
         ) : (
           rows.map((row, i) => (
             <tr key={row[pk] ?? i}>
-              {columns.map((c) => (
-                <td key={c.name} style={cell}>
-                  {fkLabels?.[c.name]?.[row[c.name]] ?? formatValue(row[c.name], c.format)}
-                </td>
-              ))}
+              {columns.map((c) => {
+                // A slot override (tier 2) renders the app's registered cell component with
+                // `{ field, value, row }`; an unregistered token falls back to the derived cell.
+                const Slot = c.slot ? getFieldWidget(c.slot) : null
+                return (
+                  <td key={c.name} style={cell}>
+                    {Slot ? <Slot field={c} value={row[c.name]} row={row} /> : (fkLabels?.[c.name]?.[row[c.name]] ?? formatValue(row[c.name], c.format))}
+                  </td>
+                )
+              })}
               {hasActions && (
                 <td style={{ ...cell, textAlign: 'right', whiteSpace: 'nowrap' }}>
                   <a href={rowHref(row)} style={{ color: 'var(--color-primary)', fontSize: 14 }}>{rowActionLabel}</a>

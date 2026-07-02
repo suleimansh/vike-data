@@ -122,6 +122,31 @@ token. A foreign key becomes a select whose options a data hook fills from the r
 `parseListQuery` validates a `?query=` (filter / orderBy / limit / offset) against a view's
 columns before it reaches the database.
 
+## Customization — config → slots → eject
+
+You start with a generated view and refine only where reality demands it:
+
+1. **Config** (tier 1) — pick / rename / order columns, mark widgets, filters, default sort via `crud` + the `column()` / `display()` / `field()` builders.
+2. **Slot overrides** (tier 2) — drop your own component for ONE field/column, keeping the rest generated. A per-field `.slot(token)` or a view-level `slots: { name: token }` map:
+
+   ```js
+   import { registerFieldWidget } from 'vike-view/react/widgets' // or /vue/widgets
+
+   registerFieldWidget('status-badge', StatusBadge) // component gets { field, value, row }
+
+   crud({
+     table: 'posts',
+     list: [column('title'), column('status').slot('status-badge')],
+     form: [field('body').slot('rich-editor')],   // a slot on a form field is your own CONTROL
+     slots: { author: 'author-chip' },             // or a map by field name, applied across list/record/form
+   })
+   ```
+
+   The token is a string (register the component with `registerFieldWidget`), so the block descriptor stays serializable — the same register-by-name pattern as the `custom` block. An unregistered token falls back to the derived cell/control, so a typo degrades gracefully. Register the component from a module the page imports so it runs on both the server (SSR) and the client (hydration).
+3. **AI-assisted eject** (tier 3) — when you outgrow config + slots, regenerate the raw page + components from the view descriptor (a separate spike).
+
+For a whole SECTION (not a field), compose a `{ block: 'custom', component }` in place of the generated `list`/`record`/`form` instead of a slot.
+
 ## Data — `vike-view/data`
 
 `resolveView` gives structure; `hydrateView` fills in the data, server-side:
