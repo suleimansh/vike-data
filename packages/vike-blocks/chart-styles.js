@@ -4,7 +4,7 @@
 // viewBox, so the box is virtual — the plot scales to its container). Theme-native: colors are
 // vike-themes CSS vars. No date/number library, no charting engine.
 
-export const CHART_WIDTH = 320 // the virtual viewBox width; the SVG stretches to its container
+export const CHART_WIDTH = 320 // the SSR / first-paint fallback width; the renderer measures the real px width and re-lays-out 1:1 (so circles stay round — no viewBox stretching)
 const PAD_X = 6 // horizontal inset so edge bars / line ends aren't flush to the border
 const PAD_Y = 6 // vertical inset so the tallest bar / peak isn't flush to the top
 
@@ -33,11 +33,11 @@ export function chartScaleMax(values, explicitMax) {
   return peak
 }
 
-// Lay out the whole chart in the virtual box: bar rects, line/area points, the line + area paths, the
-// baseline y, and the resolved max. The renderer reads only what its `type` needs. `height` is the plot
-// height in the same virtual units as CHART_WIDTH.
-export function chartGeometry(points, { height, max }) {
-  const width = CHART_WIDTH
+// Lay out the whole chart at the given pixel size: bar rects, line/area points, the line + area paths,
+// the baseline y, and the resolved max. The renderer reads only what its `type` needs. `width` is the
+// measured container width (defaulting to the SSR fallback); `height` is the plot height in px. The
+// coordinate system is 1:1 with the rendered SVG, so nothing distorts.
+export function chartGeometry(points, { width = CHART_WIDTH, height, max }) {
   const n = points.length
   const values = points.map((p) => p.value)
   const scaleMax = chartScaleMax(values, max)
@@ -75,7 +75,7 @@ export const chartRootStyle = (height) => ({
   boxSizing: 'border-box',
 })
 
-export const chartSvgStyle = () => ({ display: 'block', width: '100%', overflow: 'visible' })
+export const chartSvgStyle = () => ({ display: 'block', maxWidth: '100%', overflow: 'visible' })
 
 export const chartBarStyle = (color) => ({ fill: color, rx: 3 })
 export const chartLineStyle = (color) => ({ fill: 'none', stroke: color, strokeWidth: 2, strokeLinejoin: 'round', strokeLinecap: 'round' })
