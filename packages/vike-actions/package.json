@@ -1,0 +1,30 @@
+{
+  "name": "vike-actions",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "vike-actions: named, guarded server actions referenced from serializable config. A vike-blocks button/form carries an action NAME (never a closure); this resolves the name to a handler, authorizes it (compose vike-rbac / the owner contract), validates its input, and runs it behind one POST /_actions/<name> endpoint. Per-framework client bindings (vike-actions/react, /vue) are a fast-follow.",
+  "exports": {
+    ".": "./index.js",
+    "./config": "./+config.js",
+    "./endpoint": "./endpoint.js",
+    "./registry": "./registry.js",
+    "./run": "./run.js",
+    "./guard": "./guard.js",
+    "./validate": "./validate.js",
+    "./params": "./params.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@universal-middleware/core": "^0.4.18",
+    "vike-auth": "workspace:*"
+  },
+  "peerDependencies": {
+    "vike": "*"
+  },
+  "peerDependenciesMeta": {
+    "vike": { "optional": true }
+  }
+}

@@ -606,6 +606,18 @@ importers:
 
   packages/universal-schema: {}
 
+  packages/vike-actions:
+    dependencies:
+      '@universal-middleware/core':
+        specifier: ^0.4.18
+        version: 0.4.18(@types/express@5.0.6)(srvx@0.11.17)
+      vike:
+        specifier: 0.4.259-commit-f6ecfb2
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
+      vike-auth:
+        specifier: workspace:*
+        version: link:../vike-auth
+
   packages/vike-admin:
     dependencies:
       '@universal-middleware/core':
