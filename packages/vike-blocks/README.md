@@ -75,6 +75,21 @@ dialog()
   // dep-free portal + backdrop + focus trap + Escape / outside-click + scroll-lock, CSS enter/exit
 ```
 
+**Layout** (a container whose named regions are page structure — layouts collapse into the same
+block IR, #401). A `variant` picks a swappable shell (`landing` / `centered` / `stack`); a `slot`
+is a first-class placeholder whose `from` names its fill source, so app chrome (`from: 'config'`,
+read from a cumulative contribution at render time — the vike-layouts seam) and page content
+(`from: 'children'`, the default) share one model:
+
+```js
+import { layout, slot, heading, text, button } from 'vike-blocks'
+
+layout('landing')
+  .slot('header', [slot('nav').from('config'), button('Sign in')]) // nav comes from config, not inlined
+  .slot('main', [heading('Ship faster').level(1), text('...')])
+  .slot('footer', [text('(c) Acme')])
+```
+
 **Bespoke pass-throughs** (the renderer draws them from their props): `stat` (`{ title, source|value }`),
 `markdown` (`{ source }`), `custom` (`{ component }`, your own component). vike-view registers the
 schema-derived blocks (`list` / `record` / `form`) into the same registry.

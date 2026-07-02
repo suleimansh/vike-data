@@ -32,6 +32,8 @@ import './FormView.jsx' // side-effect: register the form renderer
 import './AttachmentView.jsx' // side-effect: register the attachment renderer
 import './CodeView.jsx' // side-effect: register the code renderer
 import './TableView.jsx' // side-effect: register the table renderer
+import './LayoutView.jsx' // side-effect: register the layout container renderer
+import './SlotView.jsx' // side-effect: register the slot placeholder renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
 export { ActionRunnerContext, ActionRunnerProvider, useActionRunner } from './action-context.js' // the actions seam (#385)
 export { Blocks, Page } from './Blocks.jsx' // importing Blocks registers the built-in blocks
@@ -68,3 +70,5 @@ export { FormView } from './FormView.jsx'
 export { AttachmentView } from './AttachmentView.jsx'
 export { CodeView } from './CodeView.jsx'
 export { TableView } from './TableView.jsx'
+export { LayoutView, LayoutConfigContext, LayoutConfigProvider, useLayoutConfig } from './LayoutView.jsx'
+export { SlotView } from './SlotView.jsx'
