@@ -797,6 +797,9 @@ importers:
       react:
         specifier: '>=18'
         version: 18.3.1
+      vike-blocks:
+        specifier: workspace:*
+        version: link:../vike-blocks
       vike-react:
         specifier: '>=0.6'
         version: 0.6.24(react-dom@19.2.7(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))

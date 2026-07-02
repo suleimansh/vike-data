@@ -1,25 +1,15 @@
-// Sidebar app shell — signed-in chrome with vertical nav down the leading side
-// (logo on top, user menu at the bottom), content in the main column.
-import { NavList } from './NavList.jsx'
+// Sidebar app frame — signed-in chrome with vertical nav down the leading side (logo on top, user
+// menu at the bottom), content in the main column. Since #401 this is a `layout`-block VARIANT that
+// arranges vike-blocks <SlotView> regions (chrome from the config seam, body from the live-content
+// seam); registered into the block LayoutView by ../ConfigLayout. `end: true` nav items sink to the
+// bottom above the user menu (#303). The nav is vertical, so its SlotViews pass `vertical`.
+import { SlotView } from 'vike-blocks/react/SlotView'
+import { useLayoutConfig } from 'vike-blocks/react/LayoutView'
 
-export function SidebarShell({ layout = { dir: 'ltr', slots: {} }, children }) {
-  const { logo, nav, userMenu } = layout.slots || {}
-  // `end: true` items sink to the bottom of the sidebar, above the user menu (#303);
-  // the rest stay at the top under the logo. No `end` set = unchanged.
-  const items = nav || []
-  const startNav = items.filter((i) => !i.end)
-  const endNav = items.filter((i) => i.end)
+export function SidebarShell() {
+  const { dir, logo } = useLayoutConfig()
   return (
-    <div
-      dir={layout.dir}
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        background: 'var(--color-bg)',
-        color: 'var(--color-text)',
-        fontFamily: 'var(--font-sans)',
-      }}
-    >
+    <div dir={dir} style={{ minHeight: '100vh', display: 'flex', background: 'var(--color-bg)', color: 'var(--color-text)', fontFamily: 'var(--font-sans)' }}>
       <aside
         style={{
           width: 220,
@@ -32,14 +22,16 @@ export function SidebarShell({ layout = { dir: 'ltr', slots: {} }, children }) {
           background: 'var(--color-surface)',
         }}
       >
-        {logo && <strong>{logo}</strong>}
-        <NavList items={startNav} vertical />
+        {logo && <strong><SlotView name="logo" from="config" /></strong>}
+        <SlotView name="nav" from="config" only="start" vertical />
         <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 'var(--space-lg, 2rem)' }}>
-          {endNav.length > 0 && <NavList items={endNav} vertical />}
-          {userMenu}
+          <SlotView name="nav" from="config" only="end" vertical />
+          <SlotView name="userMenu" from="config" />
         </div>
       </aside>
-      <main style={{ flex: 1, padding: 'var(--space-lg, 2rem)' }}>{children}</main>
+      <main style={{ flex: 1, padding: 'var(--space-lg, 2rem)' }}>
+        <SlotView from="content" />
+      </main>
     </div>
   )
 }

@@ -86,6 +86,7 @@ export function slot(name, sections = []) {
   if (!name || typeof name !== 'string') throw new Error('slot: a non-empty name is required')
   let from = 'children'
   let source
+  let only
   const body = collapse(sections)
   const self = {
     from(value) {
@@ -96,12 +97,17 @@ export function slot(name, sections = []) {
       source = value
       return self
     },
+    only(value) {
+      only = value // 'start' | 'end' — narrow a config nav to the leading/trailing items
+      return self
+    },
     build() {
       return {
         block: 'slot',
         name,
         from,
         ...(source !== undefined ? { source } : {}),
+        ...(only !== undefined ? { only } : {}),
         ...(body.length ? { sections: body.map((s) => ({ ...s })) } : {}),
       }
     },
@@ -110,9 +116,11 @@ export function slot(name, sections = []) {
 }
 
 // A placeholder resolves to its wiring (name / from / source) plus its resolved inline children.
-// A pass-through by design: the renderer FILLS it (from its children or a config source), so the
-// descriptor stays plain data. `source` falls back to the slot's `name` (a `nav` slot reads the
-// `nav` contribution) so the common case needs no explicit source.
+// A pass-through by design: the renderer FILLS it (from its children, a config source, or the live
+// page content), so the descriptor stays plain data. `source` falls back to the slot's `name` (a
+// `nav` slot reads the `nav` contribution) so the common case needs no explicit source. `only`
+// (for a config nav) narrows to the leading (`start`) or trailing (`end`) items — how a shell puts
+// some nav items by the logo and others by the user menu.
 registerBlock('slot', {
   resolve({ props, tables }) {
     const sections = props.sections ? resolvePage({ sections: collapse(props.sections) }, tables).sections : []
@@ -120,7 +128,27 @@ registerBlock('slot', {
       name: props.name ?? null,
       from: props.from ?? 'children',
       source: props.source ?? props.name ?? null,
+      ...(props.only !== undefined ? { only: props.only } : {}),
       sections,
     }
   },
 })
+
+// isActivePath — true when a nav item's `href` matches the current path. The framework-agnostic
+// half of "you are here" highlighting, shared by the React and Vue slot renderers so they agree.
+// The root `/` is exact-match only (else it lights up everywhere); every other href matches its own
+// page AND descendants (`/admin` stays active on `/admin/users`). Trailing slashes are ignored on
+// both sides; a query string or hash on the current path is dropped before comparing. (Mirrors the
+// helper that lived in vike-layouts, moved here so a config-fed nav slot can highlight without a
+// vike dependency — the current path is passed in as data.)
+export function isActivePath(currentPath, href) {
+  if (typeof currentPath !== 'string' || typeof href !== 'string' || href === '') return false
+  const strip = (p) => {
+    const noQuery = p.replace(/[?#].*$/, '')
+    return noQuery.length > 1 ? noQuery.replace(/\/+$/, '') : noQuery
+  }
+  const cur = strip(currentPath)
+  const target = strip(href)
+  if (target === '/') return cur === '/'
+  return cur === target || cur.startsWith(target + '/')
+}

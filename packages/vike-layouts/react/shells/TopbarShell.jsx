@@ -1,28 +1,15 @@
-// Topbar app shell — signed-in chrome with horizontal nav across the top, a logo
-// on the leading side and the user menu on the trailing side, content below.
-import { NavList } from './NavList.jsx'
+// Topbar app frame — signed-in chrome with horizontal nav across the top, logo on the leading
+// side, user menu on the trailing side, page content below. Since #401 this is a `layout`-block
+// VARIANT: it arranges vike-blocks <SlotView> regions (the chrome comes from the config seam, the
+// body from the live-content seam) rather than reading a `layout` prop. Registered into the block
+// LayoutView by ../ConfigLayout. `end: true` nav items sit trailing next to the user menu (#303).
+import { SlotView } from 'vike-blocks/react/SlotView'
+import { useLayoutConfig } from 'vike-blocks/react/LayoutView'
 
-export function TopbarShell({ layout = { dir: 'ltr', slots: {} }, children }) {
-  const { logo, nav, userMenu, footer } = layout.slots || {}
-  // A nav item with `end: true` aligns to the trailing side, next to the user menu
-  // (#303) — Account / Login sit on the right instead of crammed in with Home/Admin.
-  // Items without the flag keep their place on the leading side, so an app that sets
-  // no `end` is unchanged.
-  const items = nav || []
-  const startNav = items.filter((i) => !i.end)
-  const endNav = items.filter((i) => i.end)
+export function TopbarShell() {
+  const { dir, logo, footer } = useLayoutConfig()
   return (
-    <div
-      dir={layout.dir}
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        background: 'var(--color-bg)',
-        color: 'var(--color-text)',
-        fontFamily: 'var(--font-sans)',
-      }}
-    >
+    <div dir={dir} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--color-bg)', color: 'var(--color-text)', fontFamily: 'var(--font-sans)' }}>
       <header
         style={{
           display: 'flex',
@@ -35,18 +22,24 @@ export function TopbarShell({ layout = { dir: 'ltr', slots: {} }, children }) {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-lg, 2rem)' }}>
-          {logo && <strong>{logo}</strong>}
-          <NavList items={startNav} />
+          {logo && (
+            <strong>
+              <SlotView name="logo" from="config" />
+            </strong>
+          )}
+          <SlotView name="nav" from="config" only="start" />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-lg, 2rem)' }}>
-          {endNav.length > 0 && <NavList items={endNav} />}
-          {userMenu}
+          <SlotView name="nav" from="config" only="end" />
+          <SlotView name="userMenu" from="config" />
         </div>
       </header>
-      <main style={{ flex: 1, padding: 'var(--space-lg, 2rem)' }}>{children}</main>
+      <main style={{ flex: 1, padding: 'var(--space-lg, 2rem)' }}>
+        <SlotView from="content" />
+      </main>
       {footer?.length > 0 && (
         <footer style={{ padding: 'var(--space-md, 1rem) var(--space-lg, 2rem)', borderTop: '1px solid var(--color-border)' }}>
-          <NavList items={footer} />
+          <SlotView name="footer" from="config" />
         </footer>
       )}
     </div>
