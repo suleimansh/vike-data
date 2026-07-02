@@ -4,6 +4,7 @@
 // (list/record/form) into the same shared 'blocks'/'vue' registry.
 import './ButtonView.js' // side-effect: register the button renderer
 import './InputView.js' // side-effect: register the input renderer
+import './TextareaView.js' // side-effect: register the textarea renderer
 import './AlertView.js' // side-effect: register the alert renderer
 import './TabsView.js' // side-effect: register the tabs renderer
 import './AccordionView.js' // side-effect: register the accordion renderer
@@ -15,6 +16,7 @@ export { Blocks, Page } from './Blocks.js' // importing Blocks registers the bui
 export { Text, Heading, Badge, Divider, Link, Markdown, Stat } from './primitives.js'
 export { ButtonView } from './ButtonView.js'
 export { InputView } from './InputView.js'
+export { TextareaView } from './TextareaView.js'
 export { AlertView } from './AlertView.js'
 export { TabsView } from './TabsView.js'
 export { AccordionView } from './AccordionView.js'
