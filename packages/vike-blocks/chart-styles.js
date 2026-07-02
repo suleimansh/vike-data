@@ -4,7 +4,7 @@
 // viewBox, so the box is virtual — the plot scales to its container). Theme-native: colors are
 // vike-themes CSS vars. No date/number library, no charting engine.
 
-export const CHART_WIDTH = 320 // the SSR / first-paint fallback width; the renderer measures the real px width and re-lays-out 1:1 (so circles stay round — no viewBox stretching)
+export const CHART_WIDTH = 600 // the constant viewBox coordinate width; the SVG scales UNIFORMLY to its container via CSS (width:100%, height:auto), so it's responsive with no measuring, no width jump, and no distortion (circles stay round)
 const PAD_X = 6 // horizontal inset so edge bars / line ends aren't flush to the border
 const PAD_Y = 6 // vertical inset so the tallest bar / peak isn't flush to the top
 
@@ -75,7 +75,7 @@ export const chartRootStyle = (height) => ({
   boxSizing: 'border-box',
 })
 
-export const chartSvgStyle = () => ({ display: 'block', maxWidth: '100%', overflow: 'visible' })
+export const chartSvgStyle = () => ({ display: 'block', width: '100%', height: 'auto', overflow: 'visible' })
 
 export const chartBarStyle = (color) => ({ fill: color, rx: 3 })
 export const chartLineStyle = (color) => ({ fill: 'none', stroke: color, strokeWidth: 2, strokeLinejoin: 'round', strokeLinecap: 'round' })
