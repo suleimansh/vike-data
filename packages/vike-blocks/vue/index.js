@@ -9,6 +9,7 @@ import './CheckboxView.js' // side-effect: register the checkbox renderer
 import './RadioGroupView.js' // side-effect: register the radio renderer
 import './SwitchView.js' // side-effect: register the switch renderer
 import './SliderView.js' // side-effect: register the slider renderer
+import './CalendarView.js' // side-effect: register the calendar renderer
 import './KbdView.js' // side-effect: register the kbd renderer
 import './ItemView.js' // side-effect: register the item renderer
 import './BubbleView.js' // side-effect: register the bubble renderer
@@ -33,6 +34,7 @@ export { CheckboxView } from './CheckboxView.js'
 export { RadioGroupView } from './RadioGroupView.js'
 export { SwitchView } from './SwitchView.js'
 export { SliderView } from './SliderView.js'
+export { CalendarView } from './CalendarView.js'
 export { KbdView } from './KbdView.js'
 export { ItemView } from './ItemView.js'
 export { BubbleView } from './BubbleView.js'

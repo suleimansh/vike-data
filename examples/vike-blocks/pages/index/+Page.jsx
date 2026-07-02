@@ -18,6 +18,7 @@ const catalog = [
   { name: 'Radio', href: '/radio', tag: 'form', desc: 'A dep-free radio group with an animated selection — pick one option and the dot springs in. option / value / disabled, theme-native.' },
   { name: 'Switch', href: '/switch', tag: 'form', desc: 'A dep-free toggle with an animated sliding thumb — click to flip. label / checked / disabled, theme-native. Builder is toggle().' },
   { name: 'Slider', href: '/slider', tag: 'form', desc: 'A dep-free range control — drag the thumb, click the rail, or arrow-key it. min / max / step / value, theme-native. Pairs with field.' },
+  { name: 'Calendar', href: '/calendar', tag: 'form', desc: 'A dep-free month grid (no date lib) — step months, click a day. value / min / max / weekStartsOn, theme-native. Feeds date-picker.' },
   { name: 'Kbd', href: '/kbd', tag: 'leaf', desc: 'Keyboard key caps for documenting shortcuts — kbd("Esc") or kbd(["Cmd", "K"]). Static, theme-native.' },
   { name: 'Item', href: '/item', tag: 'leaf', desc: 'A reusable list row — leading media + title + description + trailing note. Composes in any container. Theme-native.' },
   { name: 'Bubble', href: '/bubble', tag: 'leaf', desc: 'A chat message bubble, sender-aligned (user / assistant). Holds text or nested blocks (markdown). For AI chat UIs.' },
