@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { defineAction, clearActions, createActionsHandler } from '../index.js'
-import { createRunner } from '../react/runner.js' // the plain module (the barrel pulls JSX, unparseable by node:test)
+import { createRunner } from '../client/runner.js' // the plain module (the barrel pulls JSX, unparseable by node:test)
 import { subscribeToasts, dismissToast } from 'vike-blocks'
 
 test('run -> real endpoint -> onSuccess -> a real toast is emitted', async () => {

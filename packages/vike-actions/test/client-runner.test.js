@@ -2,7 +2,7 @@
 // dependency is injected (fetch, handlers, confirm), so the full click-time flow tests without a DOM.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { createRunner } from '../react/runner.js'
+import { createRunner } from '../client/runner.js'
 
 // A fake fetch that records the request and returns a canned JSON envelope.
 function fakeFetch(envelope, { status = 200 } = {}) {

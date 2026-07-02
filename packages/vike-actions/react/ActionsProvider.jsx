@@ -6,7 +6,7 @@
 // mounted somewhere for the toast effect.
 import { useMemo } from 'react'
 import { ActionRunnerProvider } from 'vike-blocks/react'
-import { createRunner } from './runner.js'
+import { createRunner } from '../client/runner.js'
 
 export function ActionsProvider({ children, actions = [], context, basePath, onError, onResult }) {
   const runner = useMemo(() => {

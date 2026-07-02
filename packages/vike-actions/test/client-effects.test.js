@@ -2,7 +2,7 @@
 // the vocabulary -> side-effect mapping without a DOM or the toast store.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { applyEffect } from '../react/effects.js'
+import { applyEffect } from '../client/effects.js'
 
 function spies() {
   const calls = { reload: 0, redirect: [], toast: [] }
