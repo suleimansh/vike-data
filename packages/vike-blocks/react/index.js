@@ -13,6 +13,7 @@ import './SliderView.jsx' // side-effect: register the slider renderer
 import './CalendarView.jsx' // side-effect: register the calendar renderer
 import './DatePickerView.jsx' // side-effect: register the date-picker renderer
 import './DropdownView.jsx' // side-effect: register the dropdown renderer
+import './NavMenuView.jsx' // side-effect: register the nav-menu renderer
 import './KbdView.jsx' // side-effect: register the kbd renderer
 import './ItemView.jsx' // side-effect: register the item renderer
 import './BubbleView.jsx' // side-effect: register the bubble renderer
@@ -40,6 +41,7 @@ export { SliderView } from './SliderView.jsx'
 export { CalendarView } from './CalendarView.jsx'
 export { DatePickerView } from './DatePickerView.jsx'
 export { DropdownView } from './DropdownView.jsx'
+export { NavMenuView } from './NavMenuView.jsx'
 export { KbdView } from './KbdView.jsx'
 export { ItemView } from './ItemView.jsx'
 export { BubbleView } from './BubbleView.jsx'
