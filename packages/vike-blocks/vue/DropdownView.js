@@ -63,7 +63,7 @@ export const DropdownView = {
           trigger,
           placement,
           role: 'menu',
-          panelStyle: (v) => ({ ...popoverSurfaceStyle(), ...popoverMotionStyle(v, placement) }),
+          panelStyle: (v, pl) => ({ ...popoverSurfaceStyle(), ...popoverMotionStyle(v, pl) }),
         },
         { default: () => h('div', { ref: menuEl, onKeydown: onKeyDown, 'data-slot': 'dropdown-menu' }, rows) },
       )

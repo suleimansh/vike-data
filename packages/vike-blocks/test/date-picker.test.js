@@ -61,15 +61,17 @@ test('popoverAnchorStyle places the panel on the right side/align of the trigger
 test('popoverMotionStyle drives opacity + a directional slide by visibility', () => {
   const hidden = popoverMotionStyle(false, 'bottom-start')
   assert.equal(hidden.opacity, 0)
-  assert.equal(hidden.transform, 'translateY(-4px)') // slides down from the trigger
+  assert.equal(hidden.transform, 'translateY(-6px) scale(0.96)') // slides + scales up from the trigger
+  assert.equal(hidden.transformOrigin, 'left top') // grows out of the anchored corner
   assert.match(hidden.transition, new RegExp(`${POPOVER_ENTER_MS}ms`))
 
   const shown = popoverMotionStyle(true, 'bottom-start')
   assert.equal(shown.opacity, 1)
-  assert.equal(shown.transform, 'translateY(0)')
+  assert.equal(shown.transform, 'translateY(0) scale(1)')
 
-  // a top-anchored panel slides the other way
-  assert.equal(popoverMotionStyle(false, 'top-start').transform, 'translateY(4px)')
+  // a top-anchored panel slides the other way and grows from its bottom edge
+  assert.equal(popoverMotionStyle(false, 'top-start').transform, 'translateY(6px) scale(0.96)')
+  assert.equal(popoverMotionStyle(false, 'top-end').transformOrigin, 'right bottom')
 })
 
 test('popoverSurfaceStyle is a themed menu box', () => {

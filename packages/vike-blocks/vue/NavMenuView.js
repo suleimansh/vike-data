@@ -24,7 +24,7 @@ function groupMenu(item, open, onToggle, onClose) {
   })
   return h(
     Popover,
-    { open, onClose, trigger, placement: 'bottom-start', role: 'menu', panelStyle: (v) => ({ ...popoverSurfaceStyle(), ...navGroupPanelStyle(), ...popoverMotionStyle(v, 'bottom-start') }) },
+    { open, onClose, trigger, placement: 'bottom-start', role: 'menu', panelStyle: (v, pl) => ({ ...popoverSurfaceStyle(), ...navGroupPanelStyle(), ...popoverMotionStyle(v, pl) }) },
     { default: () => h('div', { onKeydown: (e) => moveMenuFocus(e.currentTarget, e.key) && e.preventDefault(), 'data-slot': 'nav-group' }, rows) },
   )
 }
