@@ -6,12 +6,13 @@
 // is UNSTYLED beyond the backdrop: the consumer supplies the panel position + enter/exit transform via
 // `panelStyle(visible)` and the backdrop alignment via `containerStyle`.
 import { h, ref, watch, onMounted, onUnmounted, nextTick, toRef, Teleport } from 'vue'
+import { OVERLAY_ENTER_MS, OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../overlay-motion.js'
 
 export const FOCUSABLE =
   'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])'
-export const ENTER_MS = 300
-// A springy ease with a little overshoot, so a panel lands like Animate UI's spring (pure CSS).
-export const SPRING = 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+// Re-exported from the shared overlay-motion source so dialog / sheet / drawer all animate identically.
+export const ENTER_MS = OVERLAY_ENTER_MS
+export const SPRING = OVERLAY_EASE
 
 // The shared trigger-button look, so every overlay's opener is identical.
 export const overlayTriggerStyle = () => ({
@@ -149,7 +150,7 @@ export const Overlay = {
             display: 'flex',
             background: 'rgba(15, 23, 42, 0.5)',
             opacity: visible.value ? 1 : 0,
-            transition: `opacity ${ENTER_MS}ms ease`,
+            transition: `opacity ${ENTER_MS}ms ${OVERLAY_BACKDROP_EASE}`,
             ...props.containerStyle,
           },
         },

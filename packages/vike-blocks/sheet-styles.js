@@ -2,10 +2,11 @@
 // renderers so the two twins can't drift. Given an anchored edge, it produces (a) where the panel sits
 // within the backdrop and (b) the panel box + the slide-in transform. Dep-free, theme-native. The
 // slide duration must match the overlay primitive's ENTER_MS so the panel finishes sliding before the
-// primitive unmounts it.
-export const SHEET_ENTER_MS = 300
+// primitive unmounts it — so both come from the one shared overlay-motion source (drawer reuses these).
+import { OVERLAY_ENTER_MS, OVERLAY_EASE } from './overlay-motion.js'
+export const SHEET_ENTER_MS = OVERLAY_ENTER_MS
 // A decelerate ease (no overshoot) — a full-edge panel that overshot would flash a gap past the edge.
-export const SHEET_EASE = 'cubic-bezier(0.32, 0.72, 0, 1)'
+export const SHEET_EASE = OVERLAY_EASE
 
 // Only the two inner corners are rounded; the anchored edge stays flush.
 const RADIUS = {
