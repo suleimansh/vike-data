@@ -5,10 +5,17 @@
 // vike-admin/react/ListPage). This page keeps the admin CHROME around it: the title, the "New"
 // button, and prev/next paging. Navigation is plain query-string links (`?page=&sort=&dir=`), so
 // it works without client JS.
+import { h } from 'vue'
 import { useData } from 'vike-vue/useData'
 import { ListView } from 'vike-crud/vue'
 
 const data = useData()
+
+// Confirm before a destructive submit. Progressive enhancement: after hydration it asks before
+// deleting; with no client JS the form just submits (still owner-scoped server-side).
+function confirmDelete(e) {
+  if (typeof window !== 'undefined' && !window.confirm('Delete this row?')) e.preventDefault()
+}
 
 // Build an /admin/:table URL carrying the paging/sort state; empty params are dropped so a default
 // view stays a clean `/admin/:table`.
@@ -27,6 +34,18 @@ function listUrl(table, { page, sort, dir }) {
 // links to its edit page (only when the user may edit — so no edit column otherwise).
 const sortHref = (name, nextDir) => listUrl(data.table, { page: 1, sort: name, dir: nextDir })
 const rowHref = data.canEdit ? (row) => `/admin/${data.table}/${encodeURIComponent(String(row[data.pk]))}` : undefined
+
+// A per-row Delete control: its own no-JS form POSTing `_action=delete` to the row's edit route,
+// reusing the admin's existing owner-scoped delete (data:editData) — no new endpoint, no wider
+// write surface. Server-side it keys on the primary key AND the resource scope, so a scoped user
+// can only delete a row they own.
+const rowActions = data.canEdit
+  ? (row) =>
+      h('form', { method: 'post', action: `/admin/${data.table}/${encodeURIComponent(String(row[data.pk]))}`, onSubmit: confirmDelete, style: { display: 'inline', margin: 0 } }, [
+        h('input', { type: 'hidden', name: '_action', value: 'delete' }),
+        h('button', { type: 'submit', style: { background: 'transparent', color: 'var(--color-danger, #c0392b)', border: 'none', padding: 0, fontSize: '14px', cursor: 'pointer' } }, 'Delete'),
+      ])
+  : undefined
 
 const pagerLink = { padding: '0.35rem 0.75rem', borderRadius: 'var(--radius, 8px)', border: '1px solid var(--color-border)', textDecoration: 'none', color: 'var(--color-text)' }
 const pagerDisabled = { padding: '0.35rem 0.75rem', color: 'var(--color-muted)', opacity: 0.5 }
@@ -48,6 +67,7 @@ const pagerDisabled = { padding: '0.35rem 0.75rem', color: 'var(--color-muted)',
         :dir="data.dir"
         :sortHref="sortHref"
         :rowHref="rowHref"
+        :rowActions="rowActions"
         empty-label="No rows found."
       />
     </div>

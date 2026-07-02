@@ -4,6 +4,8 @@
 //   - `fkLabels` ({ col: { value: label } }) shows a FK cell's referenced title instead of the key
 //   - `sort`/`dir`/`sortHref(col, nextDir)` make the marked-sortable headers into sort links
 //   - `rowHref(row)` adds a trailing actions column linking each row (e.g. to its edit page)
+//   - `rowActions(row)` renders extra per-row controls in that same actions column (e.g. a
+//     Delete form) — the caller owns the markup, so it can be a no-JS form or any node
 // All optional, so a bare `<ListView columns rows />` still works. `rows` default to none (the
 // data layer supplies them), so with none it shows the columns and an empty state.
 import './widgets.jsx' // side-effect: registers the built-in widgets (and any app slot registers alongside)
@@ -49,10 +51,11 @@ export function ListView({
   dir,
   sortHref,
   rowHref,
+  rowActions,
   rowActionLabel = 'Edit',
   emptyLabel = 'No rows.',
 }) {
-  const hasActions = typeof rowHref === 'function'
+  const hasActions = typeof rowHref === 'function' || typeof rowActions === 'function'
 
   // A sortable header links to the same list sorted by its column; the active column flips
   // direction and shows an arrow. Only when the column is sortable AND a sortHref is supplied.
@@ -101,7 +104,12 @@ export function ListView({
               })}
               {hasActions && (
                 <td style={{ ...cell, textAlign: 'right', whiteSpace: 'nowrap' }}>
-                  <a href={rowHref(row)} style={{ color: 'var(--color-primary)', fontSize: 14 }}>{rowActionLabel}</a>
+                  <span style={{ display: 'inline-flex', gap: '0.75rem', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    {typeof rowHref === 'function' && (
+                      <a href={rowHref(row)} style={{ color: 'var(--color-primary)', fontSize: 14 }}>{rowActionLabel}</a>
+                    )}
+                    {typeof rowActions === 'function' ? rowActions(row) : null}
+                  </span>
                 </td>
               )}
             </tr>

@@ -1,7 +1,8 @@
 // The Vue renderer for a `list` block — the Vue twin of vike-crud/react/ListView.jsx. Standalone
 // it draws columns + rows; it also carries the options a full admin list needs (fkLabels,
-// sort/dir/sortHref for sortable header links, rowHref for a per-row action), all optional, so
-// vike-admin/vue can render its list THROUGH this one component.
+// sort/dir/sortHref for sortable header links, rowHref for a per-row action, rowActions for
+// extra per-row controls like a Delete form), all optional, so vike-admin/vue can render its
+// list THROUGH this one component.
 import './widgets.js' // side-effect: registers the built-in widgets (and any app slot registers alongside)
 import { h } from 'vue'
 import { getFieldWidget } from './widget-registry.js'
@@ -33,7 +34,7 @@ export const ListView = (props) => {
   const rows = props.rows ?? []
   const pk = props.pk ?? 'id'
   const emptyLabel = props.emptyLabel ?? 'No rows.'
-  const hasActions = typeof props.rowHref === 'function'
+  const hasActions = typeof props.rowHref === 'function' || typeof props.rowActions === 'function'
 
   function header(c) {
     if (!c.sortable || typeof props.sortHref !== 'function') return c.label
@@ -58,8 +59,13 @@ export const ListView = (props) => {
             return h('td', { key: c.name, style: cell }, content)
           })
           if (hasActions) {
+            const controls = []
+            if (typeof props.rowHref === 'function') {
+              controls.push(h('a', { href: props.rowHref(row), style: { color: 'var(--color-primary)', fontSize: '14px' } }, props.rowActionLabel ?? 'Edit'))
+            }
+            if (typeof props.rowActions === 'function') controls.push(props.rowActions(row))
             tds.push(
-              h('td', { style: { ...cell, textAlign: 'right', whiteSpace: 'nowrap' } }, h('a', { href: props.rowHref(row), style: { color: 'var(--color-primary)', fontSize: '14px' } }, props.rowActionLabel ?? 'Edit')),
+              h('td', { style: { ...cell, textAlign: 'right', whiteSpace: 'nowrap' } }, h('span', { style: { display: 'inline-flex', gap: '0.75rem', alignItems: 'center', justifyContent: 'flex-end' } }, controls)),
             )
           }
           return h('tr', { key: row[pk] ?? i }, tds)
@@ -70,4 +76,4 @@ export const ListView = (props) => {
     h('tbody', body),
   ])
 }
-ListView.props = ['table', 'columns', 'rows', 'pk', 'fkLabels', 'sort', 'dir', 'sortHref', 'rowHref', 'rowActionLabel', 'emptyLabel']
+ListView.props = ['table', 'columns', 'rows', 'pk', 'fkLabels', 'sort', 'dir', 'sortHref', 'rowHref', 'rowActions', 'rowActionLabel', 'emptyLabel']
