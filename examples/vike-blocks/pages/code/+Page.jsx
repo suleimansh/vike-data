@@ -1,7 +1,7 @@
 // The code block: a snippet with a filename header, a copy button, line numbers, and per-line
 // decorations. Source = kibo-ui's code-block, reimplemented dep-free (a small generic tokenizer, no
 // Shiki), theme-native, and cross-framework. The copy button is the only client state.
-import { definePage, codeBlock, heading, text } from 'vike-blocks'
+import { definePage, code, heading, text } from 'vike-blocks'
 import { Page } from 'vike-blocks/react'
 
 const snippet = `import { defineView, crudBlocks } from 'vike-view'
@@ -25,18 +25,18 @@ const page = definePage({
     text('A themed code surface: filename header, copy button, line numbers, and per-line decorations. Dep-free — a small generic tokenizer stands in for Shiki; colors read vike-themes CSS vars.').tone('muted'),
 
     heading('Basic').level(3),
-    codeBlock(snippet).lang('tsx').filename('pages/posts/+view.js'),
+    code(snippet).lang('tsx').filename('pages/posts/+view.js'),
 
     heading('Highlighted + focused lines').level(3),
     text('Mark lines explicitly with .highlight()/.focus(), or inline with kibo-style // [!code ...] markers.'),
-    codeBlock(snippet).lang('tsx').highlight([4]).focus([4, 5, 6, 7]),
+    code(snippet).lang('tsx').highlight([4]).focus([4, 5, 6, 7]),
 
     heading('Diff').level(3),
     text('Inline markers drive an add/remove diff:'),
-    codeBlock(diff).lang('js').filename('total.js'),
+    code(diff).lang('js').filename('total.js'),
 
     heading('Bare (no chrome)').level(3),
-    codeBlock("echo 'no header, no line numbers, no copy'").lang('bash').lineNumbers(false).noCopy(),
+    code("echo 'no header, no line numbers, no copy'").lang('bash').lineNumbers(false).noCopy(),
   ],
 })
 

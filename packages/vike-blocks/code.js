@@ -4,10 +4,10 @@
 // and cross-framework. Interactivity is just the copy button's local state (like tabs / toast), so it
 // needs no actions layer.
 //
-//   codeBlock("const x = 1\nconsole.log(x)").lang('ts').filename('demo.ts')
-//   codeBlock(src).lang('tsx').highlight([2]).add([3]).remove([4])   // explicit line decorations
-//   codeBlock(src).focus([2, 3])                                     // dim every other line
-//   codeBlock(src).lineNumbers(false).noCopy().plain()               // bare, no tokenizing
+//   code("const x = 1\nconsole.log(x)").lang('ts').filename('demo.ts')
+//   code(src).lang('tsx').highlight([2]).add([3]).remove([4])   // explicit line decorations
+//   code(src).focus([2, 3])                                     // dim every other line
+//   code(src).lineNumbers(false).noCopy().plain()               // bare, no tokenizing
 //
 // Decorations can also ride inline in the source as kibo markers (stripped on resolve):
 //   const y = 2 // [!code highlight]
@@ -15,13 +15,13 @@
 //   removed()   // [!code --]
 //   focused()   // [!code focus]
 //
-// Multiple files? Compose with the `tabs` block, one codeBlock per tab.
+// Multiple files? Compose with the `tabs` block, one code per tab.
 import { defineBlock } from './registry.js'
 import { tokenizeLines, parseMarkers } from './code-highlight.js'
 
 const toLineArray = (v) => (Array.isArray(v) ? v : v != null ? [v] : [])
 
-export const codeBlock = defineBlock('code', {
+export const code = defineBlock('code', {
   build: (code) => ({ code: code ?? '' }),
   refine: {
     lang: (l) => ({ lang: l }),

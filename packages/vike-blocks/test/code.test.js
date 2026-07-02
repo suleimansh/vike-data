@@ -3,7 +3,7 @@
 // the generic tokenizer, and the resolve view-model.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { codeBlock, definePage, resolvePage, getBlock, hasBlock } from '../index.js'
+import { code, definePage, resolvePage, getBlock, hasBlock } from '../index.js'
 import { tokenizeLines, parseMarkers, TOKEN_COLORS } from '../code-highlight.js'
 
 const resolveCode = (builder) => getBlock('code').resolve({ props: builder.build() })
@@ -13,7 +13,7 @@ test('code is registered', () => {
 })
 
 test('the builder collapses to a { block, ...props } descriptor', () => {
-  const d = codeBlock('const x = 1').lang('ts').filename('a.ts').build()
+  const d = code('const x = 1').lang('ts').filename('a.ts').build()
   assert.equal(d.block, 'code')
   assert.equal(d.code, 'const x = 1')
   assert.equal(d.lang, 'ts')
@@ -21,25 +21,25 @@ test('the builder collapses to a { block, ...props } descriptor', () => {
 })
 
 test('line numbers and copy default on; noCopy / lineNumbers(false) turn them off', () => {
-  assert.equal(resolveCode(codeBlock('x')).lineNumbers, true)
-  assert.equal(resolveCode(codeBlock('x')).copy, true)
-  assert.equal(resolveCode(codeBlock('x').lineNumbers(false)).lineNumbers, false)
-  assert.equal(resolveCode(codeBlock('x').noCopy()).copy, false)
+  assert.equal(resolveCode(code('x')).lineNumbers, true)
+  assert.equal(resolveCode(code('x')).copy, true)
+  assert.equal(resolveCode(code('x').lineNumbers(false)).lineNumbers, false)
+  assert.equal(resolveCode(code('x').noCopy()).copy, false)
 })
 
 test('resolve yields one line per source line, aligned', () => {
-  const out = resolveCode(codeBlock('a\nb\nc'))
+  const out = resolveCode(code('a\nb\nc'))
   assert.equal(out.lines.length, 3)
 })
 
 test('a trailing newline does not add a phantom line, and the clipboard payload is trimmed', () => {
-  const out = resolveCode(codeBlock('a\nb\n'))
+  const out = resolveCode(code('a\nb\n'))
   assert.equal(out.lines.length, 2)
   assert.equal(out.code, 'a\nb')
 })
 
 test('explicit highlight / add / remove / focus arrays decorate the right 1-based lines', () => {
-  const out = resolveCode(codeBlock('l1\nl2\nl3\nl4').highlight([1]).add(2).remove([3]).focus([4]))
+  const out = resolveCode(code('l1\nl2\nl3\nl4').highlight([1]).add(2).remove([3]).focus([4]))
   assert.equal(out.lines[0].hl, true)
   assert.equal(out.lines[1].diff, 'add')
   assert.equal(out.lines[2].diff, 'remove')
@@ -85,7 +85,7 @@ test('# is a comment only for hash-comment languages', () => {
 })
 
 test('plain() renders one plain token per line, no tokenizing', () => {
-  const out = resolveCode(codeBlock('const x = 1').plain())
+  const out = resolveCode(code('const x = 1').plain())
   assert.equal(out.lines[0].tokens.length, 1)
   assert.equal(out.lines[0].tokens[0].c, 'plain')
 })
@@ -96,7 +96,7 @@ test('token colors are theme-native (read a CSS var)', () => {
 })
 
 test('resolves as a section through a page', () => {
-  const out = resolvePage(definePage({ sections: [codeBlock('hi').filename('h.txt')] }))
+  const out = resolvePage(definePage({ sections: [code('hi').filename('h.txt')] }))
   assert.equal(out.sections[0].block, 'code')
   assert.equal(out.sections[0].resolved.filename, 'h.txt')
 })
