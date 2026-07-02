@@ -28,3 +28,5 @@ export { projectRow } from './project.js'
 export { parseListQuery, QueryError, MAX_LIMIT } from './query.js'
 // The server-side data layer: fill a view's blocks with rows/values, and the scoped write path.
 export { hydrateView, createRow, updateRow, deleteRow, rowFromForm } from './data.js'
+// Customization tier 3: eject a view to plain, owned source (page + data hook), no page-gen.
+export { ejectView, routeToSlug } from './eject.js'

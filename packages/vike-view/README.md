@@ -143,7 +143,18 @@ You start with a generated view and refine only where reality demands it:
    ```
 
    The token is a string (register the component with `registerFieldWidget`), so the block descriptor stays serializable — the same register-by-name pattern as the `custom` block. An unregistered token falls back to the derived cell/control, so a typo degrades gracefully. Register the component from a module the page imports so it runs on both the server (SSR) and the client (hydration).
-3. **AI-assisted eject** (tier 3) — when you outgrow config + slots, regenerate the raw page + components from the view descriptor (a separate spike).
+3. **Eject** (tier 3) — when you outgrow config + slots, `ejectView(view)` hands you the whole page as plain, owned source and steps out of the way. No more generated `ViewPage` / `viewData` / `views` config dispatch: the view descriptor, the row-scope, and the read/write path are written into files in your own page folder, and nothing regenerates them.
+
+   ```js
+   import { ejectView } from 'vike-view/eject'
+
+   const { files } = ejectView(view, { framework: 'react' }) // or 'vue'
+   // -> [{ path: 'pages/posts/+data.js',  source },   // data hook: view inlined, scope + write path
+   //     { path: 'pages/posts/+Page.jsx', source }]   // page: renders the sections through <Blocks>
+   for (const f of files) await writeFile(f.path, f.source)
+   ```
+
+   It leans on two guarantees of the block IR: a view's `sections` are serializable block descriptors (so they emit as an editable literal you own) and its `scope` is a real function (so its source is emitted verbatim — you get your exact owner predicate back, not a stub). The output is a real starting point to grow, not a pre-exploded component tree you would have to reconcile on the next edit; swap `<Blocks>` for explicit `<ListView/>` / `<FormView/>` as you go. See `examples/vike-view/pages/posts-ejected/` for committed output.
 
 For a whole SECTION (not a field), compose a `{ block: 'custom', component }` in place of the generated `list`/`record`/`form` instead of a slot.
 
