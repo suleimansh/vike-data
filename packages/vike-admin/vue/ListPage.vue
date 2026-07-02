@@ -1,12 +1,12 @@
 <script setup>
 // /admin/:table — the list. The TABLE (columns, sortable headers, FK cells, per-row edit link,
-// empty state) is rendered by vike-view/vue's ListView — vike-admin is a preset over vike-view, so
+// empty state) is rendered by vike-crud/vue's ListView — vike-admin is a preset over vike-crud, so
 // it draws its list through the same component instead of a second table (mirrors
 // vike-admin/react/ListPage). This page keeps the admin CHROME around it: the title, the "New"
 // button, and prev/next paging. Navigation is plain query-string links (`?page=&sort=&dir=`), so
 // it works without client JS.
 import { useData } from 'vike-vue/useData'
-import { ListView } from 'vike-view/vue'
+import { ListView } from 'vike-crud/vue'
 
 const data = useData()
 

@@ -36,6 +36,6 @@ pages/
   +config.js          extends vike-react (vike-blocks is a library, not a Vike extension)
 ```
 
-## Relationship to vike-view
+## Relationship to vike-crud
 
-vike-view layers a schema/data tier on top of this: its `list`/`record`/`form` blocks derive their descriptors from your data schema, and `viewPages` generates Vike pages from a `defineView` route. See `examples/vike-view`. Here there is no schema — just blocks composed by hand.
+vike-crud layers a schema/data tier on top of this: its `list`/`record`/`form` blocks derive their descriptors from your data schema, and `viewPages` generates Vike pages from a `definePage` route. See `examples/vike-crud`. Here there is no schema — just blocks composed by hand.

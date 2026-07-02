@@ -4,7 +4,7 @@ Composable UI as data. The framework-agnostic substrate for building a page out 
 — a block descriptor IR, an open registry, the `definePage` composer, the built-in primitive
 blocks, and the `defineBlock` seam so any package can ship a new block with high DX.
 
-`vike-view` layers schema-driven blocks (list / record / form derived from your data schema)
+`vike-crud` layers schema-driven blocks (list / record / form derived from your data schema)
 on top of this; a per-framework package (e.g. a React renderer) draws the blocks.
 
 ## A page is a composition of blocks
@@ -28,7 +28,7 @@ definePage({
 
 `resolvePage(page, tables)` turns the block descriptors into plain, serializable view-models a
 renderer draws (`{ block, props, resolved }` per section). A bespoke block echoes its props; a
-schema-derived block (registered by vike-view) fills its `columns`/`fields` from the schema.
+schema-derived block (registered by vike-crud) fills its `columns`/`fields` from the schema.
 
 ## Built-in block catalog
 
@@ -91,7 +91,7 @@ layout('landing')
 ```
 
 **Bespoke pass-throughs** (the renderer draws them from their props): `stat` (`{ title, source|value }`),
-`markdown` (`{ source }`), `custom` (`{ component }`, your own component). vike-view registers the
+`markdown` (`{ source }`), `custom` (`{ component }`, your own component). vike-crud registers the
 schema-derived blocks (`list` / `record` / `form`) into the same registry.
 
 ## The open registry + `defineBlock`
@@ -131,10 +131,10 @@ resolved sections; `<Page>` resolves a view first. Each block type maps to its r
 component (via the shared registry), which receives the block's serializable `resolved` model:
 
 ```jsx
-import { Page } from 'vike-blocks/react'          // + 'vike-view/react' to render list/record/form
-import { defineView, crudBlocks, heading } from 'vike-view'
+import { Page } from 'vike-blocks/react'          // + 'vike-crud/react' to render list/record/form
+import { definePage, crudBlocks, heading } from 'vike-crud'
 
-const view = defineView({ sections: [heading('Posts'), ...crudBlocks({ table: 'posts' })] })
+const view = definePage({ sections: [heading('Posts'), ...crudBlocks({ table: 'posts' })] })
 // <Page page={view} tables={tables} /> -> the schema drives the table columns, record fields,
 // and form controls (an enum column renders a <select>, a required column is marked, ...).
 ```

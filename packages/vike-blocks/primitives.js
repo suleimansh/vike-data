@@ -1,9 +1,9 @@
 // The built-in leaf BLOCKS, defined through the same `defineBlock` seam a third party
 // uses — so our primitives and someone's `vike-block-rating` are peers, not special cases.
-// Each is a lowercase factory (matching vike-view's column()/field() idiom) whose `.build()`
+// Each is a lowercase factory (matching vike-crud's column()/field() idiom) whose `.build()`
 // collapses to a plain leaf-block descriptor; it drops straight into a page's `sections`.
 //
-//   defineView({
+//   definePage({
 //     sections: [
 //       heading('Post').level(2),
 //       badge('Draft').tone('warning'),

@@ -4,10 +4,10 @@
 import { definePage, code, heading, text } from 'vike-blocks'
 import { Page } from 'vike-blocks/react'
 
-const snippet = `import { defineView, crudBlocks } from 'vike-view'
+const snippet = `import { definePage, crudBlocks } from 'vike-crud'
 
 // a schema-driven CRUD page in ~10 lines
-export default defineView({
+export default definePage({
   route: '/posts',
   sections: crudBlocks({ table: 'posts' }),
   scope: (t, ctx) => ({ author_id: ctx.user.id }),

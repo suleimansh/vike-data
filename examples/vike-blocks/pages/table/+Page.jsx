@@ -1,5 +1,5 @@
 // The table block: a non-schema data table — feed it rows + columns directly (API results,
-// computed data) and it renders a themed table. The plain-data counterpart to vike-view's
+// computed data) and it renders a themed table. The plain-data counterpart to vike-crud's
 // schema-driven list; it shares the ListView chrome without the schema path. Sorting is local
 // client state (no actions layer). Display-only — the interactive non-schema form waits on #385.
 import { definePage, table, heading, text } from 'vike-blocks'

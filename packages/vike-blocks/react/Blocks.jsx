@@ -1,6 +1,6 @@
 // The dispatch: draw a page's blocks by mapping each section's block type to its registered
 // React component and handing it the section's resolved view-model. `<Blocks>` takes already
-// resolved sections; `<Page>` resolves a view first (so an app can hand it a defineView/
+// resolved sections; `<Page>` resolves a view first (so an app can hand it a definePage/
 // definePage result + the composed tables). A block type with no registered renderer is skipped
 // (returns nothing) rather than throwing, so a page degrades gracefully. Importing this module
 // registers the built-in block renderers (via ./primitives.jsx).
@@ -21,7 +21,7 @@ export function Blocks({ sections = [] }) {
   )
 }
 
-// Resolve a view/page against the composed tables, then draw it. `page` is a defineView/
+// Resolve a view/page against the composed tables, then draw it. `page` is a definePage/
 // definePage result; `tables` is the merged schema (resolveViewTables(config)) for schema blocks.
 export function Page({ page, tables }) {
   const resolved = resolvePage(page, tables)

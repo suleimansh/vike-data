@@ -1,7 +1,7 @@
 // The block registry — the open set of block types a page can compose. A BLOCK is one
 // section of a page: a `{ block: <type>, ...props }` descriptor. Most blocks are bespoke
 // (their view-model is just their props); a block can also be schema/data-aware by carrying
-// a `resolve` (vike-view's list/record/form register their derivation this way).
+// a `resolve` (vike-crud's list/record/form register their derivation this way).
 //
 // The registry is OPEN: an extension registers its own block with `registerBlock(type, def)`
 // (or, for a leaf block with a fluent builder, `defineBlock`), so a new block type ships

@@ -1,5 +1,5 @@
 // The React renderer for the `table` block — a non-schema data table. Draws the resolved
-// columns + rows with the shared table chrome (so it themes like vike-view's ListView). When the
+// columns + rows with the shared table chrome (so it themes like vike-crud's ListView). When the
 // block is `.sortable()`, headers become client-side sort toggles; the sort is purely local UI
 // state (like the code block's copy button). With `.rowActions([...])`, a trailing actions column
 // draws each action block per row, its `params` tokens resolved against that row — the button then

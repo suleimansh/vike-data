@@ -1,7 +1,7 @@
 // vike-blocks — composable UI as data. The framework-agnostic substrate: the block
 // registry + defineBlock seam, the definePage composer, and the built-in blocks.
 // Importing this root registers the bespoke blocks (stat/markdown/custom), the leaf
-// primitives (text/heading/badge/divider/link), and the tabs container block. vike-view
+// primitives (text/heading/badge/divider/link), and the tabs container block. vike-crud
 // layers schema-driven blocks on top; a per-framework package registers the renderers.
 import './blocks.js' // side-effect: register stat / custom
 import './primitives.js' // side-effect: register text / heading / badge / divider / link / list

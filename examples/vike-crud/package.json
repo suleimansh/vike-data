@@ -1,0 +1,25 @@
+{
+  "name": "app-vike-crud",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal vike-crud example: one defineSchema('posts') drives a full CRUD page via viewPages(views), plus the mix-into-a-normal-app path (a single block dropped into a hand-written page, no page-gen).",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@universal-orm/core": "workspace:*",
+    "@universal-orm/memory": "workspace:*",
+    "@vike-data/vike-schema": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "vike": "^0.4.0",
+    "vike-actions": "workspace:*",
+    "vike-blocks": "workspace:*",
+    "vike-react": "^0.6.25",
+    "vike-crud": "workspace:*",
+    "vite": "^7.1.0"
+  }
+}
