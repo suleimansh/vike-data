@@ -12,6 +12,7 @@ import './KbdView.js' // side-effect: register the kbd renderer
 import './ItemView.js' // side-effect: register the item renderer
 import './BubbleView.js' // side-effect: register the bubble renderer
 import './MessageView.js' // side-effect: register the message renderer
+import './MessageScrollerView.js' // side-effect: register the message-scroller renderer
 import './AlertView.js' // side-effect: register the alert renderer
 import './TabsView.js' // side-effect: register the tabs renderer
 import './AccordionView.js' // side-effect: register the accordion renderer
@@ -31,6 +32,7 @@ export { KbdView } from './KbdView.js'
 export { ItemView } from './ItemView.js'
 export { BubbleView } from './BubbleView.js'
 export { MessageView } from './MessageView.js'
+export { MessageScrollerView } from './MessageScrollerView.js'
 export { AlertView } from './AlertView.js'
 export { TabsView } from './TabsView.js'
 export { AccordionView } from './AccordionView.js'
