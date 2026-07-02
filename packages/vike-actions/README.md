@@ -52,6 +52,29 @@ guard: ['authed', (ctx) => ctx.user.role === 'admin']    // AND
 
 A denied action answers `403`. A missing/wrong input answers `400`. An unknown action `404`.
 
+## `onSuccess`: what happens after a 200
+
+A client-effect **hint** the binding runs once the action succeeds. It's plain, serializable data (or a function that produces some) — the effect itself (navigate, toast) runs in the react/vue binding, composing vike-blocks' toast store:
+
+```js
+onSuccess: 'reload'                 // refetch / reload the page data
+onSuccess: 'redirect:/posts'        // client navigate
+onSuccess: 'toast:Published!'       // fire a toast (vike-blocks emitToast)
+onSuccess: { toast: 'Published!', redirect: '/posts' }          // object form, combinable
+onSuccess: { toast: { title: 'Published', variant: 'success' }, reload: true }
+```
+
+Need the message to use the result? Make `onSuccess` a **function** — it's evaluated server-side (where the result lives), so only the resolved, serializable hint crosses to the client:
+
+```js
+defineAction('publish', {
+  async run({ input, db }) { return db.posts.update({ id: input.id }, { status: 'published' }) },
+  onSuccess: (post) => ({ toast: `Published "${post.title}"`, redirect: `/posts/${post.id}` }),
+})
+```
+
+A hint that throws is a no-op — the write already succeeded, so a bad UX hint never fails the action.
+
 ## The endpoint
 
 `POST /_actions/<name>` with a JSON body (the params). It resolves the signed-in user (via vike-auth), runs the action, and returns:

@@ -22,6 +22,12 @@ test('getAction returns the stored def with defaults filled', () => {
   assert.equal(typeof a.run, 'function')
 })
 
+test('a function onSuccess is reported as null in the ref (resolved per-run, not static)', () => {
+  const ref = defineAction('publish', { onSuccess: (r) => ({ toast: r.title }), run: async () => ({}) })
+  assert.equal(ref.onSuccess, null) // the ref stays serializable; the resolved hint rides the envelope
+  assert.equal(typeof getAction('publish').onSuccess, 'function') // still stored for runAction
+})
+
 test('a later definition overrides an earlier one', () => {
   defineAction('x', { run: async () => 1 })
   defineAction('x', { run: async () => 2 })
