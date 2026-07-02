@@ -5,6 +5,7 @@
 // resolved view-model as props. Importing this module registers the built-ins as a side effect.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
+import { badgeStyle } from '../badge-styles.js'
 
 const TONE = { muted: 'var(--color-muted)', danger: 'var(--color-danger, #dc2626)', success: 'var(--color-success, #16a34a)', info: 'var(--color-primary, #2563eb)' }
 
@@ -21,11 +22,8 @@ export const Heading = (props) => {
 }
 Heading.props = ['value', 'level']
 
-export const Badge = (props) => {
-  const color = props.tone ? (TONE[props.tone] ?? 'var(--color-muted)') : 'var(--color-muted)'
-  return h('span', { style: { display: 'inline-block', padding: '2px 8px', borderRadius: '999px', fontSize: '12px', border: `1px solid ${color}`, color } }, props.value)
-}
-Badge.props = ['value', 'tone']
+export const Badge = (props) => h('span', { style: badgeStyle({ variant: props.variant, tone: props.tone }) }, props.value)
+Badge.props = ['value', 'variant', 'tone']
 
 export const Divider = () => h('hr', { style: { border: 0, borderTop: '1px solid var(--color-border)', margin: '1rem 0' } })
 Divider.props = []
