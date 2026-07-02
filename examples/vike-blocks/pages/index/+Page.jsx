@@ -18,6 +18,7 @@ const catalog = [
   { name: 'Item', href: '/item', tag: 'leaf', desc: 'A reusable list row — leading media + title + description + trailing note. Composes in any container. Theme-native.' },
   { name: 'Bubble', href: '/bubble', tag: 'leaf', desc: 'A chat message bubble, sender-aligned (user / assistant). Holds text or nested blocks (markdown). For AI chat UIs.' },
   { name: 'Message', href: '/message', tag: 'container', desc: 'A chat message — a bubble plus avatar, author, and timestamp, aligned by sender. Composes the bubble block.' },
+  { name: 'Message scroller', href: '/message-scroller', tag: 'interactive', desc: 'A scroll container for a chat transcript — sticks to the bottom on load, with a jump-to-latest button. Holds messages.' },
   { name: 'Primitives', href: '/primitives', tag: 'leaf', desc: 'heading · text (lead / muted / blockquote / code) · badge · list · divider · link — the built-in leaf blocks, composed with definePage.' },
   { name: 'Custom blocks', href: '/raw', tag: 'extend', desc: 'Define your own with defineBlock, or author a page as plain { block, ...props } descriptors.' },
 ]
