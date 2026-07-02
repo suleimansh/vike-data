@@ -8,6 +8,7 @@ const catalog = [
   { name: 'Headings', href: '/heading', tag: 'leaf', desc: 'Six levels (h1-h6) with level-scaled top spacing, so sections breathe. Theme-native text color.' },
   { name: 'Alert', href: '/alert', tag: 'leaf', desc: 'The shadcn Radix alert — a bordered notice with an accent icon, title, and description; info / success / warning / danger. Dep-free.' },
   { name: 'Button', href: '/button', tag: 'leaf', desc: 'The shadcn Base button — six variants, four sizes, focus ring + disabled, optional declarative nav.' },
+  { name: 'Input', href: '/input', tag: 'form', desc: 'A from-scratch text input — type / placeholder / value / disabled, a focus-visible ring, theme-native. Pairs with field.' },
   { name: 'Primitives', href: '/primitives', tag: 'leaf', desc: 'heading · text (lead / muted / blockquote / code) · badge · list · divider · link — the built-in leaf blocks, composed with definePage.' },
   { name: 'Custom blocks', href: '/raw', tag: 'extend', desc: 'Define your own with defineBlock, or author a page as plain { block, ...props } descriptors.' },
 ]
