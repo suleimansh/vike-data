@@ -22,4 +22,9 @@ export default {
 
   schemas: [postsSchema],
   pages: viewPages(views),
+
+  // The actions endpoint. This local pointer imports pages/actions.js, which registers the `publish`
+  // action AND provides the handler (with a demo user). A real app instead does
+  // `extends: ['import:vike-actions/config:default']` and imports its action modules for their side effect.
+  middleware: 'import:./actions.js:default',
 }

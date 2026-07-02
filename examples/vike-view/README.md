@@ -7,6 +7,7 @@ The smallest possible schema-driven app. One `defineSchema('posts')` becomes a f
 - **Page generation** (`/posts`): `viewPages(views)` turns a `defineView({ route, sections: crudBlocks({ table: 'posts' }) })` into a real Vike page. GET renders the list + create form derived from the schema; POST writes a row through the owner-scoped data hook and redirects back, so the new row shows on reload. No page code exists for this route.
 - **Mix into a normal app** (`/inline`): a hand-written vike-react page that imports vike-view's `<ListView>` block and renders it directly, no page-gen. Proves the blocks compose into pages you already own; they are not lock-in.
 - **Owner scoping**: the view's `scope: (table, ctx) => ({ user_id: ctx.user.id })` bounds every read and forces `user_id` onto every write. The demo identity comes from `+onCreatePageContext.js` (a real app installs vike-auth instead).
+- **An owner-guarded action** (`/actions-demo`): a `Publish` button — a vike-blocks action block, `button('Publish').action('publish').params({ id })` — POSTs `/_actions/publish`. The action (`pages/actions.js`) is guarded (`'authed'`), enforces ownership in its write filter, and returns an `onSuccess` toast naming the post it published. `+Wrapper.jsx` mounts `<ActionsProvider>` + `<Toaster>`, so the click fires the toast and reloads. Wired with `vike-actions`; the endpoint is one middleware pointed at `pages/actions.js`.
 
 ## Run
 
@@ -25,9 +26,13 @@ Open http://localhost:4200. The store is the in-memory adapter (cached on `globa
 pages/
   posts.schema.js          one defineSchema('posts')  -- the intent
   +views.js                defineView({ route: '/posts', sections: crudBlocks({ table: 'posts' }) })
-  +config.js               extends vike-react + vike-view; schemas + pages: viewPages(views)
+  +config.js               extends vike-react + vike-view; schemas + pages; middleware -> actions.js
   +onCreatePageContext.js  a demo user (owner-scoping needs one)
-  index/+Page.jsx          two links
+  +Wrapper.jsx             mounts <ActionsProvider> + <Toaster> around every page
+  actions.js               defineAction('publish', ...) + the actions endpoint (demo user)
+  index/+Page.jsx          the links
   inline/+Page.jsx         the mix-in path: <ListView> in a hand-written page
   inline/+data.js          resolves columns + fetches owner-scoped rows
+  actions-demo/+Page.jsx   posts + a Publish action button, drawn as blocks
+  actions-demo/+data.js    the user's posts (seeds a couple of drafts on first load)
 ```
