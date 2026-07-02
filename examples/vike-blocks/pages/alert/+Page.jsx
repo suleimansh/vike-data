@@ -1,14 +1,15 @@
-// The alert block: a leaf, tone-styled notice. `alert(title).intent(...).body(...)` renders a themed
-// callout — the accent per intent reads a vike-themes CSS var, and the tint is a color-mix over the
-// background, so a theme recolors the whole set. The example's custom `callout` block (pages/
-// callout.block.jsx) stays the "third-party block" teaching demo; this is the built-in.
+// The alert block: a leaf notice on the shadcn Radix surface — a bordered box with an accent icon,
+// a title, and a muted description. `alert(title).intent(...).body(...)`; the accent per intent reads
+// a vike-themes CSS var, and danger takes the destructive treatment (accent-tinted border + title).
+// The example's custom `callout` block (pages/callout.block.jsx) stays the "third-party block"
+// teaching demo; this is the built-in.
 import { definePage, alert, heading, text } from 'vike-blocks'
 import { Page } from 'vike-blocks/react'
 
 const page = definePage({
   sections: [
     heading('Alert block').level(1),
-    text('A leaf, theme-native notice in four intents. Static and dep-free; colors read vike-themes variables.').tone('muted'),
+    text('A leaf notice on the shadcn Radix surface — a bordered box with an accent icon, title, and muted description. Static and dep-free; colors read vike-themes variables.').tone('muted'),
 
     heading('Intents').level(3),
     alert('Did you know?').intent('info').body('Info is the default intent — use it for neutral, helpful context.'),

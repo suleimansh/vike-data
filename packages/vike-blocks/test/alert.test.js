@@ -4,6 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { alert, definePage, resolvePage, hasBlock } from '../index.js'
+import { intentKey, alertStyles, INTENTS } from '../alert-styles.js'
 
 test('alert is registered', () => {
   assert.ok(hasBlock('alert'))
@@ -33,4 +34,27 @@ test('resolve is a pass-through (model = props minus block type)', () => {
 test('a plain descriptor (no builder) resolves too', () => {
   const out = resolvePage(definePage({ sections: [{ block: 'alert', title: 'Raw', intent: 'danger' }] }))
   assert.deepEqual(out.sections[0].resolved, { title: 'Raw', intent: 'danger' })
+})
+
+test('intentKey normalizes aliases and unknowns to a canonical intent', () => {
+  assert.equal(intentKey('warn'), 'warning')
+  assert.equal(intentKey('error'), 'danger')
+  assert.equal(intentKey('note'), 'info')
+  assert.equal(intentKey('success'), 'success') // a canonical name is unchanged
+  assert.equal(intentKey('bogus'), 'info') // unknown -> info
+  assert.equal(intentKey(undefined), 'info') // unset -> info
+})
+
+test('the shadcn Radix surface is bordered (not tinted); only danger is destructive', () => {
+  const info = alertStyles('info')
+  // bordered box, background is the plain page bg (no color-mix tint like the old version)
+  assert.match(info.box.border, /1px solid/)
+  assert.equal(info.box.background, 'var(--color-bg, #ffffff)')
+  assert.equal(info.box.border, '1px solid var(--color-border, #e2e8f0)') // neutral border
+  assert.equal(info.titleStyle.color, 'var(--color-text, #0f172a)') // neutral title
+
+  const danger = alertStyles('danger')
+  assert.match(danger.box.border, /color-mix/) // destructive: accent-tinted border
+  assert.equal(danger.titleStyle.color, INTENTS.danger.accent) // destructive title in accent
+  assert.equal(danger.iconStyle.color, INTENTS.danger.accent)
 })
