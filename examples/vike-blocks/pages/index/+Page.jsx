@@ -5,6 +5,7 @@ const catalog = [
   { name: 'Accordion', href: '/accordion', tag: 'interactive', desc: 'Expand/collapse sections with an animated height morph. Single or multi-open; each panel composes other blocks.' },
   { name: 'Dialog', href: '/dialog', tag: 'interactive', desc: 'A modal overlay with a portal, focus trap, Escape / outside-click, and scroll-lock. Dep-free; holds nested blocks.' },
   { name: 'Card', href: '/card', tag: 'container', desc: 'A bordered surface with an optional header + footer, wrapping nested blocks. The most-used building block; cards compose recursively.' },
+  { name: 'Field', href: '/field', tag: 'container', desc: 'A form-field shell: a label + control slot + description + error, wrapping a control block. The hand-authored field shell that schema forms share.' },
   { name: 'Headings', href: '/heading', tag: 'leaf', desc: 'Six levels (h1-h6) with level-scaled top spacing, so sections breathe. Theme-native text color.' },
   { name: 'Alert', href: '/alert', tag: 'leaf', desc: 'The shadcn Radix alert — a bordered notice with an accent icon, title, and description; info / success / warning / danger. Dep-free.' },
   { name: 'Button', href: '/button', tag: 'leaf', desc: 'The shadcn Base button — six variants, four sizes, focus ring + disabled, optional declarative nav.' },
