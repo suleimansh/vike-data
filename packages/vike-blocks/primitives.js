@@ -29,10 +29,12 @@ export const heading = defineBlock('heading', {
   refine: { level: (n) => ({ level: n }) },
 })
 
-// A small status pill. `.tone()` is the advisory intent ('success' / 'warning' / ...).
+// A small status pill on the shadcn Base badge surface. `.variant()` picks the surface
+// ('default' / 'secondary' / 'destructive' / 'outline'); `.tone()` is the historical semantic
+// intent ('success' / 'warning' / ...), kept for back-compat and rendered as a soft accent tint.
 export const badge = defineBlock('badge', {
   build: (value) => ({ value }),
-  refine: { tone: (token) => ({ tone: token }) },
+  refine: { variant: (v) => ({ variant: v }), tone: (token) => ({ tone: token }) },
 })
 
 // A horizontal rule. Terminal today, but still a builder so it composes uniformly.

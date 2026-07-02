@@ -4,6 +4,7 @@
 // automatic JSX runtime, matching the rest of the family. Importing this module registers the
 // built-ins as a side effect (Blocks.jsx imports it for exactly that).
 import { registerBlockRenderer } from './registry.js'
+import { badgeStyle } from '../badge-styles.js'
 
 const TONE = { muted: 'var(--color-muted)', danger: 'var(--color-danger, #dc2626)', success: 'var(--color-success, #16a34a)', info: 'var(--color-primary, #2563eb)' }
 
@@ -21,13 +22,8 @@ export function Heading({ value, level = 2 }) {
   return <Tag style={{ margin: `${HEADING_TOP[lvl] ?? '1rem'} 0 0.5rem` }}>{value}</Tag>
 }
 
-export function Badge({ value, tone }) {
-  const color = tone ? (TONE[tone] ?? 'var(--color-muted)') : 'var(--color-muted)'
-  return (
-    <span style={{ display: 'inline-block', padding: '2px 8px', borderRadius: 999, fontSize: 12, border: `1px solid ${color}`, color }}>
-      {value}
-    </span>
-  )
+export function Badge({ value, variant, tone }) {
+  return <span style={badgeStyle({ variant, tone })}>{value}</span>
 }
 
 export function Divider() {
