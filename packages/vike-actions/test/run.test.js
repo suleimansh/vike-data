@@ -67,6 +67,32 @@ test('an array guard is AND-merged', async () => {
   assert.equal((await runAction({ name: 'a', user: { role: 'admin' } })).result, 'ok')
 })
 
+test('onSuccess: a static string/object hint passes through unchanged', async () => {
+  defineAction('reload', { onSuccess: 'reload', run: async () => null })
+  assert.equal((await runAction({ name: 'reload' })).onSuccess, 'reload')
+
+  defineAction('obj', { onSuccess: { toast: 'Saved', redirect: '/x' }, run: async () => null })
+  assert.deepEqual((await runAction({ name: 'obj' })).onSuccess, { toast: 'Saved', redirect: '/x' })
+})
+
+test('onSuccess: a function is evaluated server-side against the result -> a serializable hint', async () => {
+  defineAction('publish', {
+    onSuccess: (result) => ({ toast: `Published "${result.title}"` }),
+    run: async () => ({ title: 'Hello' }),
+  })
+  const out = await runAction({ name: 'publish' })
+  assert.deepEqual(out.onSuccess, { toast: 'Published "Hello"' })
+  assert.doesNotThrow(() => JSON.parse(JSON.stringify(out.onSuccess))) // no closure crosses the wire
+})
+
+test('onSuccess: a throwing hint is a no-op (null), the write still succeeds', async () => {
+  defineAction('x', { onSuccess: () => { throw new Error('bad hint') }, run: async () => 'written' })
+  const out = await runAction({ name: 'x' })
+  assert.equal(out.ok, true)
+  assert.equal(out.result, 'written')
+  assert.equal(out.onSuccess, null)
+})
+
 test('a throwing run -> 500 by default, or the error\'s own status', async () => {
   defineAction('boom', { run: async () => { throw new Error('kaboom') } })
   assert.equal((await runAction({ name: 'boom' })).status, 500)

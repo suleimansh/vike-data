@@ -10,6 +10,20 @@ import { getAction } from './registry.js'
 import { runGuard } from './guard.js'
 import { validateInput } from './validate.js'
 
+// `onSuccess` is a client-effect HINT the binding runs after a 200 (reload / redirect / toast). It's
+// usually a static string/object, but can be a `(result, ctx) => hint` FUNCTION so the effect can use
+// the write result (e.g. toast the created row's name). A function is evaluated HERE, server-side, so
+// only its plain, serializable result crosses to the client — never the closure. A throwing hint is
+// a no-op (the write already succeeded; a bad UX hint must not fail the action).
+async function resolveOnSuccess(onSuccess, result, ctx) {
+  if (typeof onSuccess !== 'function') return onSuccess ?? null
+  try {
+    return (await onSuccess(result, ctx)) ?? null
+  } catch {
+    return null
+  }
+}
+
 export async function runAction({ name, input = {}, user = null, ...rest } = {}) {
   const action = getAction(name)
   if (!action) return { ok: false, status: 404, error: `Unknown action "${name}"` }
@@ -36,7 +50,7 @@ export async function runAction({ name, input = {}, user = null, ...rest } = {})
 
   try {
     const result = await action.run(ctx)
-    return { ok: true, status: 200, result: result ?? null, onSuccess: action.onSuccess }
+    return { ok: true, status: 200, result: result ?? null, onSuccess: await resolveOnSuccess(action.onSuccess, result, ctx) }
   } catch (e) {
     // An action can opt into a specific status (e.g. throw an error with `.status = 404`); default 500.
     return { ok: false, status: Number.isInteger(e?.status) ? e.status : 500, error: e?.message ?? 'Action failed' }

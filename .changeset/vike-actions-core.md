@@ -9,6 +9,7 @@ A vike-blocks button/form carries an action NAME (a click handler can't survive 
 - `defineAction(name, { input?, guard?, run, confirm?, onSuccess? })` — registry mirroring `defineBlock`; returns a serializable reference (no `run`/`guard` leaks to the client).
 - `runAction({ name, input, user, db })` — the pure, transport-agnostic executor (validate -> guard -> run -> a `{ ok, status, ... }` envelope), unit-testable with a fake user/db.
 - Guards compose the existing auth (a predicate over `vike-rbac`'s `can`, the owner contract, or `ctx.user`; arrays AND-merge; `'authed'` shorthand) — no new authz model.
+- `onSuccess` is a serializable client-effect hint (`'reload'` / `'redirect:/path'` / `'toast:...'` / an object combining them), or a `(result, ctx) => hint` function resolved server-side so a toast can use the write result. The effect (navigate / toast via vike-blocks) runs in the client binding.
 - Input validation is a shape (`{ id: 'string' }`) or a validate function (compose vike-schema).
 - One `@universal-middleware` endpoint (same shape as vike-admin's JSON API); `createActionsHandler({ resolveUser?, buildContext? })` injects a custom user resolver or a per-request `db`.
 

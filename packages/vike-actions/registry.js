@@ -47,7 +47,10 @@ export function registerAction(name, def = {}) {
 export function defineAction(name, def) {
   registerAction(name, def)
   const stored = REGISTRY.get(name)
-  return { name: stored.name, confirm: stored.confirm, onSuccess: stored.onSuccess }
+  // A function onSuccess is resolved per-run (against the result), so it isn't a static, serializable
+  // hint — the ref reports it as null; the client gets the resolved effect from the run envelope.
+  const onSuccess = typeof stored.onSuccess === 'function' ? null : stored.onSuccess
+  return { name: stored.name, confirm: stored.confirm, onSuccess }
 }
 
 export const getAction = (name) => REGISTRY.get(name) ?? null
