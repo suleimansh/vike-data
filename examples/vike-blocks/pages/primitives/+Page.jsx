@@ -2,7 +2,7 @@
 // composes a page out of blocks; each section is a builder whose `.build()` collapses to a
 // descriptor. `<Page>` resolves the page and draws each block with its registered renderer —
 // importing ./callout.block registers the custom one alongside the built-ins.
-import { definePage, resolvePage, heading, text, badge, divider, link } from 'vike-blocks'
+import { definePage, resolvePage, heading, text, badge, divider, link, list } from 'vike-blocks'
 import { Page, Blocks } from 'vike-blocks/react'
 import { callout } from '../callout.block.jsx'
 
@@ -18,6 +18,15 @@ const page = definePage({
     callout('Custom blocks are peers')
       .tone('warn')
       .body('The callout is not built in — it was created with defineBlock() + registerBlockRenderer() in ./callout.block.jsx. Your block composes exactly like heading/text/badge.'),
+    divider(),
+    heading('Typography').level(2),
+    text('The shadcn Base text set. text(value).variant(...) picks the style; the default is a plain span.').variant('lead'),
+    text('A muted variant for secondary, lower-emphasis copy.').variant('muted'),
+    text('The blockquote variant sets an italic, left-bordered quote block for pull quotes and asides.').variant('blockquote'),
+    text("text('npm i vike-blocks').variant('code')").variant('code'),
+    list(['Unordered items render with a disc marker', 'Each item is a plain string', 'list(items).ordered() switches to a numbered list']),
+    list(['First step', 'Second step', 'Third step']).ordered(),
+
     divider(),
     text('The same page can also be authored as plain { block, ...props } descriptors:').tone('muted'),
     link('See the plain-descriptor version ->').to('/raw'),

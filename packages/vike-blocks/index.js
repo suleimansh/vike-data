@@ -4,7 +4,7 @@
 // primitives (text/heading/badge/divider/link), and the tabs container block. vike-view
 // layers schema-driven blocks on top; a per-framework package registers the renderers.
 import './blocks.js' // side-effect: register stat / markdown / custom
-import './primitives.js' // side-effect: register text / heading / badge / divider / link
+import './primitives.js' // side-effect: register text / heading / badge / divider / link / list
 import './button.js' // side-effect: register the button block
 import './alert.js' // side-effect: register the alert block
 import './tabs.js' // side-effect: register the tabs container block
@@ -14,7 +14,7 @@ import './card.js' // side-effect: register the card container block
 
 export { definePage, resolvePage } from './page.js'
 export { registerBlock, getBlock, hasBlock, listBlocks, defineBlock } from './registry.js'
-export { text, heading, badge, divider, link } from './primitives.js'
+export { text, heading, badge, divider, link, list } from './primitives.js'
 export { button } from './button.js'
 export { alert } from './alert.js'
 export { tabs } from './tabs.js'
