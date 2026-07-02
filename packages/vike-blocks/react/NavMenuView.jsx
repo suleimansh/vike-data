@@ -19,7 +19,7 @@ function GroupMenu({ label, links, open, onToggle, onClose }) {
     </button>
   )
   return (
-    <Popover open={open} onClose={onClose} trigger={trigger} placement="bottom-start" role="menu" panelStyle={(v) => ({ ...popoverSurfaceStyle(), ...navGroupPanelStyle(), ...popoverMotionStyle(v, 'bottom-start') })}>
+    <Popover open={open} onClose={onClose} trigger={trigger} placement="bottom-start" role="menu" panelStyle={(v, pl) => ({ ...popoverSurfaceStyle(), ...navGroupPanelStyle(), ...popoverMotionStyle(v, pl) })}>
       <div onKeyDown={(e) => moveMenuFocus(e.currentTarget, e.key) && e.preventDefault()} data-slot="nav-group">
         {links.map((l, i) =>
           l.to != null ? (

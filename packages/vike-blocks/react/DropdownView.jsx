@@ -30,7 +30,7 @@ export function DropdownView({ label = 'Menu', items = [], align = 'start', side
   }
 
   return (
-    <Popover open={open} onClose={() => setOpen(false)} trigger={trigger} placement={placement} role="menu" panelStyle={(v) => ({ ...popoverSurfaceStyle(), ...popoverMotionStyle(v, placement) })}>
+    <Popover open={open} onClose={() => setOpen(false)} trigger={trigger} placement={placement} role="menu" panelStyle={(v, pl) => ({ ...popoverSurfaceStyle(), ...popoverMotionStyle(v, pl) })}>
       <div ref={menuRef} onKeyDown={onKeyDown} data-slot="dropdown-menu">
         {items.map((it, i) => {
           if (it.type === 'separator') return <div key={i} role="separator" style={dropdownSeparatorStyle()} />

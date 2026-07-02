@@ -37,7 +37,7 @@ export function DatePickerView({ value, month, min, max, weekStartsOn = 0, name,
   )
 
   return (
-    <Popover open={open} onClose={() => setOpen(false)} trigger={trigger} placement="bottom-start" panelStyle={(v) => popoverMotionStyle(v, 'bottom-start')}>
+    <Popover open={open} onClose={() => setOpen(false)} trigger={trigger} placement="bottom-start" panelStyle={(v, pl) => popoverMotionStyle(v, pl)}>
       <CalendarView
         value={selected ?? value}
         month={month}

@@ -51,7 +51,7 @@ export const DatePickerView = {
           onClose: () => (open.value = false),
           trigger,
           placement: 'bottom-start',
-          panelStyle: (v) => popoverMotionStyle(v, 'bottom-start'),
+          panelStyle: (v, pl) => popoverMotionStyle(v, pl),
         },
         {
           default: () =>
