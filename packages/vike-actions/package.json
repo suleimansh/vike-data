@@ -13,7 +13,8 @@
     "./guard": "./guard.js",
     "./validate": "./validate.js",
     "./params": "./params.js",
-    "./react": "./react/index.js"
+    "./react": "./react/index.js",
+    "./vue": "./vue/index.js"
   },
   "scripts": {
     "test": "node --test"
@@ -26,11 +27,15 @@
   "peerDependencies": {
     "vike": "*",
     "react": ">=18",
-    "vike-react": ">=0.6"
+    "vike-react": ">=0.6",
+    "vue": ">=3.5",
+    "vike-vue": ">=0.9"
   },
   "peerDependenciesMeta": {
     "vike": { "optional": true },
     "react": { "optional": true },
-    "vike-react": { "optional": true }
+    "vike-react": { "optional": true },
+    "vue": { "optional": true },
+    "vike-vue": { "optional": true }
   }
 }

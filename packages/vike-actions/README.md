@@ -133,4 +133,14 @@ const { run, pending, error } = useAction('publish')
 <button disabled={pending} onClick={() => run({ id })}>Publish</button>
 ```
 
-`vike-actions/vue` is the fast-follow (#492). Without any provider a bare action button is inert (and an action form falls back to its native POST).
+## Client binding — `vike-actions/vue`
+
+The Vue twin, over the same shared client core. Wrap your app in `<ActionsProvider>` (it provides the runner via provide/inject) and mount a vike-blocks `<Toaster>`:
+
+```js
+import { ActionsProvider, useAction } from 'vike-actions/vue'
+// <ActionsProvider :actions="[publish]"><App /><Toaster /></ActionsProvider>
+// const { run, pending, error } = useAction('publish')
+```
+
+Without any provider a bare action button is inert (and an action form falls back to its native POST).
