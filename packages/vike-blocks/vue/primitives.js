@@ -7,6 +7,18 @@ import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
 import { badgeStyle } from '../badge-styles.js'
 import { resolveTextStyle, listStyle, listItemStyle } from '../typography-styles.js'
+import {
+  parseMarkdown,
+  mdRootStyle,
+  mdParaStyle,
+  mdLinkStyle,
+  mdListStyle,
+  mdQuoteStyle,
+  mdInlineCodeStyle,
+  mdCodeBlockStyle,
+  mdHrStyle,
+  mdHeadingStyle,
+} from '../markdown-parse.js'
 
 const TONE = { muted: 'var(--color-muted)', danger: 'var(--color-danger, #dc2626)', success: 'var(--color-success, #16a34a)', info: 'var(--color-primary, #2563eb)' }
 
@@ -46,7 +58,34 @@ Divider.props = []
 export const Link = (props) => h('a', { href: props.to, style: { color: props.tone ? (TONE[props.tone] ?? 'var(--color-primary)') : 'var(--color-primary, #2563eb)' } }, props.label)
 Link.props = ['label', 'to', 'tone']
 
-export const Markdown = (props) => h('div', { style: { whiteSpace: 'pre-wrap' } }, props.source)
+// Render inline markdown nodes to Vue vnodes.
+const mdInline = (nodes) =>
+  nodes.map((n, i) => {
+    if (n.type === 'strong') return h('strong', { key: i }, n.value)
+    if (n.type === 'em') return h('em', { key: i }, n.value)
+    if (n.type === 'code') return h('code', { key: i, style: mdInlineCodeStyle }, n.value)
+    if (n.type === 'link') return h('a', { key: i, href: n.href, style: mdLinkStyle }, n.value)
+    return h('span', { key: i }, n.value)
+  })
+
+// Markdown: a dep-free renderer over the shared parser, the Vue twin of react/primitives.jsx.
+export const Markdown = (props) => {
+  const blocks = parseMarkdown(props.source)
+  return h(
+    'div',
+    { 'data-slot': 'markdown', style: mdRootStyle },
+    blocks.map((b, i) => {
+      if (b.type === 'heading') return h(`h${b.level}`, { key: i, style: mdHeadingStyle(b.level) }, mdInline(b.inline))
+      if (b.type === 'p') return h('p', { key: i, style: mdParaStyle }, mdInline(b.inline))
+      if (b.type === 'ul') return h('ul', { key: i, style: mdListStyle }, b.items.map((it, j) => h('li', { key: j }, mdInline(it))))
+      if (b.type === 'ol') return h('ol', { key: i, style: mdListStyle }, b.items.map((it, j) => h('li', { key: j }, mdInline(it))))
+      if (b.type === 'blockquote') return h('blockquote', { key: i, style: mdQuoteStyle }, mdInline(b.inline))
+      if (b.type === 'code') return h('pre', { key: i, style: mdCodeBlockStyle }, h('code', b.text))
+      if (b.type === 'hr') return h('hr', { key: i, style: mdHrStyle })
+      return null
+    }),
+  )
+}
 Markdown.props = ['source']
 
 export const Stat = (props) =>

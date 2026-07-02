@@ -6,6 +6,18 @@
 import { registerBlockRenderer } from './registry.js'
 import { badgeStyle } from '../badge-styles.js'
 import { resolveTextStyle, listStyle, listItemStyle } from '../typography-styles.js'
+import {
+  parseMarkdown,
+  mdRootStyle,
+  mdParaStyle,
+  mdLinkStyle,
+  mdListStyle,
+  mdQuoteStyle,
+  mdInlineCodeStyle,
+  mdCodeBlockStyle,
+  mdHrStyle,
+  mdHeadingStyle,
+} from '../markdown-parse.js'
 
 const TONE = { muted: 'var(--color-muted)', danger: 'var(--color-danger, #dc2626)', success: 'var(--color-success, #16a34a)', info: 'var(--color-primary, #2563eb)' }
 
@@ -54,10 +66,38 @@ export function Link({ label, to, tone }) {
   )
 }
 
-// Markdown MVP: render the source in a pre-wrapped block. A real markdown renderer is an app/
-// extension concern (registerBlockRenderer('markdown', ...) swaps this); this keeps zero deps.
+// Render inline markdown nodes (text / strong / em / code / link) to elements.
+function MdInline({ nodes }) {
+  return nodes.map((n, i) => {
+    if (n.type === 'strong') return <strong key={i}>{n.value}</strong>
+    if (n.type === 'em') return <em key={i}>{n.value}</em>
+    if (n.type === 'code') return <code key={i} style={mdInlineCodeStyle}>{n.value}</code>
+    if (n.type === 'link') return <a key={i} href={n.href} style={mdLinkStyle}>{n.value}</a>
+    return <span key={i}>{n.value}</span>
+  })
+}
+
+// Markdown: a dep-free renderer over the shared parser (headings / lists / emphasis / code / links /
+// quotes). Not a full engine - for tables/GFM/footnotes, swap it: registerBlockRenderer('markdown', ...).
 export function Markdown({ source }) {
-  return <div style={{ whiteSpace: 'pre-wrap' }}>{source}</div>
+  const blocks = parseMarkdown(source)
+  return (
+    <div data-slot="markdown" style={mdRootStyle}>
+      {blocks.map((b, i) => {
+        if (b.type === 'heading') {
+          const Hd = `h${b.level}`
+          return <Hd key={i} style={mdHeadingStyle(b.level)}><MdInline nodes={b.inline} /></Hd>
+        }
+        if (b.type === 'p') return <p key={i} style={mdParaStyle}><MdInline nodes={b.inline} /></p>
+        if (b.type === 'ul') return <ul key={i} style={mdListStyle}>{b.items.map((it, j) => <li key={j}><MdInline nodes={it} /></li>)}</ul>
+        if (b.type === 'ol') return <ol key={i} style={mdListStyle}>{b.items.map((it, j) => <li key={j}><MdInline nodes={it} /></li>)}</ol>
+        if (b.type === 'blockquote') return <blockquote key={i} style={mdQuoteStyle}><MdInline nodes={b.inline} /></blockquote>
+        if (b.type === 'code') return <pre key={i} style={mdCodeBlockStyle}><code>{b.text}</code></pre>
+        if (b.type === 'hr') return <hr key={i} style={mdHrStyle} />
+        return null
+      })}
+    </div>
+  )
 }
 
 // A stat card. `value` is shown when present; `source` is an expression the app/data layer

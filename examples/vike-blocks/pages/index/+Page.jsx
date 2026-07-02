@@ -30,7 +30,7 @@ const catalog = [
   { name: 'Message scroller', href: '/message-scroller', tag: 'interactive', desc: 'A scroll container for a chat transcript — sticks to the bottom on load, with a jump-to-latest button. Holds messages.' },
   { name: 'Chart', href: '/chart', tag: 'leaf', desc: 'A dep-free SVG chart (bar / line / area) driven by a data series. type / height / color / max, theme-native, responsive. Rich charts stay a custom block.' },
   { name: 'Code block', href: '/code', tag: 'interactive', desc: 'A code snippet with a filename header, copy button, line numbers, and highlight / diff / focus decorations (builder or inline markers). Dep-free tokenizer, no Shiki.' },
-  { name: 'Markdown', href: '/markdown', tag: 'leaf', desc: 'A leaf carrying a markdown source string - markdown("# Hi"). Ships a zero-dep MVP renderer (pre-wrapped text); swap a real one in with registerBlockRenderer.' },
+  { name: 'Markdown', href: '/markdown', tag: 'leaf', desc: 'A leaf carrying a markdown source string - markdown("# Hi"). Dep-free renderer (headings / lists / emphasis / code / links / quotes); swap a fuller engine in with registerBlockRenderer.' },
   { name: 'Primitives', href: '/primitives', tag: 'leaf', desc: 'heading · text (lead / muted / blockquote / code) · badge · list · divider · link — the built-in leaf blocks, composed with definePage.' },
   { name: 'Custom blocks', href: '/raw', tag: 'extend', desc: 'Define your own with defineBlock, or author a page as plain { block, ...props } descriptors.' },
 ]
