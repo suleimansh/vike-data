@@ -67,7 +67,9 @@
     "./vue/AlertView": "./vue/AlertView.js",
     "./vue/CodeView": "./vue/CodeView.js",
     "./vue/TableView": "./vue/TableView.js",
-    "./vue/FormView": "./vue/FormView.js"
+    "./vue/FormView": "./vue/FormView.js",
+    "./vue/LayoutView": "./vue/LayoutView.js",
+    "./vue/SlotView": "./vue/SlotView.js"
   },
   "scripts": {
     "test": "node --test"
