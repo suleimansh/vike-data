@@ -21,6 +21,7 @@ import './alert.js' // side-effect: register the alert block
 import './tabs.js' // side-effect: register the tabs container block
 import './accordion.js' // side-effect: register the accordion container block
 import './dialog.js' // side-effect: register the dialog container block
+import './sheet.js' // side-effect: register the sheet container block
 import './card.js' // side-effect: register the card container block
 import './field.js' // side-effect: register the field container block
 import './attachment.js' // side-effect: register the attachment block
@@ -44,6 +45,7 @@ export { alert } from './alert.js'
 export { tabs } from './tabs.js'
 export { accordion } from './accordion.js'
 export { dialog } from './dialog.js'
+export { sheet } from './sheet.js'
 export { card } from './card.js'
 export { field } from './field.js'
 export { attachment } from './attachment.js'
