@@ -52,6 +52,29 @@ guard: ['authed', (ctx) => ctx.user.role === 'admin']    // AND
 
 A denied action answers `403`. A missing/wrong input answers `400`. An unknown action `404`.
 
+## `onSuccess`: what happens after a 200
+
+A client-effect **hint** the binding runs once the action succeeds. It's plain, serializable data (or a function that produces some) — the effect itself (navigate, toast) runs in the react/vue binding, composing vike-blocks' toast store:
+
+```js
+onSuccess: 'reload'                 // refetch / reload the page data
+onSuccess: 'redirect:/posts'        // client navigate
+onSuccess: 'toast:Published!'       // fire a toast (vike-blocks emitToast)
+onSuccess: { toast: 'Published!', redirect: '/posts' }          // object form, combinable
+onSuccess: { toast: { title: 'Published', variant: 'success' }, reload: true }
+```
+
+Need the message to use the result? Make `onSuccess` a **function** — it's evaluated server-side (where the result lives), so only the resolved, serializable hint crosses to the client:
+
+```js
+defineAction('publish', {
+  async run({ input, db }) { return db.posts.update({ id: input.id }, { status: 'published' }) },
+  onSuccess: (post) => ({ toast: `Published "${post.title}"`, redirect: `/posts/${post.id}` }),
+})
+```
+
+A hint that throws is a no-op — the write already succeeded, so a bad UX hint never fails the action.
+
 ## The endpoint
 
 `POST /_actions/<name>` with a JSON body (the params). It resolves the signed-in user (via vike-auth), runs the action, and returns:
@@ -85,6 +108,29 @@ const out = await runAction({ name: 'publish', input: { id: 7 }, user, db })
 // { ok: true, status: 200, result, onSuccess }
 ```
 
-## Client bindings
+## Client binding — `vike-actions/react`
 
-`vike-actions/react` and `vike-actions/vue` (a fast-follow) fill the vike-blocks action seam: a button click POSTs to `/_actions/<name>`, handling `confirm` / optimistic UI / `onSuccess`. Until then a bare action button is inert (and an action form falls back to its native POST).
+Fills the vike-blocks action seam: a button click POSTs to `/_actions/<name>`, then confirms / resolves param tokens / runs the `onSuccess` effect. Wrap your app once; mount a vike-blocks `<Toaster>` for the toast effect.
+
+```jsx
+import { ActionsProvider } from 'vike-actions/react'
+import { Toaster } from 'vike-blocks/react'
+import { publish } from './actions.js' // the defineAction ref (carries { name, confirm })
+
+<ActionsProvider actions={[publish]}>
+  <App />
+  <Toaster />
+</ActionsProvider>
+```
+
+Now `button('Publish').action('publish').params({ id: '$row.id' })` is live: it confirms (from the ref), POSTs, and runs the returned effect. `context` supplies the buckets for `$row.id`-style tokens (a table row scopes its own, #493); `onError` takes over error handling (the default toasts it).
+
+For a hand-wired control outside the block seam:
+
+```jsx
+import { useAction } from 'vike-actions/react'
+const { run, pending, error } = useAction('publish')
+<button disabled={pending} onClick={() => run({ id })}>Publish</button>
+```
+
+`vike-actions/vue` is the fast-follow (#492). Without any provider a bare action button is inert (and an action form falls back to its native POST).
