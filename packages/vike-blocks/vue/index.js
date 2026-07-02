@@ -28,6 +28,7 @@ import './DrawerView.js' // side-effect: register the drawer renderer
 import './CardView.js' // side-effect: register the card renderer
 import './FieldView.js' // side-effect: register the field renderer
 import './AttachmentView.js' // side-effect: register the attachment renderer
+import './CodeView.js' // side-effect: register the code renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
 export { Blocks, Page } from './Blocks.js' // importing Blocks registers the built-in blocks
 export { Text, Heading, Badge, Divider, Link, Markdown, Stat } from './primitives.js'
@@ -60,3 +61,4 @@ export { Toaster } from './Toaster.js'
 export { CardView } from './CardView.js'
 export { FieldView } from './FieldView.js'
 export { AttachmentView } from './AttachmentView.js'
+export { CodeView } from './CodeView.js'

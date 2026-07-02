@@ -31,6 +31,7 @@ import './drawer.js' // side-effect: register the drawer container block
 import './card.js' // side-effect: register the card container block
 import './field.js' // side-effect: register the field container block
 import './attachment.js' // side-effect: register the attachment block
+import './code.js' // side-effect: register the code block
 
 export { definePage, resolvePage } from './page.js'
 export { registerBlock, getBlock, hasBlock, listBlocks, defineBlock } from './registry.js'
@@ -62,3 +63,4 @@ export { drawer } from './drawer.js'
 export { card } from './card.js'
 export { field } from './field.js'
 export { attachment } from './attachment.js'
+export { code } from './code.js'
