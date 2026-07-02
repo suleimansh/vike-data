@@ -9,6 +9,7 @@
     "./tabs": "./tabs.js",
     "./accordion": "./accordion.js",
     "./dialog": "./dialog.js",
+    "./sheet": "./sheet.js",
     "./card": "./card.js",
     "./button": "./button.js",
     "./alert": "./alert.js",
@@ -18,6 +19,7 @@
     "./react/TabsView": "./react/TabsView.jsx",
     "./react/AccordionView": "./react/AccordionView.jsx",
     "./react/DialogView": "./react/DialogView.jsx",
+    "./react/SheetView": "./react/SheetView.jsx",
     "./react/CardView": "./react/CardView.jsx",
     "./react/ButtonView": "./react/ButtonView.jsx",
     "./react/AlertView": "./react/AlertView.jsx",
@@ -27,6 +29,7 @@
     "./vue/TabsView": "./vue/TabsView.js",
     "./vue/AccordionView": "./vue/AccordionView.js",
     "./vue/DialogView": "./vue/DialogView.js",
+    "./vue/SheetView": "./vue/SheetView.js",
     "./vue/CardView": "./vue/CardView.js",
     "./vue/ButtonView": "./vue/ButtonView.js",
     "./vue/AlertView": "./vue/AlertView.js"

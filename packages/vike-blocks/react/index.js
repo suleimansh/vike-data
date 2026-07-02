@@ -19,6 +19,7 @@ import './AlertView.jsx' // side-effect: register the alert renderer
 import './TabsView.jsx' // side-effect: register the tabs renderer
 import './AccordionView.jsx' // side-effect: register the accordion renderer
 import './DialogView.jsx' // side-effect: register the dialog renderer
+import './SheetView.jsx' // side-effect: register the sheet renderer
 import './CardView.jsx' // side-effect: register the card renderer
 import './FieldView.jsx' // side-effect: register the field renderer
 import './AttachmentView.jsx' // side-effect: register the attachment renderer
@@ -41,6 +42,8 @@ export { AlertView } from './AlertView.jsx'
 export { TabsView } from './TabsView.jsx'
 export { AccordionView } from './AccordionView.jsx'
 export { DialogView } from './DialogView.jsx'
+export { SheetView } from './SheetView.jsx'
+export { Overlay, useOverlay } from './overlay.jsx'
 export { CardView } from './CardView.jsx'
 export { FieldView } from './FieldView.jsx'
 export { AttachmentView } from './AttachmentView.jsx'
