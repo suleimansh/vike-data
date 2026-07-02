@@ -32,4 +32,17 @@ defineAction('publish', {
   onSuccess: (post) => ({ toast: post ? `Published "${post.title}"` : 'Published', reload: true }),
 })
 
+// Delete, owner-scoped the same way. Shown as a per-row action on the table demo.
+defineAction('delete-post', {
+  input: { id: 'string' },
+  guard: 'authed',
+  async run({ input, user }) {
+    const db = buildDb(tables)
+    const post = await db.posts.findOne({ id: input.id, user_id: user.id })
+    await db.posts.delete({ id: input.id, user_id: user.id })
+    return post
+  },
+  onSuccess: (post) => ({ toast: post ? `Deleted "${post.title}"` : 'Deleted', reload: true }),
+})
+
 export default createActionsHandler({ resolveUser: async () => demoUser })

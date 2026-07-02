@@ -23,6 +23,7 @@
     "./markdown": "./markdown.js",
     "./table": "./table.js",
     "./form": "./form.js",
+    "./params": "./params.js",
     "./react": "./react/index.js",
     "./react/registry": "./react/registry.js",
     "./react/action-context": "./react/action-context.js",

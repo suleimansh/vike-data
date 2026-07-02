@@ -3,11 +3,24 @@
 // module (cell/header chrome, named formatters, the sort comparator), so it can't drift from the
 // React renderer.
 import { h, ref } from 'vue'
-import { registerBlockRenderer } from './registry.js'
+import { registerBlockRenderer, getBlockRenderer } from './registry.js'
+import { resolveParams } from '../params.js'
 import { tableCell, tableHeader, formatValue, compareRows } from '../table-styles.js'
 
+// One row's action buttons: resolve each descriptor's params against the row, then render it
+// through its registered block renderer (an action button that runs via the vike-actions runner).
+const rowActionsCell = (actions, row) =>
+  h(
+    'span',
+    { style: { display: 'inline-flex', gap: '0.5rem', justifyContent: 'flex-end' } },
+    actions.map(({ block, params, ...rest }, i) => {
+      const Renderer = getBlockRenderer(block)
+      return Renderer ? h(Renderer, { key: i, ...rest, params: resolveParams(params, { row }) }) : null
+    }),
+  )
+
 export const TableView = {
-  props: ['columns', 'rows', 'sortable', 'empty'],
+  props: ['columns', 'rows', 'sortable', 'empty', 'rowActions'],
   setup(props) {
     const sort = ref(null) // { key, dir } | null
     const onSort = (key) => {
@@ -20,6 +33,8 @@ export const TableView = {
       const rows = props.rows ?? []
       const sortable = props.sortable === true
       const empty = props.empty ?? 'No rows.'
+      const rowActions = Array.isArray(props.rowActions) ? props.rowActions : []
+      const hasActions = rowActions.length > 0
       const sorted = sortable && sort.value ? [...rows].sort((a, b) => compareRows(a, b, sort.value.key, sort.value.dir)) : rows
 
       const head = h('thead', [
@@ -38,19 +53,21 @@ export const TableView = {
               },
               `${c.label}${arrow}`,
             )
-          }),
+          }).concat(hasActions ? [h('th', { key: '__actions', style: { ...tableHeader, textAlign: 'right' }, 'aria-label': 'Actions' })] : []),
         ),
       ])
 
       const body = h(
         'tbody',
         sorted.length === 0
-          ? [h('tr', [h('td', { style: { ...tableCell, color: 'var(--color-muted, #64748b)' }, colspan: columns.length || 1 }, empty)])]
+          ? [h('tr', [h('td', { style: { ...tableCell, color: 'var(--color-muted, #64748b)' }, colspan: (columns.length || 1) + (hasActions ? 1 : 0) }, empty)])]
           : sorted.map((row, i) =>
               h(
                 'tr',
                 { key: i },
-                columns.map((c) => h('td', { key: c.key, style: { ...tableCell, textAlign: c.align || 'left' } }, formatValue(row[c.key], c.format))),
+                columns
+                  .map((c) => h('td', { key: c.key, style: { ...tableCell, textAlign: c.align || 'left' } }, formatValue(row[c.key], c.format)))
+                  .concat(hasActions ? [h('td', { key: '__actions', style: { ...tableCell, textAlign: 'right' } }, [rowActionsCell(rowActions, row)])] : []),
               ),
             ),
       )

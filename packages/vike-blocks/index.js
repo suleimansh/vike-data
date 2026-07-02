@@ -38,6 +38,7 @@ import './table.js' // side-effect: register the table block
 
 export { definePage, resolvePage } from './page.js'
 export { registerBlock, getBlock, hasBlock, listBlocks, defineBlock } from './registry.js'
+export { resolveParams, resolveToken } from './params.js'
 export { text, heading, badge, divider, link, list } from './primitives.js'
 export { button } from './button.js'
 export { input } from './input.js'

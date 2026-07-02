@@ -3,7 +3,7 @@
 // the resolve view-model, and the shared formatter + sort comparator.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { table, definePage, resolvePage, getBlock, hasBlock } from '../index.js'
+import { table, button, definePage, resolvePage, getBlock, hasBlock } from '../index.js'
 import { formatValue, compareRows } from '../table-styles.js'
 
 const resolveTable = (builder) => getBlock('table').resolve({ props: builder.build() })
@@ -34,6 +34,21 @@ test('object columns keep their explicit label / align / format and humanize a m
   const out = resolveTable(table({ columns: [{ key: 'total', align: 'right', format: 'since' }, { key: 'name', label: 'Full name' }], rows: [] }))
   assert.deepEqual(out.columns[0], { key: 'total', label: 'Total', align: 'right', format: 'since' })
   assert.deepEqual(out.columns[1], { key: 'name', label: 'Full name', align: 'left', format: null })
+})
+
+test('rowActions: builders collapse to plain action-button descriptors on the view-model', () => {
+  const out = resolveTable(
+    table({ columns: ['title'], rows: people }).rowActions([button('Publish').action('publish').params({ id: '$row.id' })]),
+  )
+  assert.equal(out.rowActions.length, 1)
+  assert.deepEqual(out.rowActions[0], { block: 'button', label: 'Publish', action: 'publish', params: { id: '$row.id' } })
+})
+
+test('rowActions default to an empty array (no actions column) and stay serializable', () => {
+  const out = resolveTable(table({ columns: ['title'], rows: people }))
+  assert.deepEqual(out.rowActions, [])
+  const withActions = resolveTable(table({ rows: people }).rowActions([button('Delete').action('del').params({ id: '$row.id' })]))
+  assert.doesNotThrow(() => JSON.parse(JSON.stringify(withActions.rowActions)))
 })
 
 test('with no columns, they are derived from the first row keys', () => {

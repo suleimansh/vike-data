@@ -1,13 +1,30 @@
 // The React renderer for the `table` block — a non-schema data table. Draws the resolved
 // columns + rows with the shared table chrome (so it themes like vike-view's ListView). When the
 // block is `.sortable()`, headers become client-side sort toggles; the sort is purely local UI
-// state (like the code block's copy button), so no actions layer is involved.
+// state (like the code block's copy button). With `.rowActions([...])`, a trailing actions column
+// draws each action block per row, its `params` tokens resolved against that row — the button then
+// runs through the vike-actions runner like any action block.
 import { useState } from 'react'
-import { registerBlockRenderer } from './registry.js'
+import { registerBlockRenderer, getBlockRenderer } from './registry.js'
+import { resolveParams } from '../params.js'
 import { tableCell, tableHeader, formatValue, compareRows } from '../table-styles.js'
 
-export function TableView({ columns = [], rows = [], sortable = false, empty = 'No rows.' }) {
+// Draw one row's action buttons: resolve each descriptor's params against the row (so `$row.id`
+// becomes the real id), then render it through its registered block renderer (an action button).
+function RowActions({ actions, row }) {
+  return (
+    <span style={{ display: 'inline-flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+      {actions.map(({ block, params, ...rest }, i) => {
+        const Renderer = getBlockRenderer(block)
+        return Renderer ? <Renderer key={i} {...rest} params={resolveParams(params, { row })} /> : null
+      })}
+    </span>
+  )
+}
+
+export function TableView({ columns = [], rows = [], sortable = false, empty = 'No rows.', rowActions = [] }) {
   const [sort, setSort] = useState(null) // { key, dir } | null
+  const hasActions = Array.isArray(rowActions) && rowActions.length > 0
 
   const onSort = (key) => setSort((s) => (s && s.key === key ? { key, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: 'asc' }))
 
@@ -32,12 +49,13 @@ export function TableView({ columns = [], rows = [], sortable = false, empty = '
               </th>
             )
           })}
+          {hasActions && <th style={{ ...tableHeader, textAlign: 'right' }} aria-label="Actions" />}
         </tr>
       </thead>
       <tbody>
         {sorted.length === 0 ? (
           <tr>
-            <td style={{ ...tableCell, color: 'var(--color-muted, #64748b)' }} colSpan={columns.length || 1}>
+            <td style={{ ...tableCell, color: 'var(--color-muted, #64748b)' }} colSpan={(columns.length || 1) + (hasActions ? 1 : 0)}>
               {empty}
             </td>
           </tr>
@@ -49,6 +67,11 @@ export function TableView({ columns = [], rows = [], sortable = false, empty = '
                   {formatValue(row[c.key], c.format)}
                 </td>
               ))}
+              {hasActions && (
+                <td style={{ ...tableCell, textAlign: 'right' }}>
+                  <RowActions actions={rowActions} row={row} />
+                </td>
+              )}
             </tr>
           ))
         )}
