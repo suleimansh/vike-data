@@ -87,6 +87,92 @@ bundle entirely.
 
 ---
 
+## How the packages fit together
+
+Arrows point to what a package depends on; **nothing points up**. The `universal-*` /
+`@vike-data/*` data layer at the bottom is framework- and Vike-agnostic; each layer above it
+adds one concern and rests on the ones below.
+
+```mermaid
+graph TD
+    subgraph ui["UI tier · schema-driven screens + app chrome"]
+        admin["<b>vike-admin</b><br/>CRUD over every table + admin chrome"]
+        crud["<b>vike-crud</b><br/>schema → list / record / form + owner-scoped data"]
+        blocks["<b>vike-blocks</b><br/>render · the block IR + renderers"]
+        actions["<b>vike-actions</b><br/>mutate · named server actions"]
+        layouts["<b>vike-layouts</b><br/>app shells, on the block IR"]
+        chrome["<b>vike-themes · vike-toolbar · vike-i18n</b><br/>brand · settings popover · translations"]
+        admin --> crud
+        crud --> blocks
+        crud --> actions
+        actions --> blocks
+        layouts --> blocks
+    end
+
+    subgraph domain["Domain & delivery · own real tables"]
+        auth["<b>vike-auth</b><br/>users · sessions · magic-link"]
+        teams["<b>vike-teams</b><br/>orgs · memberships"]
+        rbac["<b>vike-rbac</b><br/>roles · permissions"]
+        stripe["<b>vike-stripe</b><br/>billing"]
+        storage["<b>vike-storage</b><br/>uploads"]
+        push["<b>vike-push</b><br/>web push"]
+        notif["<b>vike-notifications</b><br/>multi-channel feed<br/>+ mail / push / stripe channels"]
+        teams --> auth
+        rbac --> auth
+        storage --> auth
+        push --> auth
+        notif --> auth
+        stripe --> teams
+    end
+
+    subgraph async["Async base · jobs · delivery · AI"]
+        queue["<b>vike-queue</b><br/>background jobs"]
+        mail["<b>vike-mail</b><br/>the mail port"]
+        ai["<b>vike-ai</b><br/>the AI port + gemstack provider"]
+        mail --> queue
+    end
+
+    subgraph data["Data layer · schema + ORM · zero framework"]
+        vschema["<b>@vike-data/vike-schema</b><br/>cumulative schemas + codegen plugin"]
+        uschema["<b>universal-schema</b><br/>IR · DSL · Prisma / Drizzle / Rudder compilers"]
+        orm["<b>@universal-orm/core</b><br/>neutral repository (+ memory / drizzle / rudder)"]
+        kit["<b>@vike-data/kit</b><br/>createPort · createOutbox"]
+        vschema --> uschema
+    end
+
+    %% cross-layer edges — every arrow points to a lower layer
+    actions --> auth
+    crud --> orm
+    crud --> vschema
+    admin --> vschema
+    blocks --> kit
+    auth --> vschema
+    auth --> mail
+    push --> queue
+    notif --> queue
+    queue --> orm
+    ai --> kit
+```
+
+Read it in three moves:
+
+- **The UI substrate is a small spine, not one big package.** `vike-blocks` draws (a
+  serializable block IR + per-framework renderers) and `vike-actions` mutates (named,
+  owner-scoped server actions); `vike-crud` is the reusable schema → list/record/form engine
+  built on both; `vike-admin` is a thin preset that points `vike-crud` at every composed
+  table and adds the admin chrome. The tiers are load-bearing — `vike-crud` was extracted
+  *out of* `vike-admin` to be reused.
+- **`vike-auth` is the hub of the domain layer.** Teams, RBAC, storage, push, and
+  notifications all self-install it and read `pageContext.user`; billing sits on teams. The
+  one arrow that crosses down into the async base is `vike-auth → vike-mail` (the magic link
+  is delivered as a queued job).
+- **Everything ultimately rests on two primitives** most edges are pruned from the diagram
+  for readability: `@vike-data/kit` (the `createPort` provider registry) and
+  `@universal-orm/core` (the neutral repository). No package above the data layer imports an
+  ORM or a Vike-specific write path directly.
+
+---
+
 ## Structure
 
 > For the layering, the composition mechanism, and the runtime + codegen lifecycle, see
@@ -149,7 +235,10 @@ The frontend concerns, each a framework-agnostic core plus a thin per-framework 
 
 | Package | Owns |
 |---|---|
-| `vike‑admin` | An admin panel on install: `/admin/*` CRUD pages derived from the composed schema; cumulative `adminResources` + `defineResource` refinements (FK selects, sort/search, per-row `scope`). _Subpaths:_ `/react`. |
+| `vike‑blocks` | The **render** primitive: a serializable *block IR* (`definePage({ sections })`), an open block registry (`defineBlock`), the primitive blocks (text/heading/badge/…), and per-framework renderers. App shells run on this IR too. Schema-agnostic. _Subpaths:_ `/react`, `/vue`. |
+| `vike‑actions` | The **mutate** primitive: named, owner-scoped server actions (`defineAction`) invoked over one `POST /_actions/<name>` endpoint, with a client provider that wires a block's `action` behaviour. Schema-agnostic. _Subpaths:_ `/react`, `/vue`. |
+| `vike‑crud` | The schema → CRUD engine (renamed from `vike-view`): derives list/record/form screens from a composed table (`crud({ table })`), owner-scoped reads/writes, FK labels, page-gen, and eject. Built on `vike-blocks` + `vike-actions`; `crudActions({ table })` derives the write actions. _Subpaths:_ `/react`, `/vue`. |
+| `vike‑admin` | An admin panel on install and a thin **preset over `vike-crud`**: `/admin/*` CRUD pages derived from the composed schema; cumulative `adminResources` + `defineResource` refinements (FK selects, sort/search, per-row `scope`), with row Edit + Delete on the list. Writes no ORM code. _Subpaths:_ `/react`, `/vue`. |
 | `vike‑themes` | Tokens to CSS variables; the `theme` (brand) + `appearance` axes + `useTheme()`. _Subpaths:_ `/react`. |
 | `vike‑theme‑emerald` | Example theme package (composes via the cumulative `themes` config). |
 | `vike‑layouts` | Shell selection + slot config; the `<CenteredShell>` / `<TopbarShell>` / `<SidebarShell>`. _Subpaths:_ `/react`. |

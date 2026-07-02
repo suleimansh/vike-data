@@ -28,8 +28,8 @@ top and chooses the concrete ORM.
    ├─ ORM bindings:  vike-drizzle · vike-rudder      ← register one adapter at startup
    │
    ├─ extensions (data):  vike-auth ← vike-rbac · vike-teams ← vike-stripe
-   ├─ extensions (UI):    vike-admin · vike-themes ← vike-theme-emerald
-   │                      vike-layouts · vike-toolbar · vike-i18n
+   ├─ UI substrate:       vike-blocks (render) · vike-actions (mutate)  ←  vike-crud (schema→CRUD)  ←  vike-admin
+   ├─ extensions (UI):    vike-themes ← vike-theme-emerald · vike-layouts · vike-toolbar · vike-i18n
    │
    └─ vike binding:  @vike-data/vike-schema           ← the `schemas` config point + codegen
         │
@@ -42,6 +42,12 @@ top and chooses the concrete ORM.
         │
         └─ @vike-data/kit   (createPort / createOutbox: the registry + dev-outbox primitives)
 ```
+
+> The UI substrate is its own small spine: `vike-blocks` (render) + `vike-actions` (mutate)
+> are schema-agnostic primitives; `vike-crud` is the reusable schema → CRUD engine over both;
+> `vike-admin` is a thin preset that points it at every composed table. See the README's
+> [How the packages fit together](README.md#how-the-packages-fit-together) for the graph as a
+> diagram.
 
 **Three npm scopes, by role:**
 
