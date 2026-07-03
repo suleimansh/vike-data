@@ -30,6 +30,7 @@ const catalog = [
   { name: 'Tooltip', href: '/tooltip', tag: 'interactive', desc: 'A small label revealed on hover / focus (shadcn Radix tooltip, reimplemented pure-CSS) — wraps any block via .on(), places top/bottom/left/right, dark tip + arrow. No portal, no JS, no state; works with no client JS.' },
   { name: 'Kbd', href: '/kbd', tag: 'leaf', desc: 'Keyboard key caps for documenting shortcuts — kbd("Esc") or kbd(["Cmd", "K"]). Static, theme-native.' },
   { name: 'Item', href: '/item', tag: 'leaf', desc: 'A reusable list row — leading media + title + description + trailing note. Composes in any container. Theme-native.' },
+  { name: 'Avatar', href: '/avatar', tag: 'leaf', desc: 'A user image with an initials fallback (shadcn Radix avatar) — the image hides itself on load error to reveal initials, then a user icon. Size / circle-or-square / a status dot, and an overlapping group with a +N count.' },
   { name: 'Bubble', href: '/bubble', tag: 'leaf', desc: 'A chat message bubble, sender-aligned (user / assistant). Holds text or nested blocks (markdown). For AI chat UIs.' },
   { name: 'Message', href: '/message', tag: 'container', desc: 'A chat message — a bubble plus avatar, author, and timestamp, aligned by sender. Composes the bubble block.' },
   { name: 'Message scroller', href: '/message-scroller', tag: 'interactive', desc: 'A scroll container for a chat transcript — sticks to the bottom on load, with a jump-to-latest button. Holds messages.' },

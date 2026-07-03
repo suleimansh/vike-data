@@ -39,6 +39,7 @@ import {
   PaginationEllipsis,
 } from '@/components/ui/pagination'
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip'
+import { Avatar, AvatarImage, AvatarFallback, AvatarBadge, AvatarGroup, AvatarGroupCount } from '@/components/ui/avatar'
 
 export default function Page() {
   return (
@@ -195,6 +196,36 @@ export default function Page() {
           </Tooltip>
         </div>
       </TooltipProvider>
+
+      <h2 style={{ fontSize: 18, fontWeight: 600, margin: '2.5rem 0 4px' }}>Avatar</h2>
+      <p style={{ color: 'var(--muted-foreground)', fontSize: 14, marginBottom: 16 }}>
+        The shadcn <code>avatar</code> (Radix): an image with an initials fallback when it fails to load, an optional status
+        badge, and an overlapping group with a "+N" count. This is the reference the dep-free vike-blocks{' '}
+        <code>avatar</code> block is harvested from.
+      </p>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <Avatar>
+          <AvatarImage src="https://github.com/shadcn.png" alt="shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <Avatar>
+          <AvatarImage src="/does-not-exist.png" alt="Ada Lovelace" />
+          <AvatarFallback>AL</AvatarFallback>
+          <AvatarBadge className="size-2.5 bg-green-500" />
+        </Avatar>
+        <AvatarGroup>
+          <Avatar>
+            <AvatarFallback>AL</AvatarFallback>
+          </Avatar>
+          <Avatar>
+            <AvatarFallback>GH</AvatarFallback>
+          </Avatar>
+          <Avatar>
+            <AvatarFallback>KJ</AvatarFallback>
+          </Avatar>
+          <AvatarGroupCount>+3</AvatarGroupCount>
+        </AvatarGroup>
+      </div>
     </div>
   )
 }
