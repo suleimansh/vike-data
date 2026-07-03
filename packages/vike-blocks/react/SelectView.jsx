@@ -6,7 +6,7 @@
 // select-styles module, so this can't drift from the Vue twin.
 import { useState } from 'react'
 import { registerBlockRenderer } from './registry.js'
-import { selectWrapStyle, selectStyle, selectChevronStyle, SELECT_STYLE_TAG } from '../select-styles.js'
+import { selectWrapStyle, selectStyle, selectChevronStyle, CHEVRON_DOWN_PATH, SELECT_STYLE_TAG } from '../select-styles.js'
 
 export function SelectView({ options = [], value = null, placeholder = null, name, disabled = false }) {
   const [selected, setSelected] = useState(value ?? '')
@@ -37,7 +37,9 @@ export function SelectView({ options = [], value = null, placeholder = null, nam
           ))}
         </select>
         <span aria-hidden="true" style={selectChevronStyle()}>
-          {'▾'}
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d={CHEVRON_DOWN_PATH} />
+          </svg>
         </span>
       </span>
     </>

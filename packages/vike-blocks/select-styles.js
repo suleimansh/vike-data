@@ -32,14 +32,18 @@ export function selectStyle(disabled) {
   }
 }
 
-// The static chevron overlaid at the right edge (pointer-events off so clicks fall through to the select).
+// The SVG chevron (shadcn/lucide chevron-down) drawn in the right-edge slot, stroked in currentColor.
+export const CHEVRON_DOWN_PATH = 'm6 9 6 6 6-6'
+
+// The chevron slot overlaid at the right edge (pointer-events off so clicks fall through to the select).
 export const selectChevronStyle = () => ({
   position: 'absolute',
-  right: '0.7rem',
+  right: '0.6rem',
   top: '50%',
   transform: 'translateY(-50%)',
+  display: 'inline-flex',
+  lineHeight: 0,
   pointerEvents: 'none',
-  fontSize: '11px',
   color: 'var(--color-muted, #64748b)',
 })
 

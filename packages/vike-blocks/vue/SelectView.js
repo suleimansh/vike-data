@@ -5,7 +5,7 @@
 // ring with the React renderer via select-styles, so they can't drift.
 import { h, ref } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { selectWrapStyle, selectStyle, selectChevronStyle, SELECT_STYLE_TAG } from '../select-styles.js'
+import { selectWrapStyle, selectStyle, selectChevronStyle, CHEVRON_DOWN_PATH, SELECT_STYLE_TAG } from '../select-styles.js'
 
 export const SelectView = {
   props: ['options', 'value', 'placeholder', 'name', 'disabled'],
@@ -35,7 +35,9 @@ export const SelectView = {
           },
           optionNodes,
         ),
-        h('span', { 'aria-hidden': 'true', style: selectChevronStyle() }, '▾'),
+        h('span', { 'aria-hidden': 'true', style: selectChevronStyle() }, [
+          h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, [h('path', { d: CHEVRON_DOWN_PATH })]),
+        ]),
       ])
     }
   },
