@@ -4,6 +4,7 @@
 // (a separate form posting `_action=delete`) DELETEs, both redirecting to the list. No
 // client JS, no fetch; plain form posts, SSR all the way.
 import { useData } from 'vike-react/useData'
+import { BreadcrumbView } from 'vike-blocks/react'
 import { FormFields } from './FormFields.jsx'
 
 export default function EditPage() {
@@ -16,12 +17,8 @@ export default function EditPage() {
   const action = `/admin/${table}/${encodeURIComponent(id)}`
   return (
     <div style={{ maxWidth: 520, margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h1 style={{ margin: 0, fontSize: 22 }}>Edit {singular(title)}</h1>
-        <a href={`/admin/${table}`} style={{ color: 'var(--color-muted)', fontSize: 14 }}>
-          &larr; {title}
-        </a>
-      </div>
+      <BreadcrumbView items={[{ label: 'Admin', to: '/admin' }, { label: title, to: `/admin/${table}` }, { label: `Edit ${singular(title)}` }]} />
+      <h1 style={{ margin: '0.5rem 0 0', fontSize: 22 }}>Edit {singular(title)}</h1>
 
       <form
         method="post"
