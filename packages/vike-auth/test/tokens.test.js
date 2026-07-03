@@ -3,7 +3,7 @@
 
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { newId, newToken, isoIn, isExpired, nowMs } from '../tokens.js'
+import { newId, newToken, isoIn, isExpired } from '../tokens.js'
 
 test('newId returns a v4-shaped UUID', () => {
   assert.match(newId(), /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/)
@@ -53,10 +53,4 @@ test('isExpired fails closed on an unparseable/null expiry', () => {
   assert.equal(isExpired(null, base), true)
   assert.equal(isExpired(undefined, base), true)
   assert.equal(isExpired('', base), true)
-})
-
-test('nowMs is a millisecond timestamp', () => {
-  const t = nowMs()
-  assert.equal(typeof t, 'number')
-  assert.ok(t > Date.parse('2025-01-01T00:00:00Z'))
 })

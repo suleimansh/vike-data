@@ -16,7 +16,6 @@ export function newToken() {
   return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
 }
 
-export const nowMs = () => Date.now()
 export const isoIn = (ms, base = Date.now()) => new Date(base + ms).toISOString()
 // Fails closed: an unparseable/null `iso` yields NaN, and `NaN <= base` is false,
 // which would treat the row as NOT expired (never cleaned up). Our own writes always
