@@ -34,6 +34,7 @@ import './FormView.js' // side-effect: register the form renderer
 import './AttachmentView.js' // side-effect: register the attachment renderer
 import './CodeView.js' // side-effect: register the code renderer
 import './TableView.js' // side-effect: register the table renderer
+import './PaginationView.js' // side-effect: register the pagination renderer
 import './LayoutView.js' // side-effect: register the layout container renderer
 import './SlotView.js' // side-effect: register the slot placeholder renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
@@ -75,5 +76,6 @@ export { FormView } from './FormView.js'
 export { AttachmentView } from './AttachmentView.js'
 export { CodeView } from './CodeView.js'
 export { TableView } from './TableView.js'
+export { PaginationView } from './PaginationView.js'
 export { LayoutView, LayoutConfigProvider, useLayoutConfig, LAYOUT_CONFIG_KEY, LAYOUT_CONTENT_KEY, useLayoutContent, NavRegion, registerLayoutShell } from './LayoutView.js'
 export { SlotView } from './SlotView.js'

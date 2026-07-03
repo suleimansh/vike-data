@@ -8,7 +8,7 @@
 import { h } from 'vue'
 import { useData } from 'vike-vue/useData'
 import { ListView } from 'vike-crud/vue'
-import { ConfirmView } from 'vike-blocks/vue'
+import { ConfirmView, PaginationView } from 'vike-blocks/vue'
 
 const data = useData()
 
@@ -49,9 +49,6 @@ const rowActions = data.canEdit
         fields: [{ name: '_action', value: 'delete' }],
       })
   : undefined
-
-const pagerLink = { padding: '0.35rem 0.75rem', borderRadius: 'var(--radius, 8px)', border: '1px solid var(--color-border)', textDecoration: 'none', color: 'var(--color-text)' }
-const pagerDisabled = { padding: '0.35rem 0.75rem', color: 'var(--color-muted)', opacity: 0.5 }
 </script>
 <template>
   <div :style="{ maxWidth: '900px', margin: '0 auto' }">
@@ -74,13 +71,9 @@ const pagerDisabled = { padding: '0.35rem 0.75rem', color: 'var(--color-muted)',
         empty-label="No rows found."
       />
     </div>
-    <div :style="{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: 'var(--space-md, 1rem)', fontSize: '14px' }">
-      <a v-if="data.page > 1" :href="listUrl(data.table, { page: data.page - 1, sort: data.sort, dir: data.dir })" :style="pagerLink">← Prev</a>
-      <span v-else :style="pagerDisabled">← Prev</span>
-      <span :style="{ color: 'var(--color-muted)' }">{{ data.page }} / {{ data.pageCount }}</span>
-      <a v-if="data.page < data.pageCount" :href="listUrl(data.table, { page: data.page + 1, sort: data.sort, dir: data.dir })" :style="pagerLink">Next →</a>
-      <span v-else :style="pagerDisabled">Next →</span>
-      <span :style="{ marginInlineStart: 'auto', color: 'var(--color-muted)' }">{{ data.total }} rows</span>
+    <div :style="{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', marginTop: 'var(--space-md, 1rem)', fontSize: '14px', color: 'var(--color-muted)' }">
+      <span>{{ data.total === 0 ? 'No rows' : `Page ${data.page} of ${data.pageCount} · ${data.total} ${data.total === 1 ? 'row' : 'rows'}` }}</span>
+      <PaginationView :page="data.page" :pageCount="data.pageCount" :href="(p) => listUrl(data.table, { page: p, sort: data.sort, dir: data.dir })" />
     </div>
   </div>
 </template>

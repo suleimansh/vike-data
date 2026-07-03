@@ -7,7 +7,7 @@
 // without client JS.
 import { useData } from 'vike-react/useData'
 import { ListView } from 'vike-crud/react'
-import { ConfirmView } from 'vike-blocks/react'
+import { ConfirmView, PaginationView } from 'vike-blocks/react'
 
 // A per-row Delete control: vike-blocks' `confirm` block guarding a no-JS form that POSTs
 // `_action=delete` to the row's edit route, so it reuses the admin's existing owner-scoped
@@ -45,29 +45,6 @@ function listUrl(table, { page, sort, dir }) {
 
 export default function ListPage() {
   const { table, label, columns, rows, fkLabels, pk, canEdit, page, pageCount, total, sort, dir } = useData()
-
-  // A prev/next control: a real link, or a muted, non-interactive span at the ends.
-  function pageControl(targetPage, content, disabled) {
-    const style = {
-      padding: '0.35rem 0.75rem',
-      borderRadius: 'var(--radius, 8px)',
-      border: '1px solid var(--color-border)',
-      fontSize: 14,
-      textDecoration: 'none',
-      color: disabled ? 'var(--color-muted)' : 'var(--color-text)',
-      opacity: disabled ? 0.5 : 1,
-      pointerEvents: disabled ? 'none' : 'auto',
-    }
-    return disabled ? (
-      <span style={style} aria-disabled="true">
-        {content}
-      </span>
-    ) : (
-      <a style={style} href={listUrl(table, { page: targetPage, sort, dir })}>
-        {content}
-      </a>
-    )
-  }
 
   return (
     <div style={{ maxWidth: 900, margin: '0 auto' }}>
@@ -130,10 +107,7 @@ export default function ListPage() {
         }}
       >
         <span>{total === 0 ? 'No rows' : `Page ${page} of ${pageCount} · ${total} ${total === 1 ? 'row' : 'rows'}`}</span>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          {pageControl(page - 1, '← Prev', page <= 1)}
-          {pageControl(page + 1, 'Next →', page >= pageCount)}
-        </div>
+        <PaginationView page={page} pageCount={pageCount} href={(p) => listUrl(table, { page: p, sort, dir })} />
       </div>
     </div>
   )
