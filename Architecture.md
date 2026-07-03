@@ -99,6 +99,7 @@ The cumulative points in use today:
 | `defaultRoles` | vike-rbac | roles granted to a new signup |
 | `adminResources` | vike-admin | resource refinements (carry `canView`/`canEdit`/`scope` functions) |
 | `nav` | vike-layouts | app-shell nav links |
+| `toolbarItems` | vike-toolbar | simple, context-free controls (locale + theme pickers) other extensions teleport into the toolbar |
 | `resolveUser` | vike-auth | user-enricher functions (rbac roles, teams org) |
 
 **Two escape hatches** for things a serialized config value can't express:

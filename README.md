@@ -165,8 +165,17 @@ The frontend concerns, each a framework-agnostic core plus a thin per-framework 
 |---|---|
 | `examples/react` | UI-tier demo: a themed, localized, passwordless login + topbar home + an admin panel. |
 | `examples/vue` | The Vue twin of `examples/react`: the same composition over the `vike-*/vue` subpaths. |
+| `examples/vike‑crud` | Minimal schema → CRUD: one `defineSchema('posts')` drives a full CRUD page via `viewPages(views)`, plus the mix-into-a-normal-app path (a single block dropped into a hand-written page). |
+| `examples/vike‑blocks` | The block-catalog gallery: every built-in block with a live demo; composes the primitives with `definePage` and a custom block via `defineBlock` + `registerBlockRenderer`. No schema, no data layer. |
+| `examples/drizzle‑pglite` | The real persistent-DB twin of `examples/react`: the same admin + auth + rbac app on `vike-drizzle` + an embedded Postgres (PGlite). Shows the real seeding story (migrations, idempotent reference data). |
+| `examples/teams‑files` | Org-owned uploads reference ([#284](https://github.com/suleimansh/vike-data/issues/284)): memory adapter, vike-auth's default guard + vike-teams, with `vike-storage` bound to the organization owner (the owner-arity axis, #250). |
 | `examples/two‑audience` | Two-audience reference app ([epic #255](https://github.com/suleimansh/vike-data/issues/255)): a staff guard and a customer guard side by side via vike-auth's named guards, each with its own login, cookie and tables, on the memory adapter. |
+| `examples/bench‑app‑vike` · `bench‑app‑next` | The AI benchmark pair ([#330](https://github.com/suleimansh/vike-data/issues/330)): a Vike + React Notes app composed from the family vs a vanilla Next.js baseline, over one shared HTTP contract. |
 | `fixtures/codegen` | Data-layer fixture (no UI): the merged schema rendered + compiled to all three ORMs; the CI drift gate. |
+
+Two more directories under `examples/` are working sandboxes, not part of the tour:
+`animate-ui` (where shadcn / Animate UI components run unmodified before parts are harvested
+into the blocks) and `docpress-themes` (a DocPress-theming spike, [#327](https://github.com/suleimansh/vike-data/issues/327)).
 
 The split is consistent: every core is framework- and Vike-agnostic where it can be, and
 the Vike-/framework-specific concern lives in a `vike-*/react` (and `vike-*/vue`) subpath of
@@ -189,7 +198,16 @@ pnpm gen:check                # CI drift gate: fail if committed artifacts are s
 cd examples/react && pnpm dev     # http://localhost:4100
 cd examples/vue && pnpm dev       # http://localhost:4200 (the Vue twin)
 cd examples/two-audience && pnpm dev  # http://localhost:4300 (epic #255: two named guards)
+
+# UI substrate on its own (no data layer): the block gallery + minimal schema->CRUD
+cd examples/vike-blocks && pnpm dev   # http://localhost:4300 (every built-in block, live)
+cd examples/vike-crud && pnpm dev     # http://localhost:4200 (one schema -> a full CRUD page)
+
+# The same admin app as examples/react, but on a real Postgres (embedded PGlite)
+cd examples/drizzle-pglite && pnpm dev  # http://localhost:4200 (migrations + idempotent seeding)
 ```
+
+> Run one example at a time; several default to the same port.
 
 In `examples/react` (and its Vue twin `examples/vue`), switch **Language** (bottom-left) and
 **Appearance / Theme** (bottom-right) live. Login is passwordless: submit an email, then
