@@ -42,6 +42,7 @@ import './pagination.js' // side-effect: register the pagination block
 import './tooltip.js' // side-effect: register the tooltip block
 import './avatar.js' // side-effect: register the avatar + avatarGroup blocks
 import './skeleton.js' // side-effect: register the skeleton block
+import './progress.js' // side-effect: register the progress block
 import './breadcrumb.js' // side-effect: register the breadcrumb block
 import './command.js' // side-effect: register the command block
 import './layout.js' // side-effect: register the layout container block + the slot placeholder block
@@ -88,6 +89,7 @@ export { pagination } from './pagination.js'
 export { tooltip } from './tooltip.js'
 export { avatar, avatarGroup } from './avatar.js'
 export { skeleton } from './skeleton.js'
+export { progress } from './progress.js'
 export { breadcrumb } from './breadcrumb.js'
 export { command } from './command.js'
 export { layout, slot, isActivePath } from './layout.js'

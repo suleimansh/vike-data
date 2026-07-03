@@ -38,6 +38,7 @@ import './PaginationView.js' // side-effect: register the pagination renderer
 import './TooltipView.js' // side-effect: register the tooltip renderer
 import './AvatarView.js' // side-effect: register the avatar + avatarGroup renderers
 import './SkeletonView.js' // side-effect: register the skeleton renderer
+import './ProgressView.js' // side-effect: register the progress renderer
 import './BreadcrumbView.js' // side-effect: register the breadcrumb renderer
 import './CommandView.js' // side-effect: register the command renderer
 import './LayoutView.js' // side-effect: register the layout container renderer
@@ -85,6 +86,7 @@ export { PaginationView } from './PaginationView.js'
 export { TooltipView } from './TooltipView.js'
 export { AvatarView, AvatarGroupView } from './AvatarView.js'
 export { SkeletonView } from './SkeletonView.js'
+export { ProgressView } from './ProgressView.js'
 export { BreadcrumbView } from './BreadcrumbView.js'
 export { CommandView } from './CommandView.js'
 export { LayoutView, LayoutConfigProvider, useLayoutConfig, LAYOUT_CONFIG_KEY, LAYOUT_CONTENT_KEY, useLayoutContent, NavRegion, registerLayoutShell } from './LayoutView.js'
