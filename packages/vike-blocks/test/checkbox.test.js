@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { checkbox, field, definePage, resolvePage, hasBlock } from '../index.js'
-import { checkboxBoxStyle, checkStyle, CHECKBOX_STYLE_TAG } from '../checkbox-styles.js'
+import { checkboxBoxStyle, checkStyle, CHECKBOX_STYLE_TAG } from '../blocks/checkbox-styles.js'
 
 test('checkbox is registered', () => {
   assert.ok(hasBlock('checkbox'))

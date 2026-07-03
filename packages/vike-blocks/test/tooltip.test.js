@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { tooltip, button, definePage, resolvePage, hasBlock } from '../index.js'
-import { TOOLTIP_STYLE_TAG } from '../tooltip-styles.js'
+import { TOOLTIP_STYLE_TAG } from '../blocks/tooltip-styles.js'
 
 test('tooltip is registered', () => {
   assert.ok(hasBlock('tooltip'))

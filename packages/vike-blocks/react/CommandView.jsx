@@ -7,7 +7,7 @@
 import { useState, useEffect } from 'react'
 import { registerBlockRenderer } from './registry.js'
 import { Overlay, ENTER_MS } from './overlay.jsx'
-import { OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../overlay-motion.js'
+import { OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../core/overlay-motion.js'
 import {
   filterCommands,
   SEARCH_ICON,
@@ -21,7 +21,7 @@ import {
   commandShortcutStyle,
   commandEmptyStyle,
   COMMAND_STYLE_TAG,
-} from '../command-styles.js'
+} from '../blocks/command-styles.js'
 
 const SearchIcon = ({ size = 16 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

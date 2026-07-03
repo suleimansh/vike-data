@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { combobox, field, definePage, resolvePage, hasBlock } from '../index.js'
-import { filterOptions, comboboxItemStyle, COMBOBOX_STYLE_TAG } from '../combobox-styles.js'
+import { filterOptions, comboboxItemStyle, COMBOBOX_STYLE_TAG } from '../blocks/combobox-styles.js'
 
 test('combobox is registered', () => {
   assert.ok(hasBlock('combobox'))

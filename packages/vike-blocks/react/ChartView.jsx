@@ -19,7 +19,7 @@ import {
   chartLabelRowStyle,
   chartLabelStyle,
   DEFAULT_CHART_COLOR,
-} from '../chart-styles.js'
+} from '../blocks/chart-styles.js'
 
 export function ChartView({ data = [], type = 'bar', height = 160, color = DEFAULT_CHART_COLOR, max }) {
   const points = normalizeSeries(data)

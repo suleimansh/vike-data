@@ -7,8 +7,8 @@ import { h, ref } from 'vue'
 import { registerBlockRenderer } from './registry.js'
 import { Popover } from './popover.js'
 import { CalendarView } from './CalendarView.js'
-import { popoverMotionStyle } from '../popover-styles.js'
-import { formatDisplay, datePickerTriggerStyle, CALENDAR_ICON_PATH, DATE_PICKER_STYLE_TAG } from '../date-picker-styles.js'
+import { popoverMotionStyle } from '../blocks/popover-styles.js'
+import { formatDisplay, datePickerTriggerStyle, CALENDAR_ICON_PATH, DATE_PICKER_STYLE_TAG } from '../blocks/date-picker-styles.js'
 
 export const DatePickerView = {
   props: ['value', 'month', 'min', 'max', 'weekStartsOn', 'name', 'placeholder'],

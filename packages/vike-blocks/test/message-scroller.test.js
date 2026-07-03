@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { messageScroller, message, definePage, resolvePage, hasBlock } from '../index.js'
-import { scrollerViewportStyle, AT_BOTTOM_THRESHOLD } from '../message-scroller-styles.js'
+import { scrollerViewportStyle, AT_BOTTOM_THRESHOLD } from '../blocks/message-scroller-styles.js'
 
 test('message-scroller is registered', () => {
   assert.ok(hasBlock('message-scroller'))

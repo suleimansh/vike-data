@@ -7,7 +7,7 @@
 // math + card styles live in the shared toast-styles module, so this stays a thin binding.
 import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { subscribeToasts, dismissToast } from '../toast-store.js'
+import { subscribeToasts, dismissToast } from '../blocks/toast-store.js'
 import {
   resolveToastIntent,
   toastRegionStyle,
@@ -21,7 +21,7 @@ import {
   TOAST_VISIBLE,
   TOAST_GAP,
   TOAST_STYLE_TAG,
-} from '../toast-styles.js'
+} from '../blocks/toast-styles.js'
 
 function ToastRow({ toast, side, index, total, expanded, heightsInFront, hidden, onMeasure }) {
   const [entered, setEntered] = useState(false)

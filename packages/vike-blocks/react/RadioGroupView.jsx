@@ -5,7 +5,7 @@
 // focus ring come from the shared radio-styles module, so this can't drift from the Vue twin.
 import { useState } from 'react'
 import { registerBlockRenderer } from './registry.js'
-import { radioRootStyle, radioOptionStyle, radioCircleStyle, radioDotStyle, RADIO_STYLE_TAG } from '../radio-styles.js'
+import { radioRootStyle, radioOptionStyle, radioCircleStyle, radioDotStyle, RADIO_STYLE_TAG } from '../blocks/radio-styles.js'
 
 export function RadioGroupView({ options = [], value = null, name, disabled = false }) {
   const [selected, setSelected] = useState(value)

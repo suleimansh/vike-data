@@ -10,7 +10,7 @@
 import { createContext, useContext } from 'react'
 import { Blocks } from './Blocks.jsx'
 import { registerBlockRenderer } from './registry.js'
-import { isActivePath } from '../layout.js'
+import { isActivePath } from '../blocks/layout.js'
 
 // The cumulative layout-chrome config (nav / logo / userMenu / footer / toolbar / currentPath) a
 // `slot(...).from('config')` reads at render time. A provider merges each extension's contribution,

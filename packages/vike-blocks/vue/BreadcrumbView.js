@@ -5,7 +5,7 @@
 // renderer via breadcrumb-styles.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { breadcrumbListStyle, breadcrumbItemStyle, breadcrumbLinkStyle, breadcrumbPageStyle, breadcrumbSeparatorStyle, CHEVRON_RIGHT_PATH, BREADCRUMB_STYLE_TAG } from '../breadcrumb-styles.js'
+import { breadcrumbListStyle, breadcrumbItemStyle, breadcrumbLinkStyle, breadcrumbPageStyle, breadcrumbSeparatorStyle, CHEVRON_RIGHT_PATH, BREADCRUMB_STYLE_TAG } from '../blocks/breadcrumb-styles.js'
 
 const chevron = () =>
   h('svg', { width: 14, height: 14, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' }, [h('path', { d: CHEVRON_RIGHT_PATH })])

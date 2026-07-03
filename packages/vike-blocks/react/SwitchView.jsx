@@ -5,7 +5,7 @@
 // module, so this stays a thin binding and can't drift from the Vue twin.
 import { useState } from 'react'
 import { registerBlockRenderer } from './registry.js'
-import { switchRootStyle, switchTrackStyle, switchThumbStyle, SWITCH_STYLE_TAG } from '../switch-styles.js'
+import { switchRootStyle, switchTrackStyle, switchThumbStyle, SWITCH_STYLE_TAG } from '../blocks/switch-styles.js'
 
 export function SwitchView({ label, checked = false, disabled = false, name }) {
   const [on, setOn] = useState(checked)

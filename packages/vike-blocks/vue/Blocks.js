@@ -4,7 +4,7 @@
 // view first. A block type with no registered renderer is skipped. Importing this module
 // registers the built-in block renderers (via ./primitives.js).
 import { h } from 'vue'
-import { resolvePage } from '../page.js'
+import { resolvePage } from '../core/page.js'
 import { getBlockRenderer } from './registry.js'
 import './primitives.js' // side-effect: register text / heading / badge / divider / link / markdown / stat
 

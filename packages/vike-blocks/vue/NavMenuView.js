@@ -7,9 +7,9 @@
 import { h, ref } from 'vue'
 import { registerBlockRenderer } from './registry.js'
 import { Popover } from './popover.js'
-import { popoverSurfaceStyle, popoverMotionStyle } from '../popover-styles.js'
-import { moveMenuFocus } from '../dropdown-styles.js'
-import { navRootStyle, navLinkStyle, navTriggerStyle, navGroupLinkStyle, navGroupLinkTitleStyle, navGroupLinkDescStyle, navGroupPanelStyle, NAV_STYLE_TAG } from '../nav-menu-styles.js'
+import { popoverSurfaceStyle, popoverMotionStyle } from '../blocks/popover-styles.js'
+import { moveMenuFocus } from '../blocks/dropdown-styles.js'
+import { navRootStyle, navLinkStyle, navTriggerStyle, navGroupLinkStyle, navGroupLinkTitleStyle, navGroupLinkDescStyle, navGroupPanelStyle, NAV_STYLE_TAG } from '../blocks/nav-menu-styles.js'
 
 function groupMenu(item, open, onToggle, onClose) {
   const trigger = h(

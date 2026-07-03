@@ -5,7 +5,7 @@
 // avatars and adds a "+N" chip. Styles come from the shared avatar-styles module, so this can't drift
 // from the Vue twin.
 import { registerBlockRenderer } from './registry.js'
-import { avatarRootStyle, avatarSurfaceStyle, avatarImgStyle, statusDotStyle, statusColor, avatarGroupStyle, avatarGroupItemStyle, avatarCountStyle, USER_ICON } from '../avatar-styles.js'
+import { avatarRootStyle, avatarSurfaceStyle, avatarImgStyle, statusDotStyle, statusColor, avatarGroupStyle, avatarGroupItemStyle, avatarCountStyle, USER_ICON } from '../blocks/avatar-styles.js'
 
 const UserIcon = ({ size }) => (
   <svg width={Math.round(size * 0.55)} height={Math.round(size * 0.55)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

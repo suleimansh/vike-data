@@ -22,7 +22,7 @@ import {
   calendarWeekdayStyle,
   calendarDayStyle,
   CALENDAR_STYLE_TAG,
-} from '../calendar-styles.js'
+} from '../blocks/calendar-styles.js'
 
 // The month to show first: an explicit `month` ('YYYY-MM' or a full date), else the selected date's
 // month, else today.

@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { input, definePage, resolvePage, hasBlock } from '../index.js'
-import { inputStyle, INPUT_STYLE_TAG } from '../input-styles.js'
+import { inputStyle, INPUT_STYLE_TAG } from '../blocks/input-styles.js'
 
 test('input is registered', () => {
   assert.ok(hasBlock('input'))

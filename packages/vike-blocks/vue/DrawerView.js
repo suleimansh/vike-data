@@ -7,8 +7,8 @@ import { h, ref } from 'vue'
 import { Blocks } from './Blocks.js'
 import { registerBlockRenderer } from './registry.js'
 import { Overlay, overlayTriggerStyle } from './overlay.js'
-import { sheetContainerStyle, sheetPanelStyle } from '../sheet-styles.js'
-import { dismissOffset, dismissTransform, shouldDismiss, drawerHandleStyle } from '../drawer-styles.js'
+import { sheetContainerStyle, sheetPanelStyle } from '../blocks/sheet-styles.js'
+import { dismissOffset, dismissTransform, shouldDismiss, drawerHandleStyle } from '../blocks/drawer-styles.js'
 
 let uid = 0
 

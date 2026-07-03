@@ -3,27 +3,27 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "vike-blocks: composable UI as data. The framework-agnostic substrate for building a page out of BLOCKS — a block descriptor IR + an open registry, the definePage composer, primitive blocks (text/heading/badge/divider/link, stat/markdown/custom), and the defineBlock seam so any package can ship a new block with high DX. A React binding (vike-blocks/react) draws the blocks; vike-crud layers schema-driven blocks on top.",
+  "description": "vike-blocks: composable UI as data. The framework-agnostic substrate for building a page out of BLOCKS — a block descriptor IR + an open registry, the definePage composer, primitive blocks (text/heading/badge/divider/link, stat/markdown/custom), and the defineBlock seam so any package can ship a new block with high DX. Per-framework bindings (vike-blocks/react and vike-blocks/vue) draw the blocks; vike-crud layers schema-driven blocks on top.",
   "exports": {
     ".": "./index.js",
-    "./tabs": "./tabs.js",
-    "./accordion": "./accordion.js",
-    "./dialog": "./dialog.js",
-    "./sheet": "./sheet.js",
-    "./drawer": "./drawer.js",
-    "./date-picker": "./date-picker.js",
-    "./dropdown": "./dropdown.js",
-    "./nav-menu": "./nav-menu.js",
-    "./toast": "./toast-store.js",
-    "./chart": "./chart.js",
-    "./card": "./card.js",
-    "./button": "./button.js",
-    "./alert": "./alert.js",
-    "./code": "./code.js",
-    "./markdown": "./markdown.js",
-    "./table": "./table.js",
-    "./form": "./form.js",
-    "./params": "./params.js",
+    "./tabs": "./blocks/tabs.js",
+    "./accordion": "./blocks/accordion.js",
+    "./dialog": "./blocks/dialog.js",
+    "./sheet": "./blocks/sheet.js",
+    "./drawer": "./blocks/drawer.js",
+    "./date-picker": "./blocks/date-picker.js",
+    "./dropdown": "./blocks/dropdown.js",
+    "./nav-menu": "./blocks/nav-menu.js",
+    "./toast": "./blocks/toast-store.js",
+    "./chart": "./blocks/chart.js",
+    "./card": "./blocks/card.js",
+    "./button": "./blocks/button.js",
+    "./alert": "./blocks/alert.js",
+    "./code": "./blocks/code.js",
+    "./markdown": "./blocks/markdown.js",
+    "./table": "./blocks/table.js",
+    "./form": "./blocks/form.js",
+    "./params": "./core/params.js",
     "./react": "./react/index.js",
     "./react/registry": "./react/registry.js",
     "./react/action-context": "./react/action-context.js",
@@ -84,9 +84,17 @@
     "vike-vue": ">=0.9"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "vike-react": { "optional": true },
-    "vue": { "optional": true },
-    "vike-vue": { "optional": true }
+    "react": {
+      "optional": true
+    },
+    "vike-react": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    },
+    "vike-vue": {
+      "optional": true
+    }
   }
 }

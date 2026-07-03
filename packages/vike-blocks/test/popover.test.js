@@ -5,7 +5,7 @@
 // renderers, verified live; this covers the geometry so the two twins can't drift.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { resolvePlacement, popoverMaxHeight, POPOVER_GAP } from '../popover-styles.js'
+import { resolvePlacement, popoverMaxHeight, POPOVER_GAP } from '../blocks/popover-styles.js'
 
 const VP = { width: 1000, height: 800 }
 // A trigger rect helper (viewport coords).

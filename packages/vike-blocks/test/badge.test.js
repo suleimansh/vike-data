@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { badge, definePage, resolvePage, hasBlock } from '../index.js'
-import { variantKey, toneKey, VARIANTS, TONES, badgeStyle } from '../badge-styles.js'
+import { variantKey, toneKey, VARIANTS, TONES, badgeStyle } from '../blocks/badge-styles.js'
 
 test('badge is registered', () => {
   assert.ok(hasBlock('badge'))

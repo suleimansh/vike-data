@@ -3,7 +3,7 @@
 // comes from the shared item-styles module, so this stays a thin binding and can't drift from the
 // Vue twin.
 import { registerBlockRenderer } from './registry.js'
-import { itemRowStyle, itemMediaStyle, itemBodyStyle, itemTitleStyle, itemDescriptionStyle, itemTrailingStyle } from '../item-styles.js'
+import { itemRowStyle, itemMediaStyle, itemBodyStyle, itemTitleStyle, itemDescriptionStyle, itemTrailingStyle } from '../blocks/item-styles.js'
 
 export function ItemView({ title, description, media, trailing }) {
   return (

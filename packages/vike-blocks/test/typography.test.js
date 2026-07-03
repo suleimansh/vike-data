@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { text, list, definePage, resolvePage, hasBlock } from '../index.js'
-import { TEXT_VARIANTS, textVariantKey, resolveTextStyle, listStyle } from '../typography-styles.js'
+import { TEXT_VARIANTS, textVariantKey, resolveTextStyle, listStyle } from '../blocks/typography-styles.js'
 
 test('text + list are registered', () => {
   assert.ok(hasBlock('text'))

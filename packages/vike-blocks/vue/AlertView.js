@@ -4,7 +4,7 @@
 // two renderers can't drift. A functional component (no state).
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { alertStyles, intentKey } from '../alert-styles.js'
+import { alertStyles, intentKey } from '../blocks/alert-styles.js'
 
 export const AlertView = (props) => {
   const s = alertStyles(props.intent)

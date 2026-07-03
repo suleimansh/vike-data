@@ -94,6 +94,28 @@ layout('landing')
 `markdown` (`{ source }`), `custom` (`{ component }`, your own component). vike-crud registers the
 schema-derived blocks (`list` / `record` / `form`) into the same registry.
 
+### Full catalog
+
+Every built-in builder, by group. Each imports from `vike-blocks` and has a live demo in
+`examples/vike-blocks`. The renderers (React and Vue) register automatically when you import
+`vike-blocks/react` or `vike-blocks/vue`.
+
+| Group | Blocks |
+|---|---|
+| Primitives | `text` `heading` `badge` `divider` `link` `list` |
+| Content | `markdown` `code` |
+| Buttons | `button` |
+| Form controls | `input` `textarea` `checkbox` `radioGroup` `select` `combobox` `toggle` `slider` `calendar` `datePicker` `attachment` |
+| Form structure | `field` `form` |
+| Data display | `table` `chart` `pagination` `stat` |
+| Feedback | `alert` `toast` `skeleton` `progress` `tooltip` |
+| Overlays | `dialog` `confirm` `sheet` `drawer` `dropdown` `navMenu` |
+| Navigation | `breadcrumb` `command` `tabs` `accordion` |
+| Identity + misc | `avatar` `avatarGroup` `kbd` `item` |
+| Chat | `bubble` `message` `messageScroller` |
+| Containers + layout | `card` `layout` `slot` |
+| Escape hatch | `custom` |
+
 ## The open registry + `defineBlock`
 
 Blocks live in an open registry — add one with `registerBlock(type, { resolve })`, or, for a
@@ -142,6 +164,22 @@ const view = definePage({ sections: [heading('Posts'), ...crudBlocks({ table: 'p
 `resolved` is plain data (a schema block's `columns`/`fields`, a bespoke block's props), so it
 serializes cleanly into the client hydration payload. A block type with no registered renderer
 is skipped, so a page degrades gracefully.
+
+## Package layout
+
+```
+vike-blocks/
+  index.js        the agnostic barrel: definePage/resolvePage, the registry, every builder
+  core/           the framework-agnostic IR: registry, page composer, params, primitives  (see core/README.md)
+  blocks/         one <name>.js builder (+ optional <name>-styles.js) per built-in block   (see blocks/README.md)
+  react/          the React binding: registerBlockRenderer, <Blocks>/<Page>, the renderers
+  vue/            the Vue twin of react/
+  test/           node --test coverage for the builders + resolve
+```
+
+`core/` and `blocks/` never import from a framework; `react/` and `vue/` import the shared
+builders and `-styles.js` data so the two renderers can't drift. See `blocks/README.md` for the
+recipe to add a block.
 
 ## The escape hatch
 

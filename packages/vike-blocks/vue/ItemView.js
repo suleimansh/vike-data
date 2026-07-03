@@ -3,7 +3,7 @@
 // trailing note. The layout is shared with the React renderer via item-styles, so they can't drift.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { itemRowStyle, itemMediaStyle, itemBodyStyle, itemTitleStyle, itemDescriptionStyle, itemTrailingStyle } from '../item-styles.js'
+import { itemRowStyle, itemMediaStyle, itemBodyStyle, itemTitleStyle, itemDescriptionStyle, itemTrailingStyle } from '../blocks/item-styles.js'
 
 export const ItemView = (props) =>
   h('div', { 'data-slot': 'item', style: itemRowStyle }, [

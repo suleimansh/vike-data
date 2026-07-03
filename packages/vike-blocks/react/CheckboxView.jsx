@@ -5,7 +5,7 @@
 // checkbox-styles module, so this stays a thin binding and can't drift from the Vue twin.
 import { useState } from 'react'
 import { registerBlockRenderer } from './registry.js'
-import { checkboxRootStyle, checkboxBoxStyle, checkStyle, CHECKBOX_STYLE_TAG } from '../checkbox-styles.js'
+import { checkboxRootStyle, checkboxBoxStyle, checkStyle, CHECKBOX_STYLE_TAG } from '../blocks/checkbox-styles.js'
 
 function Check({ checked }) {
   return (

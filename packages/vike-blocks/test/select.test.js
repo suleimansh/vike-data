@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { select, field, definePage, resolvePage, hasBlock } from '../index.js'
-import { selectStyle, selectChevronStyle, SELECT_STYLE_TAG } from '../select-styles.js'
+import { selectStyle, selectChevronStyle, SELECT_STYLE_TAG } from '../blocks/select-styles.js'
 
 test('select is registered', () => {
   assert.ok(hasBlock('select'))

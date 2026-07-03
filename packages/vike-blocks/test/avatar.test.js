@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { avatar, avatarGroup, definePage, resolvePage, hasBlock } from '../index.js'
-import { initials, statusColor } from '../avatar-styles.js'
+import { initials, statusColor } from '../blocks/avatar-styles.js'
 
 test('avatar + avatarGroup are registered', () => {
   assert.ok(hasBlock('avatar'))

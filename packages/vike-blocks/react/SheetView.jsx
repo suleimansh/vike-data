@@ -7,7 +7,7 @@ import { useState, useId } from 'react'
 import { Blocks } from './Blocks.jsx'
 import { registerBlockRenderer } from './registry.js'
 import { Overlay, overlayTriggerStyle } from './overlay.jsx'
-import { sheetContainerStyle, sheetPanelStyle } from '../sheet-styles.js'
+import { sheetContainerStyle, sheetPanelStyle } from '../blocks/sheet-styles.js'
 
 export function SheetView({ title = '', description, trigger = 'Open', side = 'right', sections = [], defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen)

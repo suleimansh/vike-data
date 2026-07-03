@@ -12,7 +12,7 @@ import {
   messageAuthorStyle,
   messageTimeStyle,
   avatarInitials,
-} from '../message-styles.js'
+} from '../blocks/message-styles.js'
 
 export function MessageView({ from = 'assistant', author, at, bubble }) {
   const hasHeader = author != null || at != null

@@ -4,7 +4,7 @@
 // Vue twin. The copy button is the only client state (Copy -> Copied, then resets).
 import { useState } from 'react'
 import { registerBlockRenderer } from './registry.js'
-import { TOKEN_COLORS, codeSurfaceStyle, codeHeaderStyle, LINE_BG, LINE_ACCENT } from '../code-highlight.js'
+import { TOKEN_COLORS, codeSurfaceStyle, codeHeaderStyle, LINE_BG, LINE_ACCENT } from '../blocks/code-highlight.js'
 
 function CopyButton({ code }) {
   const [copied, setCopied] = useState(false)

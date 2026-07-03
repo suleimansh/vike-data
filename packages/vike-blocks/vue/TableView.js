@@ -4,8 +4,8 @@
 // React renderer.
 import { h, ref } from 'vue'
 import { registerBlockRenderer, getBlockRenderer } from './registry.js'
-import { resolveParams } from '../params.js'
-import { tableCell, tableHeader, formatValue, compareRows } from '../table-styles.js'
+import { resolveParams } from '../core/params.js'
+import { tableCell, tableHeader, formatValue, compareRows } from '../blocks/table-styles.js'
 
 // One row's action buttons: resolve each descriptor's params against the row, then render it
 // through its registered block renderer (an action button that runs via the vike-actions runner).

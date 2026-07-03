@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { alert, definePage, resolvePage, hasBlock } from '../index.js'
-import { intentKey, alertStyles, INTENTS } from '../alert-styles.js'
+import { intentKey, alertStyles, INTENTS } from '../blocks/alert-styles.js'
 
 test('alert is registered', () => {
   assert.ok(hasBlock('alert'))

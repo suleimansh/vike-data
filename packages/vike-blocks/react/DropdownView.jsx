@@ -7,8 +7,8 @@
 import { useState, useRef } from 'react'
 import { registerBlockRenderer } from './registry.js'
 import { Popover } from './popover.jsx'
-import { popoverSurfaceStyle, popoverMotionStyle } from '../popover-styles.js'
-import { dropdownPlacement, dropdownTriggerStyle, dropdownItemStyle, dropdownSeparatorStyle, dropdownHeadingStyle, DROPDOWN_STYLE_TAG, moveMenuFocus } from '../dropdown-styles.js'
+import { popoverSurfaceStyle, popoverMotionStyle } from '../blocks/popover-styles.js'
+import { dropdownPlacement, dropdownTriggerStyle, dropdownItemStyle, dropdownSeparatorStyle, dropdownHeadingStyle, DROPDOWN_STYLE_TAG, moveMenuFocus } from '../blocks/dropdown-styles.js'
 
 export function DropdownView({ label = 'Menu', items = [], align = 'start', side = 'bottom' }) {
   const [open, setOpen] = useState(false)

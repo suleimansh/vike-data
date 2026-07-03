@@ -5,7 +5,7 @@
 // switch-styles, so they can't drift.
 import { h, ref } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { switchRootStyle, switchTrackStyle, switchThumbStyle, SWITCH_STYLE_TAG } from '../switch-styles.js'
+import { switchRootStyle, switchTrackStyle, switchThumbStyle, SWITCH_STYLE_TAG } from '../blocks/switch-styles.js'
 
 export const SwitchView = {
   props: ['label', 'checked', 'disabled', 'name'],

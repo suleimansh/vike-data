@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { button, definePage, resolvePage, hasBlock } from '../index.js'
-import { variantKey, sizeKey, VARIANTS, SIZES, buttonStyle, BUTTON_STYLE_TAG } from '../button-styles.js'
+import { variantKey, sizeKey, VARIANTS, SIZES, buttonStyle, BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
 
 test('button is registered', () => {
   assert.ok(hasBlock('button'))

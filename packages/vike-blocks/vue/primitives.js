@@ -5,8 +5,8 @@
 // resolved view-model as props. Importing this module registers the built-ins as a side effect.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { badgeStyle } from '../badge-styles.js'
-import { resolveTextStyle, listStyle, listItemStyle } from '../typography-styles.js'
+import { badgeStyle } from '../blocks/badge-styles.js'
+import { resolveTextStyle, listStyle, listItemStyle } from '../blocks/typography-styles.js'
 
 const TONE = { muted: 'var(--color-muted)', danger: 'var(--color-danger, #dc2626)', success: 'var(--color-success, #16a34a)', info: 'var(--color-primary, #2563eb)' }
 

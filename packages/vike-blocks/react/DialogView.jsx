@@ -8,7 +8,7 @@ import { useState, useId } from 'react'
 import { Blocks } from './Blocks.jsx'
 import { registerBlockRenderer } from './registry.js'
 import { Overlay, ENTER_MS, overlayTriggerStyle } from './overlay.jsx'
-import { OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../overlay-motion.js'
+import { OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../core/overlay-motion.js'
 
 // The centered dialog panel: a gentle flip in from the top + scale, settling on the shared decelerate
 // curve (no overshoot, so a modal doesn't wobble).

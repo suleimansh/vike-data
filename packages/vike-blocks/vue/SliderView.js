@@ -14,7 +14,7 @@ import {
   sliderRangeStyle,
   sliderThumbStyle,
   SLIDER_STYLE_TAG,
-} from '../slider-styles.js'
+} from '../blocks/slider-styles.js'
 
 export const SliderView = {
   props: ['label', 'min', 'max', 'step', 'value', 'disabled', 'name'],

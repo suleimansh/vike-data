@@ -3,93 +3,93 @@
 // Importing this root registers the bespoke blocks (stat/markdown/custom), the leaf
 // primitives (text/heading/badge/divider/link), and the tabs container block. vike-crud
 // layers schema-driven blocks on top; a per-framework package registers the renderers.
-import './blocks.js' // side-effect: register stat / custom
-import './primitives.js' // side-effect: register text / heading / badge / divider / link / list
-import './button.js' // side-effect: register the button block
-import './input.js' // side-effect: register the input block
-import './textarea.js' // side-effect: register the textarea block
-import './checkbox.js' // side-effect: register the checkbox block
-import './radio.js' // side-effect: register the radio block
-import './select.js' // side-effect: register the select block
-import './combobox.js' // side-effect: register the combobox block
-import './switch.js' // side-effect: register the switch block
-import './slider.js' // side-effect: register the slider block
-import './calendar.js' // side-effect: register the calendar block
-import './date-picker.js' // side-effect: register the date-picker block
-import './dropdown.js' // side-effect: register the dropdown block
-import './nav-menu.js' // side-effect: register the nav-menu block
-import './kbd.js' // side-effect: register the kbd block
-import './item.js' // side-effect: register the item block
-import './bubble.js' // side-effect: register the bubble block
-import './message.js' // side-effect: register the message block
-import './message-scroller.js' // side-effect: register the message-scroller block
-import './chart.js' // side-effect: register the chart block
-import './alert.js' // side-effect: register the alert block
-import './tabs.js' // side-effect: register the tabs container block
-import './accordion.js' // side-effect: register the accordion container block
-import './dialog.js' // side-effect: register the dialog container block
-import './confirm.js' // side-effect: register the confirm (alert dialog) block
-import './sheet.js' // side-effect: register the sheet container block
-import './drawer.js' // side-effect: register the drawer container block
-import './card.js' // side-effect: register the card container block
-import './field.js' // side-effect: register the field container block
-import './form.js' // side-effect: register the form container block
-import './attachment.js' // side-effect: register the attachment block
-import './code.js' // side-effect: register the code block
-import './markdown.js' // side-effect: register the markdown block
-import './table.js' // side-effect: register the table block
-import './pagination.js' // side-effect: register the pagination block
-import './tooltip.js' // side-effect: register the tooltip block
-import './avatar.js' // side-effect: register the avatar + avatarGroup blocks
-import './skeleton.js' // side-effect: register the skeleton block
-import './progress.js' // side-effect: register the progress block
-import './breadcrumb.js' // side-effect: register the breadcrumb block
-import './command.js' // side-effect: register the command block
-import './layout.js' // side-effect: register the layout container block + the slot placeholder block
+import './core/blocks.js' // side-effect: register stat / custom
+import './core/primitives.js' // side-effect: register text / heading / badge / divider / link / list
+import './blocks/button.js' // side-effect: register the button block
+import './blocks/input.js' // side-effect: register the input block
+import './blocks/textarea.js' // side-effect: register the textarea block
+import './blocks/checkbox.js' // side-effect: register the checkbox block
+import './blocks/radio.js' // side-effect: register the radio block
+import './blocks/select.js' // side-effect: register the select block
+import './blocks/combobox.js' // side-effect: register the combobox block
+import './blocks/switch.js' // side-effect: register the switch block
+import './blocks/slider.js' // side-effect: register the slider block
+import './blocks/calendar.js' // side-effect: register the calendar block
+import './blocks/date-picker.js' // side-effect: register the date-picker block
+import './blocks/dropdown.js' // side-effect: register the dropdown block
+import './blocks/nav-menu.js' // side-effect: register the nav-menu block
+import './blocks/kbd.js' // side-effect: register the kbd block
+import './blocks/item.js' // side-effect: register the item block
+import './blocks/bubble.js' // side-effect: register the bubble block
+import './blocks/message.js' // side-effect: register the message block
+import './blocks/message-scroller.js' // side-effect: register the message-scroller block
+import './blocks/chart.js' // side-effect: register the chart block
+import './blocks/alert.js' // side-effect: register the alert block
+import './blocks/tabs.js' // side-effect: register the tabs container block
+import './blocks/accordion.js' // side-effect: register the accordion container block
+import './blocks/dialog.js' // side-effect: register the dialog container block
+import './blocks/confirm.js' // side-effect: register the confirm (alert dialog) block
+import './blocks/sheet.js' // side-effect: register the sheet container block
+import './blocks/drawer.js' // side-effect: register the drawer container block
+import './blocks/card.js' // side-effect: register the card container block
+import './blocks/field.js' // side-effect: register the field container block
+import './blocks/form.js' // side-effect: register the form container block
+import './blocks/attachment.js' // side-effect: register the attachment block
+import './blocks/code.js' // side-effect: register the code block
+import './blocks/markdown.js' // side-effect: register the markdown block
+import './blocks/table.js' // side-effect: register the table block
+import './blocks/pagination.js' // side-effect: register the pagination block
+import './blocks/tooltip.js' // side-effect: register the tooltip block
+import './blocks/avatar.js' // side-effect: register the avatar + avatarGroup blocks
+import './blocks/skeleton.js' // side-effect: register the skeleton block
+import './blocks/progress.js' // side-effect: register the progress block
+import './blocks/breadcrumb.js' // side-effect: register the breadcrumb block
+import './blocks/command.js' // side-effect: register the command block
+import './blocks/layout.js' // side-effect: register the layout container block + the slot placeholder block
 
-export { definePage, resolvePage } from './page.js'
-export { registerBlock, getBlock, hasBlock, listBlocks, defineBlock } from './registry.js'
-export { resolveParams, resolveToken } from './params.js'
-export { text, heading, badge, divider, link, list } from './primitives.js'
-export { button } from './button.js'
-export { input } from './input.js'
-export { textarea } from './textarea.js'
-export { checkbox } from './checkbox.js'
-export { radioGroup } from './radio.js'
-export { select } from './select.js'
-export { combobox } from './combobox.js'
-export { toggle } from './switch.js'
-export { slider } from './slider.js'
-export { calendar } from './calendar.js'
-export { datePicker } from './date-picker.js'
-export { dropdown } from './dropdown.js'
-export { navMenu } from './nav-menu.js'
-export { toast, emitToast, dismissToast, subscribeToasts } from './toast-store.js'
-export { kbd } from './kbd.js'
-export { item } from './item.js'
-export { bubble } from './bubble.js'
-export { message } from './message.js'
-export { messageScroller } from './message-scroller.js'
-export { chart } from './chart.js'
-export { alert } from './alert.js'
-export { tabs } from './tabs.js'
-export { accordion } from './accordion.js'
-export { dialog } from './dialog.js'
-export { confirm } from './confirm.js'
-export { sheet } from './sheet.js'
-export { drawer } from './drawer.js'
-export { card } from './card.js'
-export { field } from './field.js'
-export { form } from './form.js'
-export { attachment } from './attachment.js'
-export { code } from './code.js'
-export { markdown } from './markdown.js'
-export { table } from './table.js'
-export { pagination } from './pagination.js'
-export { tooltip } from './tooltip.js'
-export { avatar, avatarGroup } from './avatar.js'
-export { skeleton } from './skeleton.js'
-export { progress } from './progress.js'
-export { breadcrumb } from './breadcrumb.js'
-export { command } from './command.js'
-export { layout, slot, isActivePath } from './layout.js'
+export { definePage, resolvePage } from './core/page.js'
+export { registerBlock, getBlock, hasBlock, listBlocks, defineBlock } from './core/registry.js'
+export { resolveParams, resolveToken } from './core/params.js'
+export { text, heading, badge, divider, link, list } from './core/primitives.js'
+export { button } from './blocks/button.js'
+export { input } from './blocks/input.js'
+export { textarea } from './blocks/textarea.js'
+export { checkbox } from './blocks/checkbox.js'
+export { radioGroup } from './blocks/radio.js'
+export { select } from './blocks/select.js'
+export { combobox } from './blocks/combobox.js'
+export { toggle } from './blocks/switch.js'
+export { slider } from './blocks/slider.js'
+export { calendar } from './blocks/calendar.js'
+export { datePicker } from './blocks/date-picker.js'
+export { dropdown } from './blocks/dropdown.js'
+export { navMenu } from './blocks/nav-menu.js'
+export { toast, emitToast, dismissToast, subscribeToasts } from './blocks/toast-store.js'
+export { kbd } from './blocks/kbd.js'
+export { item } from './blocks/item.js'
+export { bubble } from './blocks/bubble.js'
+export { message } from './blocks/message.js'
+export { messageScroller } from './blocks/message-scroller.js'
+export { chart } from './blocks/chart.js'
+export { alert } from './blocks/alert.js'
+export { tabs } from './blocks/tabs.js'
+export { accordion } from './blocks/accordion.js'
+export { dialog } from './blocks/dialog.js'
+export { confirm } from './blocks/confirm.js'
+export { sheet } from './blocks/sheet.js'
+export { drawer } from './blocks/drawer.js'
+export { card } from './blocks/card.js'
+export { field } from './blocks/field.js'
+export { form } from './blocks/form.js'
+export { attachment } from './blocks/attachment.js'
+export { code } from './blocks/code.js'
+export { markdown } from './blocks/markdown.js'
+export { table } from './blocks/table.js'
+export { pagination } from './blocks/pagination.js'
+export { tooltip } from './blocks/tooltip.js'
+export { avatar, avatarGroup } from './blocks/avatar.js'
+export { skeleton } from './blocks/skeleton.js'
+export { progress } from './blocks/progress.js'
+export { breadcrumb } from './blocks/breadcrumb.js'
+export { command } from './blocks/command.js'
+export { layout, slot, isActivePath } from './blocks/layout.js'

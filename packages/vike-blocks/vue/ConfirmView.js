@@ -7,8 +7,8 @@
 import { h, ref } from 'vue'
 import { registerBlockRenderer } from './registry.js'
 import { Overlay, ENTER_MS } from './overlay.js'
-import { OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../overlay-motion.js'
-import { buttonStyle, BUTTON_STYLE_TAG } from '../button-styles.js'
+import { OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../core/overlay-motion.js'
+import { buttonStyle, BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
 
 let uid = 0
 

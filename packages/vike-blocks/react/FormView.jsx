@@ -7,7 +7,7 @@
 import { Blocks } from './Blocks.jsx'
 import { registerBlockRenderer } from './registry.js'
 import { useActionRunner } from './action-context.js'
-import { buttonStyle, BUTTON_STYLE_TAG } from '../button-styles.js'
+import { buttonStyle, BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
 
 export function FormView({ action, method = 'post', submitLabel = 'Save', onSubmit, sections = [] }) {
   const runner = useActionRunner()

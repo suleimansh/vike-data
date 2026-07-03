@@ -6,7 +6,7 @@
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
 import { useActionRunner } from './action-context.js'
-import { buttonStyle, variantKey, BUTTON_STYLE_TAG } from '../button-styles.js'
+import { buttonStyle, variantKey, BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
 
 export const ButtonView = {
   props: ['label', 'variant', 'to', 'size', 'disabled', 'action', 'params'],

@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { attachment, field, definePage, resolvePage, hasBlock } from '../index.js'
-import { formatBytes, attachmentZoneStyle, ATTACHMENT_STYLE_TAG, ATTACHMENT_ICON_PATH } from '../attachment-styles.js'
+import { formatBytes, attachmentZoneStyle, ATTACHMENT_STYLE_TAG, ATTACHMENT_ICON_PATH } from '../blocks/attachment-styles.js'
 
 test('attachment is registered', () => {
   assert.ok(hasBlock('attachment'))

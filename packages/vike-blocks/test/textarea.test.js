@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { textarea, field, definePage, resolvePage, hasBlock } from '../index.js'
-import { textareaStyle, TEXTAREA_STYLE_TAG } from '../textarea-styles.js'
+import { textareaStyle, TEXTAREA_STYLE_TAG } from '../blocks/textarea-styles.js'
 
 test('textarea is registered', () => {
   assert.ok(hasBlock('textarea'))

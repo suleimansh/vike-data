@@ -8,7 +8,7 @@
 import { h, ref, computed } from 'vue'
 import { registerBlockRenderer } from './registry.js'
 import { Popover } from './popover.js'
-import { popoverSurfaceStyle, popoverMotionStyle } from '../popover-styles.js'
+import { popoverSurfaceStyle, popoverMotionStyle } from '../blocks/popover-styles.js'
 import {
   comboboxWrapStyle,
   comboboxInputStyle,
@@ -19,7 +19,7 @@ import {
   CHEVRON_DOWN_PATH,
   COMBOBOX_STYLE_TAG,
   filterOptions,
-} from '../combobox-styles.js'
+} from '../blocks/combobox-styles.js'
 
 export const ComboboxView = {
   props: ['options', 'value', 'placeholder', 'searchPlaceholder', 'empty', 'name', 'disabled'],

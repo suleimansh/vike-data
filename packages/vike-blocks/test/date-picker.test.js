@@ -6,8 +6,8 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { datePicker, field, definePage, resolvePage, hasBlock } from '../index.js'
-import { formatDisplay } from '../date-picker-styles.js'
-import { popoverAnchorStyle, popoverMotionStyle, popoverSurfaceStyle, POPOVER_ENTER_MS } from '../popover-styles.js'
+import { formatDisplay } from '../blocks/date-picker-styles.js'
+import { popoverAnchorStyle, popoverMotionStyle, popoverSurfaceStyle, POPOVER_ENTER_MS } from '../blocks/popover-styles.js'
 
 test('date-picker is registered', () => {
   assert.ok(hasBlock('date-picker'))

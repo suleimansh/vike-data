@@ -3,7 +3,7 @@
 // module (tokens + tints as vike-themes CSS vars), so it can't drift from the React renderer.
 import { h, ref } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { TOKEN_COLORS, codeSurfaceStyle, codeHeaderStyle, LINE_BG, LINE_ACCENT } from '../code-highlight.js'
+import { TOKEN_COLORS, codeSurfaceStyle, codeHeaderStyle, LINE_BG, LINE_ACCENT } from '../blocks/code-highlight.js'
 
 export const CodeView = {
   props: ['filename', 'lang', 'lineNumbers', 'copy', 'code', 'hasFocus', 'lines'],

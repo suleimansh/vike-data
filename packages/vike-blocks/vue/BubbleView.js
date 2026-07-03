@@ -5,7 +5,7 @@
 import { h } from 'vue'
 import { Blocks } from './Blocks.js'
 import { registerBlockRenderer } from './registry.js'
-import { bubbleRowStyle, bubbleStyle } from '../bubble-styles.js'
+import { bubbleRowStyle, bubbleStyle } from '../blocks/bubble-styles.js'
 
 export const BubbleView = (props) => {
   const from = props.from ?? 'assistant'

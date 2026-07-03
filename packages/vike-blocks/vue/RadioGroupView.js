@@ -5,7 +5,7 @@
 // via radio-styles, so they can't drift.
 import { h, ref } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { radioRootStyle, radioOptionStyle, radioCircleStyle, radioDotStyle, RADIO_STYLE_TAG } from '../radio-styles.js'
+import { radioRootStyle, radioOptionStyle, radioCircleStyle, radioDotStyle, RADIO_STYLE_TAG } from '../blocks/radio-styles.js'
 
 export const RadioGroupView = {
   props: ['options', 'value', 'name', 'disabled'],

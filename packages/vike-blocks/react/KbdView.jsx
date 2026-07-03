@@ -2,7 +2,7 @@
 // is a <kbd> element; the caps' styling comes from the shared kbd-styles module, so this stays a thin
 // binding and can't drift from the Vue twin.
 import { registerBlockRenderer } from './registry.js'
-import { kbdGroupStyle, kbdKeyStyle } from '../kbd-styles.js'
+import { kbdGroupStyle, kbdKeyStyle } from '../blocks/kbd-styles.js'
 
 export function KbdView({ keys = [] }) {
   return (

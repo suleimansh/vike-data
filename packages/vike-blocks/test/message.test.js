@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { message, definePage, resolvePage, hasBlock } from '../index.js'
-import { avatarInitials } from '../message-styles.js'
+import { avatarInitials } from '../blocks/message-styles.js'
 
 test('message is registered', () => {
   assert.ok(hasBlock('message'))

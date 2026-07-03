@@ -3,7 +3,7 @@
 // axis (#385). Base style + focus ring / placeholder / disabled states come from the shared
 // textarea-styles module, so this stays a thin binding and can't drift from the Vue twin.
 import { registerBlockRenderer } from './registry.js'
-import { textareaStyle, TEXTAREA_STYLE_TAG } from '../textarea-styles.js'
+import { textareaStyle, TEXTAREA_STYLE_TAG } from '../blocks/textarea-styles.js'
 
 export function TextareaView({ placeholder, value, rows = 3, name, disabled = false, required = false }) {
   return (

@@ -14,7 +14,7 @@ import {
   sliderRangeStyle,
   sliderThumbStyle,
   SLIDER_STYLE_TAG,
-} from '../slider-styles.js'
+} from '../blocks/slider-styles.js'
 
 export function SliderView({ label, min = 0, max = 100, step = 1, value, disabled = false, name }) {
   const initial = snapToStep(value ?? min, min, max, step)

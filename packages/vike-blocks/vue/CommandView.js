@@ -6,7 +6,7 @@
 import { h, ref, onMounted, onUnmounted } from 'vue'
 import { registerBlockRenderer } from './registry.js'
 import { Overlay, ENTER_MS } from './overlay.js'
-import { OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../overlay-motion.js'
+import { OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../core/overlay-motion.js'
 import {
   filterCommands,
   SEARCH_ICON,
@@ -20,7 +20,7 @@ import {
   commandShortcutStyle,
   commandEmptyStyle,
   COMMAND_STYLE_TAG,
-} from '../command-styles.js'
+} from '../blocks/command-styles.js'
 
 const searchIcon = (size = 16) =>
   h('svg', { width: size, height: size, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' }, [
