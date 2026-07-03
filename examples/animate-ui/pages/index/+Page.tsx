@@ -38,6 +38,7 @@ import {
   PaginationNext,
   PaginationEllipsis,
 } from '@/components/ui/pagination'
+import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip'
 
 export default function Page() {
   return (
@@ -175,6 +176,25 @@ export default function Page() {
           </PaginationItem>
         </PaginationContent>
       </Pagination>
+
+      <h2 style={{ fontSize: 18, fontWeight: 600, margin: '2.5rem 0 4px' }}>Tooltip</h2>
+      <p style={{ color: 'var(--muted-foreground)', fontSize: 14, marginBottom: 16 }}>
+        The shadcn <code>tooltip</code> (Radix): hover or focus the trigger to reveal a portalled, positioned tip with an
+        arrow (dark surface, fade + zoom in). This is the reference the dep-free vike-blocks <code>tooltip</code> block is
+        harvested from — the native block will do hover/focus with pure CSS, no Radix.
+      </p>
+      <TooltipProvider>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <Tooltip>
+            <TooltipTrigger className="bg-primary text-primary-foreground px-3 py-1.5 text-sm rounded-md">Hover me</TooltipTrigger>
+            <TooltipContent>Add to library</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger className="border px-3 py-1.5 text-sm rounded-md">Bottom</TooltipTrigger>
+            <TooltipContent side="bottom">Shown below</TooltipContent>
+          </Tooltip>
+        </div>
+      </TooltipProvider>
     </div>
   )
 }
