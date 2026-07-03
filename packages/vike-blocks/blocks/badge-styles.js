@@ -5,6 +5,8 @@
 //   .tone()    — our historical semantic intent (muted / info / success / warning / danger), kept
 //                for back-compat and rendered as a soft tinted pill (color-mix accent over the bg).
 // `.variant()` wins when both are set; a bare badge (neither) is the neutral `secondary` surface.
+import { keyResolver, aliasedKeyResolver } from './_shared.js'
+
 export const VARIANTS = {
   default: { bg: 'var(--color-primary, #2563eb)', fg: 'var(--color-primary-text, #ffffff)', border: 'transparent' },
   secondary: { bg: 'var(--color-surface, #f1f5f9)', fg: 'var(--color-text, #0f172a)', border: 'transparent' },
@@ -24,11 +26,8 @@ export const TONES = {
 export const TONE_ALIASES = { warn: 'warning', error: 'danger', note: 'info' }
 
 // Normalize a (possibly aliased/unknown) variant/tone name to its canonical key.
-export const variantKey = (v) => (VARIANTS[v] ? v : 'secondary')
-export const toneKey = (t) => {
-  const key = TONE_ALIASES[t] ?? t
-  return TONES[key] ? key : 'muted'
-}
+export const variantKey = keyResolver(VARIANTS, 'secondary')
+export const toneKey = aliasedKeyResolver(TONE_ALIASES, TONES, 'muted')
 
 // The shared base layout, identical for every badge (shadcn Base: a small rounded-md pill).
 const BASE = {

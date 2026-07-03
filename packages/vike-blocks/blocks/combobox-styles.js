@@ -3,6 +3,7 @@
 // search input (you type in place to filter), and the floating list opens directly below it. The list
 // panel's box + motion come from the popover primitive (popoverSurfaceStyle + popoverMotionStyle); this
 // owns the input look, the option rows, and the empty state. Every color reads a vike-themes CSS var.
+import { normalizeQuery } from './_shared.js'
 
 // The SVG chevron (shadcn/lucide chevron-down), stroked in currentColor.
 export const CHEVRON_DOWN_PATH = 'm6 9 6 6 6-6'
@@ -79,7 +80,7 @@ export const COMBOBOX_STYLE_TAG =
 // Filter the options by a query, matching the label OR the value case-insensitively. An empty query
 // returns everything. Agnostic + pure, so it is unit-tested and shared by both renderers.
 export function filterOptions(options, query) {
-  const q = String(query ?? '').trim().toLowerCase()
+  const q = normalizeQuery(query)
   if (!q) return options
   return options.filter((o) => String(o.label).toLowerCase().includes(q) || String(o.value).toLowerCase().includes(q))
 }

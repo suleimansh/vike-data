@@ -13,6 +13,7 @@
 //     .option('ada', 'Ada Lovelace')
 //     .option('alan', 'Alan Turing')
 import { registerBlock } from '../core/registry.js'
+import { normalizeOption, resolveOptions } from './_shared.js'
 
 // A fluent builder for a combobox. `.option()` appends a choice (label defaults to the value).
 export function combobox() {
@@ -25,7 +26,7 @@ export function combobox() {
   let disabled = false
   const self = {
     option(value, label) {
-      options.push({ value, label: label ?? value })
+      options.push(normalizeOption({ value, label }))
       return self
     },
     value(v) {
@@ -72,7 +73,7 @@ export function combobox() {
 // live open/query/selection state; this stays a pass-through of the declared list.
 registerBlock('combobox', {
   resolve({ props }) {
-    const options = (props.options ?? []).map((o) => ({ value: o.value, label: o.label ?? o.value }))
+    const options = resolveOptions(props.options)
     return {
       options,
       value: props.value ?? null,

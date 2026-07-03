@@ -13,6 +13,10 @@
 //     .separator()
 //     .item('Sign out')
 import { registerBlock } from '../core/registry.js'
+import { normalizeSide, normalizeAlign } from './_shared.js'
+
+// A dropdown menu anchors below (or above) its trigger; only top/bottom are legal, defaulting to bottom.
+const DROPDOWN_SIDES = ['top', 'bottom']
 
 // A fluent builder for a dropdown menu. Items accumulate in order; `to` makes an item a link.
 export function dropdown(label) {
@@ -33,11 +37,11 @@ export function dropdown(label) {
       return self
     },
     align(a) {
-      align = a === 'end' ? 'end' : 'start'
+      align = normalizeAlign(a)
       return self
     },
     side(s) {
-      side = s === 'top' ? 'top' : 'bottom'
+      side = normalizeSide(s, DROPDOWN_SIDES, 'bottom')
       return self
     },
     build() {
@@ -60,8 +64,8 @@ registerBlock('dropdown', {
     return {
       label: props.label ?? 'Menu',
       items: (props.items ?? []).map((i) => ({ ...i })),
-      align: props.align === 'end' ? 'end' : 'start',
-      side: props.side === 'top' ? 'top' : 'bottom',
+      align: normalizeAlign(props.align),
+      side: normalizeSide(props.side, DROPDOWN_SIDES, 'bottom'),
     }
   },
 })

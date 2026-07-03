@@ -3,6 +3,8 @@
 // button block's buttonStyle in the renderer (active = outline, others = ghost); this owns the nav/list
 // layout, the ellipsis, and the disabled-edge look, plus the pure `paginationRange` helper.
 
+import { clamp } from './_shared.js'
+
 // The lucide chevron paths for the Prev / Next controls, stroked in currentColor.
 export const CHEVRON_LEFT_PATH = 'm15 18-6-6 6-6'
 export const CHEVRON_RIGHT_PATH = 'm9 18 6-6-6-6'
@@ -16,7 +18,7 @@ export const CHEVRON_RIGHT_PATH = 'm9 18 6-6-6-6'
 export function paginationRange(page, pageCount, siblings = 1) {
   const total = Math.max(0, Math.floor(pageCount) || 0)
   if (total <= 1) return total === 1 ? [1] : []
-  const cur = Math.min(Math.max(1, Math.floor(page) || 1), total)
+  const cur = clamp(Math.floor(page) || 1, 1, total)
   const s = Math.max(0, Math.floor(siblings) || 0)
   const left = Math.max(2, cur - s)
   const right = Math.min(total - 1, cur + s)

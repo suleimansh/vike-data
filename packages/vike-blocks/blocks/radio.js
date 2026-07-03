@@ -10,6 +10,7 @@
 //     .option('team', 'Team')
 //     .value('pro')
 import { registerBlock } from '../core/registry.js'
+import { normalizeOption, resolveOptions } from './_shared.js'
 
 // A fluent builder for a radio group. `.option()` appends a choice (label defaults to the value).
 export function radioGroup() {
@@ -19,7 +20,7 @@ export function radioGroup() {
   let disabled = false
   const self = {
     option(value, label) {
-      options.push({ value, label: label ?? value })
+      options.push(normalizeOption({ value, label }))
       return self
     },
     value(v) {
@@ -51,7 +52,7 @@ export function radioGroup() {
 // draws the radio group; `value` is only the INITIAL selection (the renderer owns the live state).
 registerBlock('radio', {
   resolve({ props }) {
-    const options = (props.options ?? []).map((o) => ({ value: o.value, label: o.label ?? o.value }))
+    const options = resolveOptions(props.options)
     return {
       options,
       value: props.value ?? options[0]?.value ?? null,

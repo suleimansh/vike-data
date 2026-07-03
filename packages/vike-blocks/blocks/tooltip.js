@@ -9,6 +9,7 @@
 //   tooltip('Shown below').side('bottom').on(badge('Beta'))
 import { registerBlock } from '../core/registry.js'
 import { resolvePage, collapseSection as collapse } from '../core/page.js'
+import { normalizeSide } from './_shared.js'
 
 const SIDES = ['top', 'bottom', 'left', 'right']
 // Collapse a builder to its plain descriptor (like field's nested control), so `.on(button('Save'))` works.
@@ -20,7 +21,7 @@ export function tooltip(text) {
   let trigger
   const self = {
     side(s) {
-      side = SIDES.includes(s) ? s : 'top'
+      side = normalizeSide(s, SIDES, 'top')
       return self
     },
     on(block) {
@@ -46,7 +47,7 @@ registerBlock('tooltip', {
     const trigger = props.trigger ? resolvePage({ sections: [collapse(props.trigger)] }, tables).sections[0] : null
     return {
       text: props.text ?? '',
-      side: SIDES.includes(props.side) ? props.side : 'top',
+      side: normalizeSide(props.side, SIDES, 'top'),
       trigger,
     }
   },

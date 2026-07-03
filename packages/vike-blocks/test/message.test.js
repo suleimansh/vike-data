@@ -53,6 +53,8 @@ test('an unknown sender falls back to the assistant', () => {
 test('avatarInitials derives initials from the author, else falls back by sender', () => {
   assert.equal(avatarInitials('Ada Lovelace', 'assistant'), 'AL')
   assert.equal(avatarInitials('Rudder', 'assistant'), 'R')
+  // 3+ word author -> first + last initial, the same canonical `initials` the avatar block uses.
+  assert.equal(avatarInitials('Grace Brewster Hopper', 'assistant'), 'GH')
   assert.equal(avatarInitials(null, 'user'), 'U')
   assert.equal(avatarInitials(null, 'assistant'), 'AI')
 })

@@ -3,12 +3,14 @@
 // rounded track with a primary fill sized to the value (a pure-CSS width transition), plus an
 // indeterminate mode (a segment sliding across via keyframes). Theme-native via `var(--color-primary)`.
 
+import { clamp } from './_shared.js'
+
 // Clamp a value/max to a 0-100 percentage. Pure + agnostic, so it is unit-tested and shared by the twins.
 export function clampPercent(value, max = 100) {
   const m = Number(max)
   const v = Number(value) || 0
   if (!Number.isFinite(m) || m <= 0) return 0 // a non-positive / invalid max reads as empty
-  return Math.max(0, Math.min(100, (v / m) * 100))
+  return clamp((v / m) * 100, 0, 100)
 }
 
 // The optional caption row above the bar (label left, value% right).

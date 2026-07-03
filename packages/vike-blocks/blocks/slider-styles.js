@@ -3,6 +3,7 @@
 // CSS var, with a fallback). A range control is a rail whose left portion fills with the primary color
 // up to the thumb; the thumb sits at the value's percent along the rail. The :focus-visible ring rides
 // the `vike-blocks-slider-thumb` class + SLIDER_STYLE_TAG (a static, identical-everywhere <style>).
+import { clamp } from './_shared.js'
 
 // The value's position along the rail, as a 0-100 percent (clamped). A degenerate range (max <= min)
 // pins to 0 so the thumb can't fly off or divide by zero.
@@ -17,7 +18,7 @@ export function sliderPercent(value, min, max) {
 export function snapToStep(raw, min, max, step) {
   const s = step > 0 ? step : 1
   const snapped = Math.round((raw - min) / s) * s + min
-  return snapped < min ? min : snapped > max ? max : snapped
+  return clamp(snapped, min, max)
 }
 
 // The wrapper: the label above, the rail below.

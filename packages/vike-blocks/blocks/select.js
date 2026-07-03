@@ -12,6 +12,7 @@
 //     .option('pro', 'Pro')
 //     .value('pro')
 import { registerBlock } from '../core/registry.js'
+import { normalizeOption, resolveOptions } from './_shared.js'
 
 // A fluent builder for a select. `.option()` appends a choice (label defaults to the value).
 export function select() {
@@ -23,7 +24,7 @@ export function select() {
   let required = false
   const self = {
     option(value, label, opts = {}) {
-      options.push({ value, label: label ?? value, ...(opts.disabled ? { disabled: true } : {}) })
+      options.push(normalizeOption({ value, label, disabled: opts.disabled }, { withDisabled: true }))
       return self
     },
     value(v) {
@@ -68,7 +69,7 @@ export function select() {
 // `value` is only the INITIAL selection.
 registerBlock('select', {
   resolve({ props }) {
-    const options = (props.options ?? []).map((o) => ({ value: o.value, label: o.label ?? o.value, ...(o.disabled ? { disabled: true } : {}) }))
+    const options = resolveOptions(props.options, { withDisabled: true })
     return {
       options,
       value: props.value ?? null,

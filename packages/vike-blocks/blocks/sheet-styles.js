@@ -4,6 +4,7 @@
 // slide duration must match the overlay primitive's ENTER_MS so the panel finishes sliding before the
 // primitive unmounts it — so both come from the one shared overlay-motion source (drawer reuses these).
 import { OVERLAY_ENTER_MS, OVERLAY_EASE } from '../core/overlay-motion.js'
+import { keyResolver } from './_shared.js'
 export const SHEET_ENTER_MS = OVERLAY_ENTER_MS
 // A decelerate ease (no overshoot) — a full-edge panel that overshot would flash a gap past the edge.
 export const SHEET_EASE = OVERLAY_EASE
@@ -17,7 +18,7 @@ const RADIUS = {
 }
 
 const isVertical = (side) => side === 'top' || side === 'bottom'
-const norm = (side) => (RADIUS[side] ? side : 'right')
+const norm = keyResolver(RADIUS, 'right')
 
 // Where the panel sits within the backdrop, by anchored edge (fed to the overlay's containerStyle).
 export function sheetContainerStyle(side) {
