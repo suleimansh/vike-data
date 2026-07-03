@@ -5,8 +5,12 @@
 // existing `.tone()` still tints the color and, for the plain default, keeps its exact old behavior.
 // A separate `list` block renders an ordered/unordered list on the shadcn list surface.
 
-// Historical tone tokens -> a color (matches the pre-restyle renderer).
-const TONE = { muted: 'var(--color-muted)', danger: 'var(--color-danger, #dc2626)', success: 'var(--color-success, #16a34a)', info: 'var(--color-primary, #2563eb)' }
+// Historical tone tokens -> a color (matches the pre-restyle renderer). Exported so the primitive
+// renderers (text / link) share this one map instead of each keeping a copy.
+export const TONE = { muted: 'var(--color-muted)', danger: 'var(--color-danger, #dc2626)', success: 'var(--color-success, #16a34a)', info: 'var(--color-primary, #2563eb)' }
+
+// Heading top-margin by level (h1 flush, deeper levels breathe less). Shared by both renderers.
+export const HEADING_TOP = { 1: '0', 2: '1.5rem', 3: '1.25rem' }
 
 // The shadcn Base text variants: the element tag + its style (color left to resolveTextStyle so a
 // `.tone()` can override it). `default` is the historical plain span; its color is special-cased.

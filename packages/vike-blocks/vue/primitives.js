@@ -6,9 +6,7 @@
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
 import { badgeStyle } from '../blocks/badge-styles.js'
-import { resolveTextStyle, listStyle, listItemStyle } from '../blocks/typography-styles.js'
-
-const TONE = { muted: 'var(--color-muted)', danger: 'var(--color-danger, #dc2626)', success: 'var(--color-success, #16a34a)', info: 'var(--color-primary, #2563eb)' }
+import { resolveTextStyle, listStyle, listItemStyle, TONE, HEADING_TOP } from '../blocks/typography-styles.js'
 
 // A run of text on the shadcn Base typography surface: `.variant()` picks lead / muted /
 // blockquote / inline code (default is a plain span); a known `.tone()` tints the color.
@@ -29,7 +27,6 @@ List.props = ['items', 'ordered']
 
 // Top margin scales with level so sections breathe: a page-title h1 stays flush (usually the first
 // block on a page), while an h2/h3 section heading separates from the block above it.
-const HEADING_TOP = { 1: '0', 2: '1.5rem', 3: '1.25rem' }
 
 export const Heading = (props) => {
   const level = Math.min(6, Math.max(1, props.level ?? 2))

@@ -20,11 +20,10 @@
 // is present the renderer submits the form's values to that action via JS; otherwise the native
 // `action`/`method` POST is the progressive-enhancement fallback, so a form works with no client JS.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage } from '../core/page.js'
+import { resolvePage, collapseSections as collapse } from '../core/page.js'
 
 // Collapse builders to plain descriptors (a no-op for descriptors already), so `.fields([...])`
 // accepts fluent builders and `resolve` gets `{ block, ...props }` objects — same as card's sections.
-const collapse = (blocks) => (blocks ?? []).map((b) => (typeof b?.build === 'function' ? b.build() : b))
 
 // A fluent builder for a form block. `form({ action, method, fields })` seeds it; the chainable
 // setters override. `.fields()` collapses now so nested builders work; `.submit(label)` sets the

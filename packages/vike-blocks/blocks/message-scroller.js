@@ -9,9 +9,8 @@
 //     message().from('assistant').body('Hello!'),
 //   ]).height('20rem')
 import { registerBlock } from '../core/registry.js'
-import { resolvePage } from '../core/page.js'
+import { resolvePage, collapseSections as collapse } from '../core/page.js'
 
-const collapse = (sections) => (sections ?? []).map((s) => (typeof s?.build === 'function' ? s.build() : s))
 
 // A fluent builder for a message scroller. The messages are collapsed now so builders compose.
 export function messageScroller(messages = []) {

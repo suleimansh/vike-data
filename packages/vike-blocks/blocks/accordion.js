@@ -13,11 +13,10 @@
 //
 // An item's sections are ordinary blocks (built-ins or custom), so accordions compose recursively.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage } from '../core/page.js'
+import { resolvePage, collapseSections as collapse } from '../core/page.js'
 
 // Collapse a section that is a builder to its plain descriptor (definePage does this for top-level
 // sections; an item's sections need the same so `resolve` gets `{ block, ...props }` objects).
-const collapse = (sections) => (sections ?? []).map((s) => (typeof s?.build === 'function' ? s.build() : s))
 
 // Normalize the declared initial-open value(s) to an array of item values (a single-open accordion
 // takes a string, a multi-open one takes an array; either form is accepted for both).

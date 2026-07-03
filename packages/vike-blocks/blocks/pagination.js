@@ -58,7 +58,9 @@ registerBlock('pagination', {
     return {
       page: props.page ?? 1,
       pageCount: props.pageCount ?? 1,
-      siblings: props.siblings ?? 1,
+      // Clamp here too, so a hand-written `{ block:'pagination', siblings:-5 }` (which skips the
+      // builder's guard) can't reach paginationRange with a negative count.
+      siblings: Math.max(0, (props.siblings ?? 1) | 0),
       prevLabel: props.prevLabel ?? 'Previous',
       nextLabel: props.nextLabel ?? 'Next',
       hrefTemplate: props.hrefTemplate ?? null,

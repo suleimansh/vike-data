@@ -12,13 +12,12 @@
 //
 // The body sections are ordinary blocks (built-ins or custom), so drawers compose recursively.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage } from '../core/page.js'
+import { resolvePage, collapseSections as collapse } from '../core/page.js'
 
 const SIDES = ['bottom', 'top', 'left', 'right']
 
 // Collapse a section that is a builder to its plain descriptor (definePage does this for top-level
 // sections; the body sections need the same so `resolve` gets `{ block, ...props }` objects).
-const collapse = (sections) => (sections ?? []).map((s) => (typeof s?.build === 'function' ? s.build() : s))
 
 // A fluent builder for a drawer block. `.title()` / `.description()` head the panel; `.trigger()` is
 // the opening button's label; `.side()` anchors the panel (bottom | top | left | right, default

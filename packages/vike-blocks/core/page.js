@@ -15,6 +15,13 @@
 //   })
 import { getBlock, listBlocks } from './registry.js'
 
+// Collapse a fluent block BUILDER to its plain descriptor, duck-typed by a callable `.build`
+// (not truthiness — a bespoke block can carry a prop literally named `build`, e.g.
+// { block: 'deploy', build: 'ci-123' }). A plain descriptor passes through unchanged. Shared by
+// every container block that resolves nested block arrays, so the duck-type lives in one place.
+export const collapseSection = (entry) => (typeof entry?.build === 'function' ? entry.build() : entry)
+export const collapseSections = (entries) => (entries ?? []).map(collapseSection)
+
 // Normalize a section list: flatten fully (so presets — even presets that return other
 // presets, e.g. crudBlocks) mix with single blocks in the same array), collapse block
 // builders to plain specs, and validate each carries a `block` type.
@@ -22,9 +29,7 @@ function normalizeSections(sections) {
   if (!Array.isArray(sections)) throw new Error('definePage: `sections` must be an array of blocks')
   const flat = sections.flat(Infinity).filter((s) => s != null)
   return flat.map((entry, i) => {
-    // Duck-type a builder by a callable `.build`, not truthiness — a bespoke block can carry a
-    // prop literally named `build` (e.g. { block: 'deploy', build: 'ci-123' }).
-    const section = typeof entry?.build === 'function' ? entry.build() : entry
+    const section = collapseSection(entry)
     if (!section || typeof section !== 'object' || typeof section.block !== 'string' || !section.block) {
       // A common slip: dropping a crud() CONFIG (which has `table` but no `block`) into sections
       // instead of crudBlocks(). Point the way.

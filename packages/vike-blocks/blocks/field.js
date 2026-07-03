@@ -10,11 +10,10 @@
 //
 //   field('Password').error('Too short').control(input().type('password'))
 import { registerBlock } from '../core/registry.js'
-import { resolvePage } from '../core/page.js'
+import { resolvePage, collapseSection as collapse } from '../core/page.js'
 
 // Collapse a builder to its plain descriptor (definePage does this for top-level sections; a field's
 // nested control needs the same so `resolve` gets a `{ block, ...props }` object).
-const collapse = (block) => (typeof block?.build === 'function' ? block.build() : block)
 
 // A fluent builder for a field block. `field(label)` sets the label; `.control()` sets the control
 // block (collapsed now so a builder works), `.description()` / `.error()` the helper + error text.

@@ -8,11 +8,10 @@
 //   tooltip('We never share your email')            // default "?" marker trigger
 //   tooltip('Shown below').side('bottom').on(badge('Beta'))
 import { registerBlock } from '../core/registry.js'
-import { resolvePage } from '../core/page.js'
+import { resolvePage, collapseSection as collapse } from '../core/page.js'
 
 const SIDES = ['top', 'bottom', 'left', 'right']
 // Collapse a builder to its plain descriptor (like field's nested control), so `.on(button('Save'))` works.
-const collapse = (block) => (typeof block?.build === 'function' ? block.build() : block)
 
 // A fluent builder for a tooltip block. `tooltip(text)` sets the tip; `.on()` the wrapped trigger block;
 // `.side()` the placement.
