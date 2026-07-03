@@ -38,6 +38,7 @@ import './TableView.jsx' // side-effect: register the table renderer
 import './PaginationView.jsx' // side-effect: register the pagination renderer
 import './TooltipView.jsx' // side-effect: register the tooltip renderer
 import './AvatarView.jsx' // side-effect: register the avatar + avatarGroup renderers
+import './SkeletonView.jsx' // side-effect: register the skeleton renderer
 import './LayoutView.jsx' // side-effect: register the layout container renderer
 import './SlotView.jsx' // side-effect: register the slot placeholder renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
@@ -82,5 +83,6 @@ export { TableView } from './TableView.jsx'
 export { PaginationView } from './PaginationView.jsx'
 export { TooltipView } from './TooltipView.jsx'
 export { AvatarView, AvatarGroupView } from './AvatarView.jsx'
+export { SkeletonView } from './SkeletonView.jsx'
 export { LayoutView, LayoutConfigContext, LayoutConfigProvider, useLayoutConfig, LayoutContentContext, useLayoutContent, NavRegion, registerLayoutShell } from './LayoutView.jsx'
 export { SlotView } from './SlotView.jsx'
