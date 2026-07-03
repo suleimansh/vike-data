@@ -34,6 +34,7 @@
     "@universal-orm/memory": "workspace:*",
     "@vike-data/kit": "workspace:*",
     "@vike-data/vike-schema": "workspace:*",
+    "vike-blocks": "workspace:*",
     "vike-crud": "workspace:*"
   },
   "peerDependencies": {
