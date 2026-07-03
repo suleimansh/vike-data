@@ -13,6 +13,7 @@ import {
   toastRegionStyle,
   toastStackStyle,
   toastDeckExtent,
+  toastDeckOffsets,
   toastCardStyle,
   toastIconStyle,
   toastTitleStyle,
@@ -59,12 +60,7 @@ function ToastRegion({ position, toasts }) {
 
   const ordered = [...toasts].reverse() // newest first = the front of the deck
   const hOf = (t) => heights[t.id] ?? 64 // a sane default until the first measure lands
-  const inFront = [] // summed height (+gap) of the toasts closer to the edge than each one
-  let acc = 0
-  for (const t of ordered) {
-    inFront.push(acc)
-    acc += hOf(t) + TOAST_GAP
-  }
+  const inFront = toastDeckOffsets(ordered, hOf, TOAST_GAP) // height (+gap) in front of each toast
   const extent = toastDeckExtent(ordered.map(hOf), expanded)
 
   return (

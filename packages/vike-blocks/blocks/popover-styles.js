@@ -7,9 +7,10 @@
 // follows the trigger for free and stays dep-free. Consumers whose content brings its own box (the
 // calendar in a date-picker) pass `popoverMotionStyle`; menu-style consumers add `popoverSurfaceStyle`.
 
-// The tab-order selector for the elements a popover focuses on open (shared with the overlay).
-export const POPOVER_FOCUSABLE =
-  'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])'
+// The tab-order selector for the elements a popover focuses on open — the same set the overlay uses,
+// sourced from the one shared const so the two can't drift.
+import { FOCUSABLE } from '../core/overlay-motion.js'
+export const POPOVER_FOCUSABLE = FOCUSABLE
 
 // A popover is snappier than a modal: a short decelerating enter, no overshoot.
 export const POPOVER_ENTER_MS = 160

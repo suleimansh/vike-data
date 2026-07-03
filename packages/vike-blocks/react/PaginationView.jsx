@@ -5,8 +5,8 @@
 // there's no local state, and SSR renders the final links (no hydration concern). `hrefTemplate`
 // substitutes `{page}`; a hand-rendered app can pass an `href(page)` function instead.
 import { registerBlockRenderer } from './registry.js'
-import { buttonStyle, BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
-import { paginationRange, paginationNavStyle, paginationListStyle, paginationItemStyle, paginationEllipsisStyle, CHEVRON_LEFT_PATH, CHEVRON_RIGHT_PATH } from '../blocks/pagination-styles.js'
+import { BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
+import { paginationRange, paginationNavStyle, paginationListStyle, paginationItemStyle, paginationEllipsisStyle, paginationEdgeStyle as edgeStyle, paginationLinkStyle as linkStyle, CHEVRON_LEFT_PATH, CHEVRON_RIGHT_PATH } from '../blocks/pagination-styles.js'
 
 const Chevron = ({ d }) => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -20,9 +20,6 @@ export function PaginationView({ page = 1, pageCount = 1, siblings = 1, prevLabe
   const cur = Math.min(Math.max(1, page), total)
   const hrefFor = typeof href === 'function' ? href : hrefTemplate ? (p) => hrefTemplate.replaceAll('{page}', String(p)) : () => undefined
   const pages = paginationRange(cur, total, siblings)
-
-  const edgeStyle = (disabled) => ({ ...buttonStyle('ghost', 'default'), gap: '0.35rem', ...(disabled ? { opacity: 0.5, cursor: 'default', color: 'var(--color-muted, #64748b)' } : {}) })
-  const linkStyle = (active) => buttonStyle(active ? 'outline' : 'ghost', 'icon')
 
   return (
     <nav role="navigation" aria-label="pagination" data-slot="pagination" style={paginationNavStyle()}>

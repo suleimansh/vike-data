@@ -10,9 +10,7 @@
 import { Blocks } from './Blocks.jsx'
 import { useLayoutConfig, useLayoutContent, NavRegion } from './LayoutView.jsx'
 import { registerBlockRenderer } from './registry.js'
-
-// A value is nav-shaped when it is an array of link-ish items (objects with an href/label).
-const isNav = (v) => Array.isArray(v) && v.every((i) => i && typeof i === 'object' && ('href' in i || 'label' in i))
+import { isNav } from '../core/view-helpers.js'
 
 export function SlotView({ name, from = 'children', source, only, vertical, sections = [] }) {
   const config = useLayoutConfig()

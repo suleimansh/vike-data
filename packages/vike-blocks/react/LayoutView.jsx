@@ -11,6 +11,7 @@ import { createContext, useContext } from 'react'
 import { Blocks } from './Blocks.jsx'
 import { registerBlockRenderer } from './registry.js'
 import { isActivePath } from '../blocks/layout.js'
+import { stackRegionOrder } from '../core/view-helpers.js'
 
 // The cumulative layout-chrome config (nav / logo / userMenu / footer / toolbar / currentPath) a
 // `slot(...).from('config')` reads at render time. A provider merges each extension's contribution,
@@ -64,8 +65,7 @@ function Region({ sections }) {
 
 // The neutral shell: stack the regions in a stable order (header, main, footer, then extras).
 function StackShell({ slots }) {
-  const known = ['header', 'main', 'footer']
-  const names = [...known.filter((n) => slots[n]), ...Object.keys(slots).filter((n) => !known.includes(n))]
+  const names = stackRegionOrder(slots)
   return (
     <div data-slot="layout" data-variant="stack">
       {names.map((name) => (

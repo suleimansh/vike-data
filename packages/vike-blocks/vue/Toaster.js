@@ -12,6 +12,7 @@ import {
   toastRegionStyle,
   toastStackStyle,
   toastDeckExtent,
+  toastDeckOffsets,
   toastCardStyle,
   toastIconStyle,
   toastTitleStyle,
@@ -69,12 +70,7 @@ const ToastRegion = {
       const side = props.position.split('-')[0]
       const ordered = [...props.toasts].reverse() // newest first = the front of the deck
       const hOf = (t) => heights.value[t.id] ?? 64
-      const inFront = []
-      let acc = 0
-      for (const t of ordered) {
-        inFront.push(acc)
-        acc += hOf(t) + TOAST_GAP
-      }
+      const inFront = toastDeckOffsets(ordered, hOf, TOAST_GAP) // height (+gap) in front of each toast
       const extent = toastDeckExtent(ordered.map(hOf), expanded.value)
       return h(
         'div',

@@ -25,6 +25,19 @@ export function parseYMD(str) {
   return { year, monthIndex, day, iso: str }
 }
 
+// The month to show first: an explicit `month` ('YYYY-MM' or a full date), else the selected date's
+// month, else today. Shared by both renderers so the "which month opens" rule can't drift.
+export function initialView(month, value) {
+  const ym = typeof month === 'string' && /^(\d{4})-(\d{2})$/.exec(month)
+  if (ym) return { year: +ym[1], monthIndex: +ym[2] - 1 }
+  const fromMonth = parseYMD(month)
+  if (fromMonth) return { year: fromMonth.year, monthIndex: fromMonth.monthIndex }
+  const fromValue = parseYMD(value)
+  if (fromValue) return { year: fromValue.year, monthIndex: fromValue.monthIndex }
+  const now = new Date()
+  return { year: now.getFullYear(), monthIndex: now.getMonth() }
+}
+
 export const daysInMonth = (year, monthIndex) => new Date(year, monthIndex + 1, 0).getDate()
 
 // Shift a (year, monthIndex) by whole months, carrying across year boundaries in both directions.

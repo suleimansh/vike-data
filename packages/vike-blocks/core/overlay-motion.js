@@ -6,3 +6,8 @@
 export const OVERLAY_ENTER_MS = 260 // enter + exit; the primitive keeps the panel mounted this long on close
 export const OVERLAY_EASE = 'cubic-bezier(0.32, 0.72, 0, 1)' // decelerate, no overshoot — the shared panel curve
 export const OVERLAY_BACKDROP_EASE = 'ease-out' // the backdrop fade, matched to the panel's duration
+
+// The tab-order selector for the elements an overlay/popover focuses on open. One string, shared by
+// the react + vue overlay primitives and the popover primitive, so the focus set can't drift.
+export const FOCUSABLE =
+  'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])'

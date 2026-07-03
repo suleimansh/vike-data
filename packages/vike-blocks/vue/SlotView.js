@@ -9,8 +9,7 @@ import { h } from 'vue'
 import { Blocks } from './Blocks.js'
 import { useLayoutConfig, useLayoutContent, NavRegion } from './LayoutView.js'
 import { registerBlockRenderer } from './registry.js'
-
-const isNav = (v) => Array.isArray(v) && v.every((i) => i && typeof i === 'object' && ('href' in i || 'label' in i))
+import { isNav } from '../core/view-helpers.js'
 
 export const SlotView = {
   props: ['name', 'from', 'source', 'only', 'vertical', 'sections'],
