@@ -4,6 +4,7 @@
 // the shadcn Base text styles (plain paragraph / lead / muted / blockquote / inline code); the
 // existing `.tone()` still tints the color and, for the plain default, keeps its exact old behavior.
 // A separate `list` block renders an ordered/unordered list on the shadcn list surface.
+import { keyResolver } from './_shared.js'
 
 // Historical tone tokens -> a color (matches the pre-restyle renderer). Exported so the primitive
 // renderers (text / link) share this one map instead of each keeping a copy.
@@ -36,7 +37,7 @@ export const TEXT_VARIANTS = {
 }
 
 // Normalize a (possibly unknown) variant name to a canonical key.
-export const textVariantKey = (v) => (TEXT_VARIANTS[v] ? v : 'default')
+export const textVariantKey = keyResolver(TEXT_VARIANTS, 'default')
 
 // The { tag, style } for a text block. The plain `default` keeps its exact historical color rule
 // (tone -> mapped color or 'inherit'; unset -> theme text color). Every other variant carries its

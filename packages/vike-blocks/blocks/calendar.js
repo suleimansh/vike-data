@@ -9,15 +9,9 @@
 //   calendar().value('2026-07-04').min('2026-07-01').max('2026-07-31')
 //   calendar().month('2026-07').weekStartsOn(1)
 import { defineBlock } from '../core/registry.js'
+import { calendarBuild, calendarRefine } from './_shared.js'
 
 export const calendar = defineBlock('calendar', {
-  build: (value) => (value !== undefined ? { value } : {}),
-  refine: {
-    value: (v) => ({ value: v }),
-    month: (m) => ({ month: m }),
-    min: (v) => ({ min: v }),
-    max: (v) => ({ max: v }),
-    weekStartsOn: (n) => ({ weekStartsOn: n === 1 ? 1 : 0 }),
-    name: (n) => ({ name: n }),
-  },
+  build: calendarBuild,
+  refine: calendarRefine,
 })

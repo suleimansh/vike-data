@@ -5,6 +5,8 @@
 // info / success / warning render the default surface with an accent-colored icon; danger takes the
 // destructive treatment (accent-tinted border + accent title). Theme-native: every color is a
 // vike-themes CSS var with a fallback.
+import { aliasedKeyResolver } from './_shared.js'
+
 export const INTENTS = {
   info: { accent: 'var(--color-primary, #2563eb)', icon: 'i', destructive: false },
   success: { accent: 'var(--color-success, #16a34a)', icon: '✓', destructive: false },
@@ -15,10 +17,7 @@ export const INTENTS = {
 export const ALIASES = { warn: 'warning', error: 'danger', note: 'info' }
 
 // Normalize a (possibly aliased/unknown) intent name to its canonical key.
-export const intentKey = (intent) => {
-  const key = ALIASES[intent] ?? intent
-  return INTENTS[key] ? key : 'info'
-}
+export const intentKey = aliasedKeyResolver(ALIASES, INTENTS, 'info')
 
 // The computed style pieces for an intent, so the react/vue renderers stay thin twins.
 export function alertStyles(intent) {

@@ -11,16 +11,12 @@
 //   datePicker().min('2026-07-01').max('2026-07-31').placeholder('Due date')
 //   datePicker().month('2026-07').weekStartsOn(1).name('due')
 import { defineBlock } from '../core/registry.js'
+import { calendarBuild, calendarRefine } from './_shared.js'
 
 export const datePicker = defineBlock('date-picker', {
-  build: (value) => (value !== undefined ? { value } : {}),
+  build: calendarBuild,
   refine: {
-    value: (v) => ({ value: v }),
-    month: (m) => ({ month: m }),
-    min: (v) => ({ min: v }),
-    max: (v) => ({ max: v }),
-    weekStartsOn: (n) => ({ weekStartsOn: n === 1 ? 1 : 0 }),
-    name: (n) => ({ name: n }),
+    ...calendarRefine,
     placeholder: (p) => ({ placeholder: p }),
   },
 })

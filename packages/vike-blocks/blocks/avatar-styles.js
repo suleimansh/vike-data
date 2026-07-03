@@ -5,16 +5,9 @@
 // "+N" count. Theme-native via `var(--color-*)`.
 
 // Derive up-to-two initials from a name: first+last initial for a full name, the first letter for a
-// mononym, '' for nothing (the renderer then shows a user icon). Pure + agnostic, so it is unit-tested.
-export function initials(name) {
-  const parts = String(name ?? '')
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-  if (parts.length === 0) return ''
-  if (parts.length === 1) return parts[0].charAt(0).toUpperCase()
-  return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase()
-}
+// mononym, '' for nothing (the renderer then shows a user icon). The canonical form lives in _shared
+// (the message block reuses it); re-exported here since the avatar renderers import it from this module.
+export { initials } from './_shared.js'
 
 // Named presence colors for the status dot; an unknown value is used as a raw CSS color.
 export const STATUS_COLORS = { online: '#22c55e', busy: '#ef4444', away: '#f59e0b', offline: '#94a3b8' }

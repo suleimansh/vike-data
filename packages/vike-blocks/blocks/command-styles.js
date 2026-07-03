@@ -3,6 +3,8 @@
 // primitive; this owns the trigger (a search-field affordance + a ⌘K hint), the input row, the grouped
 // list, the active item, the shortcut hint, and the empty state, plus the pure `filterCommands` helper.
 
+import { normalizeQuery } from './_shared.js'
+
 // The lucide `search` glyph for the trigger + input row.
 export const SEARCH_ICON = { circle: { cx: 11, cy: 11, r: 8 }, path: 'm21 21-4.3-4.3' }
 
@@ -10,7 +12,7 @@ export const SEARCH_ICON = { circle: { cx: 11, cy: 11, r: 8 }, path: 'm21 21-4.3
 // visible `groups` AND a `flat` list of the surviving items in order (for arrow-key nav). Pure +
 // agnostic, so it is unit-tested and shared by both renderers.
 export function filterCommands(groups, query) {
-  const q = String(query ?? '').trim().toLowerCase()
+  const q = normalizeQuery(query)
   const out = []
   const flat = []
   for (const g of groups ?? []) {

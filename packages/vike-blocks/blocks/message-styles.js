@@ -2,6 +2,8 @@
 // renderers so the surface can't drift. From-scratch + theme-native (every color reads a vike-themes
 // CSS var, with a fallback): an avatar on the sender's outer side, then a column with an author +
 // timestamp header and the bubble, the whole row aligned by sender (user right, assistant left).
+import { initials } from './_shared.js'
+
 export const messageRowStyle = (from) => ({
   display: 'flex',
   flexDirection: from === 'user' ? 'row-reverse' : 'row',
@@ -47,12 +49,9 @@ export const messageHeaderStyle = (from) => ({
 export const messageAuthorStyle = { fontSize: '13px', fontWeight: 600, color: 'var(--color-text, #0f172a)' }
 export const messageTimeStyle = { fontSize: '12px', color: 'var(--color-muted, #64748b)' }
 
-// The initials shown in the avatar, derived from the author name (falls back by sender).
+// The initials shown in the avatar, derived from the author name (falls back by sender). Shares the
+// canonical first+last `initials` with the avatar block so the two can't diverge; the sender fallback
+// (U / AI) is message-specific.
 export function avatarInitials(author, from) {
-  if (author) {
-    const parts = author.trim().split(/\s+/).slice(0, 2)
-    const initials = parts.map((p) => p[0]).join('')
-    if (initials) return initials.toUpperCase()
-  }
-  return from === 'user' ? 'U' : 'AI'
+  return initials(author) || (from === 'user' ? 'U' : 'AI')
 }
