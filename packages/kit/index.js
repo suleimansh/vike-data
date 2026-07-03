@@ -195,18 +195,29 @@ export function createSubjectResolver(defaults, envKeys = {}) {
   return function resolve(overrides = {}, env = (typeof process !== 'undefined' ? process.env : {})) {
     const out = {}
     for (const field of Object.keys(frozen)) {
-      const override = overrides[field]
-      if (override != null && String(override).trim() !== '') {
-        out[field] = String(override).trim()
+      const override = cleanStr(overrides[field])
+      if (override !== undefined) {
+        out[field] = override
         continue
       }
       const envKey = envKeys[field]
-      const fromEnv = envKey ? env[envKey] : undefined
-      out[field] = fromEnv != null && String(fromEnv).trim() !== '' ? String(fromEnv).trim() : frozen[field]
+      out[field] = cleanStr(envKey ? env[envKey] : undefined, frozen[field])
     }
     return out
   }
 }
+
+/**
+ * The "blank -> unset, else trimmed" idiom the resolvers share: coerce to string and trim; a
+ * null/undefined/blank/whitespace-only value falls through to `fallback` (undefined by default), so
+ * an empty `FOO=` in a .env never produces a nameless value.
+ *
+ * @param {unknown} v
+ * @param {any} [fallback]
+ * @returns {string|any}
+ */
+export const cleanStr = (v, fallback = undefined) =>
+  v != null && String(v).trim() !== '' ? String(v).trim() : fallback
 
 /**
  * The canonical OWNER column name (#250): an owned-row extension (vike-storage / vike-push /
@@ -236,10 +247,9 @@ export const DEFAULT_OWNER_COLUMN = 'user_id'
  * @returns {{ ownerTable:string, ownerColumn:string }}
  */
 export function resolveOwner(defaultTable, binding = {}) {
-  const clean = (v) => (v != null && String(v).trim() !== '' ? String(v).trim() : undefined)
   return {
-    ownerTable: clean(binding?.table) ?? defaultTable,
-    ownerColumn: clean(binding?.column) ?? DEFAULT_OWNER_COLUMN,
+    ownerTable: cleanStr(binding?.table) ?? defaultTable,
+    ownerColumn: cleanStr(binding?.column) ?? DEFAULT_OWNER_COLUMN,
   }
 }
 
@@ -267,7 +277,7 @@ export function resolveOwner(defaultTable, binding = {}) {
  * @returns {string}
  */
 export function resolveOwnerColumn(value, defaultColumn = DEFAULT_OWNER_COLUMN) {
-  return value != null && value.trim() !== '' ? value.trim() : defaultColumn
+  return cleanStr(value, defaultColumn)
 }
 
 /**

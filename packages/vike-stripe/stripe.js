@@ -15,6 +15,7 @@
 // so an app swaps the provider without the billing models changing. We keep that
 // seam in mind but do not build the neutral layer yet.
 import crypto from 'node:crypto'
+import { jsonResponse } from '@vike-data/kit'
 
 const SIGNATURE_SCHEME = 'v1'
 // Stripe's default replay window: reject events whose timestamp is more than this
@@ -108,8 +109,8 @@ export const stripe = createStripe({
   webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
 })
 
-const json = (status, body) =>
-  new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } })
+// The shared JSON envelope, from kit (identical to the local helper this replaced).
+const json = jsonResponse
 
 // The shared webhook plumbing for every billing model. Both subpaths (purchase,
 // subscription) own a webhook that is byte-for-byte identical up to one line — read

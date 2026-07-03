@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { createPort, createOutbox } from '../index.js'
+import { createPort, createOutbox, cleanStr } from '../index.js'
 
 test('createPort: set/get/clear round-trips', () => {
   const port = createPort({ name: 'test.a' })
@@ -54,4 +54,14 @@ test('createOutbox: record/get/clear', () => {
   assert.equal(box.get()[0].to, 'a')
   box.clear()
   assert.equal(box.get().length, 0)
+})
+
+test('cleanStr: trims, treats blank/nullish as unset (falls to fallback)', () => {
+  assert.equal(cleanStr('  hi  '), 'hi')
+  assert.equal(cleanStr(''), undefined)
+  assert.equal(cleanStr('   '), undefined)
+  assert.equal(cleanStr(null), undefined)
+  assert.equal(cleanStr(undefined, 'def'), 'def')
+  assert.equal(cleanStr('  ', 'def'), 'def')
+  assert.equal(cleanStr(42), '42') // coerces non-strings
 })
