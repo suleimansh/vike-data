@@ -1,7 +1,7 @@
 // Authorizing an action — "who can run this". Default-open (an action with no `guard` runs for
 // anyone), matching the family's canView/canEdit default; a guard refines downward. A guard composes
 // the EXISTING auth primitives rather than inventing a new model — you write a predicate that calls
-// vike-rbac (`can`/`requireRole`), the owner contract (a `scope` check), or reads `ctx.user`
+// vike-rbac (`can`/`hasRole`), the owner contract (a `scope` check), or reads `ctx.user`
 // directly, so vike-actions stays free of a hard dep on any one of them.
 //
 // A `guard` is one of:

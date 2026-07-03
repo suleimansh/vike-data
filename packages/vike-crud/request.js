@@ -1,7 +1,8 @@
 // Reading a form POST across the two ways Vike surfaces the request (a Web Request on server
 // adapters, the raw Node request under `vite dev`), normalized to `{ method, formData() }`. The
 // generated view page owns its own POST (no separate endpoint), so it reads the submitted form
-// the same way regardless of environment. Same shape as vike-admin's request reader.
+// the same way regardless of environment. Framework-agnostic; vike-admin delegates to this via
+// the `vike-crud/request` subpath rather than keeping its own copy.
 function readNodeBody(req) {
   return new Promise((resolve, reject) => {
     let body = ''

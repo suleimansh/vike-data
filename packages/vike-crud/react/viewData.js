@@ -7,7 +7,7 @@
 import { redirect } from 'vike/abort'
 import { resolveViewTables, buildDb, hydrateView, createRow, updateRow } from '../index.js'
 import { viewForRoute, formFieldsFor } from './pages.js'
-import { readFormRequest } from './request.js'
+import { readFormRequest } from '../request.js'
 
 export async function viewData(pageContext) {
   const config = pageContext.config

@@ -5,6 +5,7 @@
 // way.
 import { useData } from 'vike-react/useData'
 import { FormFields } from './FormFields.jsx'
+import { singular } from '../text.js'
 
 export default function NewPage() {
   const data = useData()
@@ -58,6 +59,3 @@ export default function NewPage() {
 }
 
 // "Users" -> "User" for the heading; harmless if a label isn't a plain plural.
-function singular(label) {
-  return /s$/i.test(label) ? label.replace(/s$/i, '') : label
-}
