@@ -102,24 +102,6 @@ export function createDevTransport({ name, entry, line } = {}) {
 }
 
 /**
- * A field-widget registry: the token -> component lookup a schema-driven UI uses to map a
- * column's rendering token (derived from its `.as()` semantic) to the control that renders
- * it. This is the shared MECHANISM behind the schema-driven UI epic: a consumer (vike-admin
- * today; a future vike-landing / vike-email-editor) creates its own per-framework registry by
- * name and reads widgets from it, and an extension teaches EVERY consumer of that framework a
- * new field kind by registering once (e.g. vike-storage registers a `file` upload control), so
- * neither side has to depend on the other.
- *
- * Components are held as OPAQUE values (exactly as createPort holds opaque providers), so kit
- * never renders them and this stays JSX-free and framework-agnostic. Kept on globalThis under a
- * Symbol(name) key so module duplication can't fork the map. A token a registry doesn't know
- * returns undefined, so the caller falls back instead of throwing.
- *
- * @param {string} name  Per-framework key, e.g. 'react' or 'vue'. Two registries created with
- *                       the same name share the same slot.
- * @returns {{ register:(token:string, component:Function)=>Function, get:(token:string)=>Function|undefined, tokens:()=>string[] }}
- */
-/**
  * A per-framework, cross-package COMPONENT registry: a `token -> component` map keyed by a
  * (namespace, name) pair, kept on globalThis so module duplication can't fork it. This is the
  * generic mechanism behind the field-widget registry AND the block-renderer registry (the third

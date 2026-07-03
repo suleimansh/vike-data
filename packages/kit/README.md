@@ -55,6 +55,62 @@ It is the OWNER axis, **orthogonal** to a subject *rename*: a rename (vike-auth'
 
 `resolveOwner` is **pure** (no env, no globals): the build half. Each consumer adds the runtime half — `VIKE_<PKG>_OWNER_COLUMN` (where to write/scope the owner id) and `VIKE_<PKG>_OWNER_FROM` (which field of the signed-in user holds it, e.g. `current_organization_id`) — and resolves a `403 no-owner` when a signed-in user has no org. A blank table/column falls through to the default, and the column defaults to `DEFAULT_OWNER_COLUMN` (`user_id`), so a consumer that passes no binding stays byte-for-byte its single-owner self. See the "Owned by a team" section in [vike-storage](../vike-storage/README.md#owned-by-a-team-not-a-user-storageowner-250), [vike-push](../vike-push/README.md), and [vike-notifications](../vike-notifications/README.md) for the worked end-to-end binding, and [AUTHORING.md](../../AUTHORING.md#2-own-your-tables-the-stem-pattern) for the authoring pattern.
 
+The runtime half of the contract also lives here: `DEFAULT_OWNER_COLUMN` (`'user_id'`),
+`resolveOwnerColumn(value, default?)` (an env-or-default column name), and
+`resolveOwnerId(user, { from, subjectTable, adapter })` (read the owner id off the signed-in
+user, or look it up) — the pieces each owned-row extension composes with `resolveOwner`.
+
+## `createDevTransport`
+
+A ready-made dev transport for a port (mail/push): its `transport.send(...)` records the message
+into a `createOutbox` (via your `entry` extractor) and logs a friendly `line`. What a channel
+installs as its default transport so dev "just works" with no real provider configured.
+
+```js
+import { createDevTransport } from '@vike-data/kit'
+
+const dev = createDevTransport({ name: 'vike-mail', entry: (m) => m, line: (m) => `mail -> ${m.to}` })
+setMailTransport(dev.transport)   // install as the default transport
+dev.getOutbox()                   // inspect captured messages (tests / a dev UI); dev.clearOutbox() resets
+```
+
+## `createComponentRegistry` / `createFieldWidgetRegistry`
+
+A per-framework, cross-package `token -> component` registry, keyed by a `(namespace, name)` pair
+and kept on globalThis so module duplication can't fork it. The mechanism behind vike-blocks'
+`registerBlockRenderer` and vike-crud's field widgets: a schema declares intent (a block type, a
+widget token), each framework binding registers the component that draws it, and any consumer of
+the same `(namespace, name)` sees it — so a package teaches every consumer a new kind by
+registering once. Components are held opaque (kit never renders them), so this stays JSX-free.
+`createFieldWidgetRegistry(name)` is the thin `namespace: 'fieldWidgets'` shorthand.
+
+```js
+import { createComponentRegistry } from '@vike-data/kit'
+const blocks = createComponentRegistry('blocks', 'react')
+blocks.register('rating', Rating)   // blocks.get('rating') -> Rating (or undefined -> caller falls back)
+```
+
+## `createSubjectResolver`
+
+Per-field `override > env > default` resolution behind a configurable subject/owner (blank counts
+as unset). vike-auth's `resolveSubject` and vike-teams' `resolveTeamSubject` are both built on it.
+
+```js
+import { createSubjectResolver } from '@vike-data/kit'
+const resolve = createSubjectResolver({ table: 'users', id: 'id' }, { table: 'VIKE_AUTH_USERS_TABLE' })
+resolve({ table: 'accounts' })   // override wins; else VIKE_AUTH_USERS_TABLE; else 'users'
+```
+
+## `jsonResponse` / `readJsonSafe`
+
+Tiny HTTP helpers for the JSON endpoints: `jsonResponse(status, body)` returns a `Response` with
+the JSON body and content-type set; `readJsonSafe(request)` parses a request body to an object,
+returning `null` instead of throwing on invalid JSON.
+
 ## Used by
 
-`vike-queue` (the driver port), `vike-mail` and `vike-push` (the transport ports + dev outboxes), and `vike-storage` / `vike-push` / `vike-notifications` (the `resolveOwner` owner contract). A new channel or adapter writes a few lines instead of re-deriving the registry.
+`vike-queue` (the driver port), `vike-mail` / `vike-push` (transport ports + dev transports),
+`vike-storage` / `vike-push` / `vike-notifications` (the `resolveOwner` owner contract),
+`vike-blocks` / `vike-crud` / `vike-admin` (the component / field-widget registries),
+`vike-auth` / `vike-teams` (`createSubjectResolver`), and `vike-ai`. A new channel, adapter, or
+renderer writes a few lines instead of re-deriving the primitive.

@@ -108,13 +108,17 @@ Every built-in builder, by group. Each imports from `vike-blocks` and has a live
 | Form controls | `input` `textarea` `checkbox` `radioGroup` `select` `combobox` `toggle` `slider` `calendar` `datePicker` `attachment` |
 | Form structure | `field` `form` |
 | Data display | `table` `chart` `pagination` `stat` |
-| Feedback | `alert` `toast` `skeleton` `progress` `tooltip` |
+| Feedback | `alert` `skeleton` `progress` `tooltip` |
 | Overlays | `dialog` `confirm` `sheet` `drawer` `dropdown` `navMenu` |
 | Navigation | `breadcrumb` `command` `tabs` `accordion` |
 | Identity + misc | `avatar` `avatarGroup` `kbd` `item` |
 | Chat | `bubble` `message` `messageScroller` |
 | Containers + layout | `card` `layout` `slot` |
 | Escape hatch | `custom` |
+
+`toast` is not in the table because it is not a `sections` block — it is an imperative API you
+fire from an event: `import { toast } from 'vike-blocks'; toast('Saved', { intent: 'success' })`,
+rendered by a `<Toaster>` you mount once (from `vike-blocks/react` or `/vue`).
 
 ## The open registry + `defineBlock`
 
@@ -140,7 +144,7 @@ registerBlockRenderer('rating', Rating)
 ```
 
 Define once (builder + descriptor + registry entry), render once per framework. The built-in
-blocks (`text`/`heading`/`badge`/`divider`/`link`) are defined through this same seam, so
+blocks (`text`/`heading`/`badge`/`divider`/`link`/`list`) are defined through this same seam, so
 your custom block is a peer, not a special case.
 
 ## Rendering — `vike-blocks/react` (and `/vue`)
