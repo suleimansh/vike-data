@@ -17,6 +17,19 @@ export const TOAST_POSITIONS = ['top-left', 'top-center', 'top-right', 'bottom-l
 export const TOAST_WIDTH = 356 // Sonner's toast width, in px
 export const TOAST_GAP = 14 // px between toasts when expanded, and the collapsed peek per level
 export const TOAST_VISIBLE = 3 // how many toasts show at once before the rest hide behind the deck
+
+// The cumulative height (+`gap`) of the toasts stacked in FRONT of each one (its distance from the
+// edge), by the deck's front-to-back order. Pure prefix-sum shared by both renderers so the collapsed
+// deck geometry can't drift. `hOf(t)` returns a toast's measured height.
+export function toastDeckOffsets(ordered, hOf, gap) {
+  const inFront = []
+  let acc = 0
+  for (const t of ordered) {
+    inFront.push(acc)
+    acc += hOf(t) + gap
+  }
+  return inFront
+}
 const SCALE_STEP = 0.05 // each toast behind the front shrinks by this much when collapsed
 const ENTER_SHIFT = 22 // px a toast slides from its edge on enter / to its edge on exit
 const EASE = 'cubic-bezier(0.22, 1, 0.36, 1)'

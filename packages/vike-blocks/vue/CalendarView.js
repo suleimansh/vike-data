@@ -8,11 +8,11 @@ import { registerBlockRenderer } from './registry.js'
 import {
   MONTH_NAMES,
   toISO,
-  parseYMD,
   monthMatrix,
   addMonths,
   orderedWeekdays,
   isDisabled,
+  initialView,
   calendarRootStyle,
   calendarHeaderStyle,
   calendarTitleStyle,
@@ -22,17 +22,6 @@ import {
   calendarDayStyle,
   CALENDAR_STYLE_TAG,
 } from '../blocks/calendar-styles.js'
-
-function initialView(month, value) {
-  const ym = typeof month === 'string' && /^(\d{4})-(\d{2})$/.exec(month)
-  if (ym) return { year: +ym[1], monthIndex: +ym[2] - 1 }
-  const fromMonth = parseYMD(month)
-  if (fromMonth) return { year: fromMonth.year, monthIndex: fromMonth.monthIndex }
-  const fromValue = parseYMD(value)
-  if (fromValue) return { year: fromValue.year, monthIndex: fromValue.monthIndex }
-  const now = new Date()
-  return { year: now.getFullYear(), monthIndex: now.getMonth() }
-}
 
 // `onSelect(iso)` (optional) fires when a day is picked, so a host like `date-picker` can reflect the
 // selection in its trigger and close the popover; the grid still tracks its own selection for standalone use.

@@ -4,6 +4,7 @@
 // layout, the ellipsis, and the disabled-edge look, plus the pure `paginationRange` helper.
 
 import { clamp } from './_shared.js'
+import { buttonStyle } from './button-styles.js'
 
 // The lucide chevron paths for the Prev / Next controls, stroked in currentColor.
 export const CHEVRON_LEFT_PATH = 'm15 18-6-6 6-6'
@@ -34,6 +35,15 @@ export function paginationRange(page, pageCount, siblings = 1) {
 export const paginationNavStyle = () => ({ display: 'flex', justifyContent: 'center', margin: '0.5rem 0' })
 export const paginationListStyle = () => ({ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '0.25rem', listStyle: 'none', margin: 0, padding: 0 })
 export const paginationItemStyle = () => ({ display: 'flex' })
+
+// The prev/next EDGE control: a ghost button with a chevron gap, dimmed when disabled.
+export const paginationEdgeStyle = (disabled) => ({
+  ...buttonStyle('ghost', 'default'),
+  gap: '0.35rem',
+  ...(disabled ? { opacity: 0.5, cursor: 'default', color: 'var(--color-muted, #64748b)' } : {}),
+})
+// A numbered page LINK: outline when it is the current page, ghost otherwise.
+export const paginationLinkStyle = (active) => buttonStyle(active ? 'outline' : 'ghost', 'icon')
 
 // The ellipsis cell — a square, muted gap marker (three dots).
 export const paginationEllipsisStyle = () => ({

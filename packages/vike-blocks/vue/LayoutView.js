@@ -15,6 +15,7 @@ import { h, inject, provide, computed, unref } from 'vue'
 import { Blocks } from './Blocks.js'
 import { registerBlockRenderer } from './registry.js'
 import { isActivePath } from '../blocks/layout.js'
+import { stackRegionOrder } from '../core/view-helpers.js'
 
 export const LAYOUT_CONFIG_KEY = Symbol.for('vike-blocks.layoutConfig')
 export const useLayoutConfig = () => inject(LAYOUT_CONFIG_KEY, computed(() => ({})))
@@ -72,8 +73,7 @@ const StackShell = {
   setup(props) {
     return () => {
       const slots = props.slots ?? {}
-      const known = ['header', 'main', 'footer']
-      const names = [...known.filter((n) => slots[n]), ...Object.keys(slots).filter((n) => !known.includes(n))]
+      const names = stackRegionOrder(slots)
       return h('div', { 'data-slot': 'layout', 'data-variant': 'stack' }, names.map((n) => region(n, slots[n])))
     }
   },

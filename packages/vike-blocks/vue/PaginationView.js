@@ -6,8 +6,8 @@
 // with the React renderer via pagination-styles.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { buttonStyle, BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
-import { paginationRange, paginationNavStyle, paginationListStyle, paginationItemStyle, paginationEllipsisStyle, CHEVRON_LEFT_PATH, CHEVRON_RIGHT_PATH } from '../blocks/pagination-styles.js'
+import { BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
+import { paginationRange, paginationNavStyle, paginationListStyle, paginationItemStyle, paginationEllipsisStyle, paginationEdgeStyle as edgeStyle, paginationLinkStyle as linkStyle, CHEVRON_LEFT_PATH, CHEVRON_RIGHT_PATH } from '../blocks/pagination-styles.js'
 
 const chevron = (d) =>
   h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, [h('path', { d })])
@@ -24,9 +24,6 @@ export const PaginationView = {
       const nextLabel = props.nextLabel ?? 'Next'
       const hrefFor = typeof props.href === 'function' ? props.href : props.hrefTemplate ? (p) => props.hrefTemplate.replaceAll('{page}', String(p)) : () => undefined
       const pages = paginationRange(cur, total, siblings)
-
-      const edgeStyle = (disabled) => ({ ...buttonStyle('ghost', 'default'), gap: '0.35rem', ...(disabled ? { opacity: 0.5, cursor: 'default', color: 'var(--color-muted, #64748b)' } : {}) })
-      const linkStyle = (active) => buttonStyle(active ? 'outline' : 'ghost', 'icon')
 
       const prevCell =
         cur <= 1
