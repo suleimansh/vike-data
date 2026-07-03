@@ -17,6 +17,8 @@ const catalog = [
   { name: 'Textarea', href: '/textarea', tag: 'form', desc: 'A from-scratch multi-line input — placeholder / rows / value / disabled, resizable, a focus-visible ring. Composes inside a field.' },
   { name: 'Checkbox', href: '/checkbox', tag: 'form', desc: 'A dep-free boolean control with an animated check — click to toggle. label / checked / disabled, theme-native. Pairs with field.' },
   { name: 'Radio', href: '/radio', tag: 'form', desc: 'A dep-free radio group with an animated selection — pick one option and the dot springs in. option / value / disabled, theme-native.' },
+  { name: 'Select', href: '/select', tag: 'form', desc: 'A theme-native single-choice control over a native <select> (shadcn Base native-select) — the browser chevron replaced by ours. option / placeholder / value / disabled. Pairs with field.' },
+  { name: 'Combobox', href: '/combobox', tag: 'form', desc: 'A searchable single-select (shadcn combobox) — a popover with a filter input and a listbox, arrow-key + Enter nav, empty state. A hidden input carries the value. Reuses usePopover.' },
   { name: 'Switch', href: '/switch', tag: 'form', desc: 'A dep-free toggle with an animated sliding thumb — click to flip. label / checked / disabled, theme-native. Builder is toggle().' },
   { name: 'Slider', href: '/slider', tag: 'form', desc: 'A dep-free range control — drag the thumb, click the rail, or arrow-key it. min / max / step / value, theme-native. Pairs with field.' },
   { name: 'Calendar', href: '/calendar', tag: 'form', desc: 'A dep-free month grid (no date lib) — step months, click a day. value / min / max / weekStartsOn, theme-native. Feeds date-picker.' },

@@ -10,6 +10,8 @@ import './input.js' // side-effect: register the input block
 import './textarea.js' // side-effect: register the textarea block
 import './checkbox.js' // side-effect: register the checkbox block
 import './radio.js' // side-effect: register the radio block
+import './select.js' // side-effect: register the select block
+import './combobox.js' // side-effect: register the combobox block
 import './switch.js' // side-effect: register the switch block
 import './slider.js' // side-effect: register the slider block
 import './calendar.js' // side-effect: register the calendar block
@@ -46,6 +48,8 @@ export { input } from './input.js'
 export { textarea } from './textarea.js'
 export { checkbox } from './checkbox.js'
 export { radioGroup } from './radio.js'
+export { select } from './select.js'
+export { combobox } from './combobox.js'
 export { toggle } from './switch.js'
 export { slider } from './slider.js'
 export { calendar } from './calendar.js'
