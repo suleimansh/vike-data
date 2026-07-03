@@ -126,10 +126,11 @@ export function field(name) {
 //     slots:  { author: 'author-chip' },
 //     canView: (user) => !!user,
 //     canEdit: (user) => user?.role === 'admin',
-//     // Row scoping (#104): bound a user to their OWN rows. Return a universal-orm filter,
-//     // or a falsy value for full access (encode the admin bypass here). The filter is
-//     // AND-merged into list/load/update/delete and forced onto inserts.
-//     scope: (user) => (user?.role === 'admin' ? null : { user_id: user.id }),
+//     // Row scoping (#104): bound a user to their OWN rows. The contract is `(table, ctx) ->`
+//     // filter (ctx carries `user`); return a universal-orm filter, or a falsy value for full
+//     // access (encode the admin bypass here). AND-merged into list/load/update/delete, forced
+//     // onto inserts. NOTE canView/canEdit above take `(user)`; scope takes `(table, ctx)`.
+//     scope: (table, ctx) => (ctx.user?.role === 'admin' ? null : { user_id: ctx.user.id }),
 //   })
 export function crud(def) {
   if (!def || typeof def !== 'object') {
