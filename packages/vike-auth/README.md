@@ -215,8 +215,7 @@ await auth.destroySession(session.token) // real logout
      upstream by #3355** (idempotent extension installation): verified against the
      `0.4.259-commit-a91659b` build, the middleware runs exactly once. This is the
      same bug as the schema layer's `_migrations` duplication, one layer up — the
-     one fix covers both. The per-request `WeakSet` guard stays as back-compat for
-     users on a pre-#3355 release.
+     one fix covers both.
   2. A **3xx redirect returned from a universal middleware crashes Vike's request
      logger**, which looks for a `Location` header with a capital `L` while the
      Web `Headers` object lower-cases it (`assert(headerRedirect)` throws). The
