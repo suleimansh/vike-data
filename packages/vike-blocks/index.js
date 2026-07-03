@@ -39,6 +39,7 @@ import './code.js' // side-effect: register the code block
 import './markdown.js' // side-effect: register the markdown block
 import './table.js' // side-effect: register the table block
 import './pagination.js' // side-effect: register the pagination block
+import './tooltip.js' // side-effect: register the tooltip block
 import './layout.js' // side-effect: register the layout container block + the slot placeholder block
 
 export { definePage, resolvePage } from './page.js'
@@ -80,4 +81,5 @@ export { code } from './code.js'
 export { markdown } from './markdown.js'
 export { table } from './table.js'
 export { pagination } from './pagination.js'
+export { tooltip } from './tooltip.js'
 export { layout, slot, isActivePath } from './layout.js'
