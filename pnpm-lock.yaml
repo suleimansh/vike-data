@@ -659,12 +659,6 @@ importers:
       '@universal-orm/core':
         specifier: workspace:*
         version: link:../universal-orm
-      '@universal-orm/memory':
-        specifier: workspace:*
-        version: link:../universal-orm-memory
-      '@vike-data/kit':
-        specifier: workspace:*
-        version: link:../kit
       '@vike-data/vike-schema':
         specifier: workspace:*
         version: link:../vike-schema
@@ -689,6 +683,10 @@ importers:
       vue:
         specifier: '>=3'
         version: 3.5.38(typescript@5.9.3)
+    devDependencies:
+      '@universal-orm/memory':
+        specifier: workspace:*
+        version: link:../universal-orm-memory
 
   packages/vike-ai:
     dependencies:
