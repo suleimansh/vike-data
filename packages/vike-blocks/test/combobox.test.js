@@ -72,5 +72,5 @@ test('filterOptions matches label OR value, case-insensitively; empty query retu
 test('combobox styles: the active + selected rows read theme vars; the states style tag', () => {
   assert.match(comboboxItemStyle(true, false).background, /var\(--color-surface/) // active highlight
   assert.equal(comboboxItemStyle(false, true).fontWeight, 600) // selected weight
-  assert.match(COMBOBOX_STYLE_TAG, /vike-blocks-combobox-trigger:focus-visible/)
+  assert.match(COMBOBOX_STYLE_TAG, /vike-blocks-combobox-input:focus/) // the input-anchored trigger's ring
 })

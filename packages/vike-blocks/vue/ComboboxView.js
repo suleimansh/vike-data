@@ -1,20 +1,22 @@
 // The Vue renderer for the `combobox` block — the Vue twin of react/ComboboxView.jsx, a dep-free,
-// theme-native searchable single-select. Reuses the popover primitive (anchor + outside-click + Escape
-// + open-gated SSR); the panel holds a search input that filters the options and a role="listbox" of
-// role="option" rows with arrow-key + Enter selection. Tracks its own open / query / selection state,
-// so SSR renders only the trigger (no hydration mismatch). A hidden input carries the selected value
-// for a plain form POST. Shares the trigger / search / rows with the React renderer via combobox-styles.
+// theme-native searchable single-select that is INPUT-ANCHORED: the trigger IS the search input, so you
+// type in place to filter and the list opens directly below. Reuses the popover primitive for the
+// floating list only. Options are non-focusable role="option" divs, so focus stays in the input while
+// you arrow through them. Tracks its own open / query / selection state, so SSR renders only the input
+// (no hydration mismatch). A hidden input carries the value for a plain form POST. Shares the input /
+// rows / chevron with the React renderer via combobox-styles.
 import { h, ref, computed } from 'vue'
 import { registerBlockRenderer } from './registry.js'
 import { Popover } from './popover.js'
 import { popoverSurfaceStyle, popoverMotionStyle } from '../popover-styles.js'
 import {
-  comboboxTriggerStyle,
-  comboboxPlaceholderStyle,
-  comboboxSearchStyle,
+  comboboxWrapStyle,
+  comboboxInputStyle,
+  comboboxChevronStyle,
   comboboxListStyle,
   comboboxItemStyle,
   comboboxEmptyStyle,
+  CHEVRON_DOWN_PATH,
   COMBOBOX_STYLE_TAG,
   filterOptions,
 } from '../combobox-styles.js'
@@ -34,14 +36,22 @@ export const ComboboxView = {
       query.value = ''
     }
 
+    const openList = () => {
+      if (props.disabled || open.value) return
+      open.value = true
+      query.value = ''
+      active.value = 0
+    }
+
     const onKeyDown = (e) => {
       if (e.key === 'ArrowDown') {
         e.preventDefault()
+        if (!open.value) return openList()
         active.value = Math.min(active.value + 1, filtered.value.length - 1)
       } else if (e.key === 'ArrowUp') {
         e.preventDefault()
         active.value = Math.max(active.value - 1, 0)
-      } else if (e.key === 'Enter') {
+      } else if (e.key === 'Enter' && open.value) {
         e.preventDefault()
         const opt = filtered.value[active.value]
         if (opt) choose(opt)
@@ -52,26 +62,32 @@ export const ComboboxView = {
       const options = props.options ?? []
       const placeholder = props.placeholder ?? 'Select...'
       const selectedOption = options.find((o) => o.value === selected.value) || null
+      const inputValue = open.value ? query.value : selectedOption?.label ?? ''
 
-      const trigger = h('span', { style: { display: 'contents' } }, [
+      const trigger = h('span', { style: comboboxWrapStyle() }, [
         h('style', COMBOBOX_STYLE_TAG),
-        h(
-          'button',
-          {
-            type: 'button',
-            class: 'vike-blocks-combobox-trigger',
-            role: 'combobox',
-            'aria-haspopup': 'listbox',
-            'aria-expanded': open.value,
-            disabled: props.disabled || undefined,
-            style: comboboxTriggerStyle(props.disabled),
-            onClick: () => (open.value = !open.value),
+        h('input', {
+          class: 'vike-blocks-combobox-input',
+          'data-slot': 'combobox-input',
+          role: 'combobox',
+          'aria-expanded': open.value,
+          'aria-autocomplete': 'list',
+          disabled: props.disabled || undefined,
+          value: inputValue,
+          placeholder: open.value ? props.searchPlaceholder ?? 'Search...' : placeholder,
+          onInput: (e) => {
+            query.value = e.target.value
+            active.value = 0
+            if (!open.value) open.value = true
           },
-          [
-            h('span', { style: selectedOption ? { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' } : comboboxPlaceholderStyle() }, selectedOption ? selectedOption.label : placeholder),
-            h('span', { 'aria-hidden': 'true', style: { fontSize: '11px', color: 'var(--color-muted, #64748b)' } }, '▾'),
-          ],
-        ),
+          onMousedown: openList,
+          onFocus: openList,
+          onKeydown: onKeyDown,
+          style: comboboxInputStyle(props.disabled),
+        }),
+        h('span', { 'aria-hidden': 'true', style: comboboxChevronStyle() }, [
+          h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, [h('path', { d: CHEVRON_DOWN_PATH })]),
+        ]),
       ])
 
       const rows =
@@ -79,35 +95,22 @@ export const ComboboxView = {
           ? [h('div', { style: comboboxEmptyStyle() }, props.empty ?? 'No results.')]
           : filtered.value.map((opt, i) =>
               h(
-                'button',
+                'div',
                 {
                   key: String(opt.value),
-                  type: 'button',
                   role: 'option',
                   'aria-selected': opt.value === selected.value,
                   'data-active': i === active.value ? 'true' : undefined,
                   onMouseenter: () => (active.value = i),
-                  onClick: () => choose(opt),
+                  onMousedown: (e) => {
+                    e.preventDefault()
+                    choose(opt)
+                  },
                   style: comboboxItemStyle(i === active.value, opt.value === selected.value),
                 },
                 [h('span', opt.label), opt.value === selected.value ? h('span', { 'aria-hidden': 'true' }, '✓') : null],
               ),
             )
-
-      const panel = h('div', { 'data-slot': 'combobox', onKeydown: onKeyDown }, [
-        h('input', {
-          class: 'vike-blocks-combobox-search',
-          'data-slot': 'combobox-input',
-          placeholder: props.searchPlaceholder ?? 'Search...',
-          value: query.value,
-          onInput: (e) => {
-            query.value = e.target.value
-            active.value = 0
-          },
-          style: comboboxSearchStyle(),
-        }),
-        h('div', { role: 'listbox', style: comboboxListStyle() }, rows),
-      ])
 
       return [
         props.name != null ? h('input', { type: 'hidden', name: props.name, value: selected.value ?? '' }) : null,
@@ -121,7 +124,7 @@ export const ComboboxView = {
             role: 'listbox',
             panelStyle: (v, pl) => ({ ...popoverSurfaceStyle(), ...popoverMotionStyle(v, pl), minWidth: '14rem' }),
           },
-          { default: () => panel },
+          { default: () => h('div', { role: 'listbox', 'data-slot': 'combobox', style: comboboxListStyle() }, rows) },
         ),
       ]
     }
