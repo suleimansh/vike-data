@@ -20,6 +20,7 @@ export function select() {
   let name
   let placeholder
   let disabled = false
+  let required = false
   const self = {
     option(value, label, opts = {}) {
       options.push({ value, label: label ?? value, ...(opts.disabled ? { disabled: true } : {}) })
@@ -41,6 +42,10 @@ export function select() {
       disabled = true
       return self
     },
+    required() {
+      required = true
+      return self
+    },
     build() {
       return {
         block: 'select',
@@ -49,6 +54,7 @@ export function select() {
         ...(placeholder !== undefined ? { placeholder } : {}),
         ...(name !== undefined ? { name } : {}),
         ...(disabled ? { disabled: true } : {}),
+        ...(required ? { required: true } : {}),
       }
     },
   }
@@ -56,8 +62,10 @@ export function select() {
 }
 
 // Resolve the options + the initial selection. Unlike radio, a select does NOT force the first
-// option: with a `placeholder` and no `value` the control shows the empty leading choice. The
-// renderer owns the live state; `value` is only the INITIAL selection.
+// option: with a `placeholder` and no `value` the control shows the empty leading choice. When
+// `required`, that placeholder choice is a disabled prompt (a real option must be picked); when not
+// required, it stays selectable so the field can be cleared. The renderer owns the live state;
+// `value` is only the INITIAL selection.
 registerBlock('select', {
   resolve({ props }) {
     const options = (props.options ?? []).map((o) => ({ value: o.value, label: o.label ?? o.value, ...(o.disabled ? { disabled: true } : {}) }))
@@ -67,6 +75,7 @@ registerBlock('select', {
       placeholder: props.placeholder ?? null,
       name: props.name ?? null,
       disabled: props.disabled ?? false,
+      required: props.required ?? false,
     }
   },
 })

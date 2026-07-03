@@ -8,14 +8,14 @@ import { registerBlockRenderer } from './registry.js'
 import { selectWrapStyle, selectStyle, selectChevronStyle, CHEVRON_DOWN_PATH, SELECT_STYLE_TAG } from '../select-styles.js'
 
 export const SelectView = {
-  props: ['options', 'value', 'placeholder', 'name', 'disabled'],
+  props: ['options', 'value', 'placeholder', 'name', 'id', 'disabled', 'required'],
   setup(props) {
     const selected = ref(props.value ?? '')
     return () => {
       const options = props.options ?? []
       const onPlaceholder = props.placeholder != null && (selected.value === '' || selected.value == null)
       const optionNodes = []
-      if (props.placeholder != null) optionNodes.push(h('option', { value: '', disabled: true }, props.placeholder))
+      if (props.placeholder != null) optionNodes.push(h('option', { value: '', disabled: props.required || undefined }, props.placeholder))
       for (const opt of options) {
         optionNodes.push(h('option', { key: String(opt.value), value: opt.value, disabled: opt.disabled || undefined }, opt.label))
       }
@@ -27,8 +27,10 @@ export const SelectView = {
             class: 'vike-blocks-select',
             'data-slot': 'select',
             'data-placeholder': onPlaceholder ? 'true' : undefined,
+            id: props.id,
             name: props.name,
             disabled: props.disabled || undefined,
+            required: props.required || undefined,
             value: selected.value ?? '',
             onChange: (e) => (selected.value = e.target.value),
             style: selectStyle(props.disabled),

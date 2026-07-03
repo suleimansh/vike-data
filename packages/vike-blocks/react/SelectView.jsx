@@ -8,7 +8,7 @@ import { useState } from 'react'
 import { registerBlockRenderer } from './registry.js'
 import { selectWrapStyle, selectStyle, selectChevronStyle, CHEVRON_DOWN_PATH, SELECT_STYLE_TAG } from '../select-styles.js'
 
-export function SelectView({ options = [], value = null, placeholder = null, name, disabled = false }) {
+export function SelectView({ options = [], value = null, placeholder = null, name, id, disabled = false, required = false }) {
   const [selected, setSelected] = useState(value ?? '')
   const onPlaceholder = placeholder != null && (selected === '' || selected == null)
   return (
@@ -19,14 +19,16 @@ export function SelectView({ options = [], value = null, placeholder = null, nam
           className="vike-blocks-select"
           data-slot="select"
           data-placeholder={onPlaceholder ? 'true' : undefined}
+          id={id}
           name={name}
           disabled={disabled}
+          required={required}
           value={selected ?? ''}
           onChange={(e) => setSelected(e.target.value)}
           style={selectStyle(disabled)}
         >
           {placeholder != null && (
-            <option value="" disabled>
+            <option value="" disabled={required}>
               {placeholder}
             </option>
           )}
