@@ -41,6 +41,7 @@ import {
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip'
 import { Avatar, AvatarImage, AvatarFallback, AvatarBadge, AvatarGroup, AvatarGroupCount } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 
 export default function Page() {
   return (
@@ -241,6 +242,27 @@ export default function Page() {
           <Skeleton className="h-4 w-[180px]" />
         </div>
       </div>
+
+      <h2 style={{ fontSize: 18, fontWeight: 600, margin: '2.5rem 0 4px' }}>Breadcrumb</h2>
+      <p style={{ color: 'var(--muted-foreground)', fontSize: 14, marginBottom: 16 }}>
+        The shadcn <code>breadcrumb</code>: nav {'>'} ol {'>'} li with links, a current <code>BreadcrumbPage</code> (aria-current),
+        and chevron separators. This is the reference the dep-free vike-blocks <code>breadcrumb</code> block is harvested from.
+      </p>
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="#">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="#">Components</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
     </div>
   )
 }
