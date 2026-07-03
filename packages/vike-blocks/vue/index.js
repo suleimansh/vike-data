@@ -39,6 +39,7 @@ import './TooltipView.js' // side-effect: register the tooltip renderer
 import './AvatarView.js' // side-effect: register the avatar + avatarGroup renderers
 import './SkeletonView.js' // side-effect: register the skeleton renderer
 import './BreadcrumbView.js' // side-effect: register the breadcrumb renderer
+import './CommandView.js' // side-effect: register the command renderer
 import './LayoutView.js' // side-effect: register the layout container renderer
 import './SlotView.js' // side-effect: register the slot placeholder renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
@@ -85,5 +86,6 @@ export { TooltipView } from './TooltipView.js'
 export { AvatarView, AvatarGroupView } from './AvatarView.js'
 export { SkeletonView } from './SkeletonView.js'
 export { BreadcrumbView } from './BreadcrumbView.js'
+export { CommandView } from './CommandView.js'
 export { LayoutView, LayoutConfigProvider, useLayoutConfig, LAYOUT_CONFIG_KEY, LAYOUT_CONTENT_KEY, useLayoutContent, NavRegion, registerLayoutShell } from './LayoutView.js'
 export { SlotView } from './SlotView.js'
