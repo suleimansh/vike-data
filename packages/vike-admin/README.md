@@ -53,7 +53,7 @@ Minimal case: `defineResource({ table: 'subscriptions' })` derives every column 
 ## How it works
 
 - **Pages** (`config.pages`): `/admin` (dashboard), `/admin/:table` (list), `/admin/:table/new` (create), `/admin/:table/:id` (edit + delete).
-- **Schema introspection**: each page's `data` hook resolves the merged schema (`resolveSchemas` + `mergeSchemas`) and derives columns/fields a resource omits, auto-hiding `id` / `*_hash` / timestamps.
+- **Schema introspection**: each page's `data` hook resolves the merged schema (`resolveAdminTables`, which delegates to vike-crud's `resolveViewTables`) and derives columns/fields a resource omits, auto-hiding `id` / `*_hash` / timestamps.
 - **Data**: reads/writes go through [universal-orm](../universal-orm) (`db.<table>.find` / `.insert`) on whatever adapter the app registered (memory for dev, Drizzle for real). No ORM is imported.
 - **Write POSTs**: the write routes own their own POST. Vike hands the Web Request as `pageContext._reqWeb`, so `/admin/:table/new` renders the form (GET) and inserts (POST), and `/admin/:table/:id` renders the edit form (GET) and updates or deletes (POST), then redirects. No separate endpoint.
 - **Auth**: a `guard` fences `/admin/*` to signed-in users (`pageContext.user`, from vike-auth); per-resource `canView` / `canEdit` refine access, and `scope` (above) bounds which rows a user sees and edits.
@@ -94,7 +94,16 @@ It reuses the session cookie; API-token auth for headless agents is a follow-up.
 
 ## Packaging
 
-`vike-admin` core (framework-agnostic: the seam, schema introspection, the universal-orm reads) + `vike-admin/react` (the UI). Same core/UI split as every vike-data extension.
+`vike-admin` is a **preset over [`vike-crud`](../vike-crud)**. vike-crud owns the reusable
+engine (schema → columns/fields derivation, projection, the validated list query, the
+owner-scoped reads/writes, and the `ListView` / `FormFields` / widget renderers); several
+`vike-admin/*` entry points (`define`, `project`, `query`, `react/widgets`, `react/FormFields`)
+are thin re-exports of it. vike-admin adds only the admin-specific pieces on top: the cumulative
+`adminResources` seam, the `/admin/*` pages + auth guard, and the JSON agent API. Splits the
+usual way: `vike-admin` core (framework-agnostic) + `vike-admin/react` (and `/vue`) for the UI.
+
+Reach for `vike-crud` directly to render a single table's screens at your own routes; reach for
+`vike-admin` when you want the whole-DB panel.
 
 ## Known limits (MVP)
 

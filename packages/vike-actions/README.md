@@ -108,6 +108,11 @@ const out = await runAction({ name: 'publish', input: { id: 7 }, user, db })
 // { ok: true, status: 200, result, onSuccess }
 ```
 
+The registry and validation primitives behind `defineAction` are also exported for tests and
+advanced use: `registerAction` / `getAction` / `hasAction` / `listActions` / `clearActions`
+(the registry), and `runGuard` / `validateInput` / `validateShape` / `ValidationError` (the
+guard + input steps that `runAction` composes).
+
 ## Client binding — `vike-actions/react`
 
 Fills the vike-blocks action seam: a button click POSTs to `/_actions/<name>`, then confirms / resolves param tokens / runs the `onSuccess` effect. Wrap your app once; mount a vike-blocks `<Toaster>` for the toast effect.

@@ -93,9 +93,12 @@ crud({
   form:   [field('title').required(), field('status').type('select')],
   canView: (user) => !!user,
   canEdit: (user) => user?.role === 'admin',
-  scope:  (user) => (user?.role === 'admin' ? null : { user_id: user.id }), // row scoping (#104)
+  scope:  (table, ctx) => (ctx.user?.role === 'admin' ? null : { user_id: ctx.user.id }), // row scoping (#104)
 })
 ```
+
+Note the two signatures: `canView` / `canEdit` take `(user)`, but `scope` takes `(table, ctx)`
+(with `ctx.user`) so one predicate can scope several tables at request time.
 
 Everything is optional except `table` — omit `list`/`record`/`form` and each is derived
 from the schema (every non-hidden column). `id`, `*_hash`, and the `created_at`/`updated_at`
@@ -179,6 +182,25 @@ primary key, and enforces the same scope on writes (a forged owner field is over
 id-guess for another owner's row matches nothing). Scope stays a request-time function, so a
 predicate never serializes to the client.
 
+## Write actions — `vike-crud/actions`
+
+`crudActions({ table, tables, scope })` is the write-path twin of `crudBlocks`: instead of
+hand-authoring three `defineAction`s, it registers owner-scoped `<table>.create` /
+`<table>.update` / `<table>.delete` actions (over vike-actions) wired to the same universal-orm
+repo and the same `(table, ctx)` scope the views use.
+
+```js
+import { crudActions } from 'vike-crud'
+
+crudActions({ table: 'posts', tables, scope: (table, ctx) => ({ user_id: ctx.user.id }) })
+// registers posts.create / posts.update / posts.delete; a row action references one by name:
+//   button('Delete').action('posts.delete').params({ id: '$row.id' })
+```
+
+The scope bounds every write and is re-forced onto the written row, so a client can't reassign
+ownership or touch another owner's row. A domain action (e.g. `publish`) stays a hand-written
+`defineAction`; this preset is only the generic create / update / delete.
+
 ## Rendering — `vike-crud/react` (and `/vue`)
 
 > `vike-crud/vue` is the exact Vue twin — `ListView` / `RecordView` / `FormView` self-registered for list/record/form, over the shared Vue field-widget registry. Same import shape (`import { Page } from 'vike-crud/vue'`).
@@ -200,6 +222,30 @@ const view = definePage({ route: '/posts', sections: crudBlocks({ table: 'posts'
 `FormView` derives each control from the field's widget/type (an `enum` column becomes a
 `<select>`, a required column is marked, a boolean becomes a checkbox). List rows and record
 values are supplied by the data layer (the MVP-proof wiring); the renderer draws the structure.
+
+### The config-driven path (page generation)
+
+In a Vike app you rarely call `<Page>` by hand. Extend `vike-crud/react/config` and declare your
+`views`; `viewPages(views)` turns each `view.route` into a real page (GET renders it through the
+data layer, POST runs the write path), so you never author a `+Page`/`+data` per screen:
+
+```js
+// pages/+config.js
+import vikeReact from 'vike-react/config'
+import vikeView from 'vike-crud/react/config'
+import { viewPages } from 'vike-crud/react/pages'
+import { views } from './+views.js'
+
+export default {
+  extends: [vikeReact, vikeView],
+  views,                       // your definePage views (see examples/vike-crud)
+  pages: viewPages(views),     // each view.route becomes a generated page
+}
+```
+
+This page-generation config is React-only today (the `ListView` / `RecordView` / `FormView` Vue
+renderers exist, but the `viewPages` config wiring is not yet mirrored for Vue). `ejectView`
+(above) is the exit from this generated path when a screen outgrows it.
 
 ## Relationship to vike-admin
 
