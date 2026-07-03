@@ -11,6 +11,7 @@
 // so the default single-subject app is unchanged.
 import { getGuards } from './guards.js'
 import { parseCookies } from './cookie.js'
+import { toPublicUser } from './user-view.js'
 
 export default async function onCreateGuardsPageContext(pageContext) {
   // Defense in depth: the guards config pins this hook to { server: true }, but bail on the
@@ -27,9 +28,7 @@ export default async function onCreateGuardsPageContext(pageContext) {
     // The SAME plain, serializable user view the default hook exposes ({ id, email, name }),
     // safe to pass to the client. `user` is null when this guard has no live session — a
     // visitor signed into `admin` but not `client` gets `{ admin: { user }, client: { user: null } }`.
-    resolved[guard.name] = {
-      user: session ? { id: session.user.id, email: session.user.email, name: session.user.name } : null,
-    }
+    resolved[guard.name] = { user: toPublicUser(session?.user) }
   }
   pageContext.guards = resolved
 }

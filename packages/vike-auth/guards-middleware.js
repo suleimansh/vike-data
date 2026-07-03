@@ -14,6 +14,7 @@
 import { enhance, MiddlewareOrder } from '@universal-middleware/core'
 import { handleAuthRequest } from './middleware.js'
 import { getGuards } from './guards.js'
+import { devServerFlags } from './dev-flags.js'
 
 export function createGuardsMiddleware({ dev = false, secure = true } = {}) {
   async function guardsDispatch(request) {
@@ -37,9 +38,5 @@ export function createGuardsMiddleware({ dev = false, secure = true } = {}) {
   return enhance(guardsDispatch, { name: 'vike-auth-guards', order: MiddlewareOrder.AUTHENTICATION })
 }
 
-// Fail closed, the same derivation as the default wiring (vike-middleware.js): only the
-// local dev server gets a non-Secure cookie + the inline magic-link convenience, detected
-// from the POSITIVE signal NODE_ENV='development'. Any other value keeps `Secure` on.
-const isDevServer = process.env.NODE_ENV === 'development'
-
-export default createGuardsMiddleware({ dev: isDevServer, secure: !isDevServer })
+// Fail closed, the same shared derivation as the default wiring (see dev-flags.js).
+export default createGuardsMiddleware(devServerFlags())

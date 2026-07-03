@@ -15,6 +15,12 @@ import { SESSION_COOKIE } from './constants.js'
 import { parseCookies } from './cookie.js'
 import { getGuard, DEFAULT_GUARD_NAME } from './guards.js'
 import { resolveSubject } from './subject.js'
+import { toPublicUser } from './user-view.js'
+
+// Read the Cookie header off either a Web `Request` (headers.get) or a plain
+// { headers: { cookie } } shape, so the resolvers below accept both.
+const cookieHeaderOf = (request) =>
+  request?.headers?.get ? request.headers.get('cookie') : request?.headers?.cookie
 
 // Resolve a raw Cookie header string to the plain, serializable user view
 // ({ id, email, name }), the SAME shape onCreatePageContext exposes, or null.
@@ -22,14 +28,13 @@ export async function resolveSessionUserFromCookie(cookieHeader) {
   const token = parseCookies(cookieHeader)[SESSION_COOKIE]
   if (!token) return null
   const resolved = await auth.authenticate(token)
-  return resolved ? { id: resolved.user.id, email: resolved.user.email, name: resolved.user.name } : null
+  return toPublicUser(resolved?.user)
 }
 
 // Resolve the current user from a Web `Request` (its `cookie` header). Returns
 // the plain user view or null when there is no valid session.
 export function resolveSessionUser(request) {
-  const cookieHeader = request?.headers?.get ? request.headers.get('cookie') : request?.headers?.cookie
-  return resolveSessionUserFromCookie(cookieHeader)
+  return resolveSessionUserFromCookie(cookieHeaderOf(request))
 }
 
 // The guard-aware twin (the named-guards seam, #267 / #207 P3): resolve the user for a
@@ -45,14 +50,13 @@ export async function resolveGuardUserFromCookie(cookieHeader, guard) {
   const token = parseCookies(cookieHeader)[guard.cookieName]
   if (!token) return null
   const resolved = await guard.instance.authenticate(token)
-  return resolved ? { id: resolved.user.id, email: resolved.user.email, name: resolved.user.name } : null
+  return toPublicUser(resolved?.user)
 }
 
 // The `Request` form of resolveGuardUserFromCookie (reads its `cookie` header), mirroring
 // resolveSessionUser.
 export function resolveGuardUser(request, guard) {
-  const cookieHeader = request?.headers?.get ? request.headers.get('cookie') : request?.headers?.cookie
-  return resolveGuardUserFromCookie(cookieHeader, guard)
+  return resolveGuardUserFromCookie(cookieHeaderOf(request), guard)
 }
 
 // The by-NAME convenience the downstream owned-row extensions (vike-storage's `storageGuard`,

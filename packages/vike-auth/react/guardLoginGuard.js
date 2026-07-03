@@ -7,13 +7,14 @@
 // `authGuard` is the per-page config the app sets on each guard login route; the guard
 // users are resolved by guards-oncreate.js into pageContext.guards. Referenced from the
 // app's page entry by pointer import, like the default loginGuard.
-import { redirect } from 'vike/abort'
-import { sanitizeNext } from '../safe-redirect.js'
+//
+// Only the user-resolution differs from the default loginGuard; the "bounce a signed-in
+// visitor to next || loginRedirect" tail is the shared redirectSignedIn.
+import { redirectSignedIn } from '../login-guard.js'
 
 export function guard(pageContext) {
   const name = pageContext.config?.authGuard
   const user = name ? pageContext.guards?.[name]?.user : null
   if (!user) return // not signed into this guard: render the form
-  const next = sanitizeNext(pageContext.urlParsed?.search?.next)
-  throw redirect(next || pageContext.config?.loginRedirect || '/')
+  redirectSignedIn(pageContext)
 }
