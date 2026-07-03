@@ -29,6 +29,15 @@ import {
   DialogDescription,
   DialogClose,
 } from '@/components/animate-ui/primitives/base/dialog'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+} from '@/components/ui/pagination'
 
 export default function Page() {
   return (
@@ -126,6 +135,46 @@ export default function Page() {
           </DialogPopup>
         </DialogPortal>
       </Dialog>
+
+      <h2 style={{ fontSize: 18, fontWeight: 600, margin: '2.5rem 0 4px' }}>Pagination</h2>
+      <p style={{ color: 'var(--muted-foreground)', fontSize: 14, marginBottom: 16 }}>
+        The shadcn <code>pagination</code> component (nav {'>'} ul {'>'} li {'>'} a, ghost links, <code>outline</code> +{' '}
+        <code>aria-current</code> on the active page, chevron Prev/Next, an ellipsis). shadcn leaves the page-range math to
+        the consumer — this is the reference the dep-free vike-blocks <code>pagination</code> block is harvested from.
+      </p>
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious href="#" />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">1</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">3</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#" isActive>
+              4
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">5</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">10</PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationNext href="#" />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   )
 }
