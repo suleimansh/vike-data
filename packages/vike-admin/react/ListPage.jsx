@@ -7,35 +7,26 @@
 // without client JS.
 import { useData } from 'vike-react/useData'
 import { ListView } from 'vike-crud/react'
+import { ConfirmView } from 'vike-blocks/react'
 
-// Confirm before a destructive submit. Progressive enhancement: after hydration it asks
-// before deleting; with no client JS the form just submits (still owner-scoped server-side).
-function confirmDelete(e) {
-  if (typeof window !== 'undefined' && !window.confirm('Delete this row?')) e.preventDefault()
-}
-
-// A per-row Delete control: its own no-JS form POSTing `_action=delete` to the row's edit
-// route, so it reuses the admin's existing owner-scoped delete (data:editData) — no new
-// endpoint and no widening of the write surface. Keyed on the row's primary key AND the
-// resource scope server-side, so a scoped user can only delete a row they own.
+// A per-row Delete control: vike-blocks' `confirm` block guarding a no-JS form that POSTs
+// `_action=delete` to the row's edit route, so it reuses the admin's existing owner-scoped
+// delete (data:editData) — no new endpoint and no widening of the write surface. Keyed on the
+// row's primary key AND the resource scope server-side, so a scoped user can only delete a row
+// they own. The confirm block owns the form: with no client JS it submits directly; once
+// hydrated the submit is gated behind a themed dialog (replacing the old window.confirm).
 function DeleteRowForm({ action }) {
   return (
-    <form method="post" action={action} onSubmit={confirmDelete} style={{ display: 'inline', margin: 0 }}>
-      <input type="hidden" name="_action" value="delete" />
-      <button
-        type="submit"
-        style={{
-          background: 'transparent',
-          color: 'var(--color-danger, #c0392b)',
-          border: 'none',
-          padding: 0,
-          fontSize: 14,
-          cursor: 'pointer',
-        }}
-      >
-        Delete
-      </button>
-    </form>
+    <ConfirmView
+      label="Delete"
+      link
+      intent="danger"
+      title="Delete this row?"
+      description="This cannot be undone."
+      confirmLabel="Delete"
+      action={{ to: action, method: 'post' }}
+      fields={[{ name: '_action', value: 'delete' }]}
+    />
   )
 }
 

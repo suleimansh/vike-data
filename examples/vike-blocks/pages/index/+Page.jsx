@@ -4,6 +4,7 @@ const catalog = [
   { name: 'Tabs', href: '/tabs', tag: 'interactive', desc: 'Tabs with a sliding highlight and animated panels. Each panel composes other blocks.' },
   { name: 'Accordion', href: '/accordion', tag: 'interactive', desc: 'Expand/collapse sections with an animated height morph. Single or multi-open; each panel composes other blocks.' },
   { name: 'Dialog', href: '/dialog', tag: 'interactive', desc: 'A modal overlay with a portal, focus trap, Escape / outside-click, and scroll-lock. Dep-free; holds nested blocks.' },
+  { name: 'Confirm', href: '/confirm', tag: 'interactive', desc: 'An alert dialog guarding a destructive action (shadcn AlertDialog) — a themed replacement for window.confirm. Owns a real form so it still submits with no JS; hydrated, the submit is gated behind the dialog. Or navigates on confirm.' },
   { name: 'Sheet', href: '/sheet', tag: 'interactive', desc: 'A side panel anchored to a screen edge (right / left / top / bottom), sliding in. Shares the dialog overlay; holds nested blocks.' },
   { name: 'Drawer', href: '/drawer', tag: 'interactive', desc: 'An edge-anchored panel with a drag-to-dismiss grabber (default bottom). Drag the handle toward the edge to flick it closed.' },
   { name: 'Card', href: '/card', tag: 'container', desc: 'A bordered surface with an optional header + footer, wrapping nested blocks. The most-used building block; cards compose recursively.' },
