@@ -6,9 +6,8 @@
 //   bubble('How do I add a migration?').from('user')
 //   bubble([markdown('Run **`pnpm rudder migrate`**.')]).from('assistant')
 import { registerBlock } from '../core/registry.js'
-import { resolvePage } from '../core/page.js'
+import { resolvePage, collapseSections as collapse } from '../core/page.js'
 
-const collapse = (sections) => (sections ?? []).map((s) => (typeof s?.build === 'function' ? s.build() : s))
 
 // A fluent builder for a bubble. `content` is a string (plain text) or an array of blocks (rich body).
 export function bubble(content) {

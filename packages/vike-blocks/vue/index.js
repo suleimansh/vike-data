@@ -46,7 +46,7 @@ import './SlotView.js' // side-effect: register the slot placeholder renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
 export { ACTION_RUNNER_KEY, useActionRunner, provideActionRunner } from './action-context.js' // the actions seam (#385)
 export { Blocks, Page } from './Blocks.js' // importing Blocks registers the built-in blocks
-export { Text, Heading, Badge, Divider, Link, Markdown, Stat } from './primitives.js'
+export { Text, Heading, Badge, Divider, Link, List, Markdown, Stat } from './primitives.js'
 export { ButtonView } from './ButtonView.js'
 export { InputView } from './InputView.js'
 export { TextareaView } from './TextareaView.js'

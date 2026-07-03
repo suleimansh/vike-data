@@ -77,7 +77,6 @@ export const chartRootStyle = (height) => ({
 
 export const chartSvgStyle = () => ({ display: 'block', width: '100%', height: 'auto', overflow: 'visible' })
 
-export const chartBarStyle = (color) => ({ fill: color, rx: 3 })
 export const chartLineStyle = (color) => ({ fill: 'none', stroke: color, strokeWidth: 2, strokeLinejoin: 'round', strokeLinecap: 'round' })
 export const chartAreaFill = (color) => `color-mix(in srgb, ${color} 16%, transparent)`
 export const chartBaselineStyle = () => ({ stroke: 'var(--color-border, #e2e8f0)', strokeWidth: 1 })

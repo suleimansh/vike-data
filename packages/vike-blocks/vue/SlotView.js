@@ -28,7 +28,7 @@ export const SlotView = {
         if (isNav(value)) {
           const items = props.only === 'start' ? value.filter((i) => !i.end) : props.only === 'end' ? value.filter((i) => i.end) : value
           if (items.length === 0) return null
-          return h(NavRegion, { items, vertical: props.vertical ?? config.navVertical })
+          return h(NavRegion, { items, vertical: props.vertical ?? config.value?.navVertical })
         }
         return h('span', { 'data-slot': 'slot', 'data-from': 'config', 'data-source': key }, value ?? null)
       }

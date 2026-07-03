@@ -8,10 +8,9 @@
 //   avatar().name('Grace Hopper').shape('square')          // initials, no image
 //   avatarGroup([avatar().name('Ada'), avatar().name('Grace'), avatar().name('Katherine')]).max(2)
 import { registerBlock } from '../core/registry.js'
-import { resolvePage } from '../core/page.js'
+import { resolvePage, collapseSection as collapse } from '../core/page.js'
 import { initials } from './avatar-styles.js'
 
-const collapse = (block) => (typeof block?.build === 'function' ? block.build() : block)
 
 // A fluent builder for one avatar.
 export function avatar() {

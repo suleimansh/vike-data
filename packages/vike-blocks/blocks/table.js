@@ -26,10 +26,10 @@
 //   table({ columns: ['title', 'published'], rows })
 //     .rowActions([button('Publish').action('publish').params({ id: '$row.id' })])
 import { defineBlock } from '../core/registry.js'
+import { collapseSections as collapse } from '../core/page.js'
 
 // Collapse builders to plain descriptors (a no-op for descriptors already) — same as form/card do,
 // so `.rowActions([...])` accepts fluent builders and resolve gets serializable specs.
-const collapse = (blocks) => (blocks ?? []).map((b) => (typeof b?.build === 'function' ? b.build() : b))
 
 // A row key -> a human label: split snake/kebab/camelCase into words and title-case them.
 const humanize = (key) =>

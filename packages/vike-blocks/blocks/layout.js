@@ -21,11 +21,10 @@
 //                               contribution at render time (the vike-layouts chrome seam), so an
 //                               extension still adds a nav/toolbar item without editing pages.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage } from '../core/page.js'
+import { resolvePage, collapseSections as collapse } from '../core/page.js'
 
 // Collapse a section that is a builder to its plain descriptor (definePage does this for top-level
 // sections; a region's nested sections need the same so `resolve` gets `{ block, ...props }`).
-const collapse = (sections) => (sections ?? []).map((s) => (typeof s?.build === 'function' ? s.build() : s))
 
 // A fluent builder for a layout block. `layout('landing')` sets the initial variant; `.slot()`
 // adds a named region (its sections collapse now so a nested builder collapses recursively);

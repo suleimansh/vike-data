@@ -14,11 +14,10 @@
 //
 // The body/footer sections are ordinary blocks (built-ins or custom), so dialogs compose recursively.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage } from '../core/page.js'
+import { resolvePage, collapseSections as collapse } from '../core/page.js'
 
 // Collapse a section that is a builder to its plain descriptor (definePage does this for top-level
 // sections; the body/footer sections need the same so `resolve` gets `{ block, ...props }` objects).
-const collapse = (sections) => (sections ?? []).map((s) => (typeof s?.build === 'function' ? s.build() : s))
 
 // A fluent builder for a dialog block. `.title()` / `.description()` head the modal; `.trigger()`
 // is the opening button's label; `.sections()` is the body (nested blocks, collapsed now so a nested
