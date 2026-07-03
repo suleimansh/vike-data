@@ -43,6 +43,7 @@ import { Avatar, AvatarImage, AvatarFallback, AvatarBadge, AvatarGroup, AvatarGr
 import { Skeleton } from '@/components/ui/skeleton'
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandShortcut, CommandSeparator } from '@/components/ui/command'
+import { Progress } from '@/components/ui/progress'
 
 export default function Page() {
   return (
@@ -291,6 +292,17 @@ export default function Page() {
           </CommandGroup>
         </CommandList>
       </Command>
+
+      <h2 style={{ fontSize: 18, fontWeight: 600, margin: '2.5rem 0 4px' }}>Progress</h2>
+      <p style={{ color: 'var(--muted-foreground)', fontSize: 14, marginBottom: 16 }}>
+        The shadcn <code>progress</code> (Radix): a track with an indicator translated by the value. This is the reference the
+        dep-free vike-blocks <code>progress</code> block is harvested from — the native block adds a label row, sizing, and an
+        indeterminate mode.
+      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 360 }}>
+        <Progress value={30} />
+        <Progress value={66} />
+      </div>
     </div>
   )
 }
