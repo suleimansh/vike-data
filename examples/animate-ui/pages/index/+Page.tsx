@@ -40,6 +40,7 @@ import {
 } from '@/components/ui/pagination'
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip'
 import { Avatar, AvatarImage, AvatarFallback, AvatarBadge, AvatarGroup, AvatarGroupCount } from '@/components/ui/avatar'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Page() {
   return (
@@ -225,6 +226,20 @@ export default function Page() {
           </Avatar>
           <AvatarGroupCount>+3</AvatarGroupCount>
         </AvatarGroup>
+      </div>
+
+      <h2 style={{ fontSize: 18, fontWeight: 600, margin: '2.5rem 0 4px' }}>Skeleton</h2>
+      <p style={{ color: 'var(--muted-foreground)', fontSize: 14, marginBottom: 16 }}>
+        The shadcn <code>skeleton</code>: a pulsing placeholder box (<code>animate-pulse rounded-md bg-accent</code>) you size +
+        compose into a loading state. This is the reference the dep-free vike-blocks <code>skeleton</code> block is harvested
+        from — the native block adds width/height/circle/lines affordances.
+      </p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <Skeleton className="size-12 rounded-full" />
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-4 w-[220px]" />
+          <Skeleton className="h-4 w-[180px]" />
+        </div>
       </div>
     </div>
   )

@@ -41,6 +41,7 @@ import './table.js' // side-effect: register the table block
 import './pagination.js' // side-effect: register the pagination block
 import './tooltip.js' // side-effect: register the tooltip block
 import './avatar.js' // side-effect: register the avatar + avatarGroup blocks
+import './skeleton.js' // side-effect: register the skeleton block
 import './layout.js' // side-effect: register the layout container block + the slot placeholder block
 
 export { definePage, resolvePage } from './page.js'
@@ -84,4 +85,5 @@ export { table } from './table.js'
 export { pagination } from './pagination.js'
 export { tooltip } from './tooltip.js'
 export { avatar, avatarGroup } from './avatar.js'
+export { skeleton } from './skeleton.js'
 export { layout, slot, isActivePath } from './layout.js'
