@@ -10,36 +10,10 @@
 // data layer supplies them), so with none it shows the columns and an empty state.
 import './widgets.jsx' // side-effect: registers the built-in widgets (and any app slot registers alongside)
 import { getFieldWidget } from './widget-registry.js'
+import { formatValue } from '../list-format.js'
 
 const cell = { padding: '0.5rem 0.75rem', borderBottom: '1px solid var(--color-border)', textAlign: 'left', fontSize: 14 }
 const th = { ...cell, color: 'var(--color-muted)', fontWeight: 600 }
-
-function relativeTime(value) {
-  const then = new Date(value).getTime()
-  if (Number.isNaN(then)) return String(value)
-  const secs = Math.round((Date.now() - then) / 1000)
-  const units = [
-    ['year', 31536000],
-    ['month', 2592000],
-    ['day', 86400],
-    ['hour', 3600],
-    ['minute', 60],
-  ]
-  for (const [name, size] of units) {
-    const n = Math.floor(secs / size)
-    if (n >= 1) return `${n} ${name}${n > 1 ? 's' : ''} ago`
-  }
-  return 'just now'
-}
-
-// A named client-side formatter token -> a display transform; booleans read yes/no. Unknown
-// tokens render the raw value.
-function formatValue(value, format) {
-  if (value == null) return ''
-  if (format === 'since') return relativeTime(value)
-  if (typeof value === 'boolean') return value ? 'yes' : 'no'
-  return String(value)
-}
 
 export function ListView({
   table,

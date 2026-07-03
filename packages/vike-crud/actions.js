@@ -15,12 +15,13 @@
 // another owner's row. Names are `${table}.${op}`; each returns a serializable ref.
 import { defineAction } from 'vike-actions'
 import { buildDb, tableNamed } from './resolve.js'
+import { primaryKeyOf } from './data.js'
 
 export function crudActions({ table, tables, scope, guard = 'authed', onSuccess = 'reload' } = {}) {
   if (!table || typeof table !== 'string') throw new Error('crudActions: `table` (a string) is required')
 
   const schemaTable = tables ? tableNamed(tables, table) : null
-  const pk = schemaTable?.columns.find((c) => c.primary)?.name ?? 'id'
+  const pk = primaryKeyOf(schemaTable)
   const columnNames = schemaTable ? schemaTable.columns.map((c) => c.name) : null
 
   const repo = () => buildDb(tables)[table]

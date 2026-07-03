@@ -23,7 +23,7 @@ const DEFAULT_PAGE_SIZE = 20
 // is present in Node 18+ and every browser. Only the server-side write path actually calls it.
 const randomUUID = () => globalThis.crypto.randomUUID()
 
-const primaryKeyOf = (schemaTable) => schemaTable?.columns.find((c) => c.primary)?.name ?? 'id'
+export const primaryKeyOf = (schemaTable) => schemaTable?.columns.find((c) => c.primary)?.name ?? 'id'
 
 function scopeFor(scope, table, ctx) {
   if (typeof scope !== 'function') return {}

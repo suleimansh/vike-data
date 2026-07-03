@@ -6,11 +6,11 @@
 // mounted somewhere for the toast effect.
 import { useMemo } from 'react'
 import { ActionRunnerProvider } from 'vike-blocks/react'
-import { createRunner } from '../client/runner.js'
+import { createRunner, buildConfirms } from '../client/runner.js'
 
 export function ActionsProvider({ children, actions = [], context, basePath, onError, onResult }) {
   const runner = useMemo(() => {
-    const confirms = new Map((Array.isArray(actions) ? actions : []).filter((a) => a?.name).map((a) => [a.name, a.confirm ?? null]))
+    const confirms = buildConfirms(actions)
     return {
       enabled: true,
       run: createRunner({ context, confirmFor: (name) => confirms.get(name) ?? null, basePath, onError, onResult }),

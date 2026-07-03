@@ -2,12 +2,10 @@
 import { useData } from 'vike-vue/useData'
 import { BreadcrumbView } from 'vike-blocks/vue'
 import { FormFields } from './FormFields.js'
+import { singular } from '../text.js'
 
 const data = useData()
 
-function singular(word) {
-  return word?.endsWith('s') ? word.slice(0, -1) : word
-}
 </script>
 <template>
   <div v-if="!data.apiWrite" :style="{ maxWidth: '520px', margin: '0 auto' }">

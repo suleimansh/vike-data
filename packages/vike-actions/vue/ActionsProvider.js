@@ -5,12 +5,12 @@
 // prompt a confirm; `context` supplies the buckets for `$row.id`-style params. Needs a vike-blocks
 // <Toaster> mounted for the toast effect.
 import { provideActionRunner } from 'vike-blocks/vue'
-import { createRunner } from '../client/runner.js'
+import { createRunner, buildConfirms } from '../client/runner.js'
 
 export const ActionsProvider = {
   props: ['actions', 'context', 'basePath', 'onError', 'onResult'],
   setup(props, { slots }) {
-    const confirms = new Map((Array.isArray(props.actions) ? props.actions : []).filter((a) => a?.name).map((a) => [a.name, a.confirm ?? null]))
+    const confirms = buildConfirms(props.actions)
     provideActionRunner({
       enabled: true,
       run: createRunner({

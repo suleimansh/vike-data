@@ -10,7 +10,7 @@
 import { randomUUID } from 'node:crypto'
 import { redirect } from 'vike/abort'
 import { isInCondition } from '@universal-orm/core'
-import { readFormRequest } from './request.js'
+import { readFormRequest } from 'vike-crud/request'
 import { parseListQuery, QueryError } from './query.js'
 import { projectRow } from './project.js'
 import {
