@@ -6,8 +6,8 @@
 // with the React renderer via pagination-styles.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { buttonStyle, BUTTON_STYLE_TAG } from '../button-styles.js'
-import { paginationRange, paginationNavStyle, paginationListStyle, paginationItemStyle, paginationEllipsisStyle, CHEVRON_LEFT_PATH, CHEVRON_RIGHT_PATH } from '../pagination-styles.js'
+import { buttonStyle, BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
+import { paginationRange, paginationNavStyle, paginationListStyle, paginationItemStyle, paginationEllipsisStyle, CHEVRON_LEFT_PATH, CHEVRON_RIGHT_PATH } from '../blocks/pagination-styles.js'
 
 const chevron = (d) =>
   h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, [h('path', { d })])

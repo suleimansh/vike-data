@@ -3,7 +3,7 @@
 // renderer via kbd-styles, so they can't drift.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { kbdGroupStyle, kbdKeyStyle } from '../kbd-styles.js'
+import { kbdGroupStyle, kbdKeyStyle } from '../blocks/kbd-styles.js'
 
 export const KbdView = (props) =>
   h(

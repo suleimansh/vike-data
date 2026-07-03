@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { code, definePage, resolvePage, getBlock, hasBlock } from '../index.js'
-import { tokenizeLines, parseMarkers, TOKEN_COLORS } from '../code-highlight.js'
+import { tokenizeLines, parseMarkers, TOKEN_COLORS } from '../blocks/code-highlight.js'
 
 const resolveCode = (builder) => getBlock('code').resolve({ props: builder.build() })
 

@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { bubble, definePage, resolvePage, hasBlock } from '../index.js'
-import { bubbleRowStyle } from '../bubble-styles.js'
+import { bubbleRowStyle } from '../blocks/bubble-styles.js'
 
 // The bespoke `markdown` block has no fluent builder (it is authored as a raw descriptor), so a rich
 // bubble body uses the plain block descriptor form.

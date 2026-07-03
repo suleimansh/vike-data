@@ -6,7 +6,7 @@
 // select-styles module, so this can't drift from the Vue twin.
 import { useState } from 'react'
 import { registerBlockRenderer } from './registry.js'
-import { selectWrapStyle, selectStyle, selectChevronStyle, CHEVRON_DOWN_PATH, SELECT_STYLE_TAG } from '../select-styles.js'
+import { selectWrapStyle, selectStyle, selectChevronStyle, CHEVRON_DOWN_PATH, SELECT_STYLE_TAG } from '../blocks/select-styles.js'
 
 export function SelectView({ options = [], value = null, placeholder = null, name, id, disabled = false, required = false }) {
   const [selected, setSelected] = useState(value ?? '')

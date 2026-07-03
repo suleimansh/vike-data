@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { command, definePage, resolvePage, hasBlock } from '../index.js'
-import { filterCommands } from '../command-styles.js'
+import { filterCommands } from '../blocks/command-styles.js'
 
 test('command is registered', () => {
   assert.ok(hasBlock('command'))

@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { calendar, field, definePage, resolvePage, hasBlock } from '../index.js'
-import { parseYMD, toISO, addMonths, daysInMonth, monthMatrix, orderedWeekdays, isDisabled } from '../calendar-styles.js'
+import { parseYMD, toISO, addMonths, daysInMonth, monthMatrix, orderedWeekdays, isDisabled } from '../blocks/calendar-styles.js'
 
 test('calendar is registered', () => {
   assert.ok(hasBlock('calendar'))

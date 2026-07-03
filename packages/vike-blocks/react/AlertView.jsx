@@ -3,7 +3,7 @@
 // style comes from the shared alert-styles module, so this stays a thin binding and can't drift from
 // the Vue twin. A leaf, no state.
 import { registerBlockRenderer } from './registry.js'
-import { alertStyles, intentKey } from '../alert-styles.js'
+import { alertStyles, intentKey } from '../blocks/alert-styles.js'
 
 export function AlertView({ title, intent = 'info', body }) {
   const s = alertStyles(intent)

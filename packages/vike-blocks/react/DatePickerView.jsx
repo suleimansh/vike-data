@@ -8,8 +8,8 @@ import { useState } from 'react'
 import { registerBlockRenderer } from './registry.js'
 import { Popover } from './popover.jsx'
 import { CalendarView } from './CalendarView.jsx'
-import { popoverMotionStyle } from '../popover-styles.js'
-import { formatDisplay, datePickerTriggerStyle, CALENDAR_ICON_PATH, DATE_PICKER_STYLE_TAG } from '../date-picker-styles.js'
+import { popoverMotionStyle } from '../blocks/popover-styles.js'
+import { formatDisplay, datePickerTriggerStyle, CALENDAR_ICON_PATH, DATE_PICKER_STYLE_TAG } from '../blocks/date-picker-styles.js'
 
 export function DatePickerView({ value, month, min, max, weekStartsOn = 0, name, placeholder = 'Pick a date' }) {
   const [open, setOpen] = useState(false)

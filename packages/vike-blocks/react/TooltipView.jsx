@@ -5,7 +5,7 @@
 // hydration concern. Styles come from the shared tooltip-styles module, so this can't drift from the Vue twin.
 import { Blocks } from './Blocks.jsx'
 import { registerBlockRenderer } from './registry.js'
-import { tooltipWrapStyle, tooltipMarkerStyle, TOOLTIP_STYLE_TAG } from '../tooltip-styles.js'
+import { tooltipWrapStyle, tooltipMarkerStyle, TOOLTIP_STYLE_TAG } from '../blocks/tooltip-styles.js'
 
 export function TooltipView({ text = '', side = 'top', trigger = null }) {
   return (

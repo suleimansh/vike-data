@@ -8,7 +8,7 @@
 // dialog and an edge-anchored sheet share all the behavior and differ only in those two knobs.
 import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { OVERLAY_ENTER_MS, OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../overlay-motion.js'
+import { OVERLAY_ENTER_MS, OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../core/overlay-motion.js'
 
 export const FOCUSABLE =
   'a[href],button:not([disabled]),textarea:not([disabled]),input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])'

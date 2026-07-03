@@ -6,8 +6,8 @@
 // runs through the vike-actions runner like any action block.
 import { useState } from 'react'
 import { registerBlockRenderer, getBlockRenderer } from './registry.js'
-import { resolveParams } from '../params.js'
-import { tableCell, tableHeader, formatValue, compareRows } from '../table-styles.js'
+import { resolveParams } from '../core/params.js'
+import { tableCell, tableHeader, formatValue, compareRows } from '../blocks/table-styles.js'
 
 // Draw one row's action buttons: resolve each descriptor's params against the row (so `$row.id`
 // becomes the real id), then render it through its registered block renderer (an action button).

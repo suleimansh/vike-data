@@ -4,7 +4,7 @@
 // thin binding and can't drift from the Vue twin.
 import { Blocks } from './Blocks.jsx'
 import { registerBlockRenderer } from './registry.js'
-import { bubbleRowStyle, bubbleStyle } from '../bubble-styles.js'
+import { bubbleRowStyle, bubbleStyle } from '../blocks/bubble-styles.js'
 
 export function BubbleView({ from = 'assistant', text, sections }) {
   return (

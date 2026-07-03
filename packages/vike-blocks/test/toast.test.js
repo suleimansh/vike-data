@@ -6,7 +6,7 @@
 import { test, mock } from 'node:test'
 import assert from 'node:assert/strict'
 import { toast, emitToast, dismissToast, subscribeToasts } from '../index.js'
-import { TOAST_EXIT_MS, resolveToastIntent } from '../toast-styles.js'
+import { TOAST_EXIT_MS, resolveToastIntent } from '../blocks/toast-styles.js'
 
 // The store is a module singleton, so every test cleans up its own toasts (dismiss + tick past the exit
 // window) before it ends, leaving the store empty for the next.

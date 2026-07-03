@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { slider, field, definePage, resolvePage, hasBlock } from '../index.js'
-import { sliderPercent, snapToStep, sliderRangeStyle, sliderThumbStyle, SLIDER_STYLE_TAG } from '../slider-styles.js'
+import { sliderPercent, snapToStep, sliderRangeStyle, sliderThumbStyle, SLIDER_STYLE_TAG } from '../blocks/slider-styles.js'
 
 test('slider is registered', () => {
   assert.ok(hasBlock('slider'))

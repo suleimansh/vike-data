@@ -4,7 +4,7 @@
 // focus/placeholder/disabled states with the React renderer via textarea-styles, so they can't drift.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { textareaStyle, TEXTAREA_STYLE_TAG } from '../textarea-styles.js'
+import { textareaStyle, TEXTAREA_STYLE_TAG } from '../blocks/textarea-styles.js'
 
 export const TextareaView = (props) => {
   const { placeholder, value, rows = 3, name, disabled = false, required = false } = props

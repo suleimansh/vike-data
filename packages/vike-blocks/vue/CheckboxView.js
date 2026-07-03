@@ -5,7 +5,7 @@
 // React renderer via checkbox-styles, so they can't drift.
 import { h, ref } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { checkboxRootStyle, checkboxBoxStyle, checkStyle, CHECKBOX_STYLE_TAG } from '../checkbox-styles.js'
+import { checkboxRootStyle, checkboxBoxStyle, checkStyle, CHECKBOX_STYLE_TAG } from '../blocks/checkbox-styles.js'
 
 const check = (checked) =>
   h(

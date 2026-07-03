@@ -6,7 +6,7 @@
 import { h, ref, onMounted } from 'vue'
 import { Blocks } from './Blocks.js'
 import { registerBlockRenderer } from './registry.js'
-import { scrollerWrapStyle, scrollerViewportStyle, jumpButtonStyle, AT_BOTTOM_THRESHOLD } from '../message-scroller-styles.js'
+import { scrollerWrapStyle, scrollerViewportStyle, jumpButtonStyle, AT_BOTTOM_THRESHOLD } from '../blocks/message-scroller-styles.js'
 
 export const MessageScrollerView = {
   props: ['messages', 'maxHeight'],

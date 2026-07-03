@@ -4,7 +4,7 @@
 // text bars with the last one shorter. Shares the styles with the React renderer via skeleton-styles.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { skeletonBarStyle, skeletonStackStyle, SKELETON_STYLE_TAG } from '../skeleton-styles.js'
+import { skeletonBarStyle, skeletonStackStyle, SKELETON_STYLE_TAG } from '../blocks/skeleton-styles.js'
 
 const FALLBACK_RADIUS = 'var(--radius, 6px)'
 

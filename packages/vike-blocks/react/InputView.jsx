@@ -3,7 +3,7 @@
 // axis (#385). The base style + focus ring / placeholder / disabled states come from the shared
 // input-styles module, so this stays a thin binding and can't drift from the Vue twin.
 import { registerBlockRenderer } from './registry.js'
-import { inputStyle, INPUT_STYLE_TAG } from '../input-styles.js'
+import { inputStyle, INPUT_STYLE_TAG } from '../blocks/input-styles.js'
 
 export function InputView({ type = 'text', placeholder, value, name, disabled = false, required = false }) {
   return (

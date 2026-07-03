@@ -18,7 +18,7 @@ import {
   chartLabelRowStyle,
   chartLabelStyle,
   DEFAULT_CHART_COLOR,
-} from '../chart-styles.js'
+} from '../blocks/chart-styles.js'
 
 export const ChartView = {
   props: ['data', 'type', 'height', 'color', 'max'],

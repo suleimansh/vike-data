@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { item, card, definePage, resolvePage, hasBlock } from '../index.js'
-import { itemRowStyle, itemTrailingStyle } from '../item-styles.js'
+import { itemRowStyle, itemTrailingStyle } from '../blocks/item-styles.js'
 
 test('item is registered', () => {
   assert.ok(hasBlock('item'))

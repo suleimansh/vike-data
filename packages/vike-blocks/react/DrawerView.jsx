@@ -8,8 +8,8 @@ import { useState, useRef, useId } from 'react'
 import { Blocks } from './Blocks.jsx'
 import { registerBlockRenderer } from './registry.js'
 import { Overlay, overlayTriggerStyle } from './overlay.jsx'
-import { sheetContainerStyle, sheetPanelStyle } from '../sheet-styles.js'
-import { dismissOffset, dismissTransform, shouldDismiss, drawerHandleStyle } from '../drawer-styles.js'
+import { sheetContainerStyle, sheetPanelStyle } from '../blocks/sheet-styles.js'
+import { dismissOffset, dismissTransform, shouldDismiss, drawerHandleStyle } from '../blocks/drawer-styles.js'
 
 export function DrawerView({ title = '', description, trigger = 'Open', side = 'bottom', sections = [], defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen)

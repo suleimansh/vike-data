@@ -6,7 +6,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { dropdown, definePage, resolvePage, hasBlock } from '../index.js'
-import { dropdownPlacement } from '../dropdown-styles.js'
+import { dropdownPlacement } from '../blocks/dropdown-styles.js'
 
 test('dropdown is registered', () => {
   assert.ok(hasBlock('dropdown'))

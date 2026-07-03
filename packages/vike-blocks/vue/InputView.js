@@ -4,7 +4,7 @@
 // + focus/placeholder/disabled states with the React renderer via input-styles, so they can't drift.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { inputStyle, INPUT_STYLE_TAG } from '../input-styles.js'
+import { inputStyle, INPUT_STYLE_TAG } from '../blocks/input-styles.js'
 
 export const InputView = (props) => {
   const { type = 'text', placeholder, value, name, disabled = false, required = false } = props

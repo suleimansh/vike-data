@@ -6,7 +6,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { drawer, item, text, definePage, resolvePage, hasBlock } from '../index.js'
-import { dismissOffset, dismissTransform, shouldDismiss, drawerHandleStyle, DRAWER_CLOSE_THRESHOLD } from '../drawer-styles.js'
+import { dismissOffset, dismissTransform, shouldDismiss, drawerHandleStyle, DRAWER_CLOSE_THRESHOLD } from '../blocks/drawer-styles.js'
 
 test('drawer is registered', () => {
   assert.ok(hasBlock('drawer'))

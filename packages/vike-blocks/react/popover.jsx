@@ -7,7 +7,7 @@
 // coordinate math (dep-free). SSR renders only the trigger (the panel is client + open-gated), so
 // there's no hydration mismatch. `open`/`onClose` are owned by the consumer, exactly like the overlay.
 import { useState, useRef, useEffect } from 'react'
-import { POPOVER_FOCUSABLE, POPOVER_ENTER_MS, popoverAnchorStyle, resolvePlacement, popoverMaxHeight } from '../popover-styles.js'
+import { POPOVER_FOCUSABLE, POPOVER_ENTER_MS, popoverAnchorStyle, resolvePlacement, popoverMaxHeight } from '../blocks/popover-styles.js'
 
 // The lifecycle hook: owns render/visible/mounted + the reflow-driven enter, the edge-aware placement,
 // the outside-pointer and Escape close, and focus (into the panel on open, restored to the trigger on

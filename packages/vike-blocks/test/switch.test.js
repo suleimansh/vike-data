@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { toggle, field, definePage, resolvePage, hasBlock } from '../index.js'
-import { switchTrackStyle, switchThumbStyle, SWITCH_STYLE_TAG } from '../switch-styles.js'
+import { switchTrackStyle, switchThumbStyle, SWITCH_STYLE_TAG } from '../blocks/switch-styles.js'
 
 test('switch is registered', () => {
   assert.ok(hasBlock('switch'))

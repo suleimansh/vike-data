@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { skeleton, definePage, resolvePage, hasBlock } from '../index.js'
-import { cssLen, cssRadius, SKELETON_STYLE_TAG } from '../skeleton-styles.js'
+import { cssLen, cssRadius, SKELETON_STYLE_TAG } from '../blocks/skeleton-styles.js'
 
 test('skeleton is registered', () => {
   assert.ok(hasBlock('skeleton'))

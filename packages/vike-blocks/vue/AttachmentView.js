@@ -20,7 +20,7 @@ import {
   attachmentSizeStyle,
   attachmentRemoveStyle,
   ATTACHMENT_STYLE_TAG,
-} from '../attachment-styles.js'
+} from '../blocks/attachment-styles.js'
 
 export const AttachmentView = {
   props: ['label', 'accept', 'multiple', 'disabled', 'name', 'files'],

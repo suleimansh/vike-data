@@ -5,7 +5,7 @@
 // avatars and adds a "+N" chip. Shares the styles with the React renderer via avatar-styles.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { avatarRootStyle, avatarSurfaceStyle, avatarImgStyle, statusDotStyle, statusColor, avatarGroupStyle, avatarGroupItemStyle, avatarCountStyle, USER_ICON } from '../avatar-styles.js'
+import { avatarRootStyle, avatarSurfaceStyle, avatarImgStyle, statusDotStyle, statusColor, avatarGroupStyle, avatarGroupItemStyle, avatarCountStyle, USER_ICON } from '../blocks/avatar-styles.js'
 
 const userIcon = (size) =>
   h('svg', { width: Math.round(size * 0.55), height: Math.round(size * 0.55), viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' }, [

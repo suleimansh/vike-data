@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { progress, definePage, resolvePage, hasBlock } from '../index.js'
-import { clampPercent } from '../progress-styles.js'
+import { clampPercent } from '../blocks/progress-styles.js'
 
 test('progress is registered', () => {
   assert.ok(hasBlock('progress'))

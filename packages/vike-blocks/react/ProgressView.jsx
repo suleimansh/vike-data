@@ -4,7 +4,7 @@
 // caption row shows the label + value%. Styles come from the shared progress-styles module, so this
 // can't drift from the Vue twin.
 import { registerBlockRenderer } from './registry.js'
-import { progressLabelRowStyle, progressLabelStyle, progressValueStyle, progressTrackStyle, progressFillStyle, PROGRESS_STYLE_TAG } from '../progress-styles.js'
+import { progressLabelRowStyle, progressLabelStyle, progressValueStyle, progressTrackStyle, progressFillStyle, PROGRESS_STYLE_TAG } from '../blocks/progress-styles.js'
 
 export function ProgressView({ value = null, max = 100, percent = 0, indeterminate = false, size = 8, label = null }) {
   return (

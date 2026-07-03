@@ -4,7 +4,7 @@
 // definePage result + the composed tables). A block type with no registered renderer is skipped
 // (returns nothing) rather than throwing, so a page degrades gracefully. Importing this module
 // registers the built-in block renderers (via ./primitives.jsx).
-import { resolvePage } from '../page.js'
+import { resolvePage } from '../core/page.js'
 import { getBlockRenderer } from './registry.js'
 import './primitives.jsx' // side-effect: register text / heading / badge / divider / link / markdown / stat
 

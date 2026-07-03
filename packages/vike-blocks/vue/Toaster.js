@@ -6,7 +6,7 @@
 // `dismissed`. Teleported to <body> and gated on mount, so SSR emits nothing. Shares the deck math +
 // card styles with the React renderer via toast-styles.
 import { h, ref, onMounted, onUpdated, onUnmounted, Teleport } from 'vue'
-import { subscribeToasts, dismissToast } from '../toast-store.js'
+import { subscribeToasts, dismissToast } from '../blocks/toast-store.js'
 import {
   resolveToastIntent,
   toastRegionStyle,
@@ -20,7 +20,7 @@ import {
   TOAST_VISIBLE,
   TOAST_GAP,
   TOAST_STYLE_TAG,
-} from '../toast-styles.js'
+} from '../blocks/toast-styles.js'
 
 const ToastRow = {
   props: ['toast', 'side', 'index', 'total', 'expanded', 'heightsInFront', 'hidden', 'onMeasure'],

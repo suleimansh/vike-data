@@ -9,7 +9,7 @@
 import { useState, useMemo } from 'react'
 import { registerBlockRenderer } from './registry.js'
 import { Popover } from './popover.jsx'
-import { popoverSurfaceStyle, popoverMotionStyle } from '../popover-styles.js'
+import { popoverSurfaceStyle, popoverMotionStyle } from '../blocks/popover-styles.js'
 import {
   comboboxWrapStyle,
   comboboxInputStyle,
@@ -20,7 +20,7 @@ import {
   CHEVRON_DOWN_PATH,
   COMBOBOX_STYLE_TAG,
   filterOptions,
-} from '../combobox-styles.js'
+} from '../blocks/combobox-styles.js'
 
 export function ComboboxView({ options = [], value = null, placeholder = 'Select...', searchPlaceholder = 'Search...', empty = 'No results.', name, disabled = false }) {
   const [open, setOpen] = useState(false)

@@ -5,7 +5,7 @@
 // module, so this stays a thin binding and can't drift from the Vue twin.
 import { registerBlockRenderer } from './registry.js'
 import { useActionRunner } from './action-context.js'
-import { buttonStyle, variantKey, BUTTON_STYLE_TAG } from '../button-styles.js'
+import { buttonStyle, variantKey, BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
 
 export function ButtonView({ label, variant = 'default', to, size = 'default', disabled = false, action, params }) {
   const runner = useActionRunner()

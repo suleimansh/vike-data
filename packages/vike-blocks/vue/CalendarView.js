@@ -21,7 +21,7 @@ import {
   calendarWeekdayStyle,
   calendarDayStyle,
   CALENDAR_STYLE_TAG,
-} from '../calendar-styles.js'
+} from '../blocks/calendar-styles.js'
 
 function initialView(month, value) {
   const ym = typeof month === 'string' && /^(\d{4})-(\d{2})$/.exec(month)

@@ -5,8 +5,8 @@
 // there's no local state, and SSR renders the final links (no hydration concern). `hrefTemplate`
 // substitutes `{page}`; a hand-rendered app can pass an `href(page)` function instead.
 import { registerBlockRenderer } from './registry.js'
-import { buttonStyle, BUTTON_STYLE_TAG } from '../button-styles.js'
-import { paginationRange, paginationNavStyle, paginationListStyle, paginationItemStyle, paginationEllipsisStyle, CHEVRON_LEFT_PATH, CHEVRON_RIGHT_PATH } from '../pagination-styles.js'
+import { buttonStyle, BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
+import { paginationRange, paginationNavStyle, paginationListStyle, paginationItemStyle, paginationEllipsisStyle, CHEVRON_LEFT_PATH, CHEVRON_RIGHT_PATH } from '../blocks/pagination-styles.js'
 
 const Chevron = ({ d }) => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

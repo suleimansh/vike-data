@@ -6,7 +6,7 @@ import { h } from 'vue'
 import { Blocks } from './Blocks.js'
 import { registerBlockRenderer } from './registry.js'
 import { useActionRunner } from './action-context.js'
-import { buttonStyle, BUTTON_STYLE_TAG } from '../button-styles.js'
+import { buttonStyle, BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
 
 export const FormView = {
   props: ['action', 'method', 'submitLabel', 'onSubmit', 'sections'],

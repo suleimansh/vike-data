@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { chart, definePage, resolvePage, hasBlock } from '../index.js'
-import { normalizeSeries, chartScaleMax, chartGeometry, CHART_WIDTH } from '../chart-styles.js'
+import { normalizeSeries, chartScaleMax, chartGeometry, CHART_WIDTH } from '../blocks/chart-styles.js'
 
 test('chart is registered', () => {
   assert.ok(hasBlock('chart'))

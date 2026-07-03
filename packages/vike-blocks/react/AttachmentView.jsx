@@ -20,7 +20,7 @@ import {
   attachmentSizeStyle,
   attachmentRemoveStyle,
   ATTACHMENT_STYLE_TAG,
-} from '../attachment-styles.js'
+} from '../blocks/attachment-styles.js'
 
 export function AttachmentView({ label, accept, multiple = false, disabled = false, name, files = [] }) {
   const [list, setList] = useState(files)

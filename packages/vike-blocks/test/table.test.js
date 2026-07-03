@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { table, button, definePage, resolvePage, getBlock, hasBlock } from '../index.js'
-import { formatValue, compareRows } from '../table-styles.js'
+import { formatValue, compareRows } from '../blocks/table-styles.js'
 
 const resolveTable = (builder) => getBlock('table').resolve({ props: builder.build() })
 

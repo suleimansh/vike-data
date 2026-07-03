@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { radioGroup, field, definePage, resolvePage, hasBlock } from '../index.js'
-import { radioCircleStyle, radioDotStyle, RADIO_STYLE_TAG } from '../radio-styles.js'
+import { radioCircleStyle, radioDotStyle, RADIO_STYLE_TAG } from '../blocks/radio-styles.js'
 
 test('radio is registered', () => {
   assert.ok(hasBlock('radio'))

@@ -14,7 +14,7 @@
 import { h, inject, provide, computed, unref } from 'vue'
 import { Blocks } from './Blocks.js'
 import { registerBlockRenderer } from './registry.js'
-import { isActivePath } from '../layout.js'
+import { isActivePath } from '../blocks/layout.js'
 
 export const LAYOUT_CONFIG_KEY = Symbol.for('vike-blocks.layoutConfig')
 export const useLayoutConfig = () => inject(LAYOUT_CONFIG_KEY, computed(() => ({})))

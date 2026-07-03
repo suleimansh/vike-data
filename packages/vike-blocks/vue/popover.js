@@ -7,7 +7,7 @@
 // trigger with no portal and no coordinate math (dep-free). SSR renders only the trigger (the panel is
 // client + open-gated), so there's no hydration mismatch. `open`/`onClose` are owned by the consumer.
 import { h, ref, watch, onMounted, onUnmounted, nextTick, toRef } from 'vue'
-import { POPOVER_FOCUSABLE, POPOVER_ENTER_MS, popoverAnchorStyle, resolvePlacement, popoverMaxHeight } from '../popover-styles.js'
+import { POPOVER_FOCUSABLE, POPOVER_ENTER_MS, popoverAnchorStyle, resolvePlacement, popoverMaxHeight } from '../blocks/popover-styles.js'
 
 // The lifecycle composable: owns render/visible/mounted + the reflow-driven enter, the edge-aware
 // placement, the outside-pointer and Escape close, and focus (into the panel on open, restored to the

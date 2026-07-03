@@ -6,7 +6,7 @@
 import { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { Blocks } from './Blocks.jsx'
 import { registerBlockRenderer } from './registry.js'
-import { scrollerWrapStyle, scrollerViewportStyle, jumpButtonStyle, AT_BOTTOM_THRESHOLD } from '../message-scroller-styles.js'
+import { scrollerWrapStyle, scrollerViewportStyle, jumpButtonStyle, AT_BOTTOM_THRESHOLD } from '../blocks/message-scroller-styles.js'
 
 // Stick to the bottom before paint on the client; a no-op (no warning) during SSR.
 const useIsoLayout = typeof document !== 'undefined' ? useLayoutEffect : useEffect

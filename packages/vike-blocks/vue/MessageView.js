@@ -13,7 +13,7 @@ import {
   messageAuthorStyle,
   messageTimeStyle,
   avatarInitials,
-} from '../message-styles.js'
+} from '../blocks/message-styles.js'
 
 export const MessageView = (props) => {
   const from = props.from ?? 'assistant'

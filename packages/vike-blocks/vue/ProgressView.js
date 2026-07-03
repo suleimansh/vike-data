@@ -5,7 +5,7 @@
 // renderer via progress-styles.
 import { h } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { progressLabelRowStyle, progressLabelStyle, progressValueStyle, progressTrackStyle, progressFillStyle, PROGRESS_STYLE_TAG } from '../progress-styles.js'
+import { progressLabelRowStyle, progressLabelStyle, progressValueStyle, progressTrackStyle, progressFillStyle, PROGRESS_STYLE_TAG } from '../blocks/progress-styles.js'
 
 export const ProgressView = {
   props: ['value', 'max', 'percent', 'indeterminate', 'size', 'label'],

@@ -5,7 +5,7 @@
 // ring with the React renderer via select-styles, so they can't drift.
 import { h, ref } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { selectWrapStyle, selectStyle, selectChevronStyle, CHEVRON_DOWN_PATH, SELECT_STYLE_TAG } from '../select-styles.js'
+import { selectWrapStyle, selectStyle, selectChevronStyle, CHEVRON_DOWN_PATH, SELECT_STYLE_TAG } from '../blocks/select-styles.js'
 
 export const SelectView = {
   props: ['options', 'value', 'placeholder', 'name', 'id', 'disabled', 'required'],

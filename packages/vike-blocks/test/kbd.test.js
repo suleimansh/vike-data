@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { kbd, definePage, resolvePage, hasBlock } from '../index.js'
-import { kbdKeyStyle } from '../kbd-styles.js'
+import { kbdKeyStyle } from '../blocks/kbd-styles.js'
 
 test('kbd is registered', () => {
   assert.ok(hasBlock('kbd'))

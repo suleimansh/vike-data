@@ -5,7 +5,7 @@
 // module, so this can't drift from the Vue twin.
 import { Fragment } from 'react'
 import { registerBlockRenderer } from './registry.js'
-import { breadcrumbListStyle, breadcrumbItemStyle, breadcrumbLinkStyle, breadcrumbPageStyle, breadcrumbSeparatorStyle, CHEVRON_RIGHT_PATH, BREADCRUMB_STYLE_TAG } from '../breadcrumb-styles.js'
+import { breadcrumbListStyle, breadcrumbItemStyle, breadcrumbLinkStyle, breadcrumbPageStyle, breadcrumbSeparatorStyle, CHEVRON_RIGHT_PATH, BREADCRUMB_STYLE_TAG } from '../blocks/breadcrumb-styles.js'
 
 const Chevron = () => (
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

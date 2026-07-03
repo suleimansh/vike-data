@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { sheet, text, input, field, definePage, resolvePage, hasBlock } from '../index.js'
-import { sheetContainerStyle, sheetHiddenTransform, sheetPanelStyle } from '../sheet-styles.js'
+import { sheetContainerStyle, sheetHiddenTransform, sheetPanelStyle } from '../blocks/sheet-styles.js'
 
 test('sheet is registered', () => {
   assert.ok(hasBlock('sheet'))

@@ -6,7 +6,7 @@
 import { h } from 'vue'
 import { Blocks } from './Blocks.js'
 import { registerBlockRenderer } from './registry.js'
-import { tooltipWrapStyle, tooltipMarkerStyle, TOOLTIP_STYLE_TAG } from '../tooltip-styles.js'
+import { tooltipWrapStyle, tooltipMarkerStyle, TOOLTIP_STYLE_TAG } from '../blocks/tooltip-styles.js'
 
 export const TooltipView = {
   props: ['text', 'side', 'trigger'],

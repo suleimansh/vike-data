@@ -5,7 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { pagination, definePage, resolvePage, hasBlock } from '../index.js'
-import { paginationRange } from '../pagination-styles.js'
+import { paginationRange } from '../blocks/pagination-styles.js'
 
 test('pagination is registered', () => {
   assert.ok(hasBlock('pagination'))

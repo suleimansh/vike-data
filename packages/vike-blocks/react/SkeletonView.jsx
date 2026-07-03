@@ -3,7 +3,7 @@
 // markup. One bar by default; `lines > 1` renders a stack of text bars with the last one shorter.
 // Styles come from the shared skeleton-styles module, so this can't drift from the Vue twin.
 import { registerBlockRenderer } from './registry.js'
-import { skeletonBarStyle, skeletonStackStyle, SKELETON_STYLE_TAG } from '../skeleton-styles.js'
+import { skeletonBarStyle, skeletonStackStyle, SKELETON_STYLE_TAG } from '../blocks/skeleton-styles.js'
 
 const FALLBACK_RADIUS = 'var(--radius, 6px)'
 
