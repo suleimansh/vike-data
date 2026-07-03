@@ -421,6 +421,42 @@ importers:
         specifier: ^7.1.0
         version: 7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
 
+  examples/vike-admin:
+    dependencies:
+      '@universal-orm/core':
+        specifier: workspace:*
+        version: link:../../packages/universal-orm
+      '@universal-orm/memory':
+        specifier: workspace:*
+        version: link:../../packages/universal-orm-memory
+      '@vike-data/vike-schema':
+        specifier: workspace:*
+        version: link:../../packages/vike-schema
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+      vike:
+        specifier: 0.4.259-commit-f6ecfb2
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+      vike-admin:
+        specifier: workspace:*
+        version: link:../../packages/vike-admin
+      vike-auth:
+        specifier: workspace:*
+        version: link:../../packages/vike-auth
+      vike-i18n:
+        specifier: workspace:*
+        version: link:../../packages/vike-i18n
+      vike-react:
+        specifier: ^0.6.0
+        version: 0.6.25(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
+      vite:
+        specifier: ^7.1.0
+        version: 7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
+
   examples/vike-auth:
     dependencies:
       '@universal-orm/core':
