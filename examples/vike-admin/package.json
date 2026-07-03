@@ -1,0 +1,25 @@
+{
+  "name": "app-vike-admin",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal vike-admin example (React, memory adapter, zero DB): install vike-admin/react + vike-auth/react, declare an app-owned schema (posts + tags), contribute a couple of adminResources, and get working /admin/* list/create/edit/delete pages derived from the schema. No themes, no rbac, no storage.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@universal-orm/core": "workspace:*",
+    "@universal-orm/memory": "workspace:*",
+    "@vike-data/vike-schema": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vike": "^0.4.0",
+    "vike-react": "^0.6.0",
+    "vike-admin": "workspace:*",
+    "vike-auth": "workspace:*",
+    "vike-i18n": "workspace:*",
+    "vite": "^7.1.0"
+  }
+}
