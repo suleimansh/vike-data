@@ -15,6 +15,9 @@ export const postsSchema = defineSchema('posts', (t) => {
   t.string('title')
   t.text('body').nullable()
   t.boolean('published').default(false)
+  // An enum column: the semantic hint turns the allowed values into a select's options, so the form
+  // renders vike-blocks' theme-native `select` (nullable = a clearable, optional choice).
+  t.string('status').nullable().as('enum', { values: ['draft', 'in-review', 'scheduled'] })
   t.uuid('user_id')
   t.timestamps()
 })

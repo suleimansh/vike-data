@@ -9,6 +9,7 @@
 // Each widget is a component `({ field, value })`: `field` is the resolved form field
 // ({ name, label, required, widget, options? }, from resolve.js viewFields), `value` pre-fills
 // on edit. No React import — vike-react uses the automatic JSX runtime.
+import { SelectView } from 'vike-blocks/react'
 import { registerFieldWidget, getFieldWidget } from './widget-registry.js'
 
 const labelStyle = { display: 'block', color: 'var(--color-muted)', fontSize: 13, marginBottom: 4 }
@@ -73,20 +74,21 @@ function TextareaField({ field, value }) {
 }
 
 // A select over `field.options` ({ value, label }[]) — filled by the data hook for a foreign
-// key, or by resolve.js from an `.as('enum', { values })` declaration. A non-required field
-// gets an empty choice.
+// key, or by resolve.js from an `.as('enum', { values })` declaration. Rendered through vike-blocks'
+// theme-native `select` block (SelectView), so schema forms and the admin share the same control as a
+// hand-authored `select`. A non-required field gets a selectable empty choice (`—`) so the FK can be
+// cleared; a required field forces a real pick. Still a real `<select name>` = native POST, no JS.
 function SelectField({ field, value }) {
-  const options = field.options ?? []
   return (
     <Field field={field}>
-      <select id={field.name} name={field.name} required={field.required} defaultValue={value ?? ''} style={control}>
-        {!field.required && <option value="">—</option>}
-        {options.map((o) => (
-          <option key={String(o.value)} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
+      <SelectView
+        id={field.name}
+        name={field.name}
+        options={field.options ?? []}
+        value={value ?? null}
+        required={field.required}
+        placeholder={field.required ? null : '—'}
+      />
     </Field>
   )
 }

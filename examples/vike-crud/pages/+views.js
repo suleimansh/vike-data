@@ -20,8 +20,8 @@ export default [
     route: '/posts',
     sections: crudBlocks({
       table: 'posts',
-      list: [column('title').sortable().searchable(), column('published'), column('created_at').label('Created').format('since')],
-      form: [field('title').required(), field('body'), field('published')],
+      list: [column('title').sortable().searchable(), column('status'), column('published'), column('created_at').label('Created').format('since')],
+      form: [field('title').required(), field('body'), field('status'), field('published')],
     }),
     scope: (table, ctx) => ({ user_id: ctx.user.id }),
   }),

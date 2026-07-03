@@ -48,6 +48,19 @@ test('resolve keeps a declared selection', () => {
   assert.equal(out.sections[0].resolved.value, 'y')
 })
 
+test('.required() flows through the builder + resolve (for a forced pick / native validation)', () => {
+  assert.deepEqual(select().option('a').required().build(), {
+    block: 'select',
+    options: [{ value: 'a', label: 'a' }],
+    required: true,
+  })
+  const out = resolvePage(definePage({ sections: [select().placeholder('Pick').option('a', 'A').required()] }))
+  assert.equal(out.sections[0].resolved.required, true)
+  // a select without .required() resolves required:false (placeholder stays selectable = clearable)
+  const opt = resolvePage(definePage({ sections: [select().placeholder('Pick').option('a', 'A')] }))
+  assert.equal(opt.sections[0].resolved.required, false)
+})
+
 test('an empty select resolves to a null selection (no crash)', () => {
   const out = resolvePage(definePage({ sections: [select()] }))
   assert.equal(out.sections[0].resolved.value, null)

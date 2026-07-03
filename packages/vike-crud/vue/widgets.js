@@ -3,6 +3,7 @@
 // Importing this module registers the built-ins as a side effect; an extension adds its own
 // control with `registerFieldWidget('file', FileField)`.
 import { h } from 'vue'
+import { SelectView } from 'vike-blocks/vue'
 import { registerFieldWidget, getFieldWidget } from './widget-registry.js'
 
 const labelStyle = { display: 'block', color: 'var(--color-muted)', fontSize: '13px', marginBottom: '4px' }
@@ -56,16 +57,22 @@ export const TextareaField = (props) => {
 }
 TextareaField.props = ['field', 'value']
 
-export const SelectField = (props) => {
-  const options = props.field.options ?? []
-  const children = []
-  if (!props.field.required) children.push(h('option', { value: '' }, '—'))
-  for (const o of options) children.push(h('option', { key: String(o.value), value: o.value }, o.label))
-  return labeled(
+// Rendered through vike-blocks' theme-native `select` block (SelectView), so schema forms and the admin
+// share the same control as a hand-authored `select`. A non-required field gets a selectable empty
+// choice (`—`) so the FK can be cleared; a required field forces a real pick. Still a real
+// `<select name>` = native POST, no JS.
+export const SelectField = (props) =>
+  labeled(
     props.field,
-    h('select', { id: props.field.name, name: props.field.name, required: props.field.required, value: props.value ?? '', style: control }, children),
+    h(SelectView, {
+      id: props.field.name,
+      name: props.field.name,
+      options: props.field.options ?? [],
+      value: props.value ?? null,
+      required: props.field.required,
+      placeholder: props.field.required ? null : '—',
+    }),
   )
-}
 SelectField.props = ['field', 'value']
 
 export const CheckboxField = (props) =>
