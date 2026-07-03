@@ -8,6 +8,8 @@ import './InputView.jsx' // side-effect: register the input renderer
 import './TextareaView.jsx' // side-effect: register the textarea renderer
 import './CheckboxView.jsx' // side-effect: register the checkbox renderer
 import './RadioGroupView.jsx' // side-effect: register the radio renderer
+import './SelectView.jsx' // side-effect: register the select renderer
+import './ComboboxView.jsx' // side-effect: register the combobox renderer
 import './SwitchView.jsx' // side-effect: register the switch renderer
 import './SliderView.jsx' // side-effect: register the slider renderer
 import './CalendarView.jsx' // side-effect: register the calendar renderer
@@ -43,6 +45,8 @@ export { InputView } from './InputView.jsx'
 export { TextareaView } from './TextareaView.jsx'
 export { CheckboxView } from './CheckboxView.jsx'
 export { RadioGroupView } from './RadioGroupView.jsx'
+export { SelectView } from './SelectView.jsx'
+export { ComboboxView } from './ComboboxView.jsx'
 export { SwitchView } from './SwitchView.jsx'
 export { SliderView } from './SliderView.jsx'
 export { CalendarView } from './CalendarView.jsx'
