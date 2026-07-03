@@ -11,13 +11,13 @@
 //
 // One-time charges are this model; recurring subscriptions are the `subscription` model.
 import { defineSchema } from '@vike-data/vike-schema/schema'
+import { cleanStr } from '@vike-data/kit'
 
 export default function paymentSchemas(config) {
   const segment = config?.segment === 'b2c' ? 'b2c' : 'b2b'
   const column = segment === 'b2c' ? 'user_id' : 'organization_id'
   const defaultTable = segment === 'b2c' ? 'users' : 'organizations'
-  const override = config?.subjectTable
-  const table = override != null && String(override).trim() !== '' ? String(override).trim() : defaultTable
+  const table = cleanStr(config?.subjectTable, defaultTable)
   const ref = { column, target: `${table}.id` }
 
   return [

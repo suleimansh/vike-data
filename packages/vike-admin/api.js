@@ -28,6 +28,7 @@
 // are a separate follow-up.
 import { enhance, MiddlewareOrder } from '@universal-middleware/core'
 import { renderPage } from 'vike/server'
+import { jsonResponse } from '@vike-data/kit'
 import { projectRow } from './project.js'
 
 // Map a GET `/admin*.json` path to the admin PAGE route it mirrors, or null when it isn't a
@@ -60,8 +61,8 @@ export function writeTargetFor(pathname, method) {
 // (the path is ours but the verb is wrong) vs a fall-through (not our path at all).
 const isAdminJsonPath = (pathname) => pageRouteFor(pathname) !== null || /^\/admin\/[^/]+\/[^/]+\.json$/.test(pathname)
 
-const json = (status, body) =>
-  new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8' } })
+// The shared JSON envelope, from kit (application/json; the charset param is the default and dropped).
+const json = jsonResponse
 
 // A response header from the rendered pageContext (Vike stores them as [key, value] pairs,
 // case-insensitively). Used to read a redirect's Location.

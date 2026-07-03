@@ -8,11 +8,12 @@
 // an app swap the user resolver or inject a per-request context (most importantly a `db`, so an
 // action's run reads `{ input, user, db }` instead of importing its own repo).
 import { enhance, MiddlewareOrder } from '@universal-middleware/core'
+import { jsonResponse } from '@vike-data/kit'
 import { runAction } from './run.js'
 import { getAction } from './registry.js'
 
-const json = (status, body) =>
-  new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8' } })
+// The shared JSON envelope, from kit (application/json; the charset param is the default and dropped).
+const json = jsonResponse
 
 // The default user resolver — vike-auth's session-cookie tier, imported LAZILY so importing this
 // module (or unit-testing the handler with an injected resolver) doesn't pull vike-auth's runtime.
