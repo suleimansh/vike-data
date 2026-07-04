@@ -26,6 +26,10 @@ const usersResource = defineResource({
 const sessionsResource = defineResource({
   table: 'sessions',
   label: 'Sessions',
+  // `mode: 'dialog'` (#598): view/create/edit open as an OVERLAY on the list (`/admin/sessions?view=@id`
+  // / `?edit=@id` / `?create`) instead of navigating to a sub-page - the Vue dialog host. `users` above
+  // stays route-mode, so this demo shows both presentations side by side.
+  mode: 'dialog',
   index: [column('user_id').label('User'), column('token'), column('created_at').format('since')],
   edit: [
     field('user_id'),
