@@ -2,7 +2,7 @@
 // viewData or `views` config dispatch: the view descriptor, the row-scope, and the read/write
 // path all live here. Edit the sections, change the query, add fields — nothing regenerates.
 import { redirect } from 'vike/abort'
-import { resolveViewTables, buildDb, hydrateView, createRow, updateRow, definePage, resolvePage } from 'vike-crud'
+import { resolveViewTables, buildDb, hydrateView, createRow, updateRow, definePage, resolvePage, findSection } from 'vike-crud'
 
 const ROUTE = '/posts-ejected'
 
@@ -34,19 +34,28 @@ const view = definePage({
       block: 'record',
       table: 'posts',
     },
+    // The create form, composed INTO a card — blocks are freely composable, so a form can live inside
+    // a container and still create/update (#574). No workaround needed; the POST handler finds the
+    // form's fields at any depth.
     {
-      block: 'form',
-      table: 'posts',
-      form: [
+      block: 'card',
+      title: 'New post',
+      sections: [
         {
-          name: 'title',
-          required: true,
-        },
-        {
-          name: 'body',
-        },
-        {
-          name: 'published',
+          block: 'form',
+          table: 'posts',
+          form: [
+            {
+              name: 'title',
+              required: true,
+            },
+            {
+              name: 'body',
+            },
+            {
+              name: 'published',
+            },
+          ],
         },
       ],
     },
@@ -78,8 +87,9 @@ function readForm(pageContext) {
 }
 
 // The resolved fields of this view's `form` block for `table` — what a POST coerces against.
+// findSection looks at any depth, so the card-nested form above is still found.
 function formFields(tables, table) {
-  const form = resolvePage(view, tables).sections.find((s) => s.block === 'form' && s.props.table === table)
+  const form = findSection(resolvePage(view, tables).sections, (s) => s.block === 'form' && s.props.table === table)
   return form?.resolved.fields ?? null
 }
 
