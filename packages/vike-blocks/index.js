@@ -33,6 +33,7 @@ import './blocks/confirm.js' // side-effect: register the confirm (alert dialog)
 import './blocks/sheet.js' // side-effect: register the sheet container block
 import './blocks/drawer.js' // side-effect: register the drawer container block
 import './blocks/card.js' // side-effect: register the card container block
+import './blocks/empty-state.js' // side-effect: register the empty-state block
 import './blocks/field.js' // side-effect: register the field container block
 import './blocks/form.js' // side-effect: register the form container block
 import './blocks/attachment.js' // side-effect: register the attachment block
@@ -81,6 +82,7 @@ export { confirm } from './blocks/confirm.js'
 export { sheet } from './blocks/sheet.js'
 export { drawer } from './blocks/drawer.js'
 export { card } from './blocks/card.js'
+export { emptyState } from './blocks/empty-state.js'
 export { field } from './blocks/field.js'
 export { form } from './blocks/form.js'
 export { attachment } from './blocks/attachment.js'

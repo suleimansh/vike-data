@@ -30,6 +30,7 @@ import './ConfirmView.js' // side-effect: register the confirm renderer
 import './SheetView.js' // side-effect: register the sheet renderer
 import './DrawerView.js' // side-effect: register the drawer renderer
 import './CardView.js' // side-effect: register the card renderer
+import './EmptyStateView.js' // side-effect: register the empty-state renderer
 import './FieldView.js' // side-effect: register the field renderer
 import './FormView.js' // side-effect: register the form renderer
 import './AttachmentView.js' // side-effect: register the attachment renderer
@@ -79,6 +80,7 @@ export { Overlay, useOverlay } from './overlay.js'
 export { Popover, usePopover } from './popover.js'
 export { Toaster } from './Toaster.js'
 export { CardView } from './CardView.js'
+export { EmptyStateView } from './EmptyStateView.js'
 export { FieldView } from './FieldView.js'
 export { FormView } from './FormView.js'
 export { AttachmentView } from './AttachmentView.js'
