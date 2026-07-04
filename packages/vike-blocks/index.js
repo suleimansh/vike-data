@@ -30,6 +30,7 @@ import './blocks/chart.js' // side-effect: register the chart block
 import './blocks/alert.js' // side-effect: register the alert block
 import './blocks/tabs.js' // side-effect: register the tabs container block
 import './blocks/accordion.js' // side-effect: register the accordion container block
+import './blocks/collapsible.js' // side-effect: register the collapsible container block
 import './blocks/dialog.js' // side-effect: register the dialog container block
 import './blocks/confirm.js' // side-effect: register the confirm (alert dialog) block
 import './blocks/sheet.js' // side-effect: register the sheet container block
@@ -43,11 +44,13 @@ import './blocks/code.js' // side-effect: register the code block
 import './blocks/markdown.js' // side-effect: register the markdown block
 import './blocks/table.js' // side-effect: register the table block
 import './blocks/data-table.js' // side-effect: register the data-table block
+import './blocks/timeline.js' // side-effect: register the timeline block
 import './blocks/pagination.js' // side-effect: register the pagination block
 import './blocks/tooltip.js' // side-effect: register the tooltip block
 import './blocks/avatar.js' // side-effect: register the avatar + avatarGroup blocks
 import './blocks/skeleton.js' // side-effect: register the skeleton block
 import './blocks/progress.js' // side-effect: register the progress block
+import './blocks/spinner.js' // side-effect: register the spinner block
 import './blocks/breadcrumb.js' // side-effect: register the breadcrumb block
 import './blocks/command.js' // side-effect: register the command block
 import './blocks/layout.js' // side-effect: register the layout container block + the slot placeholder block
@@ -82,6 +85,7 @@ export { chart } from './blocks/chart.js'
 export { alert } from './blocks/alert.js'
 export { tabs } from './blocks/tabs.js'
 export { accordion } from './blocks/accordion.js'
+export { collapsible } from './blocks/collapsible.js'
 export { dialog } from './blocks/dialog.js'
 export { confirm } from './blocks/confirm.js'
 export { sheet } from './blocks/sheet.js'
@@ -95,11 +99,13 @@ export { code } from './blocks/code.js'
 export { markdown } from './blocks/markdown.js'
 export { table } from './blocks/table.js'
 export { dataTable } from './blocks/data-table.js'
+export { timeline } from './blocks/timeline.js'
 export { pagination } from './blocks/pagination.js'
 export { tooltip } from './blocks/tooltip.js'
 export { avatar, avatarGroup } from './blocks/avatar.js'
 export { skeleton } from './blocks/skeleton.js'
 export { progress } from './blocks/progress.js'
+export { spinner } from './blocks/spinner.js'
 export { breadcrumb } from './blocks/breadcrumb.js'
 export { command } from './blocks/command.js'
 export { layout, slot, isActivePath } from './blocks/layout.js'

@@ -107,10 +107,10 @@ Every built-in builder, by group. Each imports from `vike-blocks` and has a live
 | Buttons | `button` |
 | Form controls | `input` `textarea` `checkbox` `radioGroup` `select` `combobox` `tagInput` `toggle` `toggleButton` `toggleGroup` `slider` `calendar` `datePicker` `attachment` |
 | Form structure | `field` `form` |
-| Data display | `table` `dataTable` `chart` `pagination` `stat` |
-| Feedback | `alert` `skeleton` `progress` `tooltip` `emptyState` |
+| Data display | `table` `dataTable` `chart` `pagination` `stat` `timeline` |
+| Feedback | `alert` `skeleton` `progress` `spinner` `tooltip` `emptyState` |
 | Overlays | `dialog` `confirm` `sheet` `drawer` `popover` `dropdown` `navMenu` |
-| Navigation | `breadcrumb` `command` `tabs` `accordion` |
+| Navigation | `breadcrumb` `command` `tabs` `accordion` `collapsible` |
 | Identity + misc | `avatar` `avatarGroup` `kbd` `item` |
 | Chat | `bubble` `message` `messageScroller` |
 | Containers + layout | `card` `layout` `slot` |

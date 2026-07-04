@@ -28,6 +28,7 @@ import './ChartView.jsx' // side-effect: register the chart renderer
 import './AlertView.jsx' // side-effect: register the alert renderer
 import './TabsView.jsx' // side-effect: register the tabs renderer
 import './AccordionView.jsx' // side-effect: register the accordion renderer
+import './CollapsibleView.jsx' // side-effect: register the collapsible renderer
 import './DialogView.jsx' // side-effect: register the dialog renderer
 import './ConfirmView.jsx' // side-effect: register the confirm renderer
 import './SheetView.jsx' // side-effect: register the sheet renderer
@@ -40,11 +41,13 @@ import './AttachmentView.jsx' // side-effect: register the attachment renderer
 import './CodeView.jsx' // side-effect: register the code renderer
 import './TableView.jsx' // side-effect: register the table renderer
 import './DataTableView.jsx' // side-effect: register the data-table renderer
+import './TimelineView.jsx' // side-effect: register the timeline renderer
 import './PaginationView.jsx' // side-effect: register the pagination renderer
 import './TooltipView.jsx' // side-effect: register the tooltip renderer
 import './AvatarView.jsx' // side-effect: register the avatar + avatarGroup renderers
 import './SkeletonView.jsx' // side-effect: register the skeleton renderer
 import './ProgressView.jsx' // side-effect: register the progress renderer
+import './SpinnerView.jsx' // side-effect: register the spinner renderer
 import './BreadcrumbView.jsx' // side-effect: register the breadcrumb renderer
 import './CommandView.jsx' // side-effect: register the command renderer
 import './LayoutView.jsx' // side-effect: register the layout container renderer
@@ -78,6 +81,7 @@ export { ChartView } from './ChartView.jsx'
 export { AlertView } from './AlertView.jsx'
 export { TabsView } from './TabsView.jsx'
 export { AccordionView } from './AccordionView.jsx'
+export { CollapsibleView } from './CollapsibleView.jsx'
 export { DialogView } from './DialogView.jsx'
 export { ConfirmView } from './ConfirmView.jsx'
 export { SheetView } from './SheetView.jsx'
@@ -93,11 +97,13 @@ export { AttachmentView } from './AttachmentView.jsx'
 export { CodeView } from './CodeView.jsx'
 export { TableView } from './TableView.jsx'
 export { DataTableView } from './DataTableView.jsx'
+export { TimelineView } from './TimelineView.jsx'
 export { PaginationView } from './PaginationView.jsx'
 export { TooltipView } from './TooltipView.jsx'
 export { AvatarView, AvatarGroupView } from './AvatarView.jsx'
 export { SkeletonView } from './SkeletonView.jsx'
 export { ProgressView } from './ProgressView.jsx'
+export { SpinnerView } from './SpinnerView.jsx'
 export { BreadcrumbView } from './BreadcrumbView.jsx'
 export { CommandView } from './CommandView.jsx'
 export { LayoutView, LayoutConfigContext, LayoutConfigProvider, useLayoutConfig, LayoutContentContext, useLayoutContent, NavRegion, registerLayoutShell } from './LayoutView.jsx'

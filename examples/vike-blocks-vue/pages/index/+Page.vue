@@ -4,6 +4,7 @@
 // open/close lifecycle). The Vue twin of app-vike-blocks' catalog, trimmed to the interactive set.
 const demos = [
   { href: '/accordion', label: 'Accordion', note: 'Height-morph expand/collapse. Closed panels stay collapsed from first paint (no flash).' },
+  { href: '/collapsible', label: 'Collapsible', note: 'Single-panel expand/collapse (the accordion sibling). Closed panels stay collapsed from first paint.' },
   { href: '/dialog', label: 'Dialog', note: 'Modal overlay: focus trap, Escape / backdrop / × close, scroll-lock. Focus returns after the exit.' },
   { href: '/dropdown', label: 'Dropdown', note: 'Anchored popover menu: edge-aware placement, outside-click / Escape close.' },
 ]
