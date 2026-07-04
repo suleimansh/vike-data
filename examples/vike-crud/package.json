@@ -18,8 +18,11 @@
     "vike": "^0.4.0",
     "vike-actions": "workspace:*",
     "vike-blocks": "workspace:*",
-    "vike-react": "^0.6.25",
     "vike-crud": "workspace:*",
+    "vike-layouts": "workspace:*",
+    "vike-react": "^0.6.25",
+    "vike-themes": "workspace:*",
+    "vike-toolbar": "workspace:*",
     "vite": "^7.1.0"
   }
 }

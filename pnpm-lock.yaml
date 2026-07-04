@@ -6,6 +6,8 @@ settings:
 
 overrides:
   vike: 0.4.259-commit-f6ecfb2
+  react: ^19.2.0
+  react-dom: ^19.2.0
 
 importers:
 
@@ -67,13 +69,13 @@ importers:
         version: 11.10.0
       next:
         specifier: 15.3.4
-        version: 15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        version: 15.3.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react:
-        specifier: 19.1.0
-        version: 19.1.0
+        specifier: ^19.2.0
+        version: 19.2.7
       react-dom:
-        specifier: 19.1.0
-        version: 19.1.0(react@19.1.0)
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
     devDependencies:
       '@types/better-sqlite3':
         specifier: ^7.6.11
@@ -210,14 +212,14 @@ importers:
         specifier: ^0.45.2
         version: 0.45.2(@electric-sql/pglite@0.5.3)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.11.1)(postgres@3.4.9)
       react:
-        specifier: ^18.3.1
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
       vike:
         specifier: 0.4.259-commit-f6ecfb2
-        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
       vike-admin:
         specifier: workspace:*
         version: link:../../packages/vike-admin
@@ -238,7 +240,7 @@ importers:
         version: link:../../packages/vike-rbac
       vike-react:
         specifier: ^0.6.0
-        version: 0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
       vike-theme-emerald:
         specifier: workspace:*
         version: link:../../packages/vike-theme-emerald
@@ -263,7 +265,7 @@ importers:
         version: 0.105.0(zod@4.4.3)
       '@gemstack/ai-sdk':
         specifier: ^0.2.0
-        version: 0.2.0(@aws-crypto/sha256-js@5.2.0)(@smithy/signature-v4@5.5.2)(react@18.3.1)(ws@8.21.0)
+        version: 0.2.0(@aws-crypto/sha256-js@5.2.0)(@smithy/signature-v4@5.5.2)(react@19.2.7)(ws@8.21.0)
       '@universal-orm/core':
         specifier: workspace:*
         version: link:../../packages/universal-orm
@@ -274,17 +276,17 @@ importers:
         specifier: workspace:*
         version: link:../../packages/vike-schema
       react:
-        specifier: ^18.3.1
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
       telefunc:
         specifier: ^0.2.20
-        version: 0.2.20(@babel/core@7.29.7)(@babel/parser@7.29.7)(@babel/types@7.29.7)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+        version: 0.2.20(@babel/core@7.29.7)(@babel/parser@7.29.7)(@babel/types@7.29.7)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
       vike:
         specifier: 0.4.259-commit-f6ecfb2
-        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
       vike-admin:
         specifier: workspace:*
         version: link:../../packages/vike-admin
@@ -314,7 +316,7 @@ importers:
         version: link:../../packages/vike-rbac
       vike-react:
         specifier: ^0.6.0
-        version: 0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
       vike-storage:
         specifier: workspace:*
         version: link:../../packages/vike-storage
@@ -326,7 +328,7 @@ importers:
         version: link:../../packages/vike-themes
       vike-toolbar:
         specifier: file:./ejected/vike-toolbar
-        version: file:examples/react/ejected/vike-toolbar(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike-react@0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))))
+        version: file:examples/react/ejected/vike-toolbar(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike-react@0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))))
       vite:
         specifier: ^7.1.0
         version: 7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
@@ -340,14 +342,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/universal-orm-memory
       react:
-        specifier: ^18.3.1
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
       vike:
         specifier: 0.4.259-commit-f6ecfb2
-        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
       vike-auth:
         specifier: workspace:*
         version: link:../../packages/vike-auth
@@ -359,7 +361,7 @@ importers:
         version: link:../../packages/vike-layouts
       vike-react:
         specifier: ^0.6.0
-        version: 0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
       vike-storage:
         specifier: workspace:*
         version: link:../../packages/vike-storage
@@ -385,14 +387,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/universal-orm-memory
       react:
-        specifier: ^18.3.1
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
       vike:
         specifier: 0.4.259-commit-f6ecfb2
-        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
       vike-auth:
         specifier: workspace:*
         version: link:../../packages/vike-auth
@@ -407,7 +409,7 @@ importers:
         version: link:../../packages/vike-notifications
       vike-react:
         specifier: ^0.6.0
-        version: 0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
       vike-storage:
         specifier: workspace:*
         version: link:../../packages/vike-storage
@@ -433,14 +435,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/vike-schema
       react:
-        specifier: ^18.3.1
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
       vike:
         specifier: 0.4.259-commit-f6ecfb2
-        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
       vike-admin:
         specifier: workspace:*
         version: link:../../packages/vike-admin
@@ -455,7 +457,7 @@ importers:
         version: link:../../packages/vike-layouts
       vike-react:
         specifier: ^0.6.0
-        version: 0.6.25(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
+        version: 0.6.25(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
       vike-themes:
         specifier: workspace:*
         version: link:../../packages/vike-themes
@@ -475,14 +477,14 @@ importers:
         specifier: workspace:*
         version: link:../../packages/universal-orm-memory
       react:
-        specifier: ^18.3.1
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
       vike:
         specifier: 0.4.259-commit-f6ecfb2
-        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
       vike-auth:
         specifier: workspace:*
         version: link:../../packages/vike-auth
@@ -494,7 +496,7 @@ importers:
         version: link:../../packages/vike-layouts
       vike-react:
         specifier: ^0.6.0
-        version: 0.6.25(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
+        version: 0.6.25(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
       vike-themes:
         specifier: workspace:*
         version: link:../../packages/vike-themes
@@ -555,9 +557,18 @@ importers:
       vike-crud:
         specifier: workspace:*
         version: link:../../packages/vike-crud
+      vike-layouts:
+        specifier: workspace:*
+        version: link:../../packages/vike-layouts
       vike-react:
         specifier: ^0.6.25
         version: 0.6.25(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
+      vike-themes:
+        specifier: workspace:*
+        version: link:../../packages/vike-themes
+      vike-toolbar:
+        specifier: workspace:*
+        version: link:../../packages/vike-toolbar
       vite:
         specifier: ^7.1.0
         version: 7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
@@ -572,7 +583,7 @@ importers:
         version: link:../../packages/universal-orm-memory
       telefunc:
         specifier: ^0.2.20
-        version: 0.2.20(@babel/core@7.29.7)(@babel/parser@7.29.7)(@babel/types@7.29.7)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@18.3.1)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+        version: 0.2.20(@babel/core@7.29.7)(@babel/parser@7.29.7)(@babel/types@7.29.7)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
       vike:
         specifier: 0.4.259-commit-f6ecfb2
         version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
@@ -717,7 +728,7 @@ importers:
         specifier: workspace:*
         version: link:../kit
       react:
-        specifier: '>=18'
+        specifier: ^19.2.0
         version: 19.2.7
       vike:
         specifier: 0.4.259-commit-f6ecfb2
@@ -753,11 +764,11 @@ importers:
         specifier: workspace:*
         version: link:../vike-schema
       react:
-        specifier: '>=18'
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       vike:
         specifier: 0.4.259-commit-f6ecfb2
-        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
       vike-blocks:
         specifier: workspace:*
         version: link:../vike-blocks
@@ -766,10 +777,10 @@ importers:
         version: link:../vike-crud
       vike-react:
         specifier: '>=0.6'
-        version: 0.6.24(react-dom@19.2.7(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
       vike-vue:
         specifier: '>=0.9'
-        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
+        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
       vue:
         specifier: '>=3'
         version: 3.5.38(typescript@5.9.3)
@@ -809,11 +820,11 @@ importers:
         specifier: workspace:*
         version: link:../vike-schema
       react:
-        specifier: '>=18'
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       vike:
         specifier: 0.4.259-commit-f6ecfb2
-        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
       vike-i18n:
         specifier: workspace:*
         version: link:../vike-i18n
@@ -822,10 +833,10 @@ importers:
         version: link:../vike-mail
       vike-react:
         specifier: '>=0.6'
-        version: 0.6.24(react-dom@19.2.7(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
       vike-vue:
         specifier: '>=0.9'
-        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
+        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
       vue:
         specifier: '>=3.5'
         version: 3.5.38(typescript@5.9.3)
@@ -840,7 +851,7 @@ importers:
         specifier: workspace:*
         version: link:../kit
       react:
-        specifier: '>=18'
+        specifier: ^19.2.0
         version: 19.2.7
       vike-react:
         specifier: '>=0.6'
@@ -867,7 +878,7 @@ importers:
         specifier: workspace:*
         version: link:../vike-schema
       react:
-        specifier: '>=18'
+        specifier: ^19.2.0
         version: 19.2.7
       vike:
         specifier: 0.4.259-commit-f6ecfb2
@@ -913,20 +924,20 @@ importers:
         specifier: '>=0.30'
         version: 0.105.0(zod@4.4.3)
       react:
-        specifier: '>=18'
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       react-dom:
-        specifier: '>=18'
-        version: 18.3.1(react@18.3.1)
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
       vike:
         specifier: 0.4.259-commit-f6ecfb2
-        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
       vike-react:
         specifier: '>=0.6'
-        version: 0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
       vike-vue:
         specifier: '>=0.9'
-        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
+        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
       vue:
         specifier: '>=3'
         version: 3.5.38(typescript@5.9.3)
@@ -934,17 +945,17 @@ importers:
   packages/vike-layouts:
     dependencies:
       react:
-        specifier: '>=18'
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       vike-blocks:
         specifier: workspace:*
         version: link:../vike-blocks
       vike-react:
         specifier: '>=0.6'
-        version: 0.6.24(react-dom@19.2.7(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
       vike-vue:
         specifier: '>=0.9'
-        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
+        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
       vue:
         specifier: '>=3'
         version: 3.5.38(typescript@5.9.3)
@@ -973,8 +984,8 @@ importers:
         specifier: workspace:*
         version: link:../vike-schema
       react:
-        specifier: '>=18'
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       vike-auth:
         specifier: workspace:*
         version: link:../vike-auth
@@ -983,10 +994,10 @@ importers:
         version: link:../vike-queue
       vike-react:
         specifier: '>=0.6'
-        version: 0.6.24(react-dom@19.2.7(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
       vike-vue:
         specifier: '>=0.9'
-        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
+        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
       vue:
         specifier: '>=3'
         version: 3.5.38(typescript@5.9.3)
@@ -1057,8 +1068,8 @@ importers:
         specifier: workspace:*
         version: link:../vike-schema
       react:
-        specifier: '>=18'
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       vike-auth:
         specifier: workspace:*
         version: link:../vike-auth
@@ -1067,10 +1078,10 @@ importers:
         version: link:../vike-queue
       vike-react:
         specifier: '>=0.6'
-        version: 0.6.24(react-dom@19.2.7(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
       vike-vue:
         specifier: '>=0.9'
-        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
+        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
       vue:
         specifier: '>=3'
         version: 3.5.38(typescript@5.9.3)
@@ -1118,7 +1129,7 @@ importers:
         version: link:../universal-orm-memory
       telefunc:
         specifier: ^0.2.20
-        version: 0.2.20(@babel/core@7.29.7)(@babel/parser@7.29.7)(@babel/types@7.29.7)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@18.3.1)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
+        version: 0.2.20(@babel/core@7.29.7)(@babel/parser@7.29.7)(@babel/types@7.29.7)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
 
   packages/vike-rudder:
     dependencies:
@@ -1163,17 +1174,17 @@ importers:
         specifier: workspace:*
         version: link:../vike-schema
       react:
-        specifier: '>=18'
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       vike-auth:
         specifier: workspace:*
         version: link:../vike-auth
       vike-react:
         specifier: '>=0.6'
-        version: 0.6.24(react-dom@19.2.7(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
       vike-vue:
         specifier: '>=0.9'
-        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
+        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
       vue:
         specifier: '>=3'
         version: 3.5.38(typescript@5.9.3)
@@ -1259,17 +1270,17 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0
       react:
-        specifier: '>=18'
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       react-dom:
-        specifier: '>=18'
-        version: 18.3.1(react@18.3.1)
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
       vike-react:
         specifier: '>=0.6'
-        version: 0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
       vike-vue:
         specifier: '>=0.9'
-        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
+        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
       vue:
         specifier: '>=3'
         version: 3.5.38(typescript@5.9.3)
@@ -1277,17 +1288,17 @@ importers:
   packages/vike-toolbar:
     dependencies:
       react:
-        specifier: '>=18'
-        version: 18.3.1
+        specifier: ^19.2.0
+        version: 19.2.7
       react-dom:
-        specifier: '>=18'
-        version: 18.3.1(react@18.3.1)
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
       vike-react:
         specifier: '>=0.6'
-        version: 0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
+        version: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
       vike-vue:
         specifier: '>=0.9'
-        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
+        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
       vue:
         specifier: '>=3'
         version: 3.5.38(typescript@5.9.3)
@@ -1631,8 +1642,8 @@ packages:
     deprecated: Package was renamed to @base-ui/react
     peerDependencies:
       '@types/react': ^17 || ^18 || ^19
-      react: ^17 || ^18 || ^19
-      react-dom: ^17 || ^18 || ^19
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -1642,8 +1653,8 @@ packages:
     deprecated: Package was renamed to @base-ui/utils
     peerDependencies:
       '@types/react': ^17 || ^18 || ^19
-      react: ^17 || ^18 || ^19
-      react-dom: ^17 || ^18 || ^19
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -1652,8 +1663,8 @@ packages:
     resolution: {integrity: sha512-xyc6KSb9v/B9qczUfntnTWC/CIe3yW4J31xq9nPGKoL7Etw0uYdj2DJDyw0uLV2P05kMSHqqNNpOP2g2pmCbBg==}
     peerDependencies:
       '@vitejs/plugin-react': '>=4.0.0'
-      react: '>=18.0.0'
-      react-dom: '>=18.0.0'
+      react: ^19.2.0
+      react-dom: ^19.2.0
       typescript: '>=5.0.0'
       vike: 0.4.259-commit-f6ecfb2
       vite: '>=5.2.0'
@@ -1681,8 +1692,8 @@ packages:
     resolution: {integrity: sha512-mb5FOZYZIkRQ6s/NWnM98k879vu5pscWqTLubLFBO87igYYT4VzVazh4h5o/zCvTIZgEt3PvsCOMOswOUo9yHQ==}
     peerDependencies:
       '@types/react': '>= 16.8.0 < 20.0.0'
-      react: '>= 16.8.0 < 20.0.0'
-      react-dom: '>= 16.8.0 < 20.0.0'
+      react: ^19.2.0
+      react-dom: ^19.2.0
       search-insights: '>= 1 < 3'
     peerDependenciesMeta:
       '@types/react':
@@ -2326,8 +2337,8 @@ packages:
   '@floating-ui/react-dom@2.1.8':
     resolution: {integrity: sha512-cC52bHwM/n/CxS87FH0yWdngEZrjdtLW/qVruo68qg+prK7ZQ4YGdut2GyDVpoGeAYe/h899rVeOVm6Oi40k2A==}
     peerDependencies:
-      react: '>=16.8.0'
-      react-dom: '>=16.8.0'
+      react: ^19.2.0
+      react-dom: ^19.2.0
 
   '@floating-ui/utils@0.2.11':
     resolution: {integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==}
@@ -2340,7 +2351,7 @@ packages:
       '@rudderjs/console': ^1.4.3
       '@rudderjs/core': ^1.13.3
       '@rudderjs/orm': ^1.22.0
-      react: '>=19.2.0'
+      react: ^19.2.0
     peerDependenciesMeta:
       '@modelcontextprotocol/sdk':
         optional: true
@@ -2538,7 +2549,7 @@ packages:
     resolution: {integrity: sha512-9ZrPIU4MGf6et1m1ov3zKf+q9+deetI51zprKB1D/z3NOb+rUxxtEl3mCjW5wTGh6VhRdwPueh1oRzi6ezkA8A==}
     peerDependencies:
       '@types/react': '>=16'
-      react: '>=16'
+      react: ^19.2.0
 
   '@mdx-js/rollup@3.0.1':
     resolution: {integrity: sha512-j0II91OCm4ld+l5QVgXXMQGxVVcAWIQJakYWi1dv5pefDHASJyCYER2TsdH7Alf958GoFSM7ugukWyvDq/UY4A==}
@@ -2760,8 +2771,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2773,8 +2784,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2786,8 +2797,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2799,8 +2810,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2812,8 +2823,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2825,8 +2836,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2838,8 +2849,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2851,8 +2862,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2864,8 +2875,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2876,7 +2887,7 @@ packages:
     resolution: {integrity: sha512-rYOP8OMnuuPMQF1uhPVlGNcCDlkokKqGFE3JcxFViIkAXP7EvFWUliJAstrapypaBLJNHbZL6jGhbVDGTwmVhA==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2886,8 +2897,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2898,7 +2909,7 @@ packages:
     resolution: {integrity: sha512-QwH4PO5urrbO+FaGd5Aglg+YJgWTyyuZ3g/6mKvsqraLkglDdckw9JafgL5McL5VEJ6EPNduPaT3ZE9BttDAqg==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2908,8 +2919,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2920,7 +2931,7 @@ packages:
     resolution: {integrity: sha512-C3vFhbyi4SW3PmbAi6Awpu4OzJtd0MxGurvSsYtr7p7nM8RNB3VAF3CUmnp2j50knpkrRcB7+ycVXzgLgF6yNA==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2930,8 +2941,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2943,8 +2954,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2955,7 +2966,7 @@ packages:
     resolution: {integrity: sha512-cot/aB/mOm0IYVYTTmQcEEK1M48lZWi8FlYe5nDPQQ8NYZUlXEFgncJ9p2Kzer3RKSrY7cTTpEMLZKNo9QoP5Q==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2965,8 +2976,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2978,8 +2989,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -2991,8 +3002,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3003,7 +3014,7 @@ packages:
     resolution: {integrity: sha512-orBC88futVpqCmhX1p4cvquNHsELQ+w+vBJnuj3ftETI5bJb0bZn3Tqu3SWN2IOcPycTnMGnhwoermvISt72sA==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3013,8 +3024,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3026,8 +3037,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3039,8 +3050,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3052,8 +3063,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3065,8 +3076,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3078,8 +3089,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3091,8 +3102,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3104,8 +3115,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3117,8 +3128,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3130,8 +3141,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3143,8 +3154,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3156,8 +3167,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3169,8 +3180,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3182,8 +3193,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3195,8 +3206,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3208,8 +3219,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3221,8 +3232,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3234,8 +3245,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3246,7 +3257,7 @@ packages:
     resolution: {integrity: sha512-MojKku4U/miO8Av4Dkb+ctMAQx7JmY96LmtDQlAarCRtd7rN52QCSzBF+XAvr5S6coSVj9HEPBgHAHKEJVk/WA==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3256,8 +3267,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3269,8 +3280,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3282,8 +3293,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3295,8 +3306,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3308,8 +3319,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3321,8 +3332,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3334,8 +3345,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3346,7 +3357,7 @@ packages:
     resolution: {integrity: sha512-xCso9j1/u8sEgP1RNHjFrXJLApL8LiqOkI1R4ywuN00rxWdYg4oQXuwKLS3i0j5NWLromUD27/4nlxj2UFVvIw==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3355,7 +3366,7 @@ packages:
     resolution: {integrity: sha512-PLzC90MS+ReootmjC597dvopoelpZ8Q61HJkDXZSExitIq7PL55vHNnesAHwguHK0aPfBnpdNzQtv1uliaqQrA==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3364,7 +3375,7 @@ packages:
     resolution: {integrity: sha512-6c8ZqvPTWILEKnyVkP53EGRCcpnJiKTC21sS/6R1GF5xKyHJJWQEPfkqlcgUkdRQivd6tb23abUwe4ngWmY0JA==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3373,7 +3384,7 @@ packages:
     resolution: {integrity: sha512-3wEkMiPHXha/2VadZ68rYBcmYnPINVGl4Y3gtcM7fKRjANk0OscK+cdqBgUWdozb7YJxsh0vefM7vgAMHXOjqg==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3382,7 +3393,7 @@ packages:
     resolution: {integrity: sha512-qwOiz4Tjo8CNnrOLAYUMXeZwDzXgXpvK4TKQPmWLECM9XoWvA6+0Z2/7Ag3A4ivjS4ovbLJPbskkxioFyBhr8A==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3391,7 +3402,7 @@ packages:
     resolution: {integrity: sha512-jrBWOxZITuGcnjRCM2t2U5ZPkCLxD+Ym6DjfssS5haTj2iiak/DOb64JeN6OdLfLgptb6/e2kKR+ZuTrGoZTPA==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3400,7 +3411,7 @@ packages:
     resolution: {integrity: sha512-IGBQPtRFdhN6MQ8dbegVmBq1LVZluya3F1jWY+puIcQC3MHctRwTDSBWCkL/3ZcnMJLTMJ++Z+ktmvg0F89iCw==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3409,7 +3420,7 @@ packages:
     resolution: {integrity: sha512-d8a+bBY/FxikNPlgJJoaBHZX+zKVbWHYJGTLnLvveQgFSTntkGdEKv3JDtHrMS0DNYpllz2nRsTLGLKYttbpmw==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3418,7 +3429,7 @@ packages:
     resolution: {integrity: sha512-giWQp+4mxjBPt4KZ0MmyuykFNWfbDxKt4x+fPkRYmgRFJSbCZFzUglvMb/Kjn38tm10YP4ufiQZDx3zna4LU6w==}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -3428,8 +3439,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -4256,8 +4267,8 @@ packages:
   cmdk@1.1.1:
     resolution: {integrity: sha512-Vsv7kFaXm+ptHDMZ7izaRsP70GgrW9NBNGswt9OZaVBLlE0SNpDq8eu/VGXyF9r7M0azK3Wy7OlYXsuyYLFzHg==}
     peerDependencies:
-      react: ^18 || ^19 || ^19.0.0-rc
-      react-dom: ^18 || ^19 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
 
   code-block-writer@13.0.3:
     resolution: {integrity: sha512-Oofo0pq3IKnsFtuHqSF7TqBfr71aeyZDVJ0HpmqB7FBM2qEigL0iPONSCZSO9pE9dZTAxANe5XHG9Uy0YMv8cg==}
@@ -4660,8 +4671,8 @@ packages:
     resolution: {integrity: sha512-5F5Och7wrvtLVElIpclDT0CBzMVg3dL22B64aZwHtsIY8RB4mXICLrkajK4G9R+ieSAGcgrLeae2SeUTg2pr6w==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
-      react: ^18.0.0 || ^19.0.0
-      react-dom: ^18.0.0 || ^19.0.0
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@emotion/is-prop-valid':
         optional: true
@@ -4955,17 +4966,13 @@ packages:
   longest-streak@3.1.0:
     resolution: {integrity: sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==}
 
-  loose-envify@1.4.0:
-    resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
-    hasBin: true
-
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
 
   lucide-react@1.23.0:
     resolution: {integrity: sha512-38BpJcD0JhFosxHApP/BYsBetLpQFRoTRzEzstM/XCc3jsAG7wqaY1lgVwxiUe3xqYE+lNxo2PkCmYwXWrwwIw==}
     peerDependencies:
-      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react: ^19.2.0
 
   magic-regexp@0.10.0:
     resolution: {integrity: sha512-Uly1Bu4lO1hwHUW0CQeSWuRtzCMNO00CmXtS8N6fyvB3B979GOEEeAkiTUDsmbYLAbvpUS/Kt5c4ibosAzVyVg==}
@@ -5202,8 +5209,8 @@ packages:
     resolution: {integrity: sha512-JLjvFDuFr42NFtcVoMAyC2sEjnpA8xpy6qWPyzQvCloznAyQ8FIXioxWfHiLtgYhoVpfUqSWpn1h9++skj9+Wg==}
     peerDependencies:
       '@emotion/is-prop-valid': '*'
-      react: ^18.0.0 || ^19.0.0
-      react-dom: ^18.0.0 || ^19.0.0
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@emotion/is-prop-valid':
         optional: true
@@ -5240,8 +5247,8 @@ packages:
       '@opentelemetry/api': ^1.1.0
       '@playwright/test': ^1.41.2
       babel-plugin-react-compiler: '*'
-      react: ^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0
-      react-dom: ^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0
+      react: ^19.2.0
+      react-dom: ^19.2.0
       sass: ^1.3.0
     peerDependenciesMeta:
       '@opentelemetry/api':
@@ -5401,8 +5408,8 @@ packages:
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
-      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
-      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react: ^19.2.0
+      react-dom: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -5421,20 +5428,10 @@ packages:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
 
-  react-dom@18.3.1:
-    resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
-    peerDependencies:
-      react: ^18.3.1
-
-  react-dom@19.1.0:
-    resolution: {integrity: sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g==}
-    peerDependencies:
-      react: ^19.1.0
-
   react-dom@19.2.7:
     resolution: {integrity: sha512-t0BRVXvbiE/o20Hfw669rLbMCDWtYZLvmJigy2f0MxsXF+71pxhR3xOkspmsO8h3ZlNzyibAmtCa3l4lYKk6gQ==}
     peerDependencies:
-      react: ^19.2.7
+      react: ^19.2.0
 
   react-refresh@0.18.0:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
@@ -5445,7 +5442,7 @@ packages:
     engines: {node: '>=10'}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -5455,7 +5452,7 @@ packages:
     engines: {node: '>=10'}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -5463,26 +5460,18 @@ packages:
   react-streaming@0.4.20:
     resolution: {integrity: sha512-jUZqdDVrXcKCNR1PGclIK9Ggeb1+8jP6WRWDSYbu8OsOCHiu/F+PGtVx+0thIoSzOdKxaNMSowk0bNlLsPv2jw==}
     peerDependencies:
-      react: '>=19'
-      react-dom: '>=19'
+      react: ^19.2.0
+      react-dom: ^19.2.0
 
   react-style-singleton@2.2.3:
     resolution: {integrity: sha512-b6jSvxvVnyptAiLjbkWLE/lOnR4lfTtDAl+eUC7RZy+QQWc6wRzIV2CE6xBuMmDxc2qIihtDCZD5NPOFl7fRBQ==}
     engines: {node: '>=10'}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
-
-  react@18.3.1:
-    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
-    engines: {node: '>=0.10.0'}
-
-  react@19.1.0:
-    resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
-    engines: {node: '>=0.10.0'}
 
   react@19.2.7:
     resolution: {integrity: sha512-HNe9WslTbXmFK8o8cmwgAeJFSBvt1bPdHCVKtaaV+WlAN36mpT4hcRpwbf3fY56ar2oIXzsBpOAiIRHAdY0OlQ==}
@@ -5570,12 +5559,6 @@ packages:
 
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
-
-  scheduler@0.23.2:
-    resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
-
-  scheduler@0.26.0:
-    resolution: {integrity: sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==}
 
   scheduler@0.27.0:
     resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
@@ -5692,7 +5675,7 @@ packages:
     peerDependencies:
       '@babel/core': '*'
       babel-plugin-macros: '*'
-      react: '>= 16.8.0 || 17.x.x || ^18.0.0-0 || ^19.0.0-0'
+      react: ^19.2.0
     peerDependenciesMeta:
       '@babel/core':
         optional: true
@@ -5726,7 +5709,7 @@ packages:
       '@babel/core': '>=7.0.0'
       '@babel/parser': '>=7.0.0'
       '@babel/types': '>=7.0.0'
-      react: '>=18.0.0'
+      react: ^19.2.0
       react-streaming: '>=0.3.3'
       vite: '>=6.3.0'
     peerDependenciesMeta:
@@ -5857,7 +5840,7 @@ packages:
     engines: {node: '>=10'}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -5867,7 +5850,7 @@ packages:
     engines: {node: '>=10'}
     peerDependencies:
       '@types/react': '*'
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+      react: ^19.2.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -5875,7 +5858,7 @@ packages:
   use-sync-external-store@1.6.0:
     resolution: {integrity: sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react: ^19.2.0
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
@@ -5896,22 +5879,22 @@ packages:
   vike-react@0.6.24:
     resolution: {integrity: sha512-IoZ1Owlhc1muhHDdqOvqjchT8gcMmWvYWPdatU/aSY7qr/PPhp63+Bj0SPZgl5F3k3YWEZVmbGwsiPP8r3wy9A==}
     peerDependencies:
-      react: '>=19'
-      react-dom: '>=19'
+      react: ^19.2.0
+      react-dom: ^19.2.0
       vike: 0.4.259-commit-f6ecfb2
 
   vike-react@0.6.25:
     resolution: {integrity: sha512-Jrl015u5WnLUhy8uxRjcuPGGAMW5Kb2FoRRKB9XnMEInS2+GW4qOHfzS5SYmlr6xzKjNn1z+eimfHN3N51E77g==}
     peerDependencies:
-      react: '>=19'
-      react-dom: '>=19'
+      react: ^19.2.0
+      react-dom: ^19.2.0
       vike: 0.4.259-commit-f6ecfb2
 
   vike-toolbar@file:examples/react/ejected/vike-toolbar:
     resolution: {directory: examples/react/ejected/vike-toolbar, type: directory}
     peerDependencies:
-      react: '>=18'
-      react-dom: '>=18'
+      react: ^19.2.0
+      react-dom: ^19.2.0
       vike-react: '>=0.6'
     peerDependenciesMeta:
       react:
@@ -7115,26 +7098,6 @@ snapshots:
       react-dom: 19.2.7(react@19.2.7)
 
   '@floating-ui/utils@0.2.11': {}
-
-  '@gemstack/ai-sdk@0.2.0(@aws-crypto/sha256-js@5.2.0)(@smithy/signature-v4@5.5.2)(react@18.3.1)(ws@8.21.0)':
-    dependencies:
-      zod: 4.4.3
-    optionalDependencies:
-      '@anthropic-ai/sdk': 0.105.0(zod@4.4.3)
-      '@aws-sdk/client-bedrock-runtime': 3.1075.0
-      '@google/genai': 2.10.0
-      cohere-ai: 8.0.0(@aws-crypto/sha256-js@5.2.0)(@smithy/signature-v4@5.5.2)
-      openai: 6.44.0(ws@8.21.0)(zod@4.4.3)
-      react: 18.3.1
-    transitivePeerDependencies:
-      - '@aws-crypto/sha256-js'
-      - '@aws-sdk/credential-providers'
-      - '@smithy/protocol-http'
-      - '@smithy/signature-v4'
-      - bufferutil
-      - supports-color
-      - utf-8-validate
-      - ws
 
   '@gemstack/ai-sdk@0.2.0(@aws-crypto/sha256-js@5.2.0)(@smithy/signature-v4@5.5.2)(react@19.2.7)(ws@8.21.0)':
     dependencies:
@@ -9885,10 +9848,6 @@ snapshots:
 
   longest-streak@3.1.0: {}
 
-  loose-envify@1.4.0:
-    dependencies:
-      js-tokens: 4.0.0
-
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
@@ -10434,7 +10393,7 @@ snapshots:
 
   negotiator@1.0.0: {}
 
-  next@15.3.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+  next@15.3.4(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
       '@next/env': 15.3.4
       '@swc/counter': 0.1.3
@@ -10442,9 +10401,9 @@ snapshots:
       busboy: 1.6.0
       caniuse-lite: 1.0.30001799
       postcss: 8.4.31
-      react: 19.1.0
-      react-dom: 19.1.0(react@19.1.0)
-      styled-jsx: 5.1.6(react@19.1.0)
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      styled-jsx: 5.1.6(react@19.2.7)
     optionalDependencies:
       '@next/swc-darwin-arm64': 15.3.4
       '@next/swc-darwin-x64': 15.3.4
@@ -10716,22 +10675,6 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  react-dom@18.3.1(react@18.3.1):
-    dependencies:
-      loose-envify: 1.4.0
-      react: 18.3.1
-      scheduler: 0.23.2
-
-  react-dom@19.1.0(react@19.1.0):
-    dependencies:
-      react: 19.1.0
-      scheduler: 0.26.0
-
-  react-dom@19.2.7(react@18.3.1):
-    dependencies:
-      react: 18.3.1
-      scheduler: 0.27.0
-
   react-dom@19.2.7(react@19.2.7):
     dependencies:
       react: 19.2.7
@@ -10758,24 +10701,6 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.17
 
-  react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      '@brillout/import': 0.2.6
-      '@brillout/json-serializer': 0.5.25
-      '@brillout/picocolors': 1.0.31
-      isbot-fast: 1.2.0
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-
-  react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1):
-    dependencies:
-      '@brillout/import': 0.2.6
-      '@brillout/json-serializer': 0.5.25
-      '@brillout/picocolors': 1.0.31
-      isbot-fast: 1.2.0
-      react: 18.3.1
-      react-dom: 19.2.7(react@18.3.1)
-
   react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
       '@brillout/import': 0.2.6
@@ -10792,12 +10717,6 @@ snapshots:
       tslib: 2.8.1
     optionalDependencies:
       '@types/react': 19.2.17
-
-  react@18.3.1:
-    dependencies:
-      loose-envify: 1.4.0
-
-  react@19.1.0: {}
 
   react@19.2.7: {}
 
@@ -10967,12 +10886,6 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  scheduler@0.23.2:
-    dependencies:
-      loose-envify: 1.4.0
-
-  scheduler@0.26.0: {}
-
   scheduler@0.27.0: {}
 
   search-insights@2.17.3: {}
@@ -11129,10 +11042,10 @@ snapshots:
     dependencies:
       inline-style-parser: 0.2.7
 
-  styled-jsx@5.1.6(react@19.1.0):
+  styled-jsx@5.1.6(react@19.2.7):
     dependencies:
       client-only: 0.0.1
-      react: 19.1.0
+      react: 19.2.7
 
   tabbable@6.5.0: {}
 
@@ -11157,7 +11070,7 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 3.6.2
 
-  telefunc@0.2.20(@babel/core@7.29.7)(@babel/parser@7.29.7)(@babel/types@7.29.7)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)):
+  telefunc@0.2.20(@babel/core@7.29.7)(@babel/parser@7.29.7)(@babel/types@7.29.7)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)):
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/json-serializer': 0.5.25
@@ -11170,28 +11083,11 @@ snapshots:
       '@babel/core': 7.29.7
       '@babel/parser': 7.29.7
       '@babel/types': 7.29.7
-      react: 18.3.1
-      react-streaming: 0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vite: 7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
-
-  telefunc@0.2.20(@babel/core@7.29.7)(@babel/parser@7.29.7)(@babel/types@7.29.7)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@18.3.1)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)):
-    dependencies:
-      '@brillout/import': 0.2.6
-      '@brillout/json-serializer': 0.5.25
-      '@brillout/picocolors': 1.0.31
-      '@brillout/vite-plugin-server-entry': 0.7.19
-      es-module-lexer: 1.7.0
-      magic-string: 0.30.21
-      ts-morph: 26.0.0
-    optionalDependencies:
-      '@babel/core': 7.29.7
-      '@babel/parser': 7.29.7
-      '@babel/types': 7.29.7
-      react: 18.3.1
+      react: 19.2.7
       react-streaming: 0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       vite: 7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
 
-  telefunc@0.2.20(@babel/core@7.29.7)(@babel/parser@7.29.7)(@babel/types@7.29.7)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@18.3.1)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)):
+  telefunc@0.2.20(@babel/core@7.29.7)(@babel/parser@7.29.7)(@babel/types@7.29.7)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react@19.2.7)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)):
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/json-serializer': 0.5.25
@@ -11204,7 +11100,7 @@ snapshots:
       '@babel/core': 7.29.7
       '@babel/parser': 7.29.7
       '@babel/types': 7.29.7
-      react: 18.3.1
+      react: 19.2.7
       react-streaming: 0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       vite: 8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)
 
@@ -11363,33 +11259,19 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vike-react@0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))):
+  vike-react@0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))):
     dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-streaming: 0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vike: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      react-streaming: 0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      vike: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
 
-  vike-react@0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))):
+  vike-react@0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))):
     dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-streaming: 0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vike: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
-
-  vike-react@0.6.24(react-dom@19.2.7(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))):
-    dependencies:
-      react: 18.3.1
-      react-dom: 19.2.7(react@18.3.1)
-      react-streaming: 0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1)
-      vike: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
-
-  vike-react@0.6.25(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))):
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      react-streaming: 0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vike: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      react-streaming: 0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      vike: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
 
   vike-react@0.6.25(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@20.19.43)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))):
     dependencies:
@@ -11412,33 +11294,11 @@ snapshots:
       react-streaming: 0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       vike: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
 
-  vike-toolbar@file:examples/react/ejected/vike-toolbar(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike-react@0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))):
+  vike-toolbar@file:examples/react/ejected/vike-toolbar(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike-react@0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))):
     optionalDependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-      vike-react: 0.6.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
-
-  vike-vue@0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3)):
-    dependencies:
-      magic-string: 0.30.21
-      oxc-parser: 0.104.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
-      oxc-walker: 0.6.0(oxc-parser@0.104.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1))
-      vike: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
-      vue: 3.5.38(typescript@5.9.3)
-    transitivePeerDependencies:
-      - '@emnapi/core'
-      - '@emnapi/runtime'
-
-  vike-vue@0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3)):
-    dependencies:
-      magic-string: 0.30.21
-      oxc-parser: 0.104.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
-      oxc-walker: 0.6.0(oxc-parser@0.104.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1))
-      vike: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
-      vue: 3.5.38(typescript@5.9.3)
-    transitivePeerDependencies:
-      - '@emnapi/core'
-      - '@emnapi/runtime'
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
+      vike-react: 0.6.24(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
 
   vike-vue@0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3)):
     dependencies:
@@ -11461,162 +11321,6 @@ snapshots:
     transitivePeerDependencies:
       - '@emnapi/core'
       - '@emnapi/runtime'
-
-  vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)):
-    dependencies:
-      '@babel/core': 7.29.7
-      '@babel/types': 7.29.7
-      '@brillout/import': 0.2.6
-      '@brillout/json-serializer': 0.5.25
-      '@brillout/picocolors': 1.0.31
-      '@brillout/vite-plugin-server-entry': 0.7.19
-      '@universal-deploy/store': 0.2.1(srvx@0.11.17)
-      '@universal-deploy/vite': 0.1.10(@types/express@5.0.6)(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
-      '@universal-middleware/core': 0.4.18(@types/express@5.0.6)(srvx@0.11.17)
-      '@universal-middleware/node': 0.2.1(@types/express@5.0.6)(srvx@0.11.17)
-      cac: 6.7.14
-      convert-route: 1.1.1
-      es-module-lexer: 1.7.0
-      esbuild: 0.28.1
-      json5: 2.2.3
-      magic-string: 0.30.21
-      picomatch: 4.0.4
-      semver: 7.8.4
-      sirv: 3.0.2
-      source-map-support: 0.5.21
-      tinyglobby: 0.2.17
-      vite-plugin-wrapper: 0.1.0(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
-    optionalDependencies:
-      react-streaming: 0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vite: 7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
-    transitivePeerDependencies:
-      - '@cloudflare/workers-types'
-      - '@hattip/core'
-      - '@types/express'
-      - '@webroute/route'
-      - elysia
-      - fastify
-      - h3
-      - hono
-      - srvx
-      - supports-color
-
-  vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)):
-    dependencies:
-      '@babel/core': 7.29.7
-      '@babel/types': 7.29.7
-      '@brillout/import': 0.2.6
-      '@brillout/json-serializer': 0.5.25
-      '@brillout/picocolors': 1.0.31
-      '@brillout/vite-plugin-server-entry': 0.7.19
-      '@universal-deploy/store': 0.2.1(srvx@0.11.17)
-      '@universal-deploy/vite': 0.1.10(@types/express@5.0.6)(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
-      '@universal-middleware/core': 0.4.18(@types/express@5.0.6)(srvx@0.11.17)
-      '@universal-middleware/node': 0.2.1(@types/express@5.0.6)(srvx@0.11.17)
-      cac: 6.7.14
-      convert-route: 1.1.1
-      es-module-lexer: 1.7.0
-      esbuild: 0.28.1
-      json5: 2.2.3
-      magic-string: 0.30.21
-      picomatch: 4.0.4
-      semver: 7.8.4
-      sirv: 3.0.2
-      source-map-support: 0.5.21
-      tinyglobby: 0.2.17
-      vite-plugin-wrapper: 0.1.0(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
-    optionalDependencies:
-      react-streaming: 0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vite: 7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
-    transitivePeerDependencies:
-      - '@cloudflare/workers-types'
-      - '@hattip/core'
-      - '@types/express'
-      - '@webroute/route'
-      - elysia
-      - fastify
-      - h3
-      - hono
-      - srvx
-      - supports-color
-
-  vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)):
-    dependencies:
-      '@babel/core': 7.29.7
-      '@babel/types': 7.29.7
-      '@brillout/import': 0.2.6
-      '@brillout/json-serializer': 0.5.25
-      '@brillout/picocolors': 1.0.31
-      '@brillout/vite-plugin-server-entry': 0.7.19
-      '@universal-deploy/store': 0.2.1(srvx@0.11.17)
-      '@universal-deploy/vite': 0.1.10(@types/express@5.0.6)(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
-      '@universal-middleware/core': 0.4.18(@types/express@5.0.6)(srvx@0.11.17)
-      '@universal-middleware/node': 0.2.1(@types/express@5.0.6)(srvx@0.11.17)
-      cac: 6.7.14
-      convert-route: 1.1.1
-      es-module-lexer: 1.7.0
-      esbuild: 0.28.1
-      json5: 2.2.3
-      magic-string: 0.30.21
-      picomatch: 4.0.4
-      semver: 7.8.4
-      sirv: 3.0.2
-      source-map-support: 0.5.21
-      tinyglobby: 0.2.17
-      vite-plugin-wrapper: 0.1.0(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
-    optionalDependencies:
-      react-streaming: 0.4.20(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vite: 8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)
-    transitivePeerDependencies:
-      - '@cloudflare/workers-types'
-      - '@hattip/core'
-      - '@types/express'
-      - '@webroute/route'
-      - elysia
-      - fastify
-      - h3
-      - hono
-      - srvx
-      - supports-color
-
-  vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)):
-    dependencies:
-      '@babel/core': 7.29.7
-      '@babel/types': 7.29.7
-      '@brillout/import': 0.2.6
-      '@brillout/json-serializer': 0.5.25
-      '@brillout/picocolors': 1.0.31
-      '@brillout/vite-plugin-server-entry': 0.7.19
-      '@universal-deploy/store': 0.2.1(srvx@0.11.17)
-      '@universal-deploy/vite': 0.1.10(@types/express@5.0.6)(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
-      '@universal-middleware/core': 0.4.18(@types/express@5.0.6)(srvx@0.11.17)
-      '@universal-middleware/node': 0.2.1(@types/express@5.0.6)(srvx@0.11.17)
-      cac: 6.7.14
-      convert-route: 1.1.1
-      es-module-lexer: 1.7.0
-      esbuild: 0.28.1
-      json5: 2.2.3
-      magic-string: 0.30.21
-      picomatch: 4.0.4
-      semver: 7.8.4
-      sirv: 3.0.2
-      source-map-support: 0.5.21
-      tinyglobby: 0.2.17
-      vite-plugin-wrapper: 0.1.0(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
-    optionalDependencies:
-      react-streaming: 0.4.20(react-dom@19.2.7(react@18.3.1))(react@18.3.1)
-      vite: 8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)
-    transitivePeerDependencies:
-      - '@cloudflare/workers-types'
-      - '@hattip/core'
-      - '@types/express'
-      - '@webroute/route'
-      - elysia
-      - fastify
-      - h3
-      - hono
-      - srvx
-      - supports-color
 
   vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)):
     dependencies:

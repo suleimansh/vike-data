@@ -13,12 +13,32 @@
 import vikeReact from 'vike-react/config'
 import vikeView from 'vike-crud/react/config'
 import { viewPages } from 'vike-crud/react/pages'
+import themesExt from 'vike-themes/react'
+import toolbarExt from 'vike-toolbar/react'
+import layoutsExt from 'vike-layouts/react'
 import views from './+views.js'
 import { postsSchema } from './posts.schema.js'
 
 export default {
-  extends: [vikeReact, vikeView],
+  // vike-crud's generated CRUD pages (the tables, forms, toolbars) style against vike-themes'
+  // --color-* token contract, so without a theme installed /posts renders unstyled. The standard
+  // UI tier fixes that, each a one-line install:
+  //   - themes:  the design tokens + base body style (built-in `default` theme, no config needed)
+  //              + the appearance picker.
+  //   - toolbar: the floating dev toolbar.
+  //   - layouts: the app shell; `layout: 'topbar'` frames every route.
+  extends: [vikeReact, vikeView, themesExt, toolbarExt, layoutsExt],
   title: 'vike-crud example',
+
+  // The topbar shell + nav across the four demo routes.
+  layout: 'topbar',
+  logo: '◆ vike-crud',
+  nav: [
+    { label: 'Posts (CRUD)', href: '/posts' },
+    { label: 'Inline', href: '/inline' },
+    { label: 'Ejected', href: '/posts-ejected' },
+    { label: 'Actions', href: '/actions-demo' },
+  ],
 
   schemas: [postsSchema],
   pages: viewPages(views),

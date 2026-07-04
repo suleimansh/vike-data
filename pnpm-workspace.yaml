@@ -29,6 +29,14 @@ verifyDepsBeforeRun: false
 # one publishes with #3356.
 overrides:
   vike: 0.4.259-commit-f6ecfb2
+  # Pin ONE React across the whole workspace (deps, peers, transitive). The UI packages
+  # (vike-themes/-layouts/-toolbar/-blocks) declare react as a `>=18` peer, so with a mix of
+  # react 18 + 19 example apps pnpm kept a react@18.3.1 copy; vite's `resolve.dedupe` then bound
+  # to it while an app's react-dom was 19, crashing SSR with a null hooks dispatcher
+  # (`Cannot read properties of null (reading 'useContext')`). Forcing react 19 everywhere
+  # collapses it to a single copy. Bump both together.
+  react: ^19.2.0
+  react-dom: ^19.2.0
 
 minimumReleaseAgeExclude:
   - vike@0.4.259-commit-f6ecfb2

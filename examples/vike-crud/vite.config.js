@@ -8,7 +8,7 @@ export default {
   // vike-crud / vike-blocks ship plain .jsx source (incl. the pointer-imported ViewPage Vike
   // pulls in); serve them as source instead of pre-bundling so the automatic-JSX transform applies.
   optimizeDeps: {
-    exclude: ['vike-crud', 'vike-blocks'],
+    exclude: ['vike-crud', 'vike-blocks', 'vike-themes', 'vike-layouts', 'vike-toolbar'],
   },
   // The workspace UI packages resolve react from their own node_modules; dedupe so the app and
   // vike-crud's <ListView> share ONE React instance (otherwise SSR throws "Objects are not valid
