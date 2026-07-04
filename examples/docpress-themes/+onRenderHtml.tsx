@@ -39,6 +39,7 @@ async function onRenderHtml(pageContext: PageContextServer) {
              not a tooltip. Suppress it on the chrome; the article keeps DocPress's behavior. -->
         <style>
           html,body{margin:0}body{min-height:100vh;background:var(--color-bg,#fff)}
+          a{color:var(--color-primary,#4747ff)}
           [aria-label]::before{content:none!important}
           [data-region="article"] [aria-label]::before{content:attr(aria-label)!important}
         </style>

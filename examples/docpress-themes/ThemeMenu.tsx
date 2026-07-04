@@ -56,21 +56,6 @@ function writeCookie(name: string, value: string): void {
   document.cookie = `${name}=${encodeURIComponent(value)};path=/;max-age=31536000;samesite=lax`
 }
 
-// Static rules rendered in the SSR <style> below — NOT via a component-imported
-// stylesheet. In Vite dev, component CSS is injected client-side after first
-// paint, so any rule kept there lands late: the content would snap from full
-// width to the band, and links would animate from the browser default to the
-// theme color (the `transition: color` makes it a visible flicker). Shipping
-// these in the SSR HTML applies them on first paint, same as the palette.
-//   - .page-content: DocPress leaves landing-page content width-unconstrained;
-//     line it up with the top navigation (navMaxWidth: 1140). Doc pages set their
-//     own inline width and win over this rule.
-//   - a: theme the links DocPress paints from a variable (the landing page has no
-//     .doc-page wrapper, so DocPress' own link rule does not reach these).
-const STATIC_CSS =
-  '.page-content { width: 100%; max-width: 1140px; margin: auto; }\n' +
-  'a { color: var(--color-primary); }'
-
 function themeCss(themeName: ThemeName, appearance: Appearance): string {
   const theme = THEMES[themeName] ?? THEMES.indigo
   // vike-themes emits its agnostic `--color-*` contract on `body`. DocPress
@@ -146,14 +131,12 @@ function ThemeMenu() {
   }
 
   return (
-    <>
-      {/* The palette itself is applied by the no-flash <head> script (see
-          `headHtml`); this control only seeds the <select> values and mirrors
-          switches onto that head <style>. Layout + link color are SSR'd inline
-          here so they land on first paint (no width snap, no link-color flash). */}
-      <style dangerouslySetInnerHTML={{ __html: STATIC_CSS }} />
-      {/* Stacked one-per-row: this control lives in the vike-toolbar popover (a narrow column). */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 10, minWidth: 190 }}>
+    // The palette is applied by the no-flash <head> script (see `headHtml`); this control only seeds
+    // the <select> values and mirrors switches onto that head <style>. The link color + backdrop are
+    // SSR'd in +onRenderHtml so they land on first paint (no flash) — not here, since this control now
+    // renders only in the client-mounted toolbar popover.
+    // Stacked one-per-row: this control lives in the vike-toolbar popover (a narrow column).
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 10, minWidth: 190 }}>
         <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
           <span style={{ opacity: 0.7, fontSize: 13 }}>Theme</span>
           <select
@@ -185,6 +168,5 @@ function ThemeMenu() {
           </select>
         </label>
       </div>
-    </>
   )
 }
