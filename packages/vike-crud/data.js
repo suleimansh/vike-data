@@ -85,11 +85,22 @@ async function hydrateList(section, { db, tables, scope, ctx, search = {} }) {
 // The record (detail) block's one row, keyed on the primary key AND the scope so a scoped user can
 // only ever load a row they own. The id comes from the block descriptor (`section.props.id`) or,
 // for a route-driven detail page (`/posts/@id`), the route param passed through as `opts.id`.
-async function hydrateRecord(section, { db, tables, scope, ctx, id: routeId }) {
+// Whether the request's `id` targets THIS section. On a single-screen route page (no
+// `activeScreen` passed) the id always applies (the #577 behavior). On a dialog-mode index page
+// several record/form sections coexist, so the id only applies to the one whose screen the URL
+// activated (`?view=` -> the view section, `?edit=` -> the edit section) — the rest stay blank.
+function idForSection(section, opts) {
+  const gated = opts.activeScreen !== undefined && section.props.screen != null
+  const targeted = !gated || section.props.screen === opts.activeScreen
+  return section.props.id ?? (targeted ? (opts.id ?? null) : null)
+}
+
+async function hydrateRecord(section, opts) {
+  const { db, tables, scope, ctx } = opts
   const { table, fields } = section.resolved
   const schemaTable = tableNamed(tables, table)
   const pk = primaryKeyOf(schemaTable)
-  const id = section.props.id ?? routeId
+  const id = idForSection(section, opts)
   if (id == null) return { ...section, resolved: { ...section.resolved, row: null, pk } }
   const owned = { ...scopeFor(scope, table, ctx), [pk]: id }
   const row = await db[table].findOne(owned)
@@ -100,11 +111,12 @@ async function hydrateRecord(section, { db, tables, scope, ctx, id: routeId }) {
 // the form; without one (the create screen) it stays blank. Same primary-key-AND-scope key as the
 // record block, so an edit form can only ever pre-fill a row the user owns (an id-guess for
 // another owner yields `values: null`, which the caller turns into a 404).
-async function hydrateForm(section, { db, tables, scope, ctx, id: routeId }) {
+async function hydrateForm(section, opts) {
+  const { db, tables, scope, ctx } = opts
   const { table, fields } = section.resolved
   const schemaTable = tableNamed(tables, table)
   const pk = primaryKeyOf(schemaTable)
-  const id = section.props.id ?? routeId
+  const id = idForSection(section, opts)
   if (id == null) return { ...section, resolved: { ...section.resolved, values: {}, pk } }
   const owned = { ...scopeFor(scope, table, ctx), [pk]: id }
   const row = await db[table].findOne(owned)
