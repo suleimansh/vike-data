@@ -42,6 +42,8 @@ const catalog = [
   { name: 'Table', href: '/table', tag: 'interactive', desc: 'A non-schema data table — feed it rows + columns directly (API results, computed data). String or { key, label, align, format } columns, click-to-sort, empty state. The plain-data counterpart to the schema-driven list.' },
   { name: 'Pagination', href: '/pagination', tag: 'interactive', desc: 'Page navigation for a list/table (shadcn Pagination) — the active page outlined + aria-current, chevron Prev/Next, ellipsis gaps. Each page is a real <a href> built from a {page} template, so paging works with no client JS. Owns the page-range math.' },
   { name: 'Code block', href: '/code', tag: 'interactive', desc: 'A code snippet with a filename header, copy button, line numbers, and highlight / diff / focus decorations (builder or inline markers). Dep-free tokenizer, no Shiki.' },
+  { name: 'Stat', href: '/stat', tag: 'leaf', desc: 'A KPI / metric tile — a title over a single value. A bespoke block (no builder): { block: "stat", title, value }, the shape a dashboard query emits. Compose several in a metrics row.' },
+  { name: 'Markdown', href: '/markdown', tag: 'leaf', desc: 'A leaf for a markdown source string. The built-in renderer is an MVP (prints the source verbatim, zero deps); register a real markdown renderer to format it. For AI/chat bodies and long-form copy.' },
   { name: 'Primitives', href: '/primitives', tag: 'leaf', desc: 'heading · text (lead / muted / blockquote / code) · badge · list · divider · link — the built-in leaf blocks, composed with definePage.' },
   { name: 'Custom blocks', href: '/raw', tag: 'extend', desc: 'Define your own with defineBlock, or author a page as plain { block, ...props } descriptors.' },
 ]
@@ -53,9 +55,9 @@ const SECTIONS = [
   { label: 'Overlays & menus', hrefs: ['/dialog', '/confirm', '/sheet', '/drawer', '/dropdown', '/command', '/nav-menu', '/tooltip'] },
   { label: 'Navigation', hrefs: ['/breadcrumb', '/pagination', '/tabs'] },
   { label: 'Layout & containers', hrefs: ['/card', '/accordion'] },
-  { label: 'Data display', hrefs: ['/table', '/chart', '/avatar', '/item', '/code'] },
+  { label: 'Data display', hrefs: ['/table', '/chart', '/stat', '/avatar', '/item', '/code'] },
   { label: 'Feedback & status', hrefs: ['/alert', '/toast', '/progress', '/skeleton'] },
-  { label: 'Content & typography', hrefs: ['/heading', '/kbd', '/primitives'] },
+  { label: 'Content & typography', hrefs: ['/heading', '/markdown', '/kbd', '/primitives'] },
   { label: 'Chat & AI', hrefs: ['/bubble', '/message', '/message-scroller'] },
   { label: 'Extend', hrefs: ['/raw'] },
 ]
