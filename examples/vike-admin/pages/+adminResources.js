@@ -26,13 +26,13 @@ const postsResource = defineResource({
   table: 'posts',
   label: 'Posts',
   recordTitle: 'title',
-  list: [
+  index: [
     column('title').sortable().searchable(),
     column('published'),
     column('author_id').label('Author'), // FK -> resolved to the user's email (users.recordTitle)
     column('created_at').label('Created').format('since'),
   ],
-  form: [
+  edit: [
     field('title').required(),
     field('body'),
     field('published'),
@@ -51,7 +51,7 @@ const usersResource = defineResource({
   table: 'users',
   label: 'Users',
   recordTitle: 'email',
-  list: [column('email').searchable(), column('name'), column('created_at').format('since')],
+  index: [column('email').searchable(), column('name'), column('created_at').format('since')],
   ...signedIn,
 })
 

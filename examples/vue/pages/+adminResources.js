@@ -5,13 +5,13 @@ const usersResource = defineResource({
   table: 'users',
   label: 'Users',
   recordTitle: 'email',
-  list: [
+  index: [
     column('email').sortable().searchable(),
     column('name'),
     column('active'),
     column('created_at').label('Joined').format('since'),
   ],
-  form: [
+  edit: [
     field('email').type('email').required(),
     field('name'),
     field('active'),
@@ -26,8 +26,8 @@ const usersResource = defineResource({
 const sessionsResource = defineResource({
   table: 'sessions',
   label: 'Sessions',
-  list: [column('user_id').label('User'), column('token'), column('created_at').format('since')],
-  form: [
+  index: [column('user_id').label('User'), column('token'), column('created_at').format('since')],
+  edit: [
     field('user_id'),
     field('token').required(),
   ],

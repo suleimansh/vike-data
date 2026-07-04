@@ -21,7 +21,7 @@ const sessionsSchema = defineSchema('sessions', (t) => {
 // Scoped like the demo: an admin sees every row; anyone else is bound to their own user_id.
 const resource = defineResource({
   table: 'sessions',
-  list: [column('user_id').sortable(), column('token')],
+  index: [column('user_id').sortable(), column('token')],
   query: (q, ctx) => (ctx.user.role === 'admin' ? q : q.where('user_id', ctx.user.id)),
 })
 const config = { schemas: [sessionsSchema], adminResources: [resource] }

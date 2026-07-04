@@ -80,7 +80,7 @@ test('an unknown id redirects to the list', async () => {
 })
 
 test('a `.when`-hidden record field is dropped (value never leaves the server)', async () => {
-  build({ record: [display('title'), display('secret_notes').when((c) => c.user.role === 'admin')] })
+  build({ view: [display('title'), display('secret_notes').when((c) => c.user.role === 'admin')] })
   await seed()
   const asUser = await viewData(ctx(USER, 'p1'))
   assert.equal(asUser.fields.some((f) => f.name === 'secret_notes'), false)
