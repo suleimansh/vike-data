@@ -62,7 +62,7 @@ defineResource({ table: 'tags', mode: 'dialog' }) // overlay on the list; 'route
 - `'route'` (default): each screen is its own page (`/admin/:table/:id`, `/:id/edit`, `/new`). Full navigation, works with no client JS.
 - `'dialog'`: the screens open as an overlay ON the list route, driven by a shareable, refresh-safe URL param (`/admin/:table?view=@id` / `?edit=@id` / `?create`). The forms still POST to the `/new` and `/:id/edit` routes, so it is the same write path, just presented in a modal.
 
-Dialog rendering is **React only** for now (it reuses vike-blocks' `Overlay`); on Vue a `mode: 'dialog'` resource falls back to route mode. `mode` mirrors vike-crud's `defineCrud({ mode })`, but admin defaults to `'route'` (route-per-page is admin's natural shape) where a per-page vike-crud defaults to `'dialog'`.
+Dialog rendering works on **React and Vue** (both reuse vike-blocks' `Overlay`). `mode` mirrors vike-crud's `defineCrud({ mode })`, but admin defaults to `'route'` (route-per-page is admin's natural shape) where a per-page vike-crud defaults to `'dialog'`.
 
 ### Row scoping
 
