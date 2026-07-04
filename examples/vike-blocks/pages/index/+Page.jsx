@@ -46,33 +46,64 @@ const catalog = [
   { name: 'Custom blocks', href: '/raw', tag: 'extend', desc: 'Define your own with defineBlock, or author a page as plain { block, ...props } descriptors.' },
 ]
 
+// Domain grouping: the catalog above stays a flat map (by href); this orders it into sections.
+const byHref = Object.fromEntries(catalog.map((c) => [c.href, c]))
+const SECTIONS = [
+  { label: 'Forms & inputs', hrefs: ['/button', '/input', '/textarea', '/checkbox', '/radio', '/select', '/combobox', '/switch', '/slider', '/calendar', '/date-picker', '/attachment', '/field', '/form'] },
+  { label: 'Overlays & menus', hrefs: ['/dialog', '/confirm', '/sheet', '/drawer', '/dropdown', '/command', '/nav-menu', '/tooltip'] },
+  { label: 'Navigation', hrefs: ['/breadcrumb', '/pagination', '/tabs'] },
+  { label: 'Layout & containers', hrefs: ['/card', '/accordion'] },
+  { label: 'Data display', hrefs: ['/table', '/chart', '/avatar', '/item', '/code'] },
+  { label: 'Feedback & status', hrefs: ['/alert', '/toast', '/progress', '/skeleton'] },
+  { label: 'Content & typography', hrefs: ['/heading', '/kbd', '/primitives'] },
+  { label: 'Chat & AI', hrefs: ['/bubble', '/message', '/message-scroller'] },
+  { label: 'Extend', hrefs: ['/raw'] },
+]
+
+const cardStyle = {
+  display: 'block',
+  textDecoration: 'none',
+  color: 'inherit',
+  border: '1px solid var(--color-border)',
+  borderRadius: 12,
+  padding: '1.1rem 1.2rem',
+  background: 'var(--color-surface)',
+}
+
+function BlockCard({ c }) {
+  return (
+    <a href={c.href} className="vb-card" style={cardStyle}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+        <span style={{ fontSize: 17, fontWeight: 600 }}>{c.name}</span>
+        <span style={{ fontSize: 11, color: 'var(--color-muted)', border: '1px solid var(--color-border)', borderRadius: 999, padding: '1px 8px' }}>{c.tag}</span>
+      </div>
+      <p style={{ margin: '0 0 0.85rem', fontSize: 14, color: 'var(--color-muted)', lineHeight: 1.5 }}>{c.desc}</p>
+      <span style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 500 }}>View demo -&gt;</span>
+    </a>
+  )
+}
+
 export default function CatalogPage() {
   return (
-    <div style={{ maxWidth: 860, margin: '3rem auto', padding: '0 1.25rem', fontFamily: 'system-ui, sans-serif', color: '#0f172a' }}>
-      <style>{'.vb-card{transition:border-color .15s ease, transform .15s ease}.vb-card:hover{border-color:#2563eb;transform:translateY(-2px)}'}</style>
-      <header style={{ marginBottom: '2rem' }}>
+    <div style={{ maxWidth: 980, margin: '2rem auto', padding: '0 1.25rem', fontFamily: 'system-ui, sans-serif', color: 'var(--color-text)' }}>
+      <style>{'.vb-card{transition:border-color .15s ease, transform .15s ease}.vb-card:hover{border-color:var(--color-primary);transform:translateY(-2px)}'}</style>
+      <header style={{ marginBottom: '1.75rem' }}>
         <h1 style={{ fontSize: 30, margin: '0 0 0.4rem' }}>vike-blocks</h1>
-        <p style={{ color: '#64748b', fontSize: 16, margin: 0, lineHeight: 1.5 }}>
-          Composable UI as data — a page is a composition of blocks. Browse the built-in catalog:
+        <p style={{ color: 'var(--color-muted)', fontSize: 16, margin: 0, lineHeight: 1.5 }}>
+          Composable UI as data — a page is a composition of blocks. {catalog.length} blocks, by domain:
         </p>
       </header>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '1rem' }}>
-        {catalog.map((c) => (
-          <a
-            key={c.href}
-            href={c.href}
-            className="vb-card"
-            style={{ display: 'block', textDecoration: 'none', color: 'inherit', border: '1px solid #e2e8f0', borderRadius: 12, padding: '1.1rem 1.2rem', background: '#fff' }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-              <span style={{ fontSize: 17, fontWeight: 600 }}>{c.name}</span>
-              <span style={{ fontSize: 11, color: '#64748b', border: '1px solid #e2e8f0', borderRadius: 999, padding: '1px 8px' }}>{c.tag}</span>
-            </div>
-            <p style={{ margin: '0 0 0.85rem', fontSize: 14, color: '#475569', lineHeight: 1.5 }}>{c.desc}</p>
-            <span style={{ fontSize: 13, color: '#2563eb', fontWeight: 500 }}>View demo -&gt;</span>
-          </a>
-        ))}
-      </div>
+      {SECTIONS.map((section) => (
+        <section key={section.label} style={{ marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: 13, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--color-muted)', margin: '0 0 0.9rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--color-border)' }}>
+            {section.label}
+            <span style={{ marginLeft: '0.5rem', fontWeight: 400 }}>{section.hrefs.length}</span>
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '1rem' }}>
+            {section.hrefs.map((href) => byHref[href] && <BlockCard key={href} c={byHref[href]} />)}
+          </div>
+        </section>
+      ))}
     </div>
   )
 }
