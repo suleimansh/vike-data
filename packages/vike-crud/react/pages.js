@@ -30,9 +30,45 @@ export function viewPages(views) {
     }))
 }
 
-// The view whose route matches this page (the generic data hook resolves it at request time).
+// Match a route PATTERN (Vike route-string style, an `@seg` segment is a named param) against a
+// concrete pathname. Returns the captured params (`{}` when there are none), or null when the
+// pattern doesn't match. Fixed-shape CRUD routes only — no `*` catch-all.
+export function matchRoute(pattern, pathname) {
+  const pp = String(pattern).replace(/\/+$/, '').split('/')
+  const xp = String(pathname).replace(/\/+$/, '').split('/')
+  if (pp.length !== xp.length) return null
+  const params = {}
+  for (let i = 0; i < pp.length; i++) {
+    const seg = pp[i]
+    if (seg.startsWith('@')) {
+      if (xp[i] === '') return null
+      params[seg.slice(1)] = decodeURIComponent(xp[i])
+    } else if (seg !== xp[i]) {
+      return null
+    }
+  }
+  return params
+}
+
+// Resolve a pathname to its view AND the captured route params. Static segments win over params,
+// so `/posts/new` (the create screen) is picked over `/posts/@id` (the view screen) for the
+// pathname `/posts/new`. Returns null when nothing matches.
+export function resolveViewRequest(views, pathname) {
+  let best = null
+  for (const view of normalizeViews(views)) {
+    if (typeof view?.route !== 'string' || !view.route) continue
+    const params = matchRoute(view.route, pathname)
+    if (!params) continue
+    const literals = view.route.split('/').filter((s) => s && !s.startsWith('@')).length
+    if (!best || literals > best.literals) best = { view, params, literals }
+  }
+  return best ? { view: best.view, params: best.params } : null
+}
+
+// The view whose route matches this pathname (exact or `@param`), params discarded. Kept for the
+// callers that only need the view; the data hook uses resolveViewRequest to also read the params.
 export function viewForRoute(views, route) {
-  return normalizeViews(views).find((v) => v.route === route) ?? null
+  return resolveViewRequest(views, route)?.view ?? null
 }
 
 // The resolved form fields for a `form` block on `table` in this view — what the POST handler

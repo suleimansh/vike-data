@@ -20,4 +20,4 @@ export { registerFieldWidget, getFieldWidget, fieldWidgetTokens } from './widget
 // Re-export the dispatch surface (which also registers the primitive block renderers).
 export { Blocks, Page, registerBlockRenderer, getBlockRenderer, blockRendererTokens } from 'vike-blocks/react'
 // Page generation: turn `definePage`s into Vike pages (spread into `+config.js` `pages`).
-export { viewPages, viewForRoute } from './pages.js'
+export { viewPages, viewForRoute, resolveViewRequest, matchRoute } from './pages.js'
