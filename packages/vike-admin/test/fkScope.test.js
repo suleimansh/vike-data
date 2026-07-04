@@ -24,7 +24,11 @@ const projectsSchema = defineSchema('projects', (t) => {
 })
 
 // users is the FK TARGET and is itself scoped: a non-admin sees only their own user row.
-const users = defineResource({ table: 'users', recordTitle: 'email', scope: (u) => (u?.role === 'admin' ? null : { id: u.id }) })
+const users = defineResource({
+  table: 'users',
+  recordTitle: 'email',
+  query: (q, ctx) => (ctx.user?.role === 'admin' ? q : q.where('id', ctx.user.id)),
+})
 // projects is unscoped, so a non-admin can open its create/edit form and hit the FK lookup.
 const projects = defineResource({ table: 'projects' })
 const config = { schemas: [usersSchema, projectsSchema], adminResources: [users, projects] }

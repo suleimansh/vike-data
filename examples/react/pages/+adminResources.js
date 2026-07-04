@@ -1,8 +1,8 @@
 // The app's contribution to vike-admin's cumulative `adminResources` point. It lives in
 // its own +<configName>.js file (not inline in +config.js) because a resource carries
-// FUNCTIONS — canView / canEdit predicates, the column/field builders — which Vike cannot
-// serialize into the page config; a dedicated file is pointer-imported instead. Same seam
-// as `themes` / `messages`, just runtime values rather than plain data.
+// FUNCTIONS — the auth predicates (query / onCreate / canX), the column/field builders —
+// which Vike cannot serialize into the page config; a dedicated file is pointer-imported
+// instead. Same seam as `themes` / `messages`, just runtime values rather than plain data.
 //
 // A resource is the REFINEMENT on top of a composed-schema table: here, `users` and
 // `sessions` (both declared by vike-auth's schema) get curated lists + forms. Drop the
@@ -32,12 +32,15 @@ const usersResource = defineResource({
     field('avatar'),
     // id / password_hash / timestamps are auto-hidden by convention.
   ],
-  // RBAC (#103): the admin predicates now delegate to the same can() the rest of the
-  // app shares, instead of an ad-hoc check. Sign in as ada@example.com (admin role ->
-  // users.view + users.edit) to see + edit Users; alan@example.com (member) is denied
+  // RBAC (#103): the admin gates delegate to the same can() the rest of the app shares. The
+  // defineCrud model (#581) splits the old `canView`/`canEdit` into per-screen gates: listing
+  // needs `users.view`; creating / editing / deleting need `users.edit`. Sign in as
+  // ada@example.com (admin -> both) to see + edit Users; alan@example.com (member) is denied
   // both, so the Users resource disappears from /admin for him.
-  canView: (user) => can(user, 'users.view'),
-  canEdit: (user) => can(user, 'users.edit'),
+  canIndex: (ctx) => can(ctx.user, 'users.view'),
+  canCreate: (ctx) => can(ctx.user, 'users.edit'),
+  canEdit: (record, ctx) => can(ctx.user, 'users.edit'),
+  canDelete: (record, ctx) => can(ctx.user, 'users.edit'),
 })
 
 // A second resource on `sessions` whose `user_id` column references `users.id`. vike-admin
@@ -52,12 +55,14 @@ const sessionsResource = defineResource({
     field('user_id'), // FK -> rendered as a user picker
     field('token').required(),
   ],
-  canView: (user) => !!user, // any signed-in user; the scope below bounds what they see
-  // Row scoping (#104) now backed by RBAC (#103): an admin role bypasses scoping and sees
-  // every session; anyone else is scoped to their own. hasRole(user, 'admin') replaces the
-  // old ad-hoc `user.role === 'admin'`. So ada (admin) sees all sessions, alan (member) only
-  // his own — orthogonal to can(): row scoping is ABAC, the permission check is RBAC.
-  scope: (user) => (hasRole(user, 'admin') ? null : { user_id: user.id }),
+  canIndex: (ctx) => !!ctx.user, // any signed-in user; the query below bounds what they see
+  // Row scoping (#104) backed by RBAC (#103): an admin role reads every session; anyone else is
+  // bounded to their own via the `query` builder, and `onCreate` stamps the owner onto inserts.
+  // hasRole(user, 'admin') replaces the old ad-hoc `user.role === 'admin'`. So ada (admin) sees
+  // all sessions, alan (member) only his own — orthogonal to can(): row scoping is ABAC, the
+  // permission check is RBAC.
+  query: (q, ctx) => (hasRole(ctx.user, 'admin') ? q : q.where('user_id', ctx.user.id)),
+  onCreate: (ctx) => ({ user_id: ctx.user.id }),
 })
 
 export default [usersResource, sessionsResource]

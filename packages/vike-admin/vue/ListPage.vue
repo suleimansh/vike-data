@@ -25,10 +25,15 @@ function listUrl(table, { page, sort, dir }) {
   return s ? `/admin/${table}?${s}` : `/admin/${table}`
 }
 
+// Per-row permission (#581): the data hook stamped `_canEdit` / `_canDelete` on each row. Show the
+// actions column only when at least one row is actionable; the per-row callback gates each cell.
+const anyEdit = data.rows.some((r) => r._canEdit)
+const anyDelete = data.rows.some((r) => r._canDelete)
+
 // ListView's function props: a sortable header links to the same list sorted by its column; a row
-// links to its edit page (only when the user may edit — so no edit column otherwise).
+// links to its edit page when the user may edit that row.
 const sortHref = (name, nextDir) => listUrl(data.table, { page: 1, sort: name, dir: nextDir })
-const rowHref = data.canEdit ? (row) => `/admin/${data.table}/${encodeURIComponent(String(row[data.pk]))}` : undefined
+const rowHref = anyEdit ? (row) => (row._canEdit ? `/admin/${data.table}/${encodeURIComponent(String(row[data.pk]))}` : undefined) : undefined
 
 // A per-row Delete control: vike-blocks' `confirm` block guarding a no-JS form that POSTs
 // `_action=delete` to the row's edit route, reusing the admin's existing owner-scoped delete
@@ -36,25 +41,27 @@ const rowHref = data.canEdit ? (row) => `/admin/${data.table}/${encodeURICompone
 // key AND the resource scope, so a scoped user can only delete a row they own. The confirm block
 // owns the form: with no JS it submits directly; hydrated, the submit is gated behind a themed
 // dialog (replacing the old window.confirm).
-const rowActions = data.canEdit
+const rowActions = anyDelete
   ? (row) =>
-      h(ConfirmView, {
-        label: 'Delete',
-        link: true,
-        intent: 'danger',
-        title: 'Delete this row?',
-        description: 'This cannot be undone.',
-        confirmLabel: 'Delete',
-        action: { to: `/admin/${data.table}/${encodeURIComponent(String(row[data.pk]))}`, method: 'post' },
-        fields: [{ name: '_action', value: 'delete' }],
-      })
+      row._canDelete
+        ? h(ConfirmView, {
+            label: 'Delete',
+            link: true,
+            intent: 'danger',
+            title: 'Delete this row?',
+            description: 'This cannot be undone.',
+            confirmLabel: 'Delete',
+            action: { to: `/admin/${data.table}/${encodeURIComponent(String(row[data.pk]))}`, method: 'post' },
+            fields: [{ name: '_action', value: 'delete' }],
+          })
+        : null
   : undefined
 </script>
 <template>
   <div :style="{ maxWidth: '900px', margin: '0 auto' }">
     <div :style="{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md, 1rem)' }">
       <h1 :style="{ margin: 0, fontSize: '22px' }">{{ data.label }}</h1>
-      <a v-if="data.canEdit" :href="`/admin/${data.table}/new`" :style="{ background: 'var(--color-primary)', color: 'var(--color-primary-text, #fff)', padding: '0.45rem 0.9rem', borderRadius: 'var(--radius, 8px)', textDecoration: 'none', fontSize: '14px' }">+ New</a>
+      <a v-if="data.canCreate" :href="`/admin/${data.table}/new`" :style="{ background: 'var(--color-primary)', color: 'var(--color-primary-text, #fff)', padding: '0.45rem 0.9rem', borderRadius: 'var(--radius, 8px)', textDecoration: 'none', fontSize: '14px' }">+ New</a>
     </div>
     <div :style="{ overflowX: 'auto', border: '1px solid var(--color-border)', borderRadius: 'var(--radius, 10px)', overflow: 'hidden', background: 'var(--color-surface)' }">
       <ListView
