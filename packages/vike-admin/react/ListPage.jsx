@@ -141,6 +141,7 @@ export default function ListPage() {
           sortHref={(name, nextDir) => listUrl(table, { page: 1, sort: name, dir: nextDir })}
           rowHref={anyView ? (row) => (row._canView ? viewHref(row[pk]) : undefined) : undefined}
           rowActions={anyActions ? (row) => <RowActions editHref={editHref(row[pk])} deleteAction={deleteAction(row[pk])} row={row} /> : undefined}
+          rowActionLabel="View"
           emptyLabel="No rows yet."
         />
       </div>

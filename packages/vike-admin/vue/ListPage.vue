@@ -106,6 +106,7 @@ const rowActions = anyActions
         :sortHref="sortHref"
         :rowHref="rowHref"
         :rowActions="rowActions"
+        row-action-label="View"
         empty-label="No rows found."
       />
     </div>

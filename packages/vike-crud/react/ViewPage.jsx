@@ -64,7 +64,7 @@ function ListSection({ section, pathname }) {
           + New
         </a>
       )}
-      <ListView {...section.resolved} rowHref={rowHref} rowActions={rowActions} sortHref={sortHref} />
+      <ListView {...section.resolved} rowHref={rowHref} rowActions={rowActions} rowActionLabel={rowScreen === 'view' ? 'View' : 'Edit'} sortHref={sortHref} />
     </div>
   )
 }
