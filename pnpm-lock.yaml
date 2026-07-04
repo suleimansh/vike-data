@@ -521,9 +521,18 @@ importers:
       vike-blocks:
         specifier: workspace:*
         version: link:../../packages/vike-blocks
+      vike-layouts:
+        specifier: workspace:*
+        version: link:../../packages/vike-layouts
       vike-react:
         specifier: ^0.6.25
         version: 0.6.25(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
+      vike-themes:
+        specifier: workspace:*
+        version: link:../../packages/vike-themes
+      vike-toolbar:
+        specifier: workspace:*
+        version: link:../../packages/vike-toolbar
       vite:
         specifier: ^7.1.0
         version: 7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
