@@ -9,6 +9,7 @@ import './CheckboxView.js' // side-effect: register the checkbox renderer
 import './RadioGroupView.js' // side-effect: register the radio renderer
 import './SelectView.js' // side-effect: register the select renderer
 import './ComboboxView.js' // side-effect: register the combobox renderer
+import './TagInputView.js' // side-effect: register the tag-input renderer
 import './SwitchView.js' // side-effect: register the switch renderer
 import './ToggleView.js' // side-effect: register the toggle-button + toggle-group renderers
 import './SliderView.js' // side-effect: register the slider renderer
@@ -57,6 +58,7 @@ export { CheckboxView } from './CheckboxView.js'
 export { RadioGroupView } from './RadioGroupView.js'
 export { SelectView } from './SelectView.js'
 export { ComboboxView } from './ComboboxView.js'
+export { TagInputView } from './TagInputView.js'
 export { SwitchView } from './SwitchView.js'
 export { ToggleButtonView, ToggleGroupView } from './ToggleView.js'
 export { SliderView } from './SliderView.js'

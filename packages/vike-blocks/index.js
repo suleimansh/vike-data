@@ -12,6 +12,7 @@ import './blocks/checkbox.js' // side-effect: register the checkbox block
 import './blocks/radio.js' // side-effect: register the radio block
 import './blocks/select.js' // side-effect: register the select block
 import './blocks/combobox.js' // side-effect: register the combobox block
+import './blocks/tag-input.js' // side-effect: register the tag-input block
 import './blocks/switch.js' // side-effect: register the switch block
 import './blocks/toggle.js' // side-effect: register the toggle-button + toggle-group blocks
 import './blocks/slider.js' // side-effect: register the slider block
@@ -61,6 +62,7 @@ export { checkbox } from './blocks/checkbox.js'
 export { radioGroup } from './blocks/radio.js'
 export { select } from './blocks/select.js'
 export { combobox } from './blocks/combobox.js'
+export { tagInput } from './blocks/tag-input.js'
 export { toggle } from './blocks/switch.js'
 export { toggleButton, toggleGroup } from './blocks/toggle.js'
 export { slider } from './blocks/slider.js'
