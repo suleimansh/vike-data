@@ -27,6 +27,13 @@ export function defineResource(def = {}) {
   // Destructure the old block keys too, so they DON'T pass through — the screen vocabulary is the
   // single authoring surface (no `list`/`record`/`form` back-door alongside `index`/`view`/`edit`).
   const { index, view, create, edit, list: _l, record: _r, form: _f, ...rest } = def
+  // `mode` (#596) picks how view/create/edit present: 'route' (default) or 'dialog'. Validate it here
+  // so a typo ('dailog') is a clear authoring error, not a silently-ignored key. It passes through in
+  // `...rest`; `resourceMode` reads it at render time. Admin has no 'inline' (route-per-page has no
+  // stacked-form concept), so only these two are accepted.
+  if (rest.mode !== undefined && rest.mode !== 'route' && rest.mode !== 'dialog') {
+    throw new Error(`defineResource: \`mode\` must be 'route' or 'dialog' (got ${JSON.stringify(rest.mode)})`)
+  }
   const form = edit ?? create
   return crud({
     ...rest,

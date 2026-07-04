@@ -8,6 +8,7 @@
 import { useData } from 'vike-react/useData'
 import { ListView } from 'vike-crud/react'
 import { ConfirmView, PaginationView } from 'vike-blocks/react'
+import { AdminDialog } from './AdminDialog.jsx'
 
 const actionLinkStyle = { color: 'var(--color-primary, #2563eb)', textDecoration: 'none', fontSize: 14 }
 
@@ -33,16 +34,18 @@ function DeleteRowForm({ action }) {
 }
 
 // The per-row action cell: an Edit link and/or a Delete control, each shown only when this user may
-// perform it (the data hook stamped `_canEdit` / `_canDelete`). Both target the row's edit route.
-function RowActions({ base, row }) {
+// perform it (the data hook stamped `_canEdit` / `_canDelete`). `editHref` is where Edit points (the
+// row's edit route, or a `?edit=id` dialog query in dialog mode); Delete always posts to the edit
+// route (where the update/delete hook lives), unchanged by presentation mode.
+function RowActions({ editHref, deleteAction, row }) {
   return (
     <span style={{ display: 'inline-flex', gap: '0.9rem', alignItems: 'center' }}>
       {row._canEdit && (
-        <a href={`${base}/edit`} style={actionLinkStyle}>
+        <a href={editHref} style={actionLinkStyle}>
           Edit
         </a>
       )}
-      {row._canDelete && <DeleteRowForm action={`${base}/edit`} />}
+      {row._canDelete && <DeleteRowForm action={deleteAction} />}
     </span>
   )
 }
@@ -60,8 +63,32 @@ function listUrl(table, { page, sort, dir }) {
   return s ? `/admin/${table}?${s}` : `/admin/${table}`
 }
 
+// Dialog mode (#596): a screen is a query param ON the list URL (`?view=id` / `?edit=id` / `?create`),
+// preserving the current page/sort so the list stays put behind the overlay. `?create` is emitted
+// bare (no `=`), matching vike-crud's dialog links.
+function dialogHref(table, { page, sort, dir }, param, id) {
+  const qs = new URLSearchParams()
+  if (page && page > 1) qs.set('page', String(page))
+  if (sort) {
+    qs.set('sort', sort)
+    if (dir === 'desc') qs.set('dir', 'desc')
+  }
+  const base = qs.toString()
+  const sep = base ? '&' : '?'
+  const screen = id != null ? `${param}=${encodeURIComponent(id)}` : param
+  return `/admin/${table}${base ? `?${base}` : ''}${sep}${screen}`
+}
+
 export default function ListPage() {
-  const { table, label, columns, rows, fkLabels, pk, canCreate, page, pageCount, total, sort, dir } = useData()
+  const { table, label, columns, rows, fkLabels, pk, canCreate, page, pageCount, total, sort, dir, mode, dialog } = useData()
+  // Presentation (#596): in 'dialog' mode the list links open view/create/edit as an overlay on THIS
+  // route via a query param; in 'route' mode (the default) they navigate to the /admin/:table/... pages.
+  const isDialog = mode === 'dialog'
+  const st = { page, sort, dir }
+  const newHref = isDialog ? dialogHref(table, st, 'create') : `/admin/${table}/new`
+  const viewHref = (id) => (isDialog ? dialogHref(table, st, 'view', id) : `/admin/${table}/${id}`)
+  const editHref = (id) => (isDialog ? dialogHref(table, st, 'edit', id) : `/admin/${table}/${id}/edit`)
+  const deleteAction = (id) => `/admin/${table}/${id}/edit` // the write path is the edit route in both modes
   // Per-row permission (#581): the data hook stamped `_canView` / `_canEdit` / `_canDelete` on each
   // row. A row links to its detail view when viewable; the actions column (Edit + Delete) shows only
   // when at least one row is actionable, and each per-row callback gates its own cell.
@@ -78,7 +105,7 @@ export default function ListPage() {
           </a>
           {canCreate && (
             <a
-              href={`/admin/${table}/new`}
+              href={newHref}
               style={{
                 background: 'var(--color-primary)',
                 color: 'var(--color-primary-text, #fff)',
@@ -112,8 +139,8 @@ export default function ListPage() {
           sort={sort}
           dir={dir}
           sortHref={(name, nextDir) => listUrl(table, { page: 1, sort: name, dir: nextDir })}
-          rowHref={anyView ? (row) => (row._canView ? `/admin/${table}/${row[pk]}` : undefined) : undefined}
-          rowActions={anyActions ? (row) => <RowActions base={`/admin/${table}/${row[pk]}`} row={row} /> : undefined}
+          rowHref={anyView ? (row) => (row._canView ? viewHref(row[pk]) : undefined) : undefined}
+          rowActions={anyActions ? (row) => <RowActions editHref={editHref(row[pk])} deleteAction={deleteAction(row[pk])} row={row} /> : undefined}
           emptyLabel="No rows yet."
         />
       </div>
@@ -131,6 +158,19 @@ export default function ListPage() {
         <span>{total === 0 ? 'No rows' : `Page ${page} of ${pageCount} · ${total} ${total === 1 ? 'row' : 'rows'}`}</span>
         <PaginationView page={page} pageCount={pageCount} href={(p) => listUrl(table, { page: p, sort, dir })} />
       </div>
+
+      {/* Dialog mode (#596): the overlay is portalled, so it renders regardless of position. `dialog`
+          is the URL-active screen the hook hydrated (or null = closed); Edit inside a view dialog
+          switches to the edit dialog for the same row. */}
+      {isDialog && (
+        <AdminDialog
+          dialog={dialog}
+          table={table}
+          label={label}
+          closeHref={listUrl(table, { page, sort, dir })}
+          editHref={dialog?.id != null ? editHref(dialog.id) : null}
+        />
+      )}
     </div>
   )
 }

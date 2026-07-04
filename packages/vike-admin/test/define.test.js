@@ -8,7 +8,7 @@ import { defineSchema } from '@vike-data/vike-schema/schema'
 import { setAdapter, clearAdapter } from '@universal-orm/core'
 import { createMemoryAdapter } from '@universal-orm/memory'
 import { defineResource, column, display, field } from '../define.js'
-import { resolveAdminTables, viewColumns, viewRecord, viewFields } from '../resolve.js'
+import { resolveAdminTables, viewColumns, viewRecord, viewFields, resourceMode } from '../resolve.js'
 
 const usersSchema = defineSchema('users', (t) => {
   t.uuid('id').primary()
@@ -54,6 +54,17 @@ test('the old block keys (list/record/form) are NOT a second surface — ignored
   // Passing `list` no longer refines the columns; the resource derives every column from the schema.
   const r = defineResource({ table: 'users', list: [column('email')] })
   assert.deepEqual(viewColumns(r, table()).map((c) => c.name), ['email', 'name']) // schema-derived, not just email
+})
+
+test('mode passes through and resourceMode reads it; default is route (#596)', () => {
+  assert.equal(resourceMode(defineResource({ table: 'users' })), 'route') // absent -> route
+  assert.equal(resourceMode(defineResource({ table: 'users', mode: 'route' })), 'route')
+  assert.equal(resourceMode(defineResource({ table: 'users', mode: 'dialog' })), 'dialog')
+})
+
+test('an invalid mode is a clear authoring error, not a silently-ignored key (#596)', () => {
+  assert.throws(() => defineResource({ table: 'users', mode: 'dailog' }), /mode.*must be 'route' or 'dialog'/)
+  assert.throws(() => defineResource({ table: 'users', mode: 'inline' }), /mode.*must be 'route' or 'dialog'/)
 })
 
 test('label / recordTitle / auth keys pass through untouched', () => {
