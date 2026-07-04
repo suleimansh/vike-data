@@ -6,7 +6,7 @@
 // resource's index. No separate endpoint — a plain SSR form post.
 import { render, redirect } from 'vike/abort'
 import { resolveViewTables, buildDb, hydrateView, createRow, updateRow, deleteRow, loadOwnedRow, queryScope, allow, keepVisible } from '../index.js'
-import { resolveViewRequest, formFieldsFor } from './pages.js'
+import { resolveViewRequest, formFieldsFor, activeDialog } from './pages.js'
 import { readFormRequest } from '../request.js'
 
 export async function viewData(pageContext) {
@@ -54,28 +54,39 @@ export async function viewData(pageContext) {
   }
 
   const search = pageContext.urlParsed?.search ?? {}
-  const hydrated = await hydrateView(view, { tables, db, scope, ctx, search, id })
+  // Which screen is "active": on a route detail page it's the route's screen + `@id`; on a
+  // dialog-mode index page it's the dialog the URL opened (`?view=`/`?edit=`/`?create`). The active
+  // id hydrates just that section, so the others (and the list) stay blank/closed.
+  const active = id != null ? { screen: crud.screen ?? null, id } : activeDialog(search)
+  const hydrated = await hydrateView(view, { tables, db, scope, ctx, search, id: active?.id ?? null, activeScreen: active?.screen })
 
-  // A detail route (`@id`) whose keyed record/form row is missing — never existed, or not the
-  // user's — is a 404, not an empty detail: the scoped lookup returned null, so nothing about
-  // another owner's row reaches the client.
+  // A detail ROUTE (`@id`) whose keyed record/form row is missing — never existed, or not the
+  // user's — is a 404, not an empty detail. (A dialog `?view=` miss just leaves the dialog empty;
+  // it must not 404 the whole list page.)
   if (id != null) {
     const detail = hydrated.sections.find((s) => s.block === 'record' || s.block === 'form')
     if (detail && (detail.resolved.row === null || detail.resolved.values === null)) throw render(404)
   }
 
-  // Per-screen `can*` gate. Record screens (view/edit) check against the loaded row; index/create
-  // take only ctx. A denied screen is a 403 (the nav also hides it). Missing predicate = allowed.
-  const screen = crud.screen
-  if (screen === 'index' && !(await allow(crud.canIndex, ctx))) throw render(403)
-  else if (screen === 'create' && !(await allow(crud.canCreate, ctx))) throw render(403)
-  else if (screen === 'view') {
-    const row = hydrated.sections.find((s) => s.block === 'record')?.resolved.row
+  // Page gate: the index/list itself (canIndex).
+  if (crud.screen === 'index' && !(await allow(crud.canIndex, ctx))) throw render(403)
+  // Active-screen gate: the route detail screen, or the open dialog. Record screens (view/edit)
+  // check against the loaded row; create takes only ctx. Missing predicate = allowed.
+  if (active?.screen === 'create' && !(await allow(crud.canCreate, ctx))) throw render(403)
+  else if (active?.screen === 'view') {
+    const row = sectionRow(hydrated, 'record', 'view')
     if (row && !(await allow(crud.canView, row, ctx))) throw render(403)
-  } else if (screen === 'edit') {
-    const row = hydrated.sections.find((s) => s.block === 'form')?.resolved.values
+  } else if (active?.screen === 'edit') {
+    const row = sectionRow(hydrated, 'form', 'edit')
     if (row && !(await allow(crud.canEdit, row, ctx))) throw render(403)
   }
 
   return { route: hydrated.route, sections: hydrated.sections }
+}
+
+// The hydrated row/values of the section for a given block + screen (a route page has one such
+// section; a dialog index page tags each folded section with its screen).
+function sectionRow(hydrated, block, screen) {
+  const s = hydrated.sections.find((x) => x.block === block && (x.props.screen == null || x.props.screen === screen))
+  return s?.resolved.row ?? s?.resolved.values ?? null
 }

@@ -21,7 +21,7 @@
 // universal-orm filter that bounds every read AND is forced onto writes, so a user only ever sees
 // and creates their OWN rows. `ctx.user` comes from +onCreatePageContext.js (a fixed demo identity
 // here; a real app gets it from vike-auth). Vike reads a +file's DEFAULT export as the config value.
-import { definePage, crudBlocks, column, field } from 'vike-crud/react/pages'
+import { definePage, crudBlocks, defineCrud, column, display, field } from 'vike-crud/react/pages'
 import { heading, text } from 'vike-blocks'
 
 // The generated CRUD triad for `posts`, derived from the schema. We destructure it and use the list
@@ -44,5 +44,16 @@ export default [
       form,
     ],
     scope: (table, ctx) => ({ user_id: ctx.user.id }),
+  }),
+  // The same schema through the defineCrud resource surface (#575): one call derives the /crud
+  // index + view/create/edit dialogs. Owner-scoped via `query`; `onCreate` stamps the owner.
+  ...defineCrud('posts', {
+    route: '/crud',
+    mode: 'dialog',
+    index: [column('title').sortable(), column('status'), column('published')],
+    view: [display('title'), display('body'), display('status'), display('published')],
+    edit: [field('title').required(), field('body'), field('status'), field('published')],
+    query: (q, ctx) => q.where('user_id', ctx.user.id),
+    onCreate: (ctx) => ({ user_id: ctx.user.id }),
   }),
 ]

@@ -71,6 +71,17 @@ export function viewForRoute(views, route) {
   return resolveViewRequest(views, route)?.view ?? null
 }
 
+// Which dialog the URL asks to open on a dialog-mode index page: `?view=<id>` / `?edit=<id>` open
+// the record / edit-form dialog for that row; `?create` opens the create-form dialog. Returns
+// `{ screen, id }` or null (no dialog). If several are set, the most specific read wins
+// (view > edit > create), so a stray param can't open two dialogs.
+export function activeDialog(search = {}) {
+  if (search.view) return { screen: 'view', id: String(search.view) }
+  if (search.edit) return { screen: 'edit', id: String(search.edit) }
+  if (search.create != null) return { screen: 'create', id: null }
+  return null
+}
+
 // The resolved form fields for a `form` block on `table` in this view — what the POST handler
 // coerces the submitted form against.
 export function formFieldsFor(view, tables, table) {
