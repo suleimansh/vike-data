@@ -10,7 +10,7 @@ import { resolvePage } from 'vike-blocks'
 // 'vike-crud/react/pages'`. It must be jsx-free because +config.js and its +views file are loaded
 // by Vike's Node config loader, which cannot transpile the .jsx the 'vike-crud/react' barrel pulls
 // in (the barrel is for RUNTIME page components). All of these come from the pure-JS core.
-export { definePage, crudBlocks, crud, column, display, field } from '../index.js'
+export { definePage, crudBlocks, defineCrud, crud, column, display, field } from '../index.js'
 
 // A cumulative `views` config arrives as an array of per-source contributions; flatten it (an
 // entry may be an array or a function returning one), matching how the schemas point flattens.
