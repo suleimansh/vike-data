@@ -27,24 +27,11 @@
 //     .rowActions([button('Publish').action('publish').params({ id: '$row.id' })])
 import { defineBlock } from '../core/registry.js'
 import { collapseSections as collapse } from '../core/page.js'
+import { normalizeColumn } from './table-styles.js'
 
 // Collapse builders to plain descriptors (a no-op for descriptors already) — same as form/card do,
-// so `.rowActions([...])` accepts fluent builders and resolve gets serializable specs.
-
-// A row key -> a human label: split snake/kebab/camelCase into words and title-case them.
-const humanize = (key) =>
-  String(key)
-    .replace(/[_-]+/g, ' ')
-    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-    .trim()
-    .replace(/\b\w/g, (c) => c.toUpperCase())
-
-// Normalize a column spec (string or object) to a full { key, label, align, format }.
-const normalizeColumn = (c) => {
-  if (typeof c === 'string') return { key: c, label: humanize(c), align: 'left', format: null }
-  const key = c?.key
-  return { key, label: c?.label ?? humanize(key), align: c?.align ?? 'left', format: c?.format ?? null }
-}
+// so `.rowActions([...])` accepts fluent builders and resolve gets serializable specs. The column
+// helpers (humanize + normalizeColumn) are shared with data-table, so they live in table-styles.
 
 export const table = defineBlock('table', {
   build: ({ columns, rows } = {}) => ({

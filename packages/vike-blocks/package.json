@@ -26,6 +26,7 @@
     "./code": "./blocks/code.js",
     "./markdown": "./blocks/markdown.js",
     "./table": "./blocks/table.js",
+    "./data-table": "./blocks/data-table.js",
     "./form": "./blocks/form.js",
     "./params": "./core/params.js",
     "./react": "./react/index.js",
@@ -52,6 +53,7 @@
     "./react/AlertView": "./react/AlertView.jsx",
     "./react/CodeView": "./react/CodeView.jsx",
     "./react/TableView": "./react/TableView.jsx",
+    "./react/DataTableView": "./react/DataTableView.jsx",
     "./react/FormView": "./react/FormView.jsx",
     "./react/LayoutView": "./react/LayoutView.jsx",
     "./react/SlotView": "./react/SlotView.jsx",
@@ -79,6 +81,7 @@
     "./vue/AlertView": "./vue/AlertView.js",
     "./vue/CodeView": "./vue/CodeView.js",
     "./vue/TableView": "./vue/TableView.js",
+    "./vue/DataTableView": "./vue/DataTableView.js",
     "./vue/FormView": "./vue/FormView.js",
     "./vue/LayoutView": "./vue/LayoutView.js",
     "./vue/SlotView": "./vue/SlotView.js"
