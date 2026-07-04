@@ -141,3 +141,36 @@ export function crud(def) {
   }
   return { icon: null, ...def }
 }
+
+// The block each CRUD screen renders, and the refinement key it reads. The page vocabulary is
+// index / view / create / edit; the block names stay list / record / form (view renders the
+// read-only `record` block, create + edit share the `form` block). This map is the single place
+// the two vocabularies meet.
+export const SCREEN_BLOCK = {
+  index: { block: 'list', refine: 'list' },
+  view: { block: 'record', refine: 'record' },
+  create: { block: 'form', refine: 'form' },
+  edit: { block: 'form', refine: 'form' },
+}
+
+// Collapse column()/display()/field() builders in a refinement array to plain, serializable specs
+// (a builder carries function methods that can't cross the client boundary). resolve.js accepts
+// either, so a hand-authored view may also pass bare specs. Undefined stays undefined (= derive all).
+export const plainSpecs = (arr) => (arr == null ? undefined : arr.map((e) => (typeof e?.build === 'function' ? e.build() : e)))
+
+// One CRUD screen as a serializable block descriptor: `{ block, table, [refineKey]: specs }`. The
+// shared building block behind `crud.<screen>()` and the `defineCrud` expander.
+export function screenBlock(screen, table, specs) {
+  const map = SCREEN_BLOCK[screen]
+  if (!map) throw new Error(`screenBlock: unknown screen "${screen}"`)
+  const refined = plainSpecs(specs)
+  return { block: map.block, table, ...(refined ? { [map.refine]: refined } : {}) }
+}
+
+// Per-screen sugar: the block(s) for one screen, as a section array to spread into a page, e.g.
+// `definePage({ route: '/posts', sections: crud.index('posts') })`. This is the primitive tier the
+// `defineCrud` resource sugar expands into (and what `eject` reveals).
+crud.index = (table, columns) => [screenBlock('index', table, columns)]
+crud.view = (table, fields) => [screenBlock('view', table, fields)]
+crud.create = (table, fields) => [screenBlock('create', table, fields)]
+crud.edit = (table, fields) => [screenBlock('edit', table, fields)]
