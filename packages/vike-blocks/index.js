@@ -42,6 +42,7 @@ import './blocks/attachment.js' // side-effect: register the attachment block
 import './blocks/code.js' // side-effect: register the code block
 import './blocks/markdown.js' // side-effect: register the markdown block
 import './blocks/table.js' // side-effect: register the table block
+import './blocks/data-table.js' // side-effect: register the data-table block
 import './blocks/pagination.js' // side-effect: register the pagination block
 import './blocks/tooltip.js' // side-effect: register the tooltip block
 import './blocks/avatar.js' // side-effect: register the avatar + avatarGroup blocks
@@ -93,6 +94,7 @@ export { attachment } from './blocks/attachment.js'
 export { code } from './blocks/code.js'
 export { markdown } from './blocks/markdown.js'
 export { table } from './blocks/table.js'
+export { dataTable } from './blocks/data-table.js'
 export { pagination } from './blocks/pagination.js'
 export { tooltip } from './blocks/tooltip.js'
 export { avatar, avatarGroup } from './blocks/avatar.js'

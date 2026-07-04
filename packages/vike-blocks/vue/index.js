@@ -38,6 +38,7 @@ import './FormView.js' // side-effect: register the form renderer
 import './AttachmentView.js' // side-effect: register the attachment renderer
 import './CodeView.js' // side-effect: register the code renderer
 import './TableView.js' // side-effect: register the table renderer
+import './DataTableView.js' // side-effect: register the data-table renderer
 import './PaginationView.js' // side-effect: register the pagination renderer
 import './TooltipView.js' // side-effect: register the tooltip renderer
 import './AvatarView.js' // side-effect: register the avatar + avatarGroup renderers
@@ -90,6 +91,7 @@ export { FormView } from './FormView.js'
 export { AttachmentView } from './AttachmentView.js'
 export { CodeView } from './CodeView.js'
 export { TableView } from './TableView.js'
+export { DataTableView } from './DataTableView.js'
 export { PaginationView } from './PaginationView.js'
 export { TooltipView } from './TooltipView.js'
 export { AvatarView, AvatarGroupView } from './AvatarView.js'
