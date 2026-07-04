@@ -168,6 +168,9 @@ importers:
       vike:
         specifier: 0.4.259-commit-f6ecfb2
         version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@24.13.2)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
+      vike-blocks:
+        specifier: workspace:*
+        version: link:../../packages/vike-blocks
       vike-theme-emerald:
         specifier: workspace:*
         version: link:../../packages/vike-theme-emerald
