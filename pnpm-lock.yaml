@@ -537,6 +537,27 @@ importers:
         specifier: ^7.1.0
         version: 7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
 
+  examples/vike-blocks-vue:
+    dependencies:
+      '@vitejs/plugin-vue':
+        specifier: ^5.0.0
+        version: 5.2.4(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))(vue@3.5.38(typescript@5.9.3))
+      vike:
+        specifier: 0.4.259-commit-f6ecfb2
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+      vike-blocks:
+        specifier: workspace:*
+        version: link:../../packages/vike-blocks
+      vike-vue:
+        specifier: ^0.9.11
+        version: 0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3))
+      vite:
+        specifier: ^7.1.0
+        version: 7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
+      vue:
+        specifier: ^3.5.0
+        version: 3.5.38(typescript@5.9.3)
+
   examples/vike-crud:
     dependencies:
       '@universal-orm/core':
@@ -8869,6 +8890,11 @@ snapshots:
       vite: 7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
       vue: 3.5.38(typescript@5.9.3)
 
+  '@vitejs/plugin-vue@5.2.4(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))(vue@3.5.38(typescript@5.9.3))':
+    dependencies:
+      vite: 7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
+      vue: 3.5.38(typescript@5.9.3)
+
   '@vue/compiler-core@3.5.38':
     dependencies:
       '@babel/parser': 7.29.7
@@ -11315,6 +11341,17 @@ snapshots:
       oxc-parser: 0.104.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
       oxc-walker: 0.6.0(oxc-parser@0.104.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1))
       vike: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.5(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+      vue: 3.5.38(typescript@5.9.3)
+    transitivePeerDependencies:
+      - '@emnapi/core'
+      - '@emnapi/runtime'
+
+  vike-vue@0.9.11(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))(vue@3.5.38(typescript@5.9.3)):
+    dependencies:
+      magic-string: 0.30.21
+      oxc-parser: 0.104.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1)
+      oxc-walker: 0.6.0(oxc-parser@0.104.0(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.1))
+      vike: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
       vue: 3.5.38(typescript@5.9.3)
     transitivePeerDependencies:
       - '@emnapi/core'
