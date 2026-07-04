@@ -4,7 +4,7 @@ The smallest possible schema-driven app. One `defineSchema('posts')` becomes a f
 
 ## What it shows
 
-- **Page generation** (`/posts`): `viewPages(views)` turns a `definePage({ route, sections: crudBlocks({ table: 'posts' }) })` into a real Vike page. GET renders the list + create form derived from the schema; POST writes a row through the owner-scoped data hook and redirects back, so the new row shows on reload. No page code exists for this route.
+- **Page generation** (`/posts`): `viewPages(views)` turns a `definePage({ route, sections })` into a real Vike page. `crudBlocks({ table: 'posts' })` expands the schema into `[list, record, form]` descriptors; the view arranges them by hand — a heading + intro, the owner-scoped list, then a "New post" heading over the create form (the empty `record` is left out, since it belongs on a detail route). GET renders the list + create form derived from the schema; POST writes a row through the owner-scoped data hook and redirects back, so the new row shows on reload. No page code exists for this route.
 - **Mix into a normal app** (`/inline`): a hand-written vike-react page that imports vike-crud's `<ListView>` block and renders it directly, no page-gen. Proves the blocks compose into pages you already own; they are not lock-in.
 - **Owner scoping**: the view's `scope: (table, ctx) => ({ user_id: ctx.user.id })` bounds every read and forces `user_id` onto every write. The demo identity comes from `+onCreatePageContext.js` (a real app installs vike-auth instead).
 - **Owner-guarded actions in a table** (`/actions-demo`): the user's posts as a `table` block with a **row-action column** — per row, `button('Publish').action('publish').params({ id: '$row.id' })` and a Delete button. The table renderer resolves `$row.id` against each row; the click POSTs `/_actions/<name>`. `publish` is a hand-written domain action; `posts.delete` comes from the `crudActions({ table, tables, scope })` preset (owner-scoped create/update/delete in one call). Both are guarded (`'authed'`) and enforce ownership in their write filter; `publish` returns an `onSuccess` toast naming the post. `+Wrapper.jsx` mounts `<ActionsProvider>` + `<Toaster>`, so the click fires the toast and reloads. Wired with `vike-actions`; the endpoint is one middleware pointed at `pages/actions.js`.
@@ -25,7 +25,7 @@ Open http://localhost:4200. The store is the in-memory adapter (cached on `globa
 ```
 pages/
   posts.schema.js          one defineSchema('posts')  -- the intent
-  +views.js                definePage({ route: '/posts', sections: crudBlocks({ table: 'posts' }) })
+  +views.js                definePage({ route: '/posts', sections: [heading, list, form] }) -- arranges crudBlocks
   +config.js               extends vike-react + vike-crud; schemas + pages; middleware -> actions.js
   +onCreatePageContext.js  a demo user (owner-scoping needs one)
   +Wrapper.jsx             mounts <ActionsProvider> + <Toaster> around every page
