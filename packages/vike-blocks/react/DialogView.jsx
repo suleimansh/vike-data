@@ -7,24 +7,11 @@
 import { useState, useId } from 'react'
 import { Blocks } from './Blocks.jsx'
 import { registerBlockRenderer } from './registry.js'
-import { Overlay, ENTER_MS, overlayTriggerStyle } from './overlay.jsx'
-import { OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../core/overlay-motion.js'
+import { Overlay, overlayTriggerStyle } from './overlay.jsx'
+import { overlayPanelStyle } from '../core/overlay-motion.js'
 
-// The centered dialog panel: a gentle flip in from the top + scale, settling on the shared decelerate
-// curve (no overshoot, so a modal doesn't wobble).
-const panelStyle = (visible) => ({
-  width: '100%',
-  maxWidth: 440,
-  padding: '1.25rem',
-  background: 'var(--color-bg, #ffffff)',
-  color: 'var(--color-text, #0f172a)',
-  borderRadius: 'var(--radius, 12px)',
-  boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25)',
-  opacity: visible ? 1 : 0,
-  filter: visible ? 'blur(0px)' : 'blur(3px)',
-  transform: visible ? 'perspective(500px) rotateX(0deg) scale(1)' : 'perspective(500px) rotateX(-12deg) scale(0.95)',
-  transition: `opacity ${ENTER_MS}ms ${OVERLAY_BACKDROP_EASE}, filter ${ENTER_MS}ms ${OVERLAY_BACKDROP_EASE}, transform ${ENTER_MS}ms ${OVERLAY_EASE}`,
-})
+// The centered dialog panel: the shared tilt-in modal surface (blur + perspective flip + scale).
+const panelStyle = (visible) => overlayPanelStyle(visible, { maxWidth: 440 })
 
 export function DialogView({ title = '', description, trigger = 'Open', sections = [], footer = [], defaultOpen = false }) {
   const [open, setOpen] = useState(defaultOpen)

@@ -3,7 +3,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { isNav, stackRegionOrder } from '../core/view-helpers.js'
-import { FOCUSABLE } from '../core/overlay-motion.js'
+import { FOCUSABLE, overlayPanelStyle } from '../core/overlay-motion.js'
 import { POPOVER_FOCUSABLE } from '../blocks/popover-styles.js'
 import { initialView } from '../blocks/calendar-styles.js'
 import { toastDeckOffsets } from '../blocks/toast-styles.js'
@@ -46,4 +46,21 @@ test('paginationEdgeStyle / paginationLinkStyle return style objects', () => {
   assert.equal(typeof paginationEdgeStyle(false), 'object')
   assert.equal(paginationEdgeStyle(true).cursor, 'default') // dimmed when disabled
   assert.equal(typeof paginationLinkStyle(true), 'object')
+})
+
+test('overlayPanelStyle: shared dialog/confirm/command panel (px strings, mode-preserving key order)', () => {
+  // Numeric maxWidth is emitted as a px string (Vue h() has no auto-px; React renders it the same).
+  const dialog = overlayPanelStyle(true, { maxWidth: 440 })
+  assert.equal(dialog.maxWidth, '440px')
+  assert.equal(dialog.padding, '1.25rem')
+  assert.equal(dialog.opacity, 1)
+  assert.ok(dialog.filter.includes('blur(0px)')) // tilt motion carries the blur
+  // The `tilt` panels (dialog/confirm) share one shape, differing only by maxWidth.
+  assert.deepEqual(Object.keys(overlayPanelStyle(false, { maxWidth: 420 })), Object.keys(overlayPanelStyle(false, { maxWidth: 440 })))
+  // The `lift` panel (command): no padding, clipped corners, no blur, upward translate.
+  const cmd = overlayPanelStyle(false, { maxWidth: 520, motion: 'lift', padding: null, overflow: 'hidden' })
+  assert.equal('padding' in cmd, false)
+  assert.equal(cmd.overflow, 'hidden')
+  assert.equal('filter' in cmd, false)
+  assert.ok(cmd.transform.includes('translateY(-8px)'))
 })

@@ -6,8 +6,8 @@
 // module, so this can't drift from the Vue twin.
 import { useState, useEffect } from 'react'
 import { registerBlockRenderer } from './registry.js'
-import { Overlay, ENTER_MS } from './overlay.jsx'
-import { OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../core/overlay-motion.js'
+import { Overlay } from './overlay.jsx'
+import { overlayPanelStyle } from '../core/overlay-motion.js'
 import {
   filterCommands,
   SEARCH_ICON,
@@ -30,19 +30,9 @@ const SearchIcon = ({ size = 16 }) => (
   </svg>
 )
 
-// The palette box: drops in from just above with a subtle scale, on the shared overlay curves.
-const panelStyle = (visible) => ({
-  width: '100%',
-  maxWidth: 520,
-  background: 'var(--color-bg, #ffffff)',
-  color: 'var(--color-text, #0f172a)',
-  borderRadius: 'var(--radius, 12px)',
-  boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25)',
-  overflow: 'hidden',
-  opacity: visible ? 1 : 0,
-  transform: visible ? 'scale(1) translateY(0)' : 'scale(0.98) translateY(-8px)',
-  transition: `opacity ${ENTER_MS}ms ${OVERLAY_BACKDROP_EASE}, transform ${ENTER_MS}ms ${OVERLAY_EASE}`,
-})
+// The palette box: the shared modal surface with the `lift` motion (drops in from just above with a
+// subtle scale). No padding (the inner sections own it) and clipped corners.
+const panelStyle = (visible) => overlayPanelStyle(visible, { maxWidth: 520, motion: 'lift', padding: null, overflow: 'hidden' })
 
 export function CommandView({ placeholder = 'Type a command or search...', empty = 'No results found.', hotkey = 'k', trigger = 'Search...', groups = [] }) {
   const [open, setOpen] = useState(false)
