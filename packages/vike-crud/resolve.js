@@ -79,6 +79,9 @@ export function viewColumns(view, table) {
         searchable: !!spec.searchable,
         format: spec.format ?? null,
         slot: slotFor(view, spec.name, spec),
+        // `.when(ctx)` visibility predicate (#581); carried through, evaluated + stripped by the
+        // data layer (keepVisible) before the resolved view-model serializes to the client.
+        ...(typeof spec.when === 'function' ? { when: spec.when } : {}),
       }
     })
   }
@@ -119,6 +122,7 @@ export function viewRecord(view, table) {
       format: spec.format ?? null,
       slot: slotFor(view, name, spec),
       ...(fk ? { fk } : {}),
+      ...(typeof spec.when === 'function' ? { when: spec.when } : {}),
     }
   }
   if (view.record?.length) {
@@ -153,6 +157,7 @@ export function viewFields(view, table) {
         slot: slotFor(view, spec.name, spec),
         ...(fk ? { fk } : {}),
         ...(options ? { options } : {}),
+        ...(typeof spec.when === 'function' ? { when: spec.when } : {}),
       }
     })
   }
