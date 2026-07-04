@@ -20,6 +20,9 @@
     "vike-admin": "workspace:*",
     "vike-auth": "workspace:*",
     "vike-i18n": "workspace:*",
+    "vike-layouts": "workspace:*",
+    "vike-themes": "workspace:*",
+    "vike-toolbar": "workspace:*",
     "vite": "^7.1.0"
   }
 }

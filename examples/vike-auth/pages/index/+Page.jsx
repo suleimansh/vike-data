@@ -5,17 +5,19 @@
 // auth code.
 import { useUser } from 'vike-auth/react/hooks'
 
-const wrap = { maxWidth: 560, margin: '3rem auto', fontFamily: 'system-ui, sans-serif', lineHeight: 1.6, color: '#1a1a1a', padding: '0 1rem' }
-const card = { border: '1px solid #e2e8f0', borderRadius: 10, padding: '1rem 1.25rem', marginTop: '1rem' }
-const link = { color: '#2563eb', fontWeight: 600, textDecoration: 'none' }
-const btn = { padding: '0.35rem 0.7rem', borderRadius: 8, border: '1px solid #e2e8f0', background: '#f8fafc', cursor: 'pointer', fontSize: 13 }
+// Theme-driven colors (the same --color-* tokens vike-themes defines), so the page follows the
+// active theme + light/dark appearance from the toolbar instead of hardcoding a palette.
+const wrap = { maxWidth: 560, margin: '2rem auto', lineHeight: 1.6, color: 'var(--color-text)', padding: '0 1rem' }
+const card = { border: '1px solid var(--color-border)', background: 'var(--color-surface)', borderRadius: 10, padding: '1rem 1.25rem', marginTop: '1rem' }
+const link = { color: 'var(--color-primary)', fontWeight: 600, textDecoration: 'none' }
+const btn = { padding: '0.35rem 0.7rem', borderRadius: 8, border: '1px solid var(--color-border)', background: 'var(--color-bg)', color: 'var(--color-text)', cursor: 'pointer', fontSize: 13 }
 
 export default function HomePage() {
   const user = useUser()
   return (
     <div style={wrap}>
       <h1 style={{ marginBottom: 0 }}>vike-auth example</h1>
-      <p style={{ color: '#64748b', marginTop: '0.25rem' }}>
+      <p style={{ color: 'var(--color-muted)', marginTop: '0.25rem' }}>
         Magic-link auth in one install. The <code>/login</code> + <code>/account</code> pages and the
         whole session flow come from <code>vike-auth/react</code> — this app adds only a home page
         and one guarded page.
@@ -30,7 +32,7 @@ export default function HomePage() {
                 <button type="submit" style={btn}>Log out</button>
               </form>
             </div>
-            <p style={{ margin: '0.5rem 0 0', color: '#64748b', fontSize: 14 }}>
+            <p style={{ margin: '0.5rem 0 0', color: 'var(--color-muted)', fontSize: 14 }}>
               {user.name ? `Welcome back, ${user.name}. ` : ''}
               Visit your <a href="/account" style={link}>account</a> or the{' '}
               <a href="/protected" style={link}>protected page</a>.
@@ -39,7 +41,7 @@ export default function HomePage() {
         ) : (
           <>
             <strong>Not signed in</strong>
-            <p style={{ margin: '0.5rem 0 0', color: '#64748b', fontSize: 14 }}>
+            <p style={{ margin: '0.5rem 0 0', color: 'var(--color-muted)', fontSize: 14 }}>
               <a href="/login" style={link}>Sign in</a> with a magic link (in dev the link is shown
               inline — no inbox needed). Try the seeded account <code>ada@example.com</code>, or any
               email. Then try the <a href="/protected" style={link}>protected page</a>.
