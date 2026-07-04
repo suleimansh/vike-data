@@ -14,6 +14,7 @@
 import { resolvePage } from 'vike-blocks'
 import { projectRow } from './project.js'
 import { tableNamed, recordTitleColumn } from './resolve.js'
+import { keepVisible } from './authz.js'
 
 const DEFAULT_PAGE_SIZE = 20
 
@@ -110,16 +111,37 @@ async function hydrateForm(section, { db, tables, scope, ctx, id: routeId }) {
   return { ...section, resolved: { ...section.resolved, values: row ? projectRow(row, { columns: fields, pk }) : null, pk, id } }
 }
 
+// Apply per-field `.when(ctx)` visibility (#581): drop the hidden list columns / record + form
+// fields and strip the predicate, so hidden columns (and the row data projected against them)
+// never reach the client. Runs before hydration so the projection only ever sees visible columns.
+function applyVisibility(section, ctx) {
+  const r = section?.resolved
+  if (!r) return section
+  const resolved = { ...r }
+  if (Array.isArray(r.columns)) resolved.columns = keepVisible(r.columns, ctx)
+  if (Array.isArray(r.fields)) resolved.fields = keepVisible(r.fields, ctx)
+  return { ...section, resolved }
+}
+
 // Resolve a view AND fill in the data its blocks need. Returns hydrated sections a renderer
 // draws directly (`{ block, props, resolved }`, with `resolved.rows` / `resolved.row` filled).
 export async function hydrateView(view, opts = {}) {
   const resolved = resolvePage(view, opts.tables)
   const sections = await Promise.all(
-    resolved.sections.map((s) =>
-      s.block === 'list' ? hydrateList(s, opts) : s.block === 'record' ? hydrateRecord(s, opts) : s.block === 'form' ? hydrateForm(s, opts) : Promise.resolve(s),
-    ),
+    resolved.sections.map((s0) => {
+      const s = applyVisibility(s0, opts.ctx)
+      return s.block === 'list' ? hydrateList(s, opts) : s.block === 'record' ? hydrateRecord(s, opts) : s.block === 'form' ? hydrateForm(s, opts) : Promise.resolve(s)
+    }),
   )
   return { route: resolved.route, sections }
+}
+
+// Load one row keyed on the primary key AND the scope (the owner contract). Returns the row or
+// null (never existed, or not the user's). The single lookup the can* record gates check against
+// before an update/delete, so a predicate only ever sees an in-scope row.
+export function loadOwnedRow(db, tables, table, id, { scope, ctx } = {}) {
+  const pk = primaryKeyOf(tableNamed(tables, table))
+  return db[table].findOne({ ...scopeFor(scope, table, ctx), [pk]: id })
 }
 
 // Build a row from submitted form data, coercing each field by its type. An unchecked checkbox
@@ -143,12 +165,16 @@ export function rowFromForm(fields, form) {
 
 // Insert a row from a submitted form: coerce, fill a client-generatable (uuid/string) primary
 // key, FORCE the scope's owner columns, insert. Returns the inserted row.
-export async function createRow(db, tables, table, fields, form, { scope, ctx } = {}) {
+export async function createRow(db, tables, table, fields, form, { scope, ctx, onCreate } = {}) {
   const schemaTable = tableNamed(tables, table)
   const row = rowFromForm(fields, form)
   const pk = schemaTable?.columns.find((c) => c.primary)
   if (pk && row[pk.name] == null && (pk.type === 'uuid' || pk.type === 'string')) row[pk.name] = randomUUID()
   forceOwnership(row, scopeFor(scope, table, ctx))
+  // The write stamp (#581): force the resource's `onCreate(ctx)` columns onto the insert (e.g.
+  // `user_id`), so a scoped user can't create a row owned by someone else even if `query` (read
+  // scope) allowed everything. Overrides any client-forged value for those columns.
+  if (typeof onCreate === 'function') Object.assign(row, onCreate(ctx) ?? {})
   await db[table].insert(row)
   return row
 }

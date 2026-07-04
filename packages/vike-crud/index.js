@@ -30,6 +30,8 @@ export {
 export { projectRow } from './project.js'
 export { parseListQuery, QueryError, MAX_LIMIT } from './query.js'
 // The server-side data layer: fill a view's blocks with rows/values, and the scoped write path.
-export { hydrateView, createRow, updateRow, deleteRow, rowFromForm } from './data.js'
+export { hydrateView, createRow, updateRow, deleteRow, rowFromForm, loadOwnedRow } from './data.js'
+// Authorization (#581): the query read-scope builder, can* predicate gate, and field visibility.
+export { queryScope, runQuery, allow, keepVisible } from './authz.js'
 // Customization tier 3: eject a view to plain, owned source (page + data hook), no page-gen.
 export { ejectView, routeToSlug } from './eject.js'

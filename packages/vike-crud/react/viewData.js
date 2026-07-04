@@ -1,11 +1,11 @@
 // The generic Vike DATA hook shared by every generated view page. It resolves which view + route
-// params this pathname is (param routes like `/posts/@id` included), hydrates the view's blocks
-// (owner-scoped list rows, a record's one row, an edit form's pre-fill) and returns the sections
-// ViewPage renders. On POST it OWNS the write: create / update / delete through the scoped data
-// layer, keyed on the route `id` (or the form's `_id` for the legacy single-page flow), then
-// redirects to the resource's index. No separate endpoint — a plain SSR form post.
+// params this pathname is (param routes like `/posts/@id` included), enforces the resource's
+// authorization (row `query` scope, per-screen `can*` gate, per-field `.when` visibility), hydrates
+// the view's blocks and returns the sections ViewPage renders. On POST it OWNS the write: create /
+// update / delete through the scoped data layer, keyed on the route `id`, then redirects to the
+// resource's index. No separate endpoint — a plain SSR form post.
 import { render, redirect } from 'vike/abort'
-import { resolveViewTables, buildDb, hydrateView, createRow, updateRow, deleteRow } from '../index.js'
+import { resolveViewTables, buildDb, hydrateView, createRow, updateRow, deleteRow, loadOwnedRow, queryScope, allow, keepVisible } from '../index.js'
 import { resolveViewRequest, formFieldsFor } from './pages.js'
 import { readFormRequest } from '../request.js'
 
@@ -19,22 +19,36 @@ export async function viewData(pageContext) {
   const tables = resolveViewTables(config)
   const db = buildDb(tables)
   const ctx = { user: pageContext.user }
-  const scope = view.scope // optional (table, ctx) => filter — the owner contract wires row scoping
   const id = params.id ?? null // a route param (the view / edit detail routes carry `@id`)
-  const base = view.crud?.base ?? pathname // where a write redirects back to (the resource index)
+  const crud = view.crud ?? {} // defineCrud auth + meta; empty for a hand-written / legacy view
+  // Row scope: a legacy view's `scope` (table, ctx) => filter, else the resource's `query` builder.
+  const scope = view.scope ?? queryScope(crud.query)
+  const base = crud.base ?? pathname // where a write redirects back to (the resource index)
 
   const req = readFormRequest(pageContext)
   if (req.method === 'POST') {
     const form = await req.formData()
-    // The write target: the form declares `_table` (legacy single-page flow); a defineCrud route
-    // page carries it on the view's crud meta. Fields are resolved from the view's form block.
-    const table = form.get('_table') ?? view.crud?.table ?? null
-    const fields = table ? formFieldsFor(view, tables, table) : null
+    const table = form.get('_table') ?? crud.table ?? null
+    // A `.when`-hidden field is not writable: drop it before coercing, so a forged hidden field
+    // in the body is ignored (matching what the user was allowed to see/submit).
+    const fields = table ? keepVisible(formFieldsFor(view, tables, table), ctx) : null
     if (table && fields) {
       const rid = id ?? form.get('_id')
-      if (form.get('_action') === 'delete' && rid) await deleteRow(db, tables, table, rid, { scope, ctx })
-      else if (rid) await updateRow(db, tables, table, fields, rid, form, { scope, ctx })
-      else await createRow(db, tables, table, fields, form, { scope, ctx })
+      if (rid) {
+        const current = await loadOwnedRow(db, tables, table, rid, { scope, ctx })
+        if (current) {
+          if (form.get('_action') === 'delete') {
+            if (!(await allow(crud.canDelete, current, ctx))) throw render(403)
+            await deleteRow(db, tables, table, rid, { scope, ctx })
+          } else {
+            if (!(await allow(crud.canEdit, current, ctx))) throw render(403)
+            await updateRow(db, tables, table, fields, rid, form, { scope, ctx })
+          }
+        }
+      } else {
+        if (!(await allow(crud.canCreate, ctx))) throw render(403)
+        await createRow(db, tables, table, fields, form, { scope, ctx, onCreate: crud.onCreate })
+      }
     }
     throw redirect(base)
   }
@@ -43,11 +57,24 @@ export async function viewData(pageContext) {
   const hydrated = await hydrateView(view, { tables, db, scope, ctx, search, id })
 
   // A detail route (`@id`) whose keyed record/form row is missing — never existed, or not the
-  // user's — is a 404, not an empty detail page. This is the "a non-owned id does not leak" gate:
-  // the scoped lookup already returned null, so nothing about another owner's row reaches the client.
+  // user's — is a 404, not an empty detail: the scoped lookup returned null, so nothing about
+  // another owner's row reaches the client.
   if (id != null) {
     const detail = hydrated.sections.find((s) => s.block === 'record' || s.block === 'form')
     if (detail && (detail.resolved.row === null || detail.resolved.values === null)) throw render(404)
+  }
+
+  // Per-screen `can*` gate. Record screens (view/edit) check against the loaded row; index/create
+  // take only ctx. A denied screen is a 403 (the nav also hides it). Missing predicate = allowed.
+  const screen = crud.screen
+  if (screen === 'index' && !(await allow(crud.canIndex, ctx))) throw render(403)
+  else if (screen === 'create' && !(await allow(crud.canCreate, ctx))) throw render(403)
+  else if (screen === 'view') {
+    const row = hydrated.sections.find((s) => s.block === 'record')?.resolved.row
+    if (row && !(await allow(crud.canView, row, ctx))) throw render(403)
+  } else if (screen === 'edit') {
+    const row = hydrated.sections.find((s) => s.block === 'form')?.resolved.values
+    if (row && !(await allow(crud.canEdit, row, ctx))) throw render(403)
   }
 
   return { route: hydrated.route, sections: hydrated.sections }

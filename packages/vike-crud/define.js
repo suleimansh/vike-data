@@ -44,6 +44,13 @@ export function column(name) {
       spec.slot = token
       return self
     },
+    // Per-field visibility (#581): show this column only when `pred(ctx)` is truthy — e.g.
+    // an admin-only column. Evaluated server-side; a hidden column (and its data) never
+    // reaches the client. A function, so it stays server-side (the `views` point is server-only).
+    when(pred) {
+      spec.when = pred
+      return self
+    },
     build() {
       return { ...spec }
     },
@@ -70,6 +77,12 @@ export function display(name) {
     // `{ field, value, row }`.
     slot(token) {
       spec.slot = token
+      return self
+    },
+    // Per-field visibility (#581): show this record field only when `pred(ctx)` is truthy.
+    // Evaluated server-side; a hidden field's value never reaches the client.
+    when(pred) {
+      spec.when = pred
       return self
     },
     build() {
@@ -103,6 +116,13 @@ export function field(name) {
     // `{ field, value }`.
     slot(token) {
       spec.slot = token
+      return self
+    },
+    // Per-field visibility (#581): show this input only when `pred(ctx)` is truthy — e.g. an
+    // admin-only field. Evaluated server-side; a hidden field is not rendered and, because the
+    // write path drops it too, cannot be written even if a client forges it.
+    when(pred) {
+      spec.when = pred
       return self
     },
     build() {
