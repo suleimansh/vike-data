@@ -152,8 +152,9 @@ function ThemeMenu() {
           switches onto that head <style>. Layout + link color are SSR'd inline
           here so they land on first paint (no width snap, no link-color flash). */}
       <style dangerouslySetInnerHTML={{ __html: STATIC_CSS }} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 var(--padding-side, 12px)' }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+      {/* Stacked one-per-row: this control lives in the vike-toolbar popover (a narrow column). */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 10, minWidth: 190 }}>
+        <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
           <span style={{ opacity: 0.7, fontSize: 13 }}>Theme</span>
           <select
             aria-label="Theme"
@@ -168,7 +169,7 @@ function ThemeMenu() {
             ))}
           </select>
         </label>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
           <span style={{ opacity: 0.7, fontSize: 13 }}>Mode</span>
           <select
             aria-label="Appearance"

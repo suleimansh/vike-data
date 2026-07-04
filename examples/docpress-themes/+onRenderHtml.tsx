@@ -30,6 +30,10 @@ async function onRenderHtml(pageContext: PageContextServer) {
         ${description}
         <meta name="viewport" content="width=device-width,initial-scale=1">
         ${headHtml}
+        <!-- Theme the page backdrop + fill the viewport. The palette (headHtml) sets --color-bg on
+             body; this makes the body itself paint it and stretch full height, so the area below a
+             short page (and any overscroll) stays themed instead of showing white. -->
+        <style>html,body{margin:0}body{min-height:100vh;background:var(--color-bg,#fff)}</style>
       </head>
       <body>
         <div id="page-view">${dangerouslySkipEscape(pageHtml)}</div>
