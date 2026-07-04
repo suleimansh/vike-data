@@ -6,7 +6,7 @@
 // `position:absolute` child of a `position:relative` wrapper around the trigger, so it follows the
 // trigger with no portal and no coordinate math (dep-free). SSR renders only the trigger (the panel is
 // client + open-gated), so there's no hydration mismatch. `open`/`onClose` are owned by the consumer.
-import { h, ref, watch, onMounted, onUnmounted, nextTick, toRef } from 'vue'
+import { h, ref, watch, onMounted, onUnmounted, nextTick, toRef, isRef, computed } from 'vue'
 import { POPOVER_FOCUSABLE, POPOVER_ENTER_MS, popoverAnchorStyle, resolvePlacement, popoverMaxHeight } from '../blocks/popover-styles.js'
 
 // The lifecycle composable: owns render/visible/mounted + the reflow-driven enter, the edge-aware
@@ -15,10 +15,14 @@ import { POPOVER_FOCUSABLE, POPOVER_ENTER_MS, popoverAnchorStyle, resolvePlaceme
 // `requested` is the desired placement (flipped on open if it would overflow). Returns the render flags,
 // the refs for the wrapper (rootEl) + panel (panelEl), and the resolved `placement` + `maxHeight` refs.
 export function usePopover(open, onClose, requested = 'bottom-start') {
+  // `requested` may be a ref (the Popover component passes one so a changed `placement` prop re-measures,
+  // matching React's `requested` effect dep) or a plain string (external callers); normalize to a ref.
+  const requestedRef = isRef(requested) ? requested : ref(requested)
+  const requestedOf = () => requestedRef.value ?? 'bottom-start'
   const render = ref(open.value) // in the DOM (kept during the exit transition)
   const visible = ref(false) // drives the enter/exit CSS
   const mounted = ref(false) // client only — matches SSR (trigger-only) on first paint
-  const placement = ref(requested)
+  const placement = ref(requestedOf())
   const maxHeight = ref(null)
   const rootEl = ref(null)
   const panelEl = ref(null)
@@ -42,21 +46,25 @@ export function usePopover(open, onClose, requested = 'bottom-start') {
     document.removeEventListener('keydown', onKey)
   }
 
-  // Once the panel is in the DOM: listen for outside-close, measure the trigger + panel and flip the
-  // placement / cap the height if it would overflow, paint the hidden "from" frame (a reflow), flip to
-  // visible next frame (else mount + visible land in one frame with nothing to animate from), and move
-  // focus into the panel.
+  // Measure the trigger + panel and flip the placement / cap the height if it would overflow the
+  // viewport. Split out of `enter` so a `requested` change can re-run it while open (below), matching
+  // React's measure effect keyed on `[render, open, requested]`.
+  const measure = () => {
+    if (!(panelEl.value && rootEl.value)) return
+    const trigger = rootEl.value.getBoundingClientRect()
+    const panel = panelEl.value.getBoundingClientRect()
+    const viewport = { width: window.innerWidth, height: window.innerHeight }
+    placement.value = resolvePlacement(requestedOf(), trigger, panel, viewport)
+    maxHeight.value = popoverMaxHeight(placement.value, trigger, viewport)
+  }
+
+  // Once the panel is in the DOM: measure/flip the placement, paint the hidden "from" frame (a reflow),
+  // flip to visible next frame (else mount + visible land in one frame with nothing to animate from), and
+  // move focus into the panel. Listening for outside-close rides the render transition below, not here.
   const enter = () =>
     nextTick(() => {
-      listen()
-      if (panelEl.value && rootEl.value) {
-        const trigger = rootEl.value.getBoundingClientRect()
-        const panel = panelEl.value.getBoundingClientRect()
-        const viewport = { width: window.innerWidth, height: window.innerHeight }
-        placement.value = resolvePlacement(requested, trigger, panel, viewport)
-        maxHeight.value = popoverMaxHeight(placement.value, trigger, viewport)
-        void panelEl.value.getBoundingClientRect()
-      }
+      measure()
+      if (panelEl.value) void panelEl.value.getBoundingClientRect()
       requestAnimationFrame(() => (visible.value = true))
       panelEl.value?.querySelector(POPOVER_FOCUSABLE)?.focus?.()
     })
@@ -71,16 +79,35 @@ export function usePopover(open, onClose, requested = 'bottom-start') {
       render.value = true
       enter()
     } else {
+      // Start the exit; unlisten + focus-restore ride the `render`-goes-false transition below, so they
+      // land AFTER the exit animation (matching React) rather than immediately on close.
       visible.value = false
-      unlisten()
-      lastFocused.value?.focus?.()
-      lastFocused.value = null
       exitTimer = setTimeout(() => (render.value = false), POPOVER_ENTER_MS)
     }
   })
 
+  // Attach the outside-close listeners while rendered; remove them and restore focus once `render`
+  // clears after the exit. Keyed on the render TRANSITION like React's useEffect([render]).
+  watch(render, (isRendered) => {
+    if (isRendered) listen()
+    else {
+      unlisten()
+      lastFocused.value?.focus?.()
+      lastFocused.value = null
+    }
+  })
+
+  // Re-measure when the requested placement changes while open (React re-runs its measure effect since
+  // `requested` is a dep). A plain-string caller's ref never changes, so this is a no-op for them.
+  watch(requestedRef, () => {
+    if (render.value && open.value) measure()
+  })
+
   onMounted(() => {
-    if (open.value) enter()
+    if (open.value) {
+      listen() // initial-open: render starts true, so the render-watch above won't fire for it
+      enter()
+    }
   })
   onUnmounted(() => {
     if (exitTimer) clearTimeout(exitTimer)
@@ -100,7 +127,9 @@ export const Popover = {
   setup(props, { slots }) {
     const openRef = toRef(props, 'open')
     const close = () => props.onClose?.()
-    const { render, visible, mounted, rootEl, panelEl, placement, maxHeight } = usePopover(openRef, close, props.placement ?? 'bottom-start')
+    // A reactive `requested` (not a snapshot) so a changed `placement` prop re-measures, like React.
+    const requested = computed(() => props.placement ?? 'bottom-start')
+    const { render, visible, mounted, rootEl, panelEl, placement, maxHeight } = usePopover(openRef, close, requested)
     return () => {
       const children = [props.trigger ?? slots.trigger?.()]
       if (mounted.value && render.value) {

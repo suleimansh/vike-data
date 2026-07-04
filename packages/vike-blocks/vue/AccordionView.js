@@ -32,6 +32,13 @@ export const AccordionView = {
     const heights = reactive({}) // item value -> px (or 0 when collapsed)
     const contentEls = {} // item value -> inner content el, for measuring
 
+    // Seed CLOSED panels to 0 before the first render, matching React's `useState(open ? undefined : 0)`.
+    // Otherwise a closed panel renders at `height: auto` (its content visible) until `onMounted` measures
+    // and collapses it = a visible flash on load. Open panels stay unseeded (`auto`) until measured to px.
+    for (const it of props.items ?? []) {
+      if (!openSet.value.has(it.value)) heights[it.value] = 0
+    }
+
     // Measure each open item's natural content height (the inner el keeps its size while the wrapper
     // collapses), so the wrapper can transition 0 <-> px; collapsed items measure to 0.
     const measure = () => {

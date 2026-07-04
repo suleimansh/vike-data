@@ -76,7 +76,6 @@ export function useOverlay(open, onClose) {
   // animate from (which is why, done naively, only the exit animates).
   const enter = () =>
     nextTick(() => {
-      lock()
       if (popupEl.value) void popupEl.value.getBoundingClientRect()
       requestAnimationFrame(() => (visible.value = true))
       const first = popupEl.value?.querySelector(FOCUSABLE)
@@ -93,16 +92,31 @@ export function useOverlay(open, onClose) {
       render.value = true
       enter()
     } else {
+      // Start the exit; unlock + focus-restore ride the `render`-goes-false transition below, so they
+      // land AFTER the exit animation (matching React) instead of immediately on close. Keeping them off
+      // the close path also means a reopen mid-exit (render stays true) never double-locks.
       visible.value = false
-      unlock()
-      lastFocused.value?.focus?.()
-      lastFocused.value = null
       exitTimer = setTimeout(() => (render.value = false), ENTER_MS)
     }
   })
 
+  // Lock (Escape/Tab listener + body scroll) while the overlay is rendered; unlock and restore focus to
+  // the trigger once `render` clears after the exit. Keyed on the render TRANSITION like React's
+  // useEffect([render]): reopening mid-exit keeps render true, so it doesn't re-lock or re-restore focus.
+  watch(render, (isRendered) => {
+    if (isRendered) lock()
+    else {
+      unlock()
+      lastFocused.value?.focus?.()
+      lastFocused.value = null
+    }
+  })
+
   onMounted(() => {
-    if (open.value) enter()
+    if (open.value) {
+      lock() // initial-open: render starts true, so the render-watch above won't fire for it
+      enter()
+    }
   })
   onUnmounted(() => {
     if (exitTimer) clearTimeout(exitTimer)
