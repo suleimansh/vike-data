@@ -31,3 +31,12 @@ export function getResources(config) {
 export function findResource(config, table) {
   return getResources(config).find((r) => r.table === table) ?? null
 }
+
+// A resource's presentation mode for its view/create/edit screens (#596). 'route' (the default)
+// gives each screen its own /admin/:table/... page; 'dialog' opens them as an overlay on the list
+// route (?view= / ?edit= / ?create). Matches vike-crud's `mode` authoring key, but admin defaults
+// to 'route' (route-per-page is admin's natural UX) rather than crud's 'dialog'. Dialog rendering
+// is React-only; on Vue a 'dialog' resource falls back to route mode. Anything unknown -> 'route'.
+export function resourceMode(resource) {
+  return resource?.mode === 'dialog' ? 'dialog' : 'route'
+}

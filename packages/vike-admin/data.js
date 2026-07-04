@@ -24,6 +24,7 @@ import {
   tableNamed,
   resourceLabel,
   recordTitleColumn,
+  resourceMode,
   buildDb,
   viewColumns,
   viewRecord,
@@ -177,6 +178,50 @@ export async function dashboardData(pageContext) {
 // (no silent cap) so the page can show an honest "Page X of Y".
 const DEFAULT_PAGE_SIZE = 20
 
+// Dialog mode (#596): on a `mode: 'dialog'` resource the LIST route hosts view / create / edit as an
+// overlay, opened by a URL param (`?view=id` / `?edit=id` / `?create`). This hydrates the ACTIVE
+// dialog's payload on the list request so it survives refresh / share, reusing the SAME resolve
+// helpers and record-level gates as the standalone /:id, /:id/edit and /new pages. Precedence is
+// view > edit > create (a stray second param can't open two). The dialog's create/edit FORMS post to
+// those existing routes, so there is no new write path here - only this read. Returns null when no
+// dialog param is set, or the target row is missing / out of scope / not permitted (a stale param
+// then just renders no dialog, exactly like guessing another owner's id on the route pages).
+async function loadDialogPayload(pageContext, { resource, table, tables, schemaTable, db, ctx, search }) {
+  const pk = primaryKeyOf(schemaTable)
+  const deps = { db, config: pageContext.config, tables, ctx }
+
+  if (search.view != null) {
+    const id = String(search.view)
+    const fields = keepVisible(viewRecord(resource, schemaTable), ctx)
+    const row = await db[table].findOne({ ...queryFilter(resource, ctx), [pk]: id })
+    if (!row || !(await allow(resource.canView, row, ctx))) return null
+    // Label FK values from the target table (bounded by its scope), then project to the visible
+    // fields (+pk) before returning - the same leak guard as viewData (#228).
+    const fkLabels = await fkLabelsFor(fields, schemaTable, deps)
+    const values = projectRow(row, { columns: fields, pk })
+    for (const [col, map] of Object.entries(fkLabels)) {
+      if (values[col] != null && map[values[col]] != null) values[`${col}_label`] = map[values[col]]
+    }
+    return { screen: 'view', id, fields, values, canEdit: await allow(resource.canEdit, row, ctx), canDelete: await allow(resource.canDelete, row, ctx) }
+  }
+
+  if (search.edit != null) {
+    const id = String(search.edit)
+    const fields = keepVisible(viewFields(resource, schemaTable), ctx)
+    const row = await db[table].findOne({ ...queryFilter(resource, ctx), [pk]: id })
+    if (!row || !(await allow(resource.canEdit, row, ctx))) return null
+    return { screen: 'edit', id, fields: await loadFkOptions(fields, deps), values: projectRow(row, { columns: fields, pk }) }
+  }
+
+  if (search.create != null) {
+    if (!(await allow(resource.canCreate, ctx))) return null
+    const fields = keepVisible(viewFields(resource, schemaTable), ctx)
+    return { screen: 'create', fields: await loadFkOptions(fields, deps) }
+  }
+
+  return null
+}
+
 // /admin/:table — the list, PAGED, SORTED and optionally FILTERED. Reads either:
 //   - the discrete params the list UI uses: `?page=` (1-based), `?sort=` (a sortable
 //     column), `?dir=` (asc|desc); or
@@ -270,9 +315,19 @@ export async function listData(pageContext) {
     })),
   )
 
+  // Dialog mode (#596): a `mode: 'dialog'` resource hosts view/create/edit as an overlay on THIS
+  // route. Hydrate the active dialog (if the URL asks for one) so it survives a refresh; `mode` tells
+  // the list renderer to point its links at `?view=/?edit=/?create` instead of the sub-routes. On
+  // Vue (no dialog host) `mode` is ignored and links stay route-based, so a dialog resource falls
+  // back to route mode. Route resources compute nothing here.
+  const mode = resourceMode(resource)
+  const dialog = mode === 'dialog' ? await loadDialogPayload(pageContext, { resource, table, tables, schemaTable, db, ctx, search }) : null
+
   return {
     table,
     label: resourceLabel(resource),
+    mode, // 'route' | 'dialog' - drives the list's link targets and the overlay
+    dialog, // the hydrated active dialog ({ screen, ... }) or null
     columns,
     // Project to the visible columns (+pk) BEFORE returning: vike-react serializes this straight
     // into the client payload, so a raw row would ship every hidden column (a password_hash, an

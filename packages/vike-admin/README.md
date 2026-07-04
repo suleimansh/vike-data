@@ -51,6 +51,19 @@ export const usersResource = defineResource({
 
 Minimal case: `defineResource({ table: 'subscriptions' })` derives every column and field from the schema. The `index` / `view` / `edit` refinements are optional.
 
+### Presentation: route or dialog
+
+`mode` picks how a resource's view / create / edit screens present:
+
+```js
+defineResource({ table: 'tags', mode: 'dialog' }) // overlay on the list; 'route' is the default
+```
+
+- `'route'` (default): each screen is its own page (`/admin/:table/:id`, `/:id/edit`, `/new`). Full navigation, works with no client JS.
+- `'dialog'`: the screens open as an overlay ON the list route, driven by a shareable, refresh-safe URL param (`/admin/:table?view=@id` / `?edit=@id` / `?create`). The forms still POST to the `/new` and `/:id/edit` routes, so it is the same write path, just presented in a modal.
+
+Dialog rendering is **React only** for now (it reuses vike-blocks' `Overlay`); on Vue a `mode: 'dialog'` resource falls back to route mode. `mode` mirrors vike-crud's `defineCrud({ mode })`, but admin defaults to `'route'` (route-per-page is admin's natural shape) where a per-page vike-crud defaults to `'dialog'`.
+
 ### Row scoping
 
 `query(q, ctx)` is a query-builder callback (equality + `in`, mirroring universal-orm's surface) that bounds **every** read for a resource to the user's own rows: it is AND-merged into the list (and its count), the edit load, update and delete. Its scalar columns are also forced onto writes, and `onCreate(ctx)` adds a write stamp forced onto inserts (so a user can neither create a row owned by someone else nor reassign ownership). Return the builder unrefined (`(q) => q`) for full access, so the admin bypass lives in the function itself. A resource with no `query` is unscoped. This is how `/admin` doubles as a self-service view: each user sees and edits only what they own.

@@ -42,8 +42,11 @@ const postsResource = defineResource({
   ...signedIn,
 })
 
-// Bare: no list/form — every column + field is derived from the tags schema.
-const tagsResource = defineResource({ table: 'tags', label: 'Tags', ...signedIn })
+// Bare: no list/form — every column + field is derived from the tags schema. `mode: 'dialog'` (#596)
+// makes its view/create/edit open as an OVERLAY on the list (`/admin/tags?view=@id` / `?edit=@id` /
+// `?create`) instead of navigating to a sub-page — the shareable, refresh-safe edit-in-dialog. React
+// only; on Vue this resource falls back to route mode. Every other resource here stays route-mode.
+const tagsResource = defineResource({ table: 'tags', label: 'Tags', mode: 'dialog', ...signedIn })
 
 // A minimal resource over vike-auth's `users` table so the posts author FK renders as a
 // picker labeled by email (recordTitle) instead of a raw uuid.
