@@ -36,9 +36,15 @@ export default {
       data: 'import:vike-admin/data:newData',
     },
     {
-      // `/admin/@table/new` (static segment) keeps precedence over this `@id` param, so
-      // creating never resolves to editing a row whose id is literally "new".
+      // `/admin/@table/new` (static segment) keeps precedence over this `@id` param, so the
+      // read-only detail view never resolves for a row whose id is literally "new".
       route: '/admin/@table/@id',
+      Page: 'import:vike-admin/react/ViewPage:default',
+      guard: 'import:vike-admin/guard:adminGuard',
+      data: 'import:vike-admin/data:viewData',
+    },
+    {
+      route: '/admin/@table/@id/edit',
       Page: 'import:vike-admin/react/EditPage:default',
       guard: 'import:vike-admin/guard:adminGuard',
       data: 'import:vike-admin/data:editData',

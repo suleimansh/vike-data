@@ -25,36 +25,41 @@ function listUrl(table, { page, sort, dir }) {
   return s ? `/admin/${table}?${s}` : `/admin/${table}`
 }
 
-// Per-row permission (#581): the data hook stamped `_canEdit` / `_canDelete` on each row. Show the
-// actions column only when at least one row is actionable; the per-row callback gates each cell.
-const anyEdit = data.rows.some((r) => r._canEdit)
-const anyDelete = data.rows.some((r) => r._canDelete)
+// Per-row permission (#581): the data hook stamped `_canView` / `_canEdit` / `_canDelete` on each
+// row. A row links to its detail view when viewable; the actions column (Edit + Delete) shows only
+// when at least one row is actionable, and each per-row callback gates its own cell.
+const anyView = data.rows.some((r) => r._canView)
+const anyActions = data.rows.some((r) => r._canEdit || r._canDelete)
+
+const detailBase = (row) => `/admin/${data.table}/${encodeURIComponent(String(row[data.pk]))}`
 
 // ListView's function props: a sortable header links to the same list sorted by its column; a row
-// links to its edit page when the user may edit that row.
+// links to its detail view when the user may view that row.
 const sortHref = (name, nextDir) => listUrl(data.table, { page: 1, sort: name, dir: nextDir })
-const rowHref = anyEdit ? (row) => (row._canEdit ? `/admin/${data.table}/${encodeURIComponent(String(row[data.pk]))}` : undefined) : undefined
+const rowHref = anyView ? (row) => (row._canView ? detailBase(row) : undefined) : undefined
 
-// A per-row Delete control: vike-blocks' `confirm` block guarding a no-JS form that POSTs
-// `_action=delete` to the row's edit route, reusing the admin's existing owner-scoped delete
-// (data:editData) — no new endpoint, no wider write surface. Server-side it keys on the primary
-// key AND the resource scope, so a scoped user can only delete a row they own. The confirm block
-// owns the form: with no JS it submits directly; hydrated, the submit is gated behind a themed
-// dialog (replacing the old window.confirm).
-const rowActions = anyDelete
+// The per-row action cell: an Edit link and/or a Delete control, each shown only when this user may
+// perform it. Both target the row's EDIT route (where the update/delete hook lives). The Delete
+// control is vike-blocks' `confirm` block guarding a no-JS form that POSTs `_action=delete`; keyed
+// server-side on the primary key AND the resource scope, so a scoped user can only delete their own.
+const linkStyle = { color: 'var(--color-primary, #2563eb)', textDecoration: 'none', fontSize: '14px' }
+const rowActions = anyActions
   ? (row) =>
-      row._canDelete
-        ? h(ConfirmView, {
-            label: 'Delete',
-            link: true,
-            intent: 'danger',
-            title: 'Delete this row?',
-            description: 'This cannot be undone.',
-            confirmLabel: 'Delete',
-            action: { to: `/admin/${data.table}/${encodeURIComponent(String(row[data.pk]))}`, method: 'post' },
-            fields: [{ name: '_action', value: 'delete' }],
-          })
-        : null
+      h('span', { style: { display: 'inline-flex', gap: '0.9rem', alignItems: 'center' } }, [
+        row._canEdit ? h('a', { href: `${detailBase(row)}/edit`, style: linkStyle }, 'Edit') : null,
+        row._canDelete
+          ? h(ConfirmView, {
+              label: 'Delete',
+              link: true,
+              intent: 'danger',
+              title: 'Delete this row?',
+              description: 'This cannot be undone.',
+              confirmLabel: 'Delete',
+              action: { to: `${detailBase(row)}/edit`, method: 'post' },
+              fields: [{ name: '_action', value: 'delete' }],
+            })
+          : null,
+      ])
   : undefined
 </script>
 <template>

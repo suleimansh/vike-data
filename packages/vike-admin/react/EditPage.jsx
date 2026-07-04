@@ -15,10 +15,18 @@ export default function EditPage() {
   // the missing form fields.
   if (data.apiWrite) return null
   const { table, label: title, fields, values, id } = data
-  const action = `/admin/${table}/${encodeURIComponent(id)}`
+  const detail = `/admin/${table}/${encodeURIComponent(id)}`
+  const action = `${detail}/edit` // the edit route owns the update/delete POST
   return (
     <div style={{ maxWidth: 520, margin: '0 auto' }}>
-      <BreadcrumbView items={[{ label: 'Admin', to: '/admin' }, { label: title, to: `/admin/${table}` }, { label: `Edit ${singular(title)}` }]} />
+      <BreadcrumbView
+        items={[
+          { label: 'Admin', to: '/admin' },
+          { label: title, to: `/admin/${table}` },
+          { label: singular(title), to: detail },
+          { label: 'Edit' },
+        ]}
+      />
       <h1 style={{ margin: '0.5rem 0 0', fontSize: 22 }}>Edit {singular(title)}</h1>
 
       <form
