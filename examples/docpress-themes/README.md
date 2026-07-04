@@ -19,7 +19,7 @@ Then open the printed URL and use the **Theme** / **Mode** switchers in the top-
 | Piece | File | Role |
 | --- | --- | --- |
 | Agnostic core | `vike-themes` (`themeToAppearanceCss`) | Compiles a brand + appearance to a `body { --color-*: … }` string. Zero framework deps. |
-| The switcher | `ThemeMenu.tsx` | Mounted in DocPress' `topNavigation` slot. Seeds the `<select>` values from the cookie and, on switch, persists the choice and mirrors the new palette onto the head `<style>`. |
+| The switcher | `ThemeMenu.tsx` | Mounted in the **vike-toolbar** settings popover (a `Toolbar` item — see the IR adapter below). Seeds the `<select>` values from the cookie and, on switch, persists the choice and mirrors the new palette onto the head `<style>`. |
 | No-flash head script | `headHtml` (in `ThemeMenu.tsx`, wired via `config.headHtml`) | An inline `<head>` script that reads the cookie and applies the palette **before first paint**. It carries the whole brand × appearance palette inlined, so it needs no request and no bundle — it works on both per-request SSR and **prerendered/static** pages (the latter has no request to read a cookie from at render time). This is the single source of truth for the initial palette. |
 | The bridge | the head `<style>` (written by `headHtml`) | Maps DocPress' `--dp-color-*` seam onto vike-themes' emitted `--color-*` (e.g. `--dp-color-bg: var(--color-bg)`), **scoped to `body`** (see lesson below). This adapter glue is what belongs in vike-data. |
 | Brands | `themes.ts` | Two local brands plus the shipped `emerald` brand. All of them only author `primary`; the core derives `primary-light` / `primary-dark`. |
@@ -32,10 +32,11 @@ Beyond the CSS-variable reskin, this example also expresses DocPress's **page sh
 
 | Piece | File | Role |
 | --- | --- | --- |
-| The shell as a block | `ir/getPageElement.tsx` | Maps DocPress's normalized model (`pageContext.resolved`: `navItemsAll` / `pageTitle` / `isLandingPage`) onto a `layout('docs')` block: the sidebar is a `docNav` block (`groupLeveledItems` folds DocPress's flat, leveled nav list into it), the navbar composes from `link` + a config-fed theme slot, the mobile menu is a `dialog` holding the same nav, and the MDX `<Page/>` flows into the article region via `slot('article').from('content')`. |
+| The shell as a block | `ir/getPageElement.tsx` | Maps DocPress's normalized model (`pageContext.resolved`: `navItemsAll` / `pageTitle` / `isLandingPage`) onto a `layout('docs')` block: the sidebar is a `docNav` block (`groupLeveledItems` folds DocPress's flat, leveled nav list into it), the navbar composes from `link` blocks, the mobile menu is a `dialog` holding the same nav, and the MDX `<Page/>` flows into the article region via `slot('article').from('content')`. |
+| The toolbar | `vike-toolbar` (`Toolbar`) | The theme picker lives in a fixed settings popover, not the navbar. Because this app uses a custom renderer (no vike-react `Wrapper` / `bodyHtmlEnd`), the IR shell mounts `vike-toolbar/react`'s `Toolbar` directly with `ThemeMenu` as an item, and `+onRenderHtml` injects the `#vike-toolbar-root` mount node. |
 | The seam | `+onRenderHtml.tsx` / `+onRenderClient.tsx` | A thin renderer override (Vike lets an app config override an extended one) that calls the IR `getPageElement` instead of DocPress's `<Layout>`. Non-invasive — no upstream `@brillout/docpress` change. The `<head>` reproduces the essentials for this example (title / favicon / the theme no-flash `headHtml`); a real integration keeps DocPress's full head, which is why the honest long-term seam is an injectable `getPageElement` upstream. |
 
-The theme switcher and no-flash palette are preserved through the swap: `ThemeMenu` rides a `slot('theme').from('config')` in the navbar, and `headHtml` is still injected — so a designer can change **structure + components** (swap the renderer per block type) on top of the color reskin.
+The theme switcher and no-flash palette are preserved through the swap: `ThemeMenu` is a `vike-toolbar` settings item and `headHtml` is still injected — so a designer can change **structure + components** (swap the renderer per block type) on top of the color reskin.
 
 ## The load-bearing lesson
 

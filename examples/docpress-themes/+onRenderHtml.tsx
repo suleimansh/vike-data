@@ -8,6 +8,7 @@ export { onRenderHtml }
 // long-term seam is an injectable getPageElement upstream, not this override.
 import ReactDOMServer from 'react-dom/server'
 import { escapeInject, dangerouslySkipEscape } from 'vike/server'
+import { TOOLBAR_ROOT_ID } from 'vike-toolbar'
 import { getPageElement } from './ir/getPageElement'
 import type { PageContextServer } from 'vike/types'
 
@@ -32,6 +33,9 @@ async function onRenderHtml(pageContext: PageContextServer) {
       </head>
       <body>
         <div id="page-view">${dangerouslySkipEscape(pageHtml)}</div>
+        <!-- vike-toolbar's popover portals into this node, kept OUTSIDE the hydration root. Normally
+             vike-toolbar contributes it via bodyHtmlEnd; the custom renderer injects it here. -->
+        <div id="${TOOLBAR_ROOT_ID}"></div>
       </body>
     </html>`
 }

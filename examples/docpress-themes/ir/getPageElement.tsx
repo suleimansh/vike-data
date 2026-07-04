@@ -12,8 +12,23 @@ import React from 'react'
 import { definePage, resolvePage, layout, slot, docNav, groupLeveledItems, link, dialog } from 'vike-blocks'
 // Importing the react barrel registers every block renderer (layout / slot / doc-nav / link / dialog).
 import { LayoutView, LayoutConfigProvider } from 'vike-blocks/react'
+// The theme picker lives in the vike-toolbar settings popover, not the navbar. This example uses a
+// custom renderer (DocPress is not vike-react), so the toolbar's vike-react Wrapper / bodyHtmlEnd
+// don't fire — we mount its renderer-agnostic `Toolbar` here directly and inject its `#vike-toolbar-
+// root` mount node in +onRenderHtml. ThemeMenu is a self-contained control, so it drops in as an item.
+import { Toolbar } from 'vike-toolbar/react/Toolbar'
 import { ThemeMenu } from '../ThemeMenu'
 import type { PageContext } from 'vike/types'
+
+// Mount the toolbar one tick AFTER hydration. vike-toolbar's Toolbar resolves its portal target
+// synchronously on the first client render, so under this custom renderer it would render the popover
+// during hydration while the server rendered only the button = a mismatch. Deferring to a post-mount
+// effect makes the first client render match the server (nothing), then the toolbar appears.
+function DeferredToolbar() {
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => setMounted(true), [])
+  return mounted ? <Toolbar items={[{ id: 'theme', Control: ThemeMenu }]} /> : null
+}
 
 function getPageElement(pageContext: PageContext) {
   const { Page } = pageContext
@@ -27,11 +42,9 @@ function getPageElement(pageContext: PageContext) {
   const leveled = navItemsDetached ?? navItemsAll
   const navTree = () => docNav().current(current).tree(groupLeveledItems(leveled))
 
-  // The navbar: a logo link, then a config-fed theme switcher (the vike-themes ThemeMenu, injected as
-  // a React node via slot(from:'config') so it stays out of the serializable IR) + a repo link.
+  // The navbar: a logo link + a repo link. The theme switcher moved to the toolbar popover (below).
   const header = [
     link(cfg.name).to('/'),
-    slot('theme').from('config'),
     ...(cfg.github ? [link('GitHub ↗').to(cfg.github)] : []),
   ]
 
@@ -49,11 +62,14 @@ function getPageElement(pageContext: PageContext) {
 
   // Render LayoutView directly (not via <Blocks>) so we can hand it the live page body as `content`;
   // the article's slot(from:'content') placeholder draws it. LayoutConfigProvider feeds the config
-  // slots (currentPath for active highlighting, the theme node).
+  // slots (currentPath for active highlighting). The toolbar mounts alongside the shell: its button
+  // renders in-tree, its popover portals into the injected #vike-toolbar-root, and it renders the
+  // theme picker as a settings item.
   return (
     <React.StrictMode>
-      <LayoutConfigProvider config={{ currentPath: current, theme: <ThemeMenu /> }}>
+      <LayoutConfigProvider config={{ currentPath: current }}>
         <LayoutView variant={variant} slots={slots} content={<Page />} />
+        <DeferredToolbar />
       </LayoutConfigProvider>
     </React.StrictMode>
   )

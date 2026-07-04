@@ -16,7 +16,8 @@
     "vike": "0.4.259-commit-f6ecfb2",
     "vike-blocks": "workspace:*",
     "vike-theme-emerald": "workspace:*",
-    "vike-themes": "workspace:*"
+    "vike-themes": "workspace:*",
+    "vike-toolbar": "workspace:*"
   },
   "devDependencies": {
     "@docsearch/react": "^3.8.0",

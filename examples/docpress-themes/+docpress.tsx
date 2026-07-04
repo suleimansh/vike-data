@@ -1,10 +1,9 @@
 export { config as default }
 
 import type { Config } from '@brillout/docpress'
-import React from 'react'
 import logo from './assets/logo.svg'
 import { headings, headingsDetached } from './headings'
-import { ThemeMenu, headHtml } from './ThemeMenu'
+import { headHtml } from './ThemeMenu'
 
 const config: Config = {
   name: 'Themed DocPress',
@@ -20,9 +19,9 @@ const config: Config = {
   headings,
   headingsDetached,
 
-  // The proof: a vike-themes-powered theme switcher lives in DocPress's
-  // top-navigation React-node slot.
-  topNavigation: <ThemeMenu />,
+  // The theme switcher lives in the vike-toolbar settings popover (see ir/getPageElement),
+  // not DocPress's top-navigation slot — the IR shell replaces DocPress's Layout, so this
+  // config's `topNavigation` would never render.
   navMaxWidth: 1140,
 
   // Inline <head> script that applies the cookie's palette before first paint,

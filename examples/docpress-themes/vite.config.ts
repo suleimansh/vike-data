@@ -12,6 +12,6 @@ export default {
     include: ['@docsearch/react'],
     // Workspace UI packages ship ESM source (.js/.jsx); keep them out of the
     // pre-bundle so HMR + workspace symlinks resolve (same as the other examples).
-    exclude: ['vike-themes', 'vike-theme-emerald', 'vike-blocks'],
+    exclude: ['vike-themes', 'vike-theme-emerald', 'vike-blocks', 'vike-toolbar'],
   },
 }
