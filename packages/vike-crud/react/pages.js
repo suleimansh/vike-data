@@ -4,6 +4,7 @@
 // backed by ONE generic page (ViewPage) + ONE generic data hook (viewData); the hook reads the
 // `views` config point to know which view this route is. Plain JS (no JSX) so it is testable.
 import { resolvePage } from 'vike-blocks'
+import { findSection } from '../walk.js'
 
 // The config-time authoring surface, re-exported here so an app imports everything it declares its
 // views with from ONE jsx-free entry: `import { definePage, crudBlocks, viewPages } from
@@ -95,9 +96,10 @@ export function sectionHasContent(section) {
 }
 
 // The resolved form fields for a `form` block on `table` in this view — what the POST handler
-// coerces the submitted form against.
+// coerces the submitted form against. Finds the form at any depth (#574), so a form composed into a
+// card / tab / field is still writable, not silently a no-op.
 export function formFieldsFor(view, tables, table) {
   const resolved = resolvePage(view, tables)
-  const form = resolved.sections.find((s) => s.block === 'form' && s.props.table === table)
+  const form = findSection(resolved.sections, (s) => s.block === 'form' && s.props.table === table)
   return form?.resolved.fields ?? null
 }

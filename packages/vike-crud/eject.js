@@ -96,7 +96,7 @@ function dataFile({ route, sections, scope, pkg }) {
 // viewData or \`views\` config dispatch: the view descriptor, the row-scope, and the read/write
 // path all live here. Edit the sections, change the query, add fields — nothing regenerates.
 import { redirect } from 'vike/abort'
-import { resolveViewTables, buildDb, hydrateView, createRow, updateRow, definePage, resolvePage } from '${pkg}'
+import { resolveViewTables, buildDb, hydrateView, createRow, updateRow, definePage, resolvePage, findSection } from '${pkg}'
 
 const ROUTE = ${quote(route)}
 
@@ -132,8 +132,9 @@ function readForm(pageContext) {
 }
 
 // The resolved fields of this view's \`form\` block for \`table\` — what a POST coerces against.
+// findSection looks at any depth, so a form nested in a card / tab still writes.
 function formFields(tables, table) {
-  const form = resolvePage(view, tables).sections.find((s) => s.block === 'form' && s.props.table === table)
+  const form = findSection(resolvePage(view, tables).sections, (s) => s.block === 'form' && s.props.table === table)
   return form?.resolved.fields ?? null
 }
 
