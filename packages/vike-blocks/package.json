@@ -16,6 +16,7 @@
     "./dropdown": "./blocks/dropdown.js",
     "./popover": "./blocks/popover.js",
     "./nav-menu": "./blocks/nav-menu.js",
+    "./doc-nav": "./blocks/doc-nav.js",
     "./toast": "./blocks/toast-store.js",
     "./chart": "./blocks/chart.js",
     "./card": "./blocks/card.js",
@@ -59,6 +60,7 @@
     "./react/FormView": "./react/FormView.jsx",
     "./react/LayoutView": "./react/LayoutView.jsx",
     "./react/SlotView": "./react/SlotView.jsx",
+    "./react/DocNavView": "./react/DocNavView.jsx",
     "./vue": "./vue/index.js",
     "./vue/registry": "./vue/registry.js",
     "./vue/action-context": "./vue/action-context.js",
@@ -87,7 +89,8 @@
     "./vue/DataTableView": "./vue/DataTableView.js",
     "./vue/FormView": "./vue/FormView.js",
     "./vue/LayoutView": "./vue/LayoutView.js",
-    "./vue/SlotView": "./vue/SlotView.js"
+    "./vue/SlotView": "./vue/SlotView.js",
+    "./vue/DocNavView": "./vue/DocNavView.js"
   },
   "scripts": {
     "test": "node --test"

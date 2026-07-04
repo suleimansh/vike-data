@@ -12,3 +12,17 @@ export function stackRegionOrder(slots) {
   const known = ['header', 'main', 'footer']
   return [...known.filter((n) => slots[n]), ...Object.keys(slots).filter((n) => !known.includes(n))]
 }
+
+// Static <style> for the `docs` layout shell, shared by the react + vue twins so the responsive rules
+// live once. The header's first child (the logo) is pushed left so the rest of the row sits on the
+// right; the `mobileMenu` region is hidden on desktop. Below the breakpoint the sidebar column drops
+// out, the article gets tighter padding, and the mobile menu appears (fill it with a dialog holding
+// the same doc-nav).
+export const DOCS_SHELL_STYLE_TAG =
+  '.vike-blocks-docs-header>:first-child{margin-right:auto}' +
+  '.vike-blocks-docs-mobile{display:none}' +
+  '@media (max-width:860px){' +
+  '.vike-blocks-docs-body{grid-template-columns:minmax(0,1fr)!important}' +
+  '.vike-blocks-docs-sidebar{display:none!important}' +
+  '.vike-blocks-docs-article{padding:1.5rem 1.25rem!important}' +
+  '.vike-blocks-docs-mobile{display:block}}'

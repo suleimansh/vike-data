@@ -52,6 +52,7 @@ import './BreadcrumbView.jsx' // side-effect: register the breadcrumb renderer
 import './CommandView.jsx' // side-effect: register the command renderer
 import './LayoutView.jsx' // side-effect: register the layout container renderer
 import './SlotView.jsx' // side-effect: register the slot placeholder renderer
+import './DocNavView.jsx' // side-effect: register the doc-nav renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
 export { ActionRunnerContext, ActionRunnerProvider, useActionRunner } from './action-context.js' // the actions seam (#385)
 export { Blocks, Page } from './Blocks.jsx' // importing Blocks registers the built-in blocks
@@ -108,3 +109,4 @@ export { BreadcrumbView } from './BreadcrumbView.jsx'
 export { CommandView } from './CommandView.jsx'
 export { LayoutView, LayoutConfigContext, LayoutConfigProvider, useLayoutConfig, LayoutContentContext, useLayoutContent, NavRegion, registerLayoutShell } from './LayoutView.jsx'
 export { SlotView } from './SlotView.jsx'
+export { DocNavView } from './DocNavView.jsx'
