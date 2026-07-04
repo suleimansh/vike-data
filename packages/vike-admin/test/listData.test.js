@@ -20,7 +20,7 @@ const usersSchema = defineSchema('users', (t) => {
 })
 
 // email is sortable; name is a plain (non-sortable) column.
-const resource = defineResource({ table: 'users', list: [column('email').sortable(), column('name')] })
+const resource = defineResource({ table: 'users', index: [column('email').sortable(), column('name')] })
 const config = { schemas: [usersSchema], adminResources: [resource] }
 
 const pc = (search = {}) => ({ routeParams: { table: 'users' }, config, user: { role: 'admin' }, urlParsed: { search } })

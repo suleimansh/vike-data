@@ -96,7 +96,7 @@ test('canDelete(record, ctx): gates the delete path independently of edit', asyn
 test('onCreate: forces the owner column onto an insert, overriding a forged value', async () => {
   const posts = defineResource({
     table: 'posts',
-    form: [field('user_id'), field('title')],
+    edit: [field('user_id'), field('title')],
     onCreate: (ctx) => ({ user_id: ctx.user.id }),
   })
   const config = { schemas: [postsSchema], adminResources: [posts] }
@@ -109,7 +109,7 @@ test('onCreate: forces the owner column onto an insert, overriding a forged valu
 test('.when(ctx): a hidden field is dropped from the form AND not writable', async () => {
   const posts = defineResource({
     table: 'posts',
-    form: [field('title'), field('status').when((ctx) => ctx.user?.role === 'admin')],
+    edit: [field('title'), field('status').when((ctx) => ctx.user?.role === 'admin')],
     onCreate: (ctx) => ({ user_id: ctx.user.id }),
   })
   const config = { schemas: [postsSchema], adminResources: [posts] }
@@ -127,7 +127,7 @@ test('.when(ctx): a hidden field is dropped from the form AND not writable', asy
 test('.when(ctx): a hidden LIST column never ships to the client', async () => {
   const posts = defineResource({
     table: 'posts',
-    list: [column('title'), column('status').when((ctx) => ctx.user?.role === 'admin')],
+    index: [column('title'), column('status').when((ctx) => ctx.user?.role === 'admin')],
   })
   const config = { schemas: [postsSchema], adminResources: [posts] }
   await freshDb(config).posts.insert({ id: 'p1', user_id: 'u1', title: 't', status: 'secret' })

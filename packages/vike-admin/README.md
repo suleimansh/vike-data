@@ -22,16 +22,18 @@ Installing `vike-admin/react` brings the `/admin/*` pages (via `config.pages`) a
 ## Define a resource
 
 ```js
-import { defineResource, column, field } from 'vike-admin/define'
+import { defineResource, column, display, field } from 'vike-admin/define'
 
 export const usersResource = defineResource({
   table: 'users',          // a table in the COMPOSED schema, not a Model class
   label: 'Users',
-  list: [
+  // The screen vocabulary matches defineCrud: index (list), view (detail), edit (the form).
+  index: [
     column('email').sortable().searchable(),
     column('created_at').format('since'),
   ],
-  form: [
+  view: [display('email'), display('name')],
+  edit: [
     field('email').type('email').required(),
     field('name'),         // type inferred from the schema
     // id / *_hash / timestamps auto-hidden by convention
@@ -47,7 +49,7 @@ export const usersResource = defineResource({
 })
 ```
 
-Minimal case: `defineResource({ table: 'subscriptions' })` derives every column and field from the schema. List/form refinements are optional.
+Minimal case: `defineResource({ table: 'subscriptions' })` derives every column and field from the schema. The `index` / `view` / `edit` refinements are optional.
 
 ### Row scoping
 
@@ -59,7 +61,7 @@ Minimal case: `defineResource({ table: 'subscriptions' })` derives every column 
 
 ## How it works
 
-- **Pages** (`config.pages`): `/admin` (dashboard), `/admin/:table` (list), `/admin/:table/new` (create), `/admin/:table/:id` (edit + delete).
+- **Pages** (`config.pages`): `/admin` (dashboard), `/admin/:table` (list), `/admin/:table/new` (create), `/admin/:table/:id` (read-only view), `/admin/:table/:id/edit` (edit + delete).
 - **Schema introspection**: each page's `data` hook resolves the merged schema (`resolveAdminTables`, which delegates to vike-crud's `resolveViewTables`) and derives columns/fields a resource omits, auto-hiding `id` / `*_hash` / timestamps.
 - **Data**: reads/writes go through [universal-orm](../universal-orm) (`db.<table>.find` / `.insert`) on whatever adapter the app registered (memory for dev, Drizzle for real). No ORM is imported.
 - **Write POSTs**: the write routes own their own POST. Vike hands the Web Request as `pageContext._reqWeb`, so `/admin/:table/new` renders the form (GET) and inserts (POST), and `/admin/:table/:id` renders the edit form (GET) and updates or deletes (POST), then redirects. No separate endpoint.

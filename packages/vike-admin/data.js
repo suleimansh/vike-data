@@ -11,6 +11,9 @@ import { randomUUID } from 'node:crypto'
 import { redirect } from 'vike/abort'
 import { isInCondition } from '@universal-orm/core'
 import { readFormRequest } from 'vike-crud/request'
+// Shared, framework-agnostic helpers reused from vike-crud's data layer instead of a parallel copy:
+// the primary-key resolver and the form-row coercion (its widget-aware superset of what admin had).
+import { primaryKeyOf, rowFromForm } from 'vike-crud/data'
 import { runQuery, allow, keepVisible } from 'vike-crud/authz'
 import { parseListQuery, QueryError } from './query.js'
 import { projectRow } from './project.js'
@@ -85,31 +88,6 @@ async function fkLabelsFor(columns, schemaTable, deps) {
   return labels
 }
 
-// Build a row from submitted form data, coercing each field by its type. An unchecked
-// checkbox sends no value, so a boolean field reads as false on absence; an empty string
-// becomes null; an integer field is numeric. Shared by create and edit so both coerce
-// identically. universal-orm rejects unknown columns, so only declared fields are read.
-function rowFromForm(fields, form) {
-  const row = {}
-  for (const f of fields) {
-    if (f.type === 'boolean') {
-      row[f.name] = form.get(f.name) === 'on' || form.get(f.name) === 'true'
-      continue
-    }
-    if (!form.has(f.name)) continue
-    let value = form.get(f.name)
-    if (value === '') value = null
-    else if (f.type === 'integer') value = Number(value)
-    row[f.name] = value
-  }
-  return row
-}
-
-// The resource's single primary-key column (the row identity the edit/delete routes key
-// on). Composite keys are out of scope for the MVP; falls back to `id` by convention.
-function primaryKeyOf(schemaTable) {
-  return schemaTable.columns.find((c) => c.primary)?.name ?? 'id'
-}
 
 // Row-level scoping (#104, #581). A resource declares `query(q, ctx) -> q` — a query-builder
 // callback that reads like a query but only expresses what the ORM can execute (equality + `in`).

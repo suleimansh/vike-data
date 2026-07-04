@@ -50,7 +50,7 @@ test('viewColumns defaults from the schema and auto-hides id / *_hash / timestam
 test('viewColumns honors an explicit list and resolves type/format from the schema', () => {
   const resource = defineResource({
     table: 'users',
-    list: [column('email').sortable().searchable(), column('created_at').format('since').label('Joined')],
+    index: [column('email').sortable().searchable(), column('created_at').format('since').label('Joined')],
   })
   const cols = viewColumns(resource, usersTable())
   assert.deepEqual(
@@ -80,7 +80,7 @@ test('viewFields defaults from the schema, auto-hides, and infers required from 
 test('viewFields honors an explicit form and lets a field override the inferred type', () => {
   const resource = defineResource({
     table: 'users',
-    form: [field('email').type('email').required(), field('name')],
+    edit: [field('email').type('email').required(), field('name')],
   })
   const fields = viewFields(resource, usersTable())
   assert.equal(fields[0].type, 'email')
@@ -203,7 +203,7 @@ test('an enum semantic surfaces its values as static select options', () => {
 })
 
 test('an explicit field .type() override wins over the column semantic for both type and widget', () => {
-  const resource = defineResource({ table: 'docs', form: [field('contact').type('text')] })
+  const resource = defineResource({ table: 'docs', edit: [field('contact').type('text')] })
   const contact = viewFields(resource, docsTable())[0]
   assert.equal(contact.type, 'text')
   assert.equal(contact.widget, 'text')

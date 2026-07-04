@@ -24,7 +24,7 @@ const usersSchema = defineSchema('users', (t) => {
   t.timestamps()
 })
 
-const resource = defineResource({ table: 'users', list: [column('email'), column('name')], form: [column('email'), column('name')] })
+const resource = defineResource({ table: 'users', index: [column('email'), column('name')], edit: [column('email'), column('name')] })
 const config = { schemas: [usersSchema], adminResources: [resource] }
 
 beforeEach(async () => {

@@ -21,7 +21,7 @@ const docsSchema = defineSchema('docs', (t) => {
 // A member may write within the orgs they belong to (o1, o2); o3 is off-limits.
 const resource = defineResource({
   table: 'docs',
-  form: [field('org_id'), field('title')],
+  edit: [field('org_id'), field('title')],
   query: (q, ctx) => (ctx.user.role === 'admin' ? q : q.whereIn('org_id', ctx.user.orgIds)),
 })
 const config = { schemas: [docsSchema], adminResources: [resource] }
