@@ -23,6 +23,7 @@ import {
   recordTitleColumn,
   buildDb,
   viewColumns,
+  viewRecord,
   viewFields,
 } from './resolve.js'
 
@@ -278,12 +279,14 @@ export async function listData(pageContext) {
   const rows = await db[table].find(where, { limit: pageSize, offset, orderBy })
   const fkLabels = await fkLabelsFor(columns, schemaTable, { db, config: pageContext.config, tables, ctx })
 
-  // Per-row edit/delete permission (#581): `canEdit`/`canDelete` are record-level `(record, ctx)`,
+  // Per-row permission (#581): `canView`/`canEdit`/`canDelete` are record-level `(record, ctx)`,
   // evaluated here on the server (predicates never serialize) and stamped onto each projected row
-  // so the list can show an Edit link / Delete control only for the rows this user may act on.
+  // so the list links to the detail page / shows an Edit link / Delete control only for the rows
+  // this user may act on.
   const projected = await Promise.all(
     rows.map(async (row) => ({
       ...projectRow(row, { columns, pk }),
+      _canView: await allow(resource.canView, row, ctx),
       _canEdit: await allow(resource.canEdit, row, ctx),
       _canDelete: await allow(resource.canDelete, row, ctx),
     })),
@@ -359,7 +362,53 @@ export async function newData(pageContext) {
   }
 }
 
-// /admin/:table/:id — the detail/edit page. GET loads the row by its primary key and
+// /admin/:table/:id — the read-only VIEW (detail) page. Loads the one row keyed on its primary
+// key AND the query scope, gates it with `canView(record, ctx)`, and returns the resolved RECORD
+// fields + values for the read-only display. FK values are labelled from the target table (bounded
+// by its own scope) so the detail shows an author's email, not a uuid. A missing / out-of-scope /
+// unviewable row bounces to the list. `canEdit`/`canDelete` ride along so the page can offer the
+// Edit / Delete controls only when this user may act on the row.
+export async function viewData(pageContext) {
+  const { table, id } = pageContext.routeParams
+  const ctx = ctxOf(pageContext)
+  const resource = findResource(pageContext.config, table)
+  if (!resource) throw redirect('/admin')
+
+  const tables = resolveAdminTables(pageContext.config)
+  const schemaTable = tableNamed(tables, table)
+  if (!schemaTable) throw redirect('/admin')
+
+  const fields = keepVisible(viewRecord(resource, schemaTable), ctx)
+  const pk = primaryKeyOf(schemaTable)
+  const db = buildDb(tables)
+
+  const owned = { ...queryFilter(resource, ctx), [pk]: id }
+  const row = await db[table].findOne(owned)
+  // Deleted, never existed, not the user's, or not viewable by them -> back to the list.
+  if (!row || !(await allow(resource.canView, row, ctx))) throw redirect(`/admin/${table}`)
+
+  // Label FK values from the target table (bounded by its scope), then project to the visible
+  // fields (+pk) before returning — the same leak guard as the list (#228). The `_label` keys are
+  // added AFTER projection so the read-only cell can show the referenced row's title.
+  const fkLabels = await fkLabelsFor(fields, schemaTable, { db, config: pageContext.config, tables, ctx })
+  const values = projectRow(row, { columns: fields, pk })
+  for (const [col, map] of Object.entries(fkLabels)) {
+    if (values[col] != null && map[values[col]] != null) values[`${col}_label`] = map[values[col]]
+  }
+
+  return {
+    table,
+    label: resourceLabel(resource),
+    fields,
+    values,
+    id,
+    pk,
+    canEdit: await allow(resource.canEdit, row, ctx),
+    canDelete: await allow(resource.canDelete, row, ctx),
+  }
+}
+
+// /admin/:table/:id/edit — the detail/edit page. GET loads the row by its primary key and
 // pre-fills the form; POST either UPDATES it (default) or DELETES it (an `_action=delete`
 // field, from the Delete control), then redirects to the list. The row is loaded FIRST, then
 // the record-level gate runs against it (`canEdit(record, ctx)` / `canDelete(record, ctx)`); an

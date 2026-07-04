@@ -9,12 +9,14 @@ import { useData } from 'vike-react/useData'
 import { ListView } from 'vike-crud/react'
 import { ConfirmView, PaginationView } from 'vike-blocks/react'
 
+const actionLinkStyle = { color: 'var(--color-primary, #2563eb)', textDecoration: 'none', fontSize: 14 }
+
 // A per-row Delete control: vike-blocks' `confirm` block guarding a no-JS form that POSTs
-// `_action=delete` to the row's edit route, so it reuses the admin's existing owner-scoped
-// delete (data:editData) — no new endpoint and no widening of the write surface. Keyed on the
-// row's primary key AND the resource scope server-side, so a scoped user can only delete a row
-// they own. The confirm block owns the form: with no client JS it submits directly; once
-// hydrated the submit is gated behind a themed dialog (replacing the old window.confirm).
+// `_action=delete` to the row's EDIT route (where the update/delete hook lives), so it reuses the
+// admin's existing owner-scoped delete (data:editData) — no new endpoint and no widening of the
+// write surface. Keyed on the row's primary key AND the resource scope server-side, so a scoped
+// user can only delete a row they own. The confirm block owns the form: with no client JS it
+// submits directly; once hydrated the submit is gated behind a themed dialog.
 function DeleteRowForm({ action }) {
   return (
     <ConfirmView
@@ -27,6 +29,21 @@ function DeleteRowForm({ action }) {
       action={{ to: action, method: 'post' }}
       fields={[{ name: '_action', value: 'delete' }]}
     />
+  )
+}
+
+// The per-row action cell: an Edit link and/or a Delete control, each shown only when this user may
+// perform it (the data hook stamped `_canEdit` / `_canDelete`). Both target the row's edit route.
+function RowActions({ base, row }) {
+  return (
+    <span style={{ display: 'inline-flex', gap: '0.9rem', alignItems: 'center' }}>
+      {row._canEdit && (
+        <a href={`${base}/edit`} style={actionLinkStyle}>
+          Edit
+        </a>
+      )}
+      {row._canDelete && <DeleteRowForm action={`${base}/edit`} />}
+    </span>
   )
 }
 
@@ -45,10 +62,11 @@ function listUrl(table, { page, sort, dir }) {
 
 export default function ListPage() {
   const { table, label, columns, rows, fkLabels, pk, canCreate, page, pageCount, total, sort, dir } = useData()
-  // Per-row permission (#581): the data hook stamped `_canEdit` / `_canDelete` on each row. Show the
-  // actions column only when at least one row is actionable; the per-row callback gates each cell.
-  const anyEdit = rows.some((r) => r._canEdit)
-  const anyDelete = rows.some((r) => r._canDelete)
+  // Per-row permission (#581): the data hook stamped `_canView` / `_canEdit` / `_canDelete` on each
+  // row. A row links to its detail view when viewable; the actions column (Edit + Delete) shows only
+  // when at least one row is actionable, and each per-row callback gates its own cell.
+  const anyView = rows.some((r) => r._canView)
+  const anyActions = rows.some((r) => r._canEdit || r._canDelete)
 
   return (
     <div style={{ maxWidth: 900, margin: '0 auto' }}>
@@ -94,8 +112,8 @@ export default function ListPage() {
           sort={sort}
           dir={dir}
           sortHref={(name, nextDir) => listUrl(table, { page: 1, sort: name, dir: nextDir })}
-          rowHref={anyEdit ? (row) => (row._canEdit ? `/admin/${table}/${row[pk]}` : undefined) : undefined}
-          rowActions={anyDelete ? (row) => (row._canDelete ? <DeleteRowForm action={`/admin/${table}/${row[pk]}`} /> : null) : undefined}
+          rowHref={anyView ? (row) => (row._canView ? `/admin/${table}/${row[pk]}` : undefined) : undefined}
+          rowActions={anyActions ? (row) => <RowActions base={`/admin/${table}/${row[pk]}`} row={row} /> : undefined}
           emptyLabel="No rows yet."
         />
       </div>

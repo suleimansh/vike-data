@@ -43,16 +43,18 @@ export function pageRouteFor(pathname) {
 
 // Map a write request (method + `/admin*.json` path) to the page route that performs it and
 // the action to hand the hook, or null when it isn't a valid write endpoint.
-//   POST   /admin/<table>.json      -> { /admin/<table>/new, create }
-//   PATCH  /admin/<table>/<id>.json -> { /admin/<table>/<id>, update }
-//   DELETE /admin/<table>/<id>.json -> { /admin/<table>/<id>, delete }
+//   POST   /admin/<table>.json      -> { /admin/<table>/new,       create }
+//   PATCH  /admin/<table>/<id>.json -> { /admin/<table>/<id>/edit, update }
+//   DELETE /admin/<table>/<id>.json -> { /admin/<table>/<id>/edit, delete }
+// (writes render the EDIT page route, which owns the update/delete hook; the bare `@id` route is
+// the read-only VIEW page.)
 export function writeTargetFor(pathname, method) {
   const list = pathname.match(/^\/admin\/([^/]+)\.json$/)
   if (list && method === 'POST') return { pageRoute: `/admin/${list[1]}/new`, action: 'create', hasBody: true }
 
   const row = pathname.match(/^\/admin\/([^/]+)\/([^/]+)\.json$/)
-  if (row && (method === 'PATCH' || method === 'PUT')) return { pageRoute: `/admin/${row[1]}/${row[2]}`, action: 'update', hasBody: true }
-  if (row && method === 'DELETE') return { pageRoute: `/admin/${row[1]}/${row[2]}`, action: 'delete', hasBody: false }
+  if (row && (method === 'PATCH' || method === 'PUT')) return { pageRoute: `/admin/${row[1]}/${row[2]}/edit`, action: 'update', hasBody: true }
+  if (row && method === 'DELETE') return { pageRoute: `/admin/${row[1]}/${row[2]}/edit`, action: 'delete', hasBody: false }
 
   return null
 }

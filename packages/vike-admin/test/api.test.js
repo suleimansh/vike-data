@@ -19,9 +19,9 @@ test('pageRouteFor maps only /admin*.json paths to their page route', () => {
 
 test('writeTargetFor maps a method + path to its page route, action and body need', () => {
   assert.deepEqual(writeTargetFor('/admin/users.json', 'POST'), { pageRoute: '/admin/users/new', action: 'create', hasBody: true })
-  assert.deepEqual(writeTargetFor('/admin/users/u1.json', 'PATCH'), { pageRoute: '/admin/users/u1', action: 'update', hasBody: true })
-  assert.deepEqual(writeTargetFor('/admin/users/u1.json', 'PUT'), { pageRoute: '/admin/users/u1', action: 'update', hasBody: true })
-  assert.deepEqual(writeTargetFor('/admin/users/u1.json', 'DELETE'), { pageRoute: '/admin/users/u1', action: 'delete', hasBody: false })
+  assert.deepEqual(writeTargetFor('/admin/users/u1.json', 'PATCH'), { pageRoute: '/admin/users/u1/edit', action: 'update', hasBody: true })
+  assert.deepEqual(writeTargetFor('/admin/users/u1.json', 'PUT'), { pageRoute: '/admin/users/u1/edit', action: 'update', hasBody: true })
+  assert.deepEqual(writeTargetFor('/admin/users/u1.json', 'DELETE'), { pageRoute: '/admin/users/u1/edit', action: 'delete', hasBody: false })
   // wrong shape for the verb -> null (the middleware turns that into a 405)
   assert.equal(writeTargetFor('/admin/users.json', 'PATCH'), null) // no id to update
   assert.equal(writeTargetFor('/admin/users/u1.json', 'POST'), null) // create has no id
