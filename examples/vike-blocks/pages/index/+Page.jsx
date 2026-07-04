@@ -19,6 +19,7 @@ const catalog = [
   { name: 'Checkbox', href: '/checkbox', tag: 'form', desc: 'A dep-free boolean control with an animated check — click to toggle. label / checked / disabled, theme-native. Pairs with field.' },
   { name: 'Radio', href: '/radio', tag: 'form', desc: 'A dep-free radio group with an animated selection — pick one option and the dot springs in. option / value / disabled, theme-native.' },
   { name: 'Select', href: '/select', tag: 'form', desc: 'A theme-native single-choice control over a native <select> (shadcn Base native-select) — the browser chevron replaced by ours. option / placeholder / value / disabled. Pairs with field.' },
+  { name: 'Tag-input', href: '/tag-input', tag: 'form', desc: 'A tag / chip multi-select token field — add and remove chips, with optional autocomplete suggestions. Type + Enter (or comma) adds, Backspace removes the last, a chip x removes it. Hidden inputs carry the values for a native submit. The multi-value counterpart to the single-select combobox.' },
   { name: 'Combobox', href: '/combobox', tag: 'form', desc: 'A searchable single-select (shadcn combobox) — a popover with a filter input and a listbox, arrow-key + Enter nav, empty state. A hidden input carries the value. Reuses usePopover.' },
   { name: 'Switch', href: '/switch', tag: 'form', desc: 'A dep-free toggle with an animated sliding thumb — click to flip. label / checked / disabled, theme-native. Builder is toggle().' },
   { name: 'Toggle', href: '/toggle', tag: 'form', desc: 'A pressable on/off button (toggleButton) plus a segmented control (toggleGroup) — the shadcn Toggle / ToggleGroup toolbar + segmented-select staple. Single-select (click again to clear) or .multiple(). aria-pressed, theme-native. Distinct from switch (a form boolean).' },
@@ -54,7 +55,7 @@ const catalog = [
 // Domain grouping: the catalog above stays a flat map (by href); this orders it into sections.
 const byHref = Object.fromEntries(catalog.map((c) => [c.href, c]))
 const SECTIONS = [
-  { label: 'Forms & inputs', hrefs: ['/button', '/input', '/textarea', '/checkbox', '/radio', '/select', '/combobox', '/switch', '/toggle', '/slider', '/calendar', '/date-picker', '/attachment', '/field', '/form'] },
+  { label: 'Forms & inputs', hrefs: ['/button', '/input', '/textarea', '/checkbox', '/radio', '/select', '/combobox', '/tag-input', '/switch', '/toggle', '/slider', '/calendar', '/date-picker', '/attachment', '/field', '/form'] },
   { label: 'Overlays & menus', hrefs: ['/dialog', '/confirm', '/sheet', '/drawer', '/popover', '/dropdown', '/command', '/nav-menu', '/tooltip'] },
   { label: 'Navigation', hrefs: ['/breadcrumb', '/pagination', '/tabs'] },
   { label: 'Layout & containers', hrefs: ['/card', '/accordion'] },
