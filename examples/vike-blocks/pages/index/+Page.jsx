@@ -21,6 +21,7 @@ const catalog = [
   { name: 'Select', href: '/select', tag: 'form', desc: 'A theme-native single-choice control over a native <select> (shadcn Base native-select) — the browser chevron replaced by ours. option / placeholder / value / disabled. Pairs with field.' },
   { name: 'Combobox', href: '/combobox', tag: 'form', desc: 'A searchable single-select (shadcn combobox) — a popover with a filter input and a listbox, arrow-key + Enter nav, empty state. A hidden input carries the value. Reuses usePopover.' },
   { name: 'Switch', href: '/switch', tag: 'form', desc: 'A dep-free toggle with an animated sliding thumb — click to flip. label / checked / disabled, theme-native. Builder is toggle().' },
+  { name: 'Toggle', href: '/toggle', tag: 'form', desc: 'A pressable on/off button (toggleButton) plus a segmented control (toggleGroup) — the shadcn Toggle / ToggleGroup toolbar + segmented-select staple. Single-select (click again to clear) or .multiple(). aria-pressed, theme-native. Distinct from switch (a form boolean).' },
   { name: 'Slider', href: '/slider', tag: 'form', desc: 'A dep-free range control — drag the thumb, click the rail, or arrow-key it. min / max / step / value, theme-native. Pairs with field.' },
   { name: 'Calendar', href: '/calendar', tag: 'form', desc: 'A dep-free month grid (no date lib) — step months, click a day. value / min / max / weekStartsOn, theme-native. Feeds date-picker.' },
   { name: 'Date-picker', href: '/date-picker', tag: 'form', desc: 'A calendar in a popover — click the input-like trigger to open the grid, pick a day to fill it. Outside-click / Escape close. Reuses usePopover.' },
@@ -53,7 +54,7 @@ const catalog = [
 // Domain grouping: the catalog above stays a flat map (by href); this orders it into sections.
 const byHref = Object.fromEntries(catalog.map((c) => [c.href, c]))
 const SECTIONS = [
-  { label: 'Forms & inputs', hrefs: ['/button', '/input', '/textarea', '/checkbox', '/radio', '/select', '/combobox', '/switch', '/slider', '/calendar', '/date-picker', '/attachment', '/field', '/form'] },
+  { label: 'Forms & inputs', hrefs: ['/button', '/input', '/textarea', '/checkbox', '/radio', '/select', '/combobox', '/switch', '/toggle', '/slider', '/calendar', '/date-picker', '/attachment', '/field', '/form'] },
   { label: 'Overlays & menus', hrefs: ['/dialog', '/confirm', '/sheet', '/drawer', '/popover', '/dropdown', '/command', '/nav-menu', '/tooltip'] },
   { label: 'Navigation', hrefs: ['/breadcrumb', '/pagination', '/tabs'] },
   { label: 'Layout & containers', hrefs: ['/card', '/accordion'] },
