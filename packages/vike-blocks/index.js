@@ -17,6 +17,7 @@ import './blocks/slider.js' // side-effect: register the slider block
 import './blocks/calendar.js' // side-effect: register the calendar block
 import './blocks/date-picker.js' // side-effect: register the date-picker block
 import './blocks/dropdown.js' // side-effect: register the dropdown block
+import './blocks/popover.js' // side-effect: register the popover block
 import './blocks/nav-menu.js' // side-effect: register the nav-menu block
 import './blocks/kbd.js' // side-effect: register the kbd block
 import './blocks/item.js' // side-effect: register the item block
@@ -63,6 +64,7 @@ export { slider } from './blocks/slider.js'
 export { calendar } from './blocks/calendar.js'
 export { datePicker } from './blocks/date-picker.js'
 export { dropdown } from './blocks/dropdown.js'
+export { popover } from './blocks/popover.js'
 export { navMenu } from './blocks/nav-menu.js'
 export { toast, emitToast, dismissToast, subscribeToasts } from './blocks/toast-store.js'
 export { kbd } from './blocks/kbd.js'

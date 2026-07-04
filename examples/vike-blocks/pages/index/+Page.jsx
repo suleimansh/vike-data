@@ -24,6 +24,7 @@ const catalog = [
   { name: 'Slider', href: '/slider', tag: 'form', desc: 'A dep-free range control — drag the thumb, click the rail, or arrow-key it. min / max / step / value, theme-native. Pairs with field.' },
   { name: 'Calendar', href: '/calendar', tag: 'form', desc: 'A dep-free month grid (no date lib) — step months, click a day. value / min / max / weekStartsOn, theme-native. Feeds date-picker.' },
   { name: 'Date-picker', href: '/date-picker', tag: 'form', desc: 'A calendar in a popover — click the input-like trigger to open the grid, pick a day to fill it. Outside-click / Escape close. Reuses usePopover.' },
+  { name: 'Popover', href: '/popover', tag: 'interactive', desc: 'A trigger that opens a floating panel of arbitrary content anchored to it (the general-purpose sibling of the dropdown menu). Holds any nested blocks — a form, a card, copy. Edge-aware flip, outside-click / Escape close. Reuses usePopover.' },
   { name: 'Dropdown-menu', href: '/dropdown', tag: 'interactive', desc: 'A trigger that opens a floating menu of items (links or buttons) anchored below it. Arrow-key nav, outside-click / Escape close. Reuses usePopover.' },
   { name: 'Command', href: '/command', tag: 'interactive', desc: 'A ⌘K command palette (shadcn command) on the Overlay primitive — a trigger + global ⌘K hotkey open a modal with a filter input over grouped items, arrow-key + Enter to run (navigates), shortcut hints. Dep-free; SSR renders the trigger only.' },
   { name: 'Navigation-menu', href: '/nav-menu', tag: 'interactive', desc: 'A horizontal bar of links + dropdown sections (title + description per link), one open at a time. Arrow-key nav, outside-click / Escape close.' },
@@ -50,7 +51,7 @@ const catalog = [
 const byHref = Object.fromEntries(catalog.map((c) => [c.href, c]))
 const SECTIONS = [
   { label: 'Forms & inputs', hrefs: ['/button', '/input', '/textarea', '/checkbox', '/radio', '/select', '/combobox', '/switch', '/slider', '/calendar', '/date-picker', '/attachment', '/field', '/form'] },
-  { label: 'Overlays & menus', hrefs: ['/dialog', '/confirm', '/sheet', '/drawer', '/dropdown', '/command', '/nav-menu', '/tooltip'] },
+  { label: 'Overlays & menus', hrefs: ['/dialog', '/confirm', '/sheet', '/drawer', '/popover', '/dropdown', '/command', '/nav-menu', '/tooltip'] },
   { label: 'Navigation', hrefs: ['/breadcrumb', '/pagination', '/tabs'] },
   { label: 'Layout & containers', hrefs: ['/card', '/accordion'] },
   { label: 'Data display', hrefs: ['/table', '/chart', '/avatar', '/item', '/code'] },

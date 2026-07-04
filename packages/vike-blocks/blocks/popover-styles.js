@@ -98,3 +98,22 @@ export function popoverSurfaceStyle() {
     fontSize: '14px',
   }
 }
+
+// A roomier content surface for the standalone `popover` block, whose panel holds arbitrary nested
+// blocks (not a tight menu list): the same elevation as popoverSurfaceStyle but with generous padding
+// and a content max-width so long copy wraps. Compose with popoverMotionStyle.
+export function popoverPanelStyle() {
+  return {
+    minWidth: '12rem',
+    maxWidth: '20rem',
+    padding: '0.85rem 0.95rem',
+    border: '1px solid var(--color-border, #e2e8f0)',
+    borderRadius: 'var(--radius, 10px)',
+    background: 'var(--color-bg, #ffffff)',
+    color: 'var(--color-text, #0f172a)',
+    boxShadow: '0 10px 30px -12px rgba(15, 23, 42, 0.35)',
+    font: 'inherit',
+    fontSize: '14px',
+    lineHeight: 1.5,
+  }
+}
