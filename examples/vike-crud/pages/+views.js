@@ -1,79 +1,44 @@
 // The app's views live in this `+views.js` file (its own +file), NOT inline in +config.js. Vike
-// requires it: a view carries a `scope` FUNCTION, and Vike refuses to serialize a function into
-// the page config (https://vike.dev/error/runtime-in-config) -- a `+views.js` file is
-// pointer-imported and loaded on the server instead, so the function survives to the data hook.
-// This is the `views` cumulative config point; +config.js imports the same array to build
+// requires it: a view carries auth FUNCTIONS (`query` / `onCreate`), and Vike refuses to serialize a
+// function into the page config (https://vike.dev/error/runtime-in-config) -- a `+views.js` file is
+// pointer-imported and loaded on the server instead, so the functions survive to the data hook. This
+// is the `views` cumulative config point; +config.js imports the same array to build
 // `pages: viewPages(views)` (routes are plain strings, safe to compute inline).
 //
-// A `definePage` is a page composed of blocks; `crudBlocks({ table })` expands a table into its
-// list + record + form block DESCRIPTORS (an array: [list, record, form]). Because those are plain,
-// composable descriptors, this page ARRANGES them by hand instead of dropping the triad in as-is: a
-// page heading + intro, then the owner-scoped list, then a "New post" heading over the create form.
-// The `record` block is left out -- an empty record reads as clutter on a list route; it belongs on
-// a detail route (see /posts-ejected for a hand-written page). This is the point of blocks-as-data:
-// the generated pieces are rearrangeable, not a fixed layout.
+// `defineCrud(table, opts?)` is the whole surface: one call declares `posts` as a CRUD resource and
+// derives the pages it needs (index / view / create / edit), choosing how each screen is presented.
+// The schema is the intent; the pages are derived. `defineCrud` is a pure expander -- it returns the
+// explicit `definePage[]` you would otherwise hand-write, and `ejectCrud` reveals exactly that.
 //
-// The form stays a TOP-LEVEL section (not nested in a card): the POST handler finds the form's fields
-// by scanning the view's top-level sections (formFieldsFor), and it must stay a real, top-level
-// <form> for the native, no-JS submit to round-trip.
-//
-// `scope` is the owner contract (#104): it receives (table, ctx) at request time and returns a
-// universal-orm filter that bounds every read AND is forced onto writes, so a user only ever sees
-// and creates their OWN rows. `ctx.user` comes from +onCreatePageContext.js (a fixed demo identity
-// here; a real app gets it from vike-auth). Vike reads a +file's DEFAULT export as the config value.
-import { definePage, crudBlocks, defineCrud, column, display, field } from 'vike-crud/react/pages'
-import { heading, text } from 'vike-blocks'
+// Owner scoping (#104): `query` bounds every read to the current user's rows and `onCreate` stamps
+// the owner onto every insert, so a user only ever sees and creates their OWN posts. `ctx.user` comes
+// from +onCreatePageContext.js (a fixed demo identity here; a real app gets it from vike-auth).
+import { defineCrud, column, display, field } from 'vike-crud/react/pages'
 
-// The generated CRUD triad for `posts`, derived from the schema. We destructure it and use the list
-// + form (skipping the record view, which has nothing to show on a list route).
-const [list, , form] = crudBlocks({
-  table: 'posts',
-  list: [column('title').sortable().searchable(), column('status'), column('published'), column('created_at').label('Created').format('since')],
-  form: [field('title').required(), field('body'), field('status'), field('published')],
-})
+const owner = {
+  query: (q, ctx) => q.where('user_id', ctx.user.id),
+  onCreate: (ctx) => ({ user_id: ctx.user.id }),
+}
 
 export default [
-  definePage({
-    route: '/posts',
-    sections: [
-      heading('Posts').level(1),
-      text('One defineSchema drives this whole page. The list and the create form below are both derived from the posts schema; every row is owner-scoped to you.').tone('muted'),
-      list,
-      heading('New post').level(2),
-      text('Fields come straight from the schema -- a required title, an optional body, a status select, and a published toggle.').tone('muted'),
-      form,
-    ],
-    scope: (table, ctx) => ({ user_id: ctx.user.id }),
-  }),
-  // The same schema through the defineCrud resource surface (#575): one call derives the /crud
-  // index + view/create/edit dialogs. Owner-scoped via `query`; `onCreate` stamps the owner.
+  // `/posts` -- `mode: 'dialog'` (the default). One list page at /posts; view / create / edit open as
+  // dialogs over it (`?view=<id>`, `?create`, `?edit=<id>`). The list is the whole page until a dialog
+  // is triggered, so nothing empty stacks on the index -- the empty `<dl>` this epic set out to kill.
   ...defineCrud('posts', {
-    route: '/crud',
-    mode: 'dialog',
-    index: [column('title').sortable(), column('status'), column('published')],
+    index: [column('title').sortable().searchable(), column('status'), column('published'), column('created_at').label('Created').format('since')],
     view: [display('title'), display('body'), display('status'), display('published')],
     edit: [field('title').required(), field('body'), field('status'), field('published')],
-    query: (q, ctx) => q.where('user_id', ctx.user.id),
-    onCreate: (ctx) => ({ user_id: ctx.user.id }),
+    ...owner,
   }),
-  // The same resource in `route` mode: separate pages (/crud-route, /crud-route/@id,
-  // /crud-route/new, /crud-route/@id/edit); the list links each row to its detail page.
+  // `/posts-route` -- the same resource in `mode: 'route'`: separate pages at /posts-route,
+  // /posts-route/@id (view), /posts-route/new (create), /posts-route/@id/edit. The list links each row
+  // to its own detail page instead of a dialog. `inline` is the third mode (screens stacked in place).
   ...defineCrud('posts', {
-    route: '/crud-route',
+    route: '/posts-route',
     mode: 'route',
     index: [column('title').sortable(), column('status')],
     view: [display('title'), display('body'), display('status')],
     edit: [field('title').required(), field('body'), field('status')],
-    query: (q, ctx) => q.where('user_id', ctx.user.id),
-    onCreate: (ctx) => ({ user_id: ctx.user.id }),
-  }),
-  // `inline` mode: list + the create form stacked on one page (no detail/edit screens shown).
-  ...defineCrud('posts', {
-    route: '/crud-inline',
-    mode: 'inline',
-    index: [column('title').sortable(), column('status')],
-    edit: [field('title').required(), field('body'), field('status')],
-    query: (q, ctx) => q.where('user_id', ctx.user.id),
-    onCreate: (ctx) => ({ user_id: ctx.user.id }),
+    ...owner,
   }),
 ]

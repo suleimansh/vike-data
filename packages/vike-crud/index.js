@@ -34,4 +34,4 @@ export { hydrateView, createRow, updateRow, deleteRow, rowFromForm, loadOwnedRow
 // Authorization (#581): the query read-scope builder, can* predicate gate, and field visibility.
 export { queryScope, runQuery, allow, keepVisible } from './authz.js'
 // Customization tier 3: eject a view to plain, owned source (page + data hook), no page-gen.
-export { ejectView, routeToSlug } from './eject.js'
+export { ejectView, ejectCrud, routeToSlug } from './eject.js'

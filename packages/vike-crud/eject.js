@@ -17,6 +17,8 @@
 // the generated page used), because the point of eject is to give you a real, editable file to
 // grow — not to pre-explode every block into markup you would have to reconcile on the next edit.
 
+import { SCREEN_BLOCK } from './define.js'
+
 const IDENT = /^[A-Za-z_$][\w$]*$/
 
 function quote(str) {
@@ -221,4 +223,145 @@ export function ejectView(view, opts = {}) {
       { path: `${dir}/+Page.${page.ext}`, source: page.build({ pkg }) },
     ],
   }
+}
+
+// ---- Resource eject: a `defineCrud` back into the explicit `definePage[]` it expands to ----
+//
+// `defineCrud('posts', { ... })` is INTENT; it derives the index/view/create/edit pages a resource
+// needs. `ejectCrud` reverses that sugar: given the page array `defineCrud` returned, it emits the
+// same pages as PLAIN, OWNED source, each built from the primitive tier — `definePage({ route,
+// sections })` with `crud.index / crud.view / crud.create / crud.edit` for the screens. The resource
+// helper is gone; you get the real pages, editable per-page (add a route, drop the edit dialog,
+// reorder folded sections), and it round-trips: the emitted array is the same object graph, so it
+// renders identically through the same `viewPages` + ViewPage + data hook.
+//
+// This differs from `ejectView` (which de-generates ONE page down to its own +data hook): a resource
+// ejects to its `views` ARRAY, since crud pages route through `viewPages(views)`, not the filesystem.
+
+// Resource-level, server-only auth carried on each page's `crud` meta — hoisted to named consts.
+const AUTH_KEYS = ['query', 'onCreate', 'canIndex', 'canView', 'canCreate', 'canEdit', 'canDelete']
+
+// A single-line rendering of a function-free value, or null if it contains a function (which must
+// be placed by hand) or is otherwise not inline-able. Used to keep small specs / nav on one line.
+function inlineValue(value) {
+  if (typeof value === 'function') return null
+  if (value === null || value === undefined || typeof value !== 'object') return literal(value, 0)
+  if (Array.isArray(value)) {
+    const parts = value.map(inlineValue)
+    return parts.some((p) => p === null) ? null : `[${parts.join(', ')}]`
+  }
+  const entries = Object.entries(value).filter(([, v]) => v !== undefined)
+  if (entries.length === 0) return '{}'
+  const parts = []
+  for (const [k, v] of entries) {
+    const iv = inlineValue(v)
+    if (iv === null) return null
+    const key = IDENT.test(k) ? k : quote(k)
+    parts.push(iv === key ? key : `${key}: ${iv}`)
+  }
+  return `{ ${parts.join(', ')} }`
+}
+
+// Emit a value as source. Like `literal`, but a function is emitted as an IDENTIFIER when it is a
+// hoisted resource-auth fn (already in `fns`), else inlined from its own source (a per-field
+// `.when` predicate). This is what lets the resource's server-only functions survive eject verbatim.
+// Function-free values that fit on one line are kept inline; larger ones expand with 2-space indent.
+function emitValue(value, depth, fns) {
+  if (typeof value === 'function') {
+    if (fns.has(value)) return fns.get(value)
+    const { source, note } = scopeSource(value)
+    return note ? `/* ${note} */ ${source}` : source
+  }
+  if (value === null || value === undefined || typeof value !== 'object') return literal(value, depth)
+  const flat = inlineValue(value)
+  if (flat !== null && flat.length <= 72) return flat
+  const pad = '  '.repeat(depth)
+  const padIn = '  '.repeat(depth + 1)
+  if (Array.isArray(value)) {
+    if (value.length === 0) return '[]'
+    const items = value.map((v) => `${padIn}${emitValue(v, depth + 1, fns)}`).join(',\n')
+    return `[\n${items},\n${pad}]`
+  }
+  const entries = Object.entries(value).filter(([, v]) => v !== undefined)
+  if (entries.length === 0) return '{}'
+  const body = entries
+    .map(([k, v]) => {
+      const key = IDENT.test(k) ? k : quote(k)
+      const vs = emitValue(v, depth + 1, fns)
+      return `${padIn}${vs === key ? key : `${key}: ${vs}`}`
+    })
+    .join(',\n')
+  return `{\n${body},\n${pad}}`
+}
+
+// One section as a `crud.<screen>(table, specs)[0]` call plus the keys `defineCrud` decorates it
+// with (`present`, `screen`, and — on the index list — the `nav` descriptor). A non-crud section
+// (a hand-added heading/text with no `screen`) is emitted as a plain object literal.
+function sectionExpr(section, depth, fns) {
+  const { screen } = section
+  const refineKey = SCREEN_BLOCK[screen]?.refine
+  if (!refineKey) return emitValue(section, depth, fns)
+  const specs = section[refineKey]
+  const args = specs === undefined ? quote(section.table) : `${quote(section.table)}, ${emitValue(specs, depth, fns)}`
+  const extra = { present: section.present, screen }
+  if (section.nav !== undefined) extra.nav = section.nav
+  const extraStr = Object.entries(extra)
+    .map(([k, v]) => `${k}: ${emitValue(v, depth + 1, fns)}`)
+    .join(', ')
+  return `{ ...crud.${screen}(${args})[0], ${extraStr} }`
+}
+
+// One `definePage({ route, sections, crud })` call.
+function pageExpr(page, depth, fns) {
+  const pad = '  '.repeat(depth)
+  const padIn = '  '.repeat(depth + 1)
+  const padSec = '  '.repeat(depth + 2)
+  const sections = page.sections.map((s) => `${padSec}${sectionExpr(s, depth + 2, fns)}`).join(',\n')
+  const crudMeta = page.crud ? `\n${padIn}crud: ${emitValue(page.crud, depth + 1, fns)},` : ''
+  return `${pad}definePage({\n${padIn}route: ${quote(page.route)},\n${padIn}sections: [\n${sections},\n${padIn}],${crudMeta}\n${pad}})`
+}
+
+function crudHeader(pkg, base) {
+  return `// Ejected from vike-crud — the defineCrud resource for ${quote(base)} is now these explicit pages,
+// YOURS to edit. Each page is the primitive tier: definePage({ route, sections }) with
+// crud.index / crud.view / crud.create / crud.edit for the screens, plus the present / screen / nav /
+// crud metadata the resource attached. Spread this array into your app's \`views\` (or make it your
+// +views.js); it renders through the same viewPages path, so nothing about the output changes — you
+// have just traded the resource sugar for editable pages.
+import { definePage, crud } from '${pkg}'
+`
+}
+
+// Eject a `defineCrud(...)` result (its `definePage[]`) to plain, owned source. Returns
+// `{ slug, path, base, files: [{ path, source }] }`; the caller writes the file. `pkg` overrides the
+// import specifier (useful in-repo / for tests). The resource's server-only auth fns are hoisted to
+// named consts (deduped by reference — a route-mode resource repeats them across its four pages).
+export function ejectCrud(pages, opts = {}) {
+  if (!Array.isArray(pages) || pages.length === 0 || !pages.every((p) => p && typeof p === 'object' && Array.isArray(p.sections))) {
+    throw new Error('ejectCrud: expected the definePage[] that defineCrud(...) returns')
+  }
+  const pkg = opts.pkg ?? 'vike-crud/react/pages'
+  const indexPage = pages.find((p) => p.crud?.screen === 'index') ?? pages[0]
+  const base = indexPage.crud?.base ?? indexPage.route ?? '/'
+  const slug = opts.slug ?? routeToSlug(base)
+  const path = opts.path ?? `pages/${slug}.crud.js`
+
+  const fns = new Map()
+  const consts = []
+  for (const page of pages) {
+    const c = page.crud ?? {}
+    for (const k of AUTH_KEYS) {
+      const fn = c[k]
+      if (typeof fn === 'function' && !fns.has(fn)) {
+        fns.set(fn, k)
+        const { source, note } = scopeSource(fn)
+        consts.push(note ? `// NOTE: ${note}.\nconst ${k} = ${source}` : `const ${k} = ${source}`)
+      }
+    }
+  }
+
+  const body = pages.map((p) => pageExpr(p, 1, fns)).join(',\n')
+  const source = `${crudHeader(pkg, base)}${consts.length ? `\n${consts.join('\n')}\n` : ''}\nexport default [\n${body},\n]\n`
+
+  return { slug, path, base, files: [{ path, source }] }
 }
