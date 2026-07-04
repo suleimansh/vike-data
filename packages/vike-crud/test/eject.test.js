@@ -8,8 +8,9 @@ import { execFileSync } from 'node:child_process'
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { ejectView, routeToSlug } from '../eject.js'
-import { definePage, crudBlocks, column, field } from '../index.js'
+import { pathToFileURL } from 'node:url'
+import { ejectView, ejectCrud, routeToSlug } from '../eject.js'
+import { definePage, crudBlocks, defineCrud, column, display, field } from '../index.js'
 
 function postsView() {
   return definePage({
@@ -119,3 +120,90 @@ test('generated +data.js is syntactically valid JS (node --check)', () => {
     rmSync(dir, { recursive: true, force: true })
   }
 })
+
+// ---- ejectCrud: a defineCrud resource back to its explicit definePage[] ----
+
+const query = (q, ctx) => q.where('user_id', ctx.user.id)
+const onCreate = (ctx) => ({ user_id: ctx.user.id })
+
+function postsResource(mode = 'dialog') {
+  return defineCrud('posts', {
+    mode,
+    index: [column('title').sortable(), column('status')],
+    view: mode === 'inline' ? false : [display('title'), display('body')],
+    edit: [field('title').required(), field('body')],
+    query,
+    onCreate,
+  })
+}
+
+// Deep-compare two page graphs, functions matched by source (an ejected fn is a fresh object).
+function normFns(v) {
+  if (typeof v === 'function') return `__fn__:${v.toString()}`
+  if (Array.isArray(v)) return v.map(normFns)
+  if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, normFns(x)]))
+  return v
+}
+
+test('ejectCrud: emits one views file at a route-derived slug', () => {
+  const out = ejectCrud(postsResource('dialog'))
+  assert.equal(out.base, '/posts')
+  assert.equal(out.slug, 'posts')
+  assert.equal(out.path, 'pages/posts.crud.js')
+  assert.equal(out.files.length, 1)
+})
+
+test('ejectCrud: source uses the crud.<screen> primitive tier + hoists auth fns', () => {
+  const src = ejectCrud(postsResource('dialog')).files[0].source
+  assert.match(src, /import \{ definePage, crud \} from 'vike-crud\/react\/pages'/)
+  // resource-level auth hoisted to named consts, referenced by shorthand in the crud meta
+  assert.match(src, /const query = \(q, ctx\) => q\.where\('user_id', ctx\.user\.id\)/)
+  assert.match(src, /const onCreate = \(ctx\) => \(\{ user_id: ctx\.user\.id \}\)/)
+  // each screen through its crud.* helper
+  assert.match(src, /crud\.index\('posts',/)
+  assert.match(src, /crud\.view\('posts',/)
+  assert.match(src, /crud\.create\('posts',/)
+  assert.match(src, /crud\.edit\('posts',/)
+  // the decoration defineCrud attaches, and the server-only meta
+  assert.match(src, /present: 'dialog'/)
+  assert.match(src, /nav: \{ base: '\/posts'/)
+  assert.match(src, /crud: \{[\s\S]*query,[\s\S]*onCreate,/)
+})
+
+test('ejectCrud: route mode emits one definePage per REST route', () => {
+  const src = ejectCrud(postsResource('route')).files[0].source
+  for (const route of ['/posts', '/posts/@id', '/posts/new', '/posts/@id/edit']) {
+    assert.match(src, new RegExp(`route: '${route.replace(/[/@]/g, '\\$&')}'`))
+  }
+})
+
+test('ejectCrud: pkg + path options', () => {
+  const out = ejectCrud(postsResource('dialog'), { pkg: '@acme/views', path: 'src/posts.views.js' })
+  assert.match(out.files[0].source, /from '@acme\/views'/)
+  assert.equal(out.files[0].path, 'src/posts.views.js')
+})
+
+test('ejectCrud: rejects non-resource input', () => {
+  assert.throws(() => ejectCrud(null), /the definePage\[\]/)
+  assert.throws(() => ejectCrud([]), /the definePage\[\]/)
+  assert.throws(() => ejectCrud([{ route: '/x' }]), /the definePage\[\]/)
+})
+
+for (const mode of ['dialog', 'route', 'inline']) {
+  test(`ejectCrud (${mode}): the emitted source round-trips to the same pages`, async () => {
+    const pages = postsResource(mode)
+    // import the emitted module from the real package so crud.* resolves the same blocks
+    const pkg = pathToFileURL(join(import.meta.dirname, '..', 'index.js')).href
+    const src = ejectCrud(pages, { pkg }).files[0].source
+    const dir = mkdtempSync(join(tmpdir(), 'ejectcrud-'))
+    const file = join(dir, 'views.mjs')
+    try {
+      writeFileSync(file, src)
+      execFileSync(process.execPath, ['--check', file]) // valid ESM
+      const mod = await import(pathToFileURL(file).href)
+      assert.deepEqual(normFns(mod.default), normFns(pages))
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })
+}

@@ -6,8 +6,8 @@
 //     point the views derive from) and provides the generic ViewPage + data hook the generated
 //     pages point at.
 //
-// `schemas` contributes the `posts` table. The views themselves live in +views.js (they carry a
-// `scope` function, which Vike requires be in its own +file, not inline here). We import that same
+// `schemas` contributes the `posts` table. The views themselves live in +views.js (they carry auth
+// functions, which Vike requires be in their own +file, not inline here). We import that same
 // array only to compute `pages: viewPages(views)` -- turning each view.route into a real page.
 // Nothing else -- no page components, no forms, no controllers.
 import vikeReact from 'vike-react/config'
@@ -30,12 +30,13 @@ export default {
   extends: [vikeReact, vikeView, themesExt, toolbarExt, layoutsExt],
   title: 'vike-crud example',
 
-  // The topbar shell + nav across the four demo routes.
+  // The topbar shell + nav across the demo routes.
   layout: 'topbar',
   logo: '◆ vike-crud',
   nav: [
     { label: 'Posts (CRUD)', href: '/posts' },
-    { label: 'Inline', href: '/inline' },
+    { label: 'Route mode', href: '/posts-route' },
+    { label: 'Mix-in', href: '/inline' },
     { label: 'Ejected', href: '/posts-ejected' },
     { label: 'Actions', href: '/actions-demo' },
   ],

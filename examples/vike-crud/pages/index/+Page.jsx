@@ -1,4 +1,4 @@
-// Home: two links, no data. Everything interesting is on the two routes it points at.
+// Home: a link list, no data. Everything interesting is on the routes it points at.
 export default function HomePage() {
   return (
     <div style={{ maxWidth: 720, margin: '2rem auto', fontFamily: 'system-ui, sans-serif', lineHeight: 1.6 }}>
@@ -9,8 +9,13 @@ export default function HomePage() {
       </p>
       <ul>
         <li>
-          <a href="/posts">/posts</a> -- a <strong>generated</strong> view (list + create form), owner-scoped reads and
-          writes. This route is produced by <code>viewPages(views)</code>; there is no page component for it.
+          <a href="/posts">/posts</a> -- a <strong>generated</strong> resource from one <code>defineCrud('posts')</code>,
+          owner-scoped reads and writes. <code>mode: 'dialog'</code>: a list, with view / create / edit opening as dialogs
+          over it. There is no page component for it.
+        </li>
+        <li>
+          <a href="/posts-route">/posts-route</a> -- the same resource in <code>mode: 'route'</code>: the list links each row
+          to its own detail page (<code>/posts-route/@id</code>, <code>/new</code>, <code>/@id/edit</code>).
         </li>
         <li>
           <a href="/inline">/inline</a> -- the same <code>posts</code> block dropped into a <strong>hand-written</strong>{' '}
