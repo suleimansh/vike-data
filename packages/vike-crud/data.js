@@ -81,15 +81,33 @@ async function hydrateList(section, { db, tables, scope, ctx, search = {} }) {
   return { ...section, resolved: { ...section.resolved, rows: projected, fkLabels, pk, page, pageCount, total, sort, dir } }
 }
 
-async function hydrateRecord(section, { db, tables, scope, ctx }) {
+// The record (detail) block's one row, keyed on the primary key AND the scope so a scoped user can
+// only ever load a row they own. The id comes from the block descriptor (`section.props.id`) or,
+// for a route-driven detail page (`/posts/@id`), the route param passed through as `opts.id`.
+async function hydrateRecord(section, { db, tables, scope, ctx, id: routeId }) {
   const { table, fields } = section.resolved
   const schemaTable = tableNamed(tables, table)
   const pk = primaryKeyOf(schemaTable)
-  const id = section.props.id
+  const id = section.props.id ?? routeId
   if (id == null) return { ...section, resolved: { ...section.resolved, row: null, pk } }
   const owned = { ...scopeFor(scope, table, ctx), [pk]: id }
   const row = await db[table].findOne(owned)
   return { ...section, resolved: { ...section.resolved, row: row ? projectRow(row, { columns: fields, pk }) : null, pk } }
+}
+
+// The form block's pre-fill values. With an id (the edit screen) it loads the owned row and fills
+// the form; without one (the create screen) it stays blank. Same primary-key-AND-scope key as the
+// record block, so an edit form can only ever pre-fill a row the user owns (an id-guess for
+// another owner yields `values: null`, which the caller turns into a 404).
+async function hydrateForm(section, { db, tables, scope, ctx, id: routeId }) {
+  const { table, fields } = section.resolved
+  const schemaTable = tableNamed(tables, table)
+  const pk = primaryKeyOf(schemaTable)
+  const id = section.props.id ?? routeId
+  if (id == null) return { ...section, resolved: { ...section.resolved, values: {}, pk } }
+  const owned = { ...scopeFor(scope, table, ctx), [pk]: id }
+  const row = await db[table].findOne(owned)
+  return { ...section, resolved: { ...section.resolved, values: row ? projectRow(row, { columns: fields, pk }) : null, pk, id } }
 }
 
 // Resolve a view AND fill in the data its blocks need. Returns hydrated sections a renderer
@@ -97,7 +115,9 @@ async function hydrateRecord(section, { db, tables, scope, ctx }) {
 export async function hydrateView(view, opts = {}) {
   const resolved = resolvePage(view, opts.tables)
   const sections = await Promise.all(
-    resolved.sections.map((s) => (s.block === 'list' ? hydrateList(s, opts) : s.block === 'record' ? hydrateRecord(s, opts) : Promise.resolve(s))),
+    resolved.sections.map((s) =>
+      s.block === 'list' ? hydrateList(s, opts) : s.block === 'record' ? hydrateRecord(s, opts) : s.block === 'form' ? hydrateForm(s, opts) : Promise.resolve(s),
+    ),
   )
   return { route: resolved.route, sections }
 }

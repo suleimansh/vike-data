@@ -81,7 +81,8 @@ export function defineCrud(table, opts = {}) {
   // Resource-level auth, carried on every emitted page's server-only `crud` meta.
   const auth = {}
   for (const k of AUTH_KEYS) if (opts[k] !== undefined) auth[k] = opts[k]
-  const meta = (screen, present) => ({ crud: { table, screen, present, ...auth } })
+  // `base` is the resource's index route — where a write on any screen redirects back to.
+  const meta = (screen, present) => ({ crud: { table, screen, present, base, ...auth } })
 
   const screens = SCREENS.map((name) => ({ name, cfg: screenCfg(opts, name, defaultMode) })).filter((s) => s.cfg)
   const indexScreen = screens.find((s) => s.name === 'index')
