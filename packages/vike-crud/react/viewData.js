@@ -7,6 +7,7 @@
 import { render, redirect } from 'vike/abort'
 import { resolveViewTables, buildDb, hydrateView, createRow, updateRow, deleteRow, loadOwnedRow, queryScope, allow, keepVisible } from '../index.js'
 import { resolveViewRequest, formFieldsFor, activeDialog } from './pages.js'
+import { findSection } from '../walk.js'
 import { readFormRequest } from '../request.js'
 
 export async function viewData(pageContext) {
@@ -64,7 +65,7 @@ export async function viewData(pageContext) {
   // user's — is a 404, not an empty detail. (A dialog `?view=` miss just leaves the dialog empty;
   // it must not 404 the whole list page.)
   if (id != null) {
-    const detail = hydrated.sections.find((s) => s.block === 'record' || s.block === 'form')
+    const detail = findSection(hydrated.sections, (s) => s.block === 'record' || s.block === 'form')
     if (detail && (detail.resolved.row === null || detail.resolved.values === null)) throw render(404)
   }
 
@@ -87,6 +88,6 @@ export async function viewData(pageContext) {
 // The hydrated row/values of the section for a given block + screen (a route page has one such
 // section; a dialog index page tags each folded section with its screen).
 function sectionRow(hydrated, block, screen) {
-  const s = hydrated.sections.find((x) => x.block === block && (x.props.screen == null || x.props.screen === screen))
+  const s = findSection(hydrated.sections, (x) => x.block === block && (x.props.screen == null || x.props.screen === screen))
   return s?.resolved.row ?? s?.resolved.values ?? null
 }

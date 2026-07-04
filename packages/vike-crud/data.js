@@ -15,6 +15,7 @@ import { resolvePage } from 'vike-blocks'
 import { projectRow } from './project.js'
 import { tableNamed, recordTitleColumn } from './resolve.js'
 import { keepVisible } from './authz.js'
+import { mapSections } from './walk.js'
 
 const DEFAULT_PAGE_SIZE = 20
 
@@ -139,12 +140,13 @@ function applyVisibility(section, ctx) {
 // draws directly (`{ block, props, resolved }`, with `resolved.rows` / `resolved.row` filled).
 export async function hydrateView(view, opts = {}) {
   const resolved = resolvePage(view, opts.tables)
-  const sections = await Promise.all(
-    resolved.sections.map((s0) => {
-      const s = applyVisibility(s0, opts.ctx)
-      return s.block === 'list' ? hydrateList(s, opts) : s.block === 'record' ? hydrateRecord(s, opts) : s.block === 'form' ? hydrateForm(s, opts) : Promise.resolve(s)
-    }),
-  )
+  // Hydrate every data block WHEREVER it sits — a list / record / form nested in a card / tab /
+  // field is filled too (#574), so a composed view hydrates the same as a flat one. mapSections
+  // descends into containers and rebuilds them around the hydrated children.
+  const sections = await mapSections(resolved.sections, (s0) => {
+    const s = applyVisibility(s0, opts.ctx)
+    return s.block === 'list' ? hydrateList(s, opts) : s.block === 'record' ? hydrateRecord(s, opts) : s.block === 'form' ? hydrateForm(s, opts) : s
+  })
   return { route: resolved.route, sections }
 }
 
