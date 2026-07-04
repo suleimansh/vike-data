@@ -5,8 +5,8 @@
 // open-gated). Shares the styles + filter with the React renderer via command-styles.
 import { h, ref, onMounted, onUnmounted } from 'vue'
 import { registerBlockRenderer } from './registry.js'
-import { Overlay, ENTER_MS } from './overlay.js'
-import { OVERLAY_EASE, OVERLAY_BACKDROP_EASE } from '../core/overlay-motion.js'
+import { Overlay } from './overlay.js'
+import { overlayPanelStyle } from '../core/overlay-motion.js'
 import {
   filterCommands,
   SEARCH_ICON,
@@ -28,18 +28,7 @@ const searchIcon = (size = 16) =>
     h('path', { d: SEARCH_ICON.path }),
   ])
 
-const panelStyle = (visible) => ({
-  width: '100%',
-  maxWidth: '520px',
-  background: 'var(--color-bg, #ffffff)',
-  color: 'var(--color-text, #0f172a)',
-  borderRadius: 'var(--radius, 12px)',
-  boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25)',
-  overflow: 'hidden',
-  opacity: visible ? 1 : 0,
-  transform: visible ? 'scale(1) translateY(0)' : 'scale(0.98) translateY(-8px)',
-  transition: `opacity ${ENTER_MS}ms ${OVERLAY_BACKDROP_EASE}, transform ${ENTER_MS}ms ${OVERLAY_EASE}`,
-})
+const panelStyle = (visible) => overlayPanelStyle(visible, { maxWidth: 520, motion: 'lift', padding: null, overflow: 'hidden' })
 
 export const CommandView = {
   props: ['placeholder', 'empty', 'hotkey', 'trigger', 'groups'],
