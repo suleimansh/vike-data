@@ -48,11 +48,11 @@ const catalog = [
 
 export default function CatalogPage() {
   return (
-    <div style={{ maxWidth: 860, margin: '3rem auto', padding: '0 1.25rem', fontFamily: 'system-ui, sans-serif', color: '#0f172a' }}>
-      <style>{'.vb-card{transition:border-color .15s ease, transform .15s ease}.vb-card:hover{border-color:#2563eb;transform:translateY(-2px)}'}</style>
+    <div style={{ maxWidth: 860, margin: '3rem auto', padding: '0 1.25rem', fontFamily: 'system-ui, sans-serif', color: 'var(--color-text)' }}>
+      <style>{'.vb-card{transition:border-color .15s ease, transform .15s ease}.vb-card:hover{border-color:var(--color-primary);transform:translateY(-2px)}'}</style>
       <header style={{ marginBottom: '2rem' }}>
         <h1 style={{ fontSize: 30, margin: '0 0 0.4rem' }}>vike-blocks</h1>
-        <p style={{ color: '#64748b', fontSize: 16, margin: 0, lineHeight: 1.5 }}>
+        <p style={{ color: 'var(--color-muted)', fontSize: 16, margin: 0, lineHeight: 1.5 }}>
           Composable UI as data — a page is a composition of blocks. Browse the built-in catalog:
         </p>
       </header>
@@ -62,14 +62,14 @@ export default function CatalogPage() {
             key={c.href}
             href={c.href}
             className="vb-card"
-            style={{ display: 'block', textDecoration: 'none', color: 'inherit', border: '1px solid #e2e8f0', borderRadius: 12, padding: '1.1rem 1.2rem', background: '#fff' }}
+            style={{ display: 'block', textDecoration: 'none', color: 'inherit', border: '1px solid var(--color-border)', borderRadius: 12, padding: '1.1rem 1.2rem', background: 'var(--color-surface)' }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
               <span style={{ fontSize: 17, fontWeight: 600 }}>{c.name}</span>
-              <span style={{ fontSize: 11, color: '#64748b', border: '1px solid #e2e8f0', borderRadius: 999, padding: '1px 8px' }}>{c.tag}</span>
+              <span style={{ fontSize: 11, color: 'var(--color-muted)', border: '1px solid var(--color-border)', borderRadius: 999, padding: '1px 8px' }}>{c.tag}</span>
             </div>
-            <p style={{ margin: '0 0 0.85rem', fontSize: 14, color: '#475569', lineHeight: 1.5 }}>{c.desc}</p>
-            <span style={{ fontSize: 13, color: '#2563eb', fontWeight: 500 }}>View demo -&gt;</span>
+            <p style={{ margin: '0 0 0.85rem', fontSize: 14, color: 'var(--color-muted)', lineHeight: 1.5 }}>{c.desc}</p>
+            <span style={{ fontSize: 13, color: 'var(--color-primary)', fontWeight: 500 }}>View demo -&gt;</span>
           </a>
         ))}
       </div>
