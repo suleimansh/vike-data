@@ -110,7 +110,7 @@ Every built-in builder, by group. Each imports from `vike-blocks` and has a live
 | Data display | `table` `dataTable` `chart` `pagination` `stat` `timeline` |
 | Feedback | `alert` `skeleton` `progress` `spinner` `tooltip` `emptyState` |
 | Overlays | `dialog` `confirm` `sheet` `drawer` `popover` `dropdown` `navMenu` |
-| Navigation | `breadcrumb` `command` `tabs` `accordion` `collapsible` |
+| Navigation | `breadcrumb` `docNav` `command` `tabs` `accordion` `collapsible` |
 | Identity + misc | `avatar` `avatarGroup` `kbd` `item` |
 | Chat | `bubble` `message` `messageScroller` |
 | Containers + layout | `card` `layout` `slot` |

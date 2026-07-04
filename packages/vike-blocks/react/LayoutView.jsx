@@ -11,7 +11,7 @@ import { createContext, useContext } from 'react'
 import { Blocks } from './Blocks.jsx'
 import { registerBlockRenderer } from './registry.js'
 import { isActivePath } from '../blocks/layout.js'
-import { stackRegionOrder } from '../core/view-helpers.js'
+import { stackRegionOrder, DOCS_SHELL_STYLE_TAG } from '../core/view-helpers.js'
 
 // The cumulative layout-chrome config (nav / logo / userMenu / footer / toolbar / currentPath) a
 // `slot(...).from('config')` reads at render time. A provider merges each extension's contribution,
@@ -122,12 +122,53 @@ function CenteredShell({ slots }) {
   )
 }
 
+// A documentation shell: a sticky navbar row over a two-column [sidebar | article] grid. The sidebar
+// (typically a doc-nav block) sticks under the navbar and scrolls on its own; the article holds the
+// page body — a page's own blocks or the live content a wrapper feeds via slot(from:'content'). Below
+// a breakpoint the sidebar column drops out for a header-hosted mobile menu (DOCS_SHELL_STYLE_TAG).
+// This is the #420 proof: DocPress's 2-column shell (navbar + left sidebar + article) as an IR shell,
+// so the renderer is swappable.
+function DocsShell({ slots }) {
+  const hasSidebar = !!slots.sidebar
+  return (
+    <div data-slot="layout" data-variant="docs" style={{ minHeight: '100%', background: 'var(--color-bg)', color: 'var(--color-text)', fontFamily: 'var(--font-sans)' }}>
+      <style>{DOCS_SHELL_STYLE_TAG}</style>
+      {slots.header && (
+        <header data-region="header" style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid var(--color-border, #e2e8f0)', background: 'var(--color-bg)' }}>
+          {/* Header blocks flow as direct flex children (logo pushed left, actions right — see the style tag). */}
+          <div className="vike-blocks-docs-header" style={{ display: 'flex', alignItems: 'center', gap: '1rem', maxWidth: 'var(--doc-max-width, 1300px)', margin: '0 auto', padding: '0.6rem 1.25rem' }}>
+            <Blocks sections={slots.header} />
+            {slots.mobileMenu && (
+              <div className="vike-blocks-docs-mobile" data-region="mobileMenu">
+                <Region sections={slots.mobileMenu} />
+              </div>
+            )}
+          </div>
+        </header>
+      )}
+      <div className="vike-blocks-docs-body" style={{ display: 'grid', gridTemplateColumns: hasSidebar ? 'var(--doc-nav-width, 260px) minmax(0, 1fr)' : 'minmax(0, 1fr)', maxWidth: 'var(--doc-max-width, 1300px)', margin: '0 auto' }}>
+        {hasSidebar && (
+          <aside data-region="sidebar" className="vike-blocks-docs-sidebar" style={{ borderRight: '1px solid var(--color-border, #e2e8f0)' }}>
+            <div style={{ position: 'sticky', top: 'var(--doc-nav-top, 57px)', maxHeight: 'calc(100vh - var(--doc-nav-top, 57px))', overflowY: 'auto', padding: '1.5rem 1rem' }}>
+              <Region sections={slots.sidebar} />
+            </div>
+          </aside>
+        )}
+        <main data-region="article" className="vike-blocks-docs-article" style={{ minWidth: 0, padding: '1.75rem 2.5rem 4rem' }}>
+          <Region sections={slots.article} />
+        </main>
+      </div>
+    </div>
+  )
+}
+
 // variant -> shell. Open: register via registerLayoutShell (vike-layouts adds its app frames) or
 // pass `shells` per call. A later registration wins, so an extension can override a builtin.
 const SHELLS = new Map([
   ['stack', StackShell],
   ['landing', LandingShell],
   ['centered', CenteredShell],
+  ['docs', DocsShell],
 ])
 
 export function registerLayoutShell(variant, component) {

@@ -32,6 +32,7 @@ const catalog = [
   { name: 'Command', href: '/command', tag: 'interactive', desc: 'A ⌘K command palette (shadcn command) on the Overlay primitive — a trigger + global ⌘K hotkey open a modal with a filter input over grouped items, arrow-key + Enter to run (navigates), shortcut hints. Dep-free; SSR renders the trigger only.' },
   { name: 'Navigation-menu', href: '/nav-menu', tag: 'interactive', desc: 'A horizontal bar of links + dropdown sections (title + description per link), one open at a time. Arrow-key nav, outside-click / Escape close.' },
   { name: 'Breadcrumb', href: '/breadcrumb', tag: 'leaf', desc: 'The trail of pages to the current one (shadcn breadcrumb) — nav > ol of crumbs, the last one the current page (aria-current), chevron separators. Plain links, works with no client JS.' },
+  { name: 'Doc-nav', href: '/doc-nav', tag: 'interactive', desc: 'A documentation sidebar tree — collapsible categories, page links, active + relevant state, and an on-page section splice under the active page. Pairs with the docs layout shell; the sidebar half of DocPress-on-the-IR (#420). Plain links, works with no client JS.' },
   { name: 'Toast', href: '/toast', tag: 'interactive', desc: 'Transient notifications fired imperatively (Sonner-style) — toast("Saved") / toast.success(...). Stack in a corner, auto-dismiss, closeable. Mount <Toaster> once.' },
   { name: 'Tooltip', href: '/tooltip', tag: 'interactive', desc: 'A small label revealed on hover / focus (shadcn Radix tooltip, reimplemented pure-CSS) — wraps any block via .on(), places top/bottom/left/right, dark tip + arrow. No portal, no JS, no state; works with no client JS.' },
   { name: 'Kbd', href: '/kbd', tag: 'leaf', desc: 'Keyboard key caps for documenting shortcuts — kbd("Esc") or kbd(["Cmd", "K"]). Static, theme-native.' },
@@ -61,7 +62,7 @@ const byHref = Object.fromEntries(catalog.map((c) => [c.href, c]))
 const SECTIONS = [
   { label: 'Forms & inputs', hrefs: ['/button', '/input', '/textarea', '/checkbox', '/radio', '/select', '/combobox', '/tag-input', '/switch', '/toggle', '/slider', '/calendar', '/date-picker', '/attachment', '/field', '/form'] },
   { label: 'Overlays & menus', hrefs: ['/dialog', '/confirm', '/sheet', '/drawer', '/popover', '/dropdown', '/command', '/nav-menu', '/tooltip'] },
-  { label: 'Navigation', hrefs: ['/breadcrumb', '/pagination', '/tabs'] },
+  { label: 'Navigation', hrefs: ['/breadcrumb', '/doc-nav', '/pagination', '/tabs'] },
   { label: 'Layout & containers', hrefs: ['/card', '/accordion', '/collapsible'] },
   { label: 'Data display', hrefs: ['/table', '/data-table', '/chart', '/stat', '/avatar', '/item', '/code', '/timeline'] },
   { label: 'Feedback & status', hrefs: ['/alert', '/toast', '/progress', '/spinner', '/skeleton', '/empty-state'] },

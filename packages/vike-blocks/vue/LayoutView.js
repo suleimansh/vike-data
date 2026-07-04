@@ -15,7 +15,7 @@ import { h, inject, provide, computed, unref } from 'vue'
 import { Blocks } from './Blocks.js'
 import { registerBlockRenderer } from './registry.js'
 import { isActivePath } from '../blocks/layout.js'
-import { stackRegionOrder } from '../core/view-helpers.js'
+import { stackRegionOrder, DOCS_SHELL_STYLE_TAG } from '../core/view-helpers.js'
 
 export const LAYOUT_CONFIG_KEY = Symbol.for('vike-blocks.layoutConfig')
 export const useLayoutConfig = () => inject(LAYOUT_CONFIG_KEY, computed(() => ({})))
@@ -127,12 +127,60 @@ const CenteredShell = {
   },
 }
 
+// A documentation shell: a sticky navbar row over a two-column [sidebar | article] grid — the Vue twin
+// of the react DocsShell. The sidebar (typically a doc-nav block) sticks under the navbar; the article
+// holds the page body (its own blocks or slot(from:'content')). Below a breakpoint the sidebar drops
+// out for a header-hosted mobile menu (DOCS_SHELL_STYLE_TAG). The #420 proof: DocPress's 2-column shell
+// as an IR shell, renderer swappable.
+const DocsShell = {
+  props: ['slots'],
+  setup(props) {
+    return () => {
+      const slots = props.slots ?? {}
+      const hasSidebar = !!slots.sidebar
+      const children = [h('style', DOCS_SHELL_STYLE_TAG)]
+      if (slots.header) {
+        children.push(
+          h(
+            'header',
+            { 'data-region': 'header', style: { position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid var(--color-border, #e2e8f0)', background: 'var(--color-bg)' } },
+            [
+              h(
+                'div',
+                { class: 'vike-blocks-docs-header', style: { display: 'flex', alignItems: 'center', gap: '1rem', maxWidth: 'var(--doc-max-width, 1300px)', margin: '0 auto', padding: '0.6rem 1.25rem' } },
+                [
+                  h(Blocks, { sections: slots.header }),
+                  slots.mobileMenu ? h('div', { class: 'vike-blocks-docs-mobile', 'data-region': 'mobileMenu' }, [h(Blocks, { sections: slots.mobileMenu })]) : null,
+                ],
+              ),
+            ],
+          ),
+        )
+      }
+      const cols = []
+      if (hasSidebar) {
+        cols.push(
+          h('aside', { 'data-region': 'sidebar', class: 'vike-blocks-docs-sidebar', style: { borderRight: '1px solid var(--color-border, #e2e8f0)' } }, [
+            h('div', { style: { position: 'sticky', top: 'var(--doc-nav-top, 57px)', maxHeight: 'calc(100vh - var(--doc-nav-top, 57px))', overflowY: 'auto', padding: '1.5rem 1rem' } }, [h(Blocks, { sections: slots.sidebar ?? [] })]),
+          ]),
+        )
+      }
+      cols.push(h('main', { 'data-region': 'article', class: 'vike-blocks-docs-article', style: { minWidth: 0, padding: '1.75rem 2.5rem 4rem' } }, [h(Blocks, { sections: slots.article ?? [] })]))
+      children.push(
+        h('div', { class: 'vike-blocks-docs-body', style: { display: 'grid', gridTemplateColumns: hasSidebar ? 'var(--doc-nav-width, 260px) minmax(0, 1fr)' : 'minmax(0, 1fr)', maxWidth: 'var(--doc-max-width, 1300px)', margin: '0 auto' } }, cols),
+      )
+      return h('div', { 'data-slot': 'layout', 'data-variant': 'docs', style: { minHeight: '100%', background: 'var(--color-bg)', color: 'var(--color-text)', fontFamily: 'var(--font-sans)' } }, children)
+    }
+  },
+}
+
 // variant -> shell. Open: register via registerLayoutShell (vike-layouts adds its app frames) or
 // pass `shells` per call. A later registration wins.
 const SHELLS = new Map([
   ['stack', StackShell],
   ['landing', LandingShell],
   ['centered', CenteredShell],
+  ['docs', DocsShell],
 ])
 
 export function registerLayoutShell(variant, component) {
