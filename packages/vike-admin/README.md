@@ -36,11 +36,14 @@ export const usersResource = defineResource({
     field('name'),         // type inferred from the schema
     // id / *_hash / timestamps auto-hidden by convention
   ],
-  canView: (user) => !!user,
-  canEdit: (user) => user?.role === 'admin',
-  // Row scoping: bound a user to their OWN rows. Return a universal-orm filter, or a
-  // falsy value for full access (encode the admin bypass here).
-  scope: (user) => (user?.role === 'admin' ? null : { user_id: user.id }),
+  // Per-screen gates (missing = allowed). canIndex/canCreate take (ctx); canView/canEdit/canDelete
+  // take (record, ctx) — the loaded row plus ctx. All evaluated server-side.
+  canIndex: (ctx) => !!ctx.user,
+  canEdit: (record, ctx) => ctx.user?.role === 'admin',
+  // Row scoping: `query(q, ctx)` bounds a user to their OWN rows; `onCreate(ctx)` stamps the owner
+  // onto inserts. Return the builder unrefined for full access (encode the admin bypass here).
+  query: (q, ctx) => (ctx.user?.role === 'admin' ? q : q.where('user_id', ctx.user.id)),
+  onCreate: (ctx) => ({ user_id: ctx.user.id }),
 })
 ```
 
@@ -48,7 +51,11 @@ Minimal case: `defineResource({ table: 'subscriptions' })` derives every column 
 
 ### Row scoping
 
-`scope(user)` returns a universal-orm filter that bounds **every** row op for that resource to the user's own rows: it is AND-merged into the list (and its count), the edit load, update and delete, and its scalar columns are forced onto inserts (so a user can neither create a row owned by someone else nor reassign ownership). Return a falsy value for full access, so the admin bypass lives in the function itself. A resource with no `scope` is unscoped. This is how `/admin` doubles as a self-service view: each user sees and edits only what they own.
+`query(q, ctx)` is a query-builder callback (equality + `in`, mirroring universal-orm's surface) that bounds **every** read for a resource to the user's own rows: it is AND-merged into the list (and its count), the edit load, update and delete. Its scalar columns are also forced onto writes, and `onCreate(ctx)` adds a write stamp forced onto inserts (so a user can neither create a row owned by someone else nor reassign ownership). Return the builder unrefined (`(q) => q`) for full access, so the admin bypass lives in the function itself. A resource with no `query` is unscoped. This is how `/admin` doubles as a self-service view: each user sees and edits only what they own.
+
+### Per-field visibility
+
+`.when(ctx)` on any `column()` / `display()` / `field()` shows it only when the predicate is truthy — evaluated server-side, so a hidden column's data never reaches the client and a hidden form field is not writable.
 
 ## How it works
 
@@ -56,7 +63,7 @@ Minimal case: `defineResource({ table: 'subscriptions' })` derives every column 
 - **Schema introspection**: each page's `data` hook resolves the merged schema (`resolveAdminTables`, which delegates to vike-crud's `resolveViewTables`) and derives columns/fields a resource omits, auto-hiding `id` / `*_hash` / timestamps.
 - **Data**: reads/writes go through [universal-orm](../universal-orm) (`db.<table>.find` / `.insert`) on whatever adapter the app registered (memory for dev, Drizzle for real). No ORM is imported.
 - **Write POSTs**: the write routes own their own POST. Vike hands the Web Request as `pageContext._reqWeb`, so `/admin/:table/new` renders the form (GET) and inserts (POST), and `/admin/:table/:id` renders the edit form (GET) and updates or deletes (POST), then redirects. No separate endpoint.
-- **Auth**: a `guard` fences `/admin/*` to signed-in users (`pageContext.user`, from vike-auth); per-resource `canView` / `canEdit` refine access, and `scope` (above) bounds which rows a user sees and edits.
+- **Auth**: a `guard` fences `/admin/*` to signed-in users (`pageContext.user`, from vike-auth); per-resource `canIndex` / `canCreate` / `canView` / `canEdit` / `canDelete` refine access per screen, and `query` / `onCreate` (above) bound which rows a user sees and can write.
 
 ## Agent API (JSON)
 

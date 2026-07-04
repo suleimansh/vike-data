@@ -16,8 +16,11 @@ const usersResource = defineResource({
     field('name'),
     field('active'),
   ],
-  canView: (user) => can(user, 'users.view'),
-  canEdit: (user) => can(user, 'users.edit'),
+  // defineCrud auth model (#581): listing needs `users.view`; create/edit/delete need `users.edit`.
+  canIndex: (ctx) => can(ctx.user, 'users.view'),
+  canCreate: (ctx) => can(ctx.user, 'users.edit'),
+  canEdit: (record, ctx) => can(ctx.user, 'users.edit'),
+  canDelete: (record, ctx) => can(ctx.user, 'users.edit'),
 })
 
 const sessionsResource = defineResource({
@@ -28,8 +31,11 @@ const sessionsResource = defineResource({
     field('user_id'),
     field('token').required(),
   ],
-  canView: (user) => !!user,
-  scope: (user) => (hasRole(user, 'admin') ? null : { user_id: user.id }),
+  canIndex: (ctx) => !!ctx.user,
+  // Row scoping (#104): an admin reads every session; anyone else is bounded to their own via the
+  // `query` builder, and `onCreate` stamps the owner onto inserts.
+  query: (q, ctx) => (hasRole(ctx.user, 'admin') ? q : q.where('user_id', ctx.user.id)),
+  onCreate: (ctx) => ({ user_id: ctx.user.id }),
 })
 
 export default [usersResource, sessionsResource]

@@ -22,7 +22,7 @@ const sessionsSchema = defineSchema('sessions', (t) => {
 const resource = defineResource({
   table: 'sessions',
   form: [field('user_id'), field('token')],
-  scope: (user) => (user.role === 'admin' ? null : { user_id: user.id }),
+  query: (q, ctx) => (ctx.user.role === 'admin' ? q : q.where('user_id', ctx.user.id)),
 })
 const config = { schemas: [sessionsSchema], adminResources: [resource] }
 const alan = { id: 'u-alan', role: 'member' }

@@ -1,13 +1,26 @@
 // The app's contribution to vike-admin's cumulative `adminResources` point. It lives in its
-// own +<configName>.js file (not inline in +config.js) because a resource carries FUNCTIONS
-// (canView / canEdit) that Vike can't serialize into the page config; a dedicated file is
+// own +<configName>.js file (not inline in +config.js) because a resource carries auth FUNCTIONS
+// (query / onCreate / canX) that Vike can't serialize into the page config; a dedicated file is
 // pointer-imported instead. Same seam as `schemas` / `themes`, just runtime values.
 //
 // A resource is the REFINEMENT on top of a composed-schema table. `posts` gets a curated
 // list + form; `tags` is BARE — `defineResource({ table })` derives every column and field
 // from the schema (id / timestamps auto-hidden). `users` (vike-auth's table) gets a tiny
 // resource mainly so its `recordTitle` labels the posts.author_id picker by email.
+//
+// Authorization is the defineCrud model (#581): flat `canX(ctx)` / `canX(record, ctx)` gates
+// (missing = allowed), the `query(q, ctx)` read scope, and the `onCreate(ctx)` write stamp. This
+// demo has no row-owner scoping (an admin app sees every row), so it only gates on "signed in".
 import { defineResource, column, field } from 'vike-admin/define'
+
+// Every screen requires a signed-in user. canIndex/canCreate take `(ctx)`; canEdit/canDelete take
+// `(record, ctx)` (the loaded row + ctx). Spread onto each resource below.
+const signedIn = {
+  canIndex: (ctx) => !!ctx.user,
+  canCreate: (ctx) => !!ctx.user,
+  canEdit: (record, ctx) => !!ctx.user,
+  canDelete: (record, ctx) => !!ctx.user,
+}
 
 const postsResource = defineResource({
   table: 'posts',
@@ -26,12 +39,11 @@ const postsResource = defineResource({
     field('author_id'), // FK -> rendered as a user picker
     // id / created_at / updated_at auto-hidden by convention.
   ],
-  canView: (user) => !!user, // any signed-in user
-  canEdit: (user) => !!user,
+  ...signedIn,
 })
 
 // Bare: no list/form — every column + field is derived from the tags schema.
-const tagsResource = defineResource({ table: 'tags', label: 'Tags' })
+const tagsResource = defineResource({ table: 'tags', label: 'Tags', ...signedIn })
 
 // A minimal resource over vike-auth's `users` table so the posts author FK renders as a
 // picker labeled by email (recordTitle) instead of a raw uuid.
@@ -40,8 +52,7 @@ const usersResource = defineResource({
   label: 'Users',
   recordTitle: 'email',
   list: [column('email').searchable(), column('name'), column('created_at').format('since')],
-  canView: (user) => !!user,
-  canEdit: (user) => !!user,
+  ...signedIn,
 })
 
 export default [postsResource, tagsResource, usersResource]

@@ -11,7 +11,7 @@
 // logic. The middleware maps the `.json` URL to its admin page route and RENDERS it through
 // Vike (`renderPage`): vike-auth resolves the user, vike-rbac enriches roles/permissions,
 // the page guard runs, and the page's own data hook (dashboardData / listData / newData /
-// editData) runs — the same `scope(user)` AND-merge, `canView`/`canEdit` allow-list,
+// editData) runs — the same `query(q, ctx)` AND-merge, `canX(record, ctx)` gate,
 // validated `?query=`, ownership-forcing and universal-orm writes the browser UI goes
 // through. We return that hook's result (`pageContext.data`) as JSON instead of HTML, so the
 // API inherits the UI's security model by construction and the two can never drift.
@@ -89,7 +89,7 @@ export function projectRows(data) {
 }
 
 // Translate a rendered pageContext into the caller's JSON response: a bad query / body -> 400,
-// a guard / canView / canEdit redirect -> 401 (sign in) or 404 (not available to this caller).
+// a guard / canX redirect -> 401 (sign in) or 404 (not available to this caller).
 // Shared by reads and writes; `onOk` handles the success (200) shape for each.
 function respondFrom(pageContext, onOk) {
   if (pageContext.adminApiError) return json(400, { error: pageContext.adminApiError })
@@ -146,7 +146,7 @@ async function handleWrite(request, target) {
     if (w.created) return json(201, projectRow(w.created, pageContext.data))
     return json(200, projectRow(w.updated, pageContext.data))
   }
-  // No write was performed -> the guard / canEdit gate redirected. Reuse the read tier's
+  // No write was performed -> the guard / canX gate redirected. Reuse the read tier's
   // 401-vs-404 disambiguation.
   return respondFrom(pageContext, () => json(500, { error: 'Request failed' }))
 }

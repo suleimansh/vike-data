@@ -44,7 +44,11 @@ function listUrl(table, { page, sort, dir }) {
 }
 
 export default function ListPage() {
-  const { table, label, columns, rows, fkLabels, pk, canEdit, page, pageCount, total, sort, dir } = useData()
+  const { table, label, columns, rows, fkLabels, pk, canCreate, page, pageCount, total, sort, dir } = useData()
+  // Per-row permission (#581): the data hook stamped `_canEdit` / `_canDelete` on each row. Show the
+  // actions column only when at least one row is actionable; the per-row callback gates each cell.
+  const anyEdit = rows.some((r) => r._canEdit)
+  const anyDelete = rows.some((r) => r._canDelete)
 
   return (
     <div style={{ maxWidth: 900, margin: '0 auto' }}>
@@ -54,7 +58,7 @@ export default function ListPage() {
           <a href="/admin" style={{ color: 'var(--color-muted)', fontSize: 14 }}>
             &larr; Admin
           </a>
-          {canEdit && (
+          {canCreate && (
             <a
               href={`/admin/${table}/new`}
               style={{
@@ -90,8 +94,8 @@ export default function ListPage() {
           sort={sort}
           dir={dir}
           sortHref={(name, nextDir) => listUrl(table, { page: 1, sort: name, dir: nextDir })}
-          rowHref={canEdit ? (row) => `/admin/${table}/${row[pk]}` : undefined}
-          rowActions={canEdit ? (row) => <DeleteRowForm action={`/admin/${table}/${row[pk]}`} /> : undefined}
+          rowHref={anyEdit ? (row) => (row._canEdit ? `/admin/${table}/${row[pk]}` : undefined) : undefined}
+          rowActions={anyDelete ? (row) => (row._canDelete ? <DeleteRowForm action={`/admin/${table}/${row[pk]}`} /> : null) : undefined}
           emptyLabel="No rows yet."
         />
       </div>

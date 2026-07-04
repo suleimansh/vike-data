@@ -18,7 +18,10 @@ const notesSchema = defineSchema('notes', (t) => {
 })
 
 // Admins (role 'admin') bypass scoping; everyone else is bound to their own user_id.
-const notes = defineResource({ table: 'notes', scope: (u) => (u?.role === 'admin' ? null : { user_id: u.id }) })
+const notes = defineResource({
+  table: 'notes',
+  query: (q, ctx) => (ctx.user?.role === 'admin' ? q : q.where('user_id', ctx.user.id)),
+})
 const config = { schemas: [notesSchema], adminResources: [notes] }
 
 const USER = { id: 'u1', role: 'user' }

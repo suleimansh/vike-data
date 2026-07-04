@@ -1,7 +1,7 @@
 // vike-rbac — the framework-agnostic POLICY CORE.
 //
 // The whole point of RBAC here is ONE check that every layer shares: a page guard,
-// vike-admin's canView/canEdit, and (later) a Telefunc RPC all call the same
+// vike-admin's canX gates, and (later) a Telefunc RPC all call the same
 // can(user, permission). To make that check cheap and synchronous everywhere, the
 // user's effective permissions are RESOLVED ONCE per request (resolve.js) onto
 // `user.permissions`; the functions here are then pure lookups over that user.
@@ -70,7 +70,7 @@ export function hasRole(user, role, { org } = {}) {
 /**
  * A Vike guard that aborts with 403 unless the user holds `permission`. Use on a
  * page (`guard: requirePermission('users.view')`); the same predicate (`can`) backs
- * an admin resource's canView or a Telefunc check, so authorization is declared once.
+ * an admin resource's canX gate or a Telefunc check, so authorization is declared once.
  */
 export function requirePermission(permission) {
   return (pageContext) => {

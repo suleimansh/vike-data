@@ -90,11 +90,11 @@ test('viewFields honors an explicit form and lets a field override the inferred 
 })
 
 test('getResources returns the contributed resources whole (functions intact)', () => {
-  const resource = defineResource({ table: 'users', canEdit: (u) => u?.role === 'admin' })
+  const resource = defineResource({ table: 'users', canEdit: (record, ctx) => ctx.user?.role === 'admin' })
   const resources = getResources(config([resource]))
   assert.equal(resources.length, 1)
-  assert.equal(resources[0].canEdit({ role: 'admin' }), true)
-  assert.equal(resources[0].canEdit({ role: 'user' }), false)
+  assert.equal(resources[0].canEdit(null, { user: { role: 'admin' } }), true)
+  assert.equal(resources[0].canEdit(null, { user: { role: 'user' } }), false)
 })
 
 test('insert round-trip: buildDb inserts a row and find returns it', async () => {

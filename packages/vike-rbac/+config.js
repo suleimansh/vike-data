@@ -8,7 +8,7 @@
 //     installing an extension brings its permission set with it;
 //   - it provides a request-time RESOLVER (resolve.js) that enriches the signed-in
 //     user with roles + permissions, so the single sync `can(user, permission)`
-//     works everywhere the user object reaches: vike-admin's canView/canEdit, a page
+//     works everywhere the user object reaches: vike-admin's canX gates, a page
 //     guard, AND a Telefunc RPC (vike-rbac/telefunc + the telefunc seam). The
 //     enrichment is contributed to vike-auth's `resolveUser` seam (see resolve.js).
 //
@@ -62,7 +62,7 @@ export default {
   schemas: 'import:vike-rbac/schema:rbacSchemasFromConfig',
   // Plug the resolver into vike-auth's user-enricher seam: auth runs it right after
   // it resolves pageContext.user, on every page, so can(user, ...) works everywhere
-  // (vike-admin canView/canEdit, page guards, a future Telefunc check). A
+  // (vike-admin canX gates, page guards, a future Telefunc check). A
   // pointer-imported function (live code can't be inlined into serialized config).
   resolveUser: ['import:vike-rbac/resolve:resolveAccessOnto'],
 }

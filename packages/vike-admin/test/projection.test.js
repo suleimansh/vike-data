@@ -46,8 +46,14 @@ test('listData rows are projected to the visible columns + pk (no password_hash 
   const data = await listData({ routeParams: { table: 'users' }, config, user: { role: 'admin' }, urlParsed: { search: {} } })
   assert.equal(data.rows.length, 1)
   const row = data.rows[0]
-  // Only the listed columns and the primary key survive.
-  assert.deepEqual(Object.keys(row).sort(), ['email', 'id', 'name'])
+  // Only the listed columns and the primary key survive as DATA (the `_can*` keys are per-row
+  // permission flags the list uses to gate the Edit/Delete controls, not row data).
+  assert.deepEqual(
+    Object.keys(row)
+      .filter((k) => !k.startsWith('_can'))
+      .sort(),
+    ['email', 'id', 'name'],
+  )
   // The secret and unlisted/hidden columns are gone.
   assert.equal('password_hash' in row, false)
   assert.equal('active' in row, false)

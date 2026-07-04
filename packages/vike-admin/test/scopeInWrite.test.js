@@ -22,7 +22,7 @@ const docsSchema = defineSchema('docs', (t) => {
 const resource = defineResource({
   table: 'docs',
   form: [field('org_id'), field('title')],
-  scope: (user) => (user.role === 'admin' ? null : { org_id: { in: user.orgIds } }),
+  query: (q, ctx) => (ctx.user.role === 'admin' ? q : q.whereIn('org_id', ctx.user.orgIds)),
 })
 const config = { schemas: [docsSchema], adminResources: [resource] }
 const member = { id: 'u1', role: 'member', orgIds: ['o1', 'o2'] }

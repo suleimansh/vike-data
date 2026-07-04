@@ -1,6 +1,6 @@
 // Request-time resolution: enrich the signed-in user with their effective `roles`
 // + `permissions`, so the sync can(user, ...) works everywhere downstream
-// (vike-admin canView/canEdit, a page guard, a future Telefunc check).
+// (vike-admin canX gates, a page guard, a future Telefunc check).
 //
 // This is contributed to vike-auth's `resolveUser` seam (see vike-rbac/+config.js):
 // auth runs it right after it resolves pageContext.user, on every page, before any
