@@ -177,6 +177,9 @@ importers:
       vike-themes:
         specifier: workspace:*
         version: link:../../packages/vike-themes
+      vike-toolbar:
+        specifier: workspace:*
+        version: link:../../packages/vike-toolbar
     devDependencies:
       '@docsearch/react':
         specifier: ^3.8.0

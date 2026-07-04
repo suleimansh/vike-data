@@ -8,6 +8,7 @@ export { onRenderHtml }
 // long-term seam is an injectable getPageElement upstream, not this override.
 import ReactDOMServer from 'react-dom/server'
 import { escapeInject, dangerouslySkipEscape } from 'vike/server'
+import { TOOLBAR_ROOT_ID } from 'vike-toolbar'
 import { getPageElement } from './ir/getPageElement'
 import type { PageContextServer } from 'vike/types'
 
@@ -29,9 +30,25 @@ async function onRenderHtml(pageContext: PageContextServer) {
         ${description}
         <meta name="viewport" content="width=device-width,initial-scale=1">
         ${headHtml}
+        <!-- Theme the page backdrop + fill the viewport. The palette (headHtml) sets --color-bg on
+             body; this makes the body itself paint it and stretch full height, so the area below a
+             short page (and any overscroll) stays themed instead of showing white.
+             Also: DocPress's stylesheet turns any [aria-label] into a hover tooltip (its own icon-
+             button convention). We import that stylesheet for the article, so it leaks onto the IR
+             shell chrome (toolbar button, the nav, the theme selects) where aria-label is for a11y,
+             not a tooltip. Suppress it on the chrome; the article keeps DocPress's behavior. -->
+        <style>
+          html,body{margin:0}body{min-height:100vh;background:var(--color-bg,#fff)}
+          a{color:var(--color-primary,#4747ff)}
+          [aria-label]::before{content:none!important}
+          [data-region="article"] [aria-label]::before{content:attr(aria-label)!important}
+        </style>
       </head>
       <body>
         <div id="page-view">${dangerouslySkipEscape(pageHtml)}</div>
+        <!-- vike-toolbar's popover portals into this node, kept OUTSIDE the hydration root. Normally
+             vike-toolbar contributes it via bodyHtmlEnd; the custom renderer injects it here. -->
+        <div id="${TOOLBAR_ROOT_ID}"></div>
       </body>
     </html>`
 }
