@@ -10,6 +10,7 @@ import './RadioGroupView.js' // side-effect: register the radio renderer
 import './SelectView.js' // side-effect: register the select renderer
 import './ComboboxView.js' // side-effect: register the combobox renderer
 import './SwitchView.js' // side-effect: register the switch renderer
+import './ToggleView.js' // side-effect: register the toggle-button + toggle-group renderers
 import './SliderView.js' // side-effect: register the slider renderer
 import './CalendarView.js' // side-effect: register the calendar renderer
 import './DatePickerView.js' // side-effect: register the date-picker renderer
@@ -57,6 +58,7 @@ export { RadioGroupView } from './RadioGroupView.js'
 export { SelectView } from './SelectView.js'
 export { ComboboxView } from './ComboboxView.js'
 export { SwitchView } from './SwitchView.js'
+export { ToggleButtonView, ToggleGroupView } from './ToggleView.js'
 export { SliderView } from './SliderView.js'
 export { CalendarView } from './CalendarView.js'
 export { DatePickerView } from './DatePickerView.js'
