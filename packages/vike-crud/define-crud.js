@@ -103,7 +103,13 @@ export function defineCrud(table, opts = {}) {
 
   const pages = []
   if (indexScreen) {
-    pages.push(definePage({ route: base, sections: [section('index', indexScreen.cfg, 'route'), ...folded], ...meta('index', 'route') }))
+    // A serializable navigation descriptor on the index list: how each screen is reached, so the
+    // renderer wires row links + a New link per presentation (route -> its own URL, dialog -> a
+    // `?screen=id` query, inline -> already on the page, no link). `base` anchors the route paths.
+    const nav = { base }
+    for (const { name, cfg } of screens) if (name !== 'index') nav[name] = cfg.present
+    const indexSection = { ...section('index', indexScreen.cfg, 'route'), nav }
+    pages.push(definePage({ route: base, sections: [indexSection, ...folded], ...meta('index', 'route') }))
   }
   pages.push(...routePages)
   return pages

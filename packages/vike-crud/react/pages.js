@@ -82,6 +82,18 @@ export function activeDialog(search = {}) {
   return null
 }
 
+// Whether an in-place (non-dialog) section has something to render — the guard that keeps an empty
+// CRUD block off the page (the empty `<dl>` this whole epic set out to kill). A `record` needs a
+// row. A `form` renders UNLESS it is an EDIT screen with no loaded row (an empty edit on an index):
+// a create form's blank inputs are the point, and a hand-written / legacy untagged form is a create.
+// Any other block (list / heading / text) always renders.
+export function sectionHasContent(section) {
+  const { block, props, resolved } = section ?? {}
+  if (block === 'record') return resolved?.row != null
+  if (block === 'form') return props?.screen !== 'edit' || resolved?.values?.[resolved?.pk] != null
+  return true
+}
+
 // The resolved form fields for a `form` block on `table` in this view — what the POST handler
 // coerces the submitted form against.
 export function formFieldsFor(view, tables, table) {

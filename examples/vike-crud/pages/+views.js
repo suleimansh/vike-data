@@ -56,4 +56,24 @@ export default [
     query: (q, ctx) => q.where('user_id', ctx.user.id),
     onCreate: (ctx) => ({ user_id: ctx.user.id }),
   }),
+  // The same resource in `route` mode: separate pages (/crud-route, /crud-route/@id,
+  // /crud-route/new, /crud-route/@id/edit); the list links each row to its detail page.
+  ...defineCrud('posts', {
+    route: '/crud-route',
+    mode: 'route',
+    index: [column('title').sortable(), column('status')],
+    view: [display('title'), display('body'), display('status')],
+    edit: [field('title').required(), field('body'), field('status')],
+    query: (q, ctx) => q.where('user_id', ctx.user.id),
+    onCreate: (ctx) => ({ user_id: ctx.user.id }),
+  }),
+  // `inline` mode: list + the create form stacked on one page (no detail/edit screens shown).
+  ...defineCrud('posts', {
+    route: '/crud-inline',
+    mode: 'inline',
+    index: [column('title').sortable(), column('status')],
+    edit: [field('title').required(), field('body'), field('status')],
+    query: (q, ctx) => q.where('user_id', ctx.user.id),
+    onCreate: (ctx) => ({ user_id: ctx.user.id }),
+  }),
 ]
