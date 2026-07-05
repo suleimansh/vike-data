@@ -59,6 +59,7 @@ import './blocks/tree-view.js' // side-effect: register the tree-view block (nes
 import './blocks/context-menu.js' // side-effect: register the context-menu block (right-click, cursor-anchored)
 import './blocks/stepper.js' // side-effect: register the stepper block (multi-step wizard)
 import './blocks/description-list.js' // side-effect: register the description-list block (key-value metadata)
+import './blocks/rating.js' // side-effect: register the rating block (star rating input)
 
 export { definePage, resolvePage } from './core/page.js'
 export { registerBlock, getBlock, hasBlock, listBlocks, defineBlock } from './core/registry.js'
@@ -123,3 +124,5 @@ export { clampMenuPosition } from './blocks/context-menu-styles.js'
 export { stepper } from './blocks/stepper.js'
 export { stepState } from './blocks/stepper-styles.js'
 export { descriptionList } from './blocks/description-list.js'
+export { rating } from './blocks/rating.js'
+export { ratingValueAt, starFill, snapRating } from './blocks/rating-styles.js'

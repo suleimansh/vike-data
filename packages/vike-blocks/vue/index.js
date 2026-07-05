@@ -56,6 +56,7 @@ import './TreeView.js' // side-effect: register the tree-view renderer
 import './ContextMenuView.js' // side-effect: register the context-menu renderer
 import './StepperView.js' // side-effect: register the stepper renderer
 import './DescriptionListView.js' // side-effect: register the description-list renderer
+import './RatingView.js' // side-effect: register the rating renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
 export { ACTION_RUNNER_KEY, useActionRunner, provideActionRunner } from './action-context.js' // the actions seam (#385)
 export { Blocks, Page } from './Blocks.js' // importing Blocks registers the built-in blocks
@@ -117,3 +118,4 @@ export { TreeView } from './TreeView.js'
 export { ContextMenuView } from './ContextMenuView.js'
 export { StepperView } from './StepperView.js'
 export { DescriptionListView } from './DescriptionListView.js'
+export { RatingView } from './RatingView.js'
