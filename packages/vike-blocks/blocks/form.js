@@ -9,7 +9,7 @@
 //   form({ action: '/members', method: 'post' })
 //     .fields([
 //       field('Name').control(input().name('name').required()),
-//       field('Role').control(radioGroup().option('admin', 'Admin').option('member', 'Member')),
+//       field('Role').control(radio().option('admin', 'Admin').option('member', 'Member')),
 //     ])
 //     .submit('Create member')
 //

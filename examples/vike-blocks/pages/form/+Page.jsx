@@ -3,7 +3,7 @@
 // takes the fields you compose. Scoped to NATIVE HTML submission (method + action), so it works with
 // progressive enhancement and zero client JS. The richer JS submission (named actions, optimistic UI,
 // inline validation) is the actions axis (#385).
-import { definePage, form, field, input, textarea, radioGroup, checkbox, heading, text, card } from 'vike-blocks'
+import { definePage, form, field, input, textarea, radio, checkbox, heading, text, card } from 'vike-blocks'
 import { Page } from 'vike-blocks/react'
 
 const page = definePage({
@@ -17,7 +17,7 @@ const page = definePage({
       .fields([
         field('Name').control(input().name('name').placeholder('Ada Lovelace').required()),
         field('Email').description('We never share it.').control(input().type('email').name('email').placeholder('you@example.com')),
-        field('Role').control(radioGroup().name('role').option('admin', 'Admin').option('member', 'Member').value('member')),
+        field('Role').control(radio().name('role').option('admin', 'Admin').option('member', 'Member').value('member')),
         field('Bio').control(textarea().name('bio').placeholder('A short bio...').rows(3)),
       ])
       .submit('Create member'),

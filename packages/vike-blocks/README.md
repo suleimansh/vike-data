@@ -105,7 +105,7 @@ Every built-in builder, by group. Each imports from `vike-blocks` and has a live
 | Primitives | `text` `heading` `badge` `divider` `link` `list` |
 | Content | `markdown` `code` |
 | Buttons | `button` |
-| Form controls | `input` `textarea` `checkbox` `radioGroup` `select` `combobox` `tagInput` `toggle` `toggleButton` `toggleGroup` `slider` `calendar` `datePicker` `attachment` |
+| Form controls | `input` `textarea` `checkbox` `radio` `select` `combobox` `tagInput` `toggle` `toggleButton` `toggleGroup` `slider` `calendar` `datePicker` `attachment` |
 | Form structure | `field` `form` |
 | Data display | `table` `dataTable` `chart` `pagination` `stat` `timeline` |
 | Feedback | `alert` `skeleton` `progress` `spinner` `tooltip` `emptyState` |
