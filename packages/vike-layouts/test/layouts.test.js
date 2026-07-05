@@ -67,29 +67,12 @@ test('registerShell validates its arguments', () => {
   assert.throws(() => registerShell('x', {}), /slots must be an array/)
 })
 
-test('isActivePath matches the current page and its descendants', () => {
-  // exact match
-  assert.equal(isActivePath('/admin', '/admin'), true)
-  // descendant: /admin stays active inside /admin/users
+// isActivePath is now re-exported from vike-blocks (its canonical home + full
+// matrix live there); this only pins that the re-export stays wired up.
+test('re-exports isActivePath from vike-blocks', () => {
+  assert.equal(typeof isActivePath, 'function')
   assert.equal(isActivePath('/admin/users', '/admin'), true)
-  // a sibling is not active
-  assert.equal(isActivePath('/chat', '/admin'), false)
-  // a prefix that is not a path boundary does NOT match (/admin vs /administrators)
-  assert.equal(isActivePath('/administrators', '/admin'), false)
-})
-
-test('isActivePath treats root "/" as exact-only', () => {
-  assert.equal(isActivePath('/', '/'), true)
-  assert.equal(isActivePath('/chat', '/'), false) // root must not light up everywhere
-})
-
-test('isActivePath ignores trailing slashes, query and hash', () => {
-  assert.equal(isActivePath('/admin/', '/admin'), true)
-  assert.equal(isActivePath('/admin?tab=users', '/admin'), true)
-  assert.equal(isActivePath('/admin#top', '/admin'), true)
-  // guards: bad inputs are never active
-  assert.equal(isActivePath(undefined, '/admin'), false)
-  assert.equal(isActivePath('/admin', ''), false)
+  assert.equal(isActivePath('/chat', '/'), false)
 })
 
 test('+config declares the layout selection + slot config points', () => {
