@@ -128,6 +128,8 @@ export function toastCardStyle(intent) {
   return {
     pointerEvents: 'auto',
     touchAction: 'none', // the card is a swipe surface — keep touch drags from scrolling the page
+    userSelect: 'none', // ...and a mouse drag from selecting the toast text instead of swiping
+    WebkitUserSelect: 'none',
     display: 'flex',
     alignItems: 'flex-start',
     gap: '0.6rem',
