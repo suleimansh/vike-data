@@ -65,15 +65,38 @@ export function toastRegionStyle(position, height) {
   return style
 }
 
+// Swipe-to-dismiss (Sonner's flick). A toast can be dragged toward its region edge to close it: past
+// TOAST_SWIPE_THRESHOLD px it flicks away, a shorter drag snaps back. Vertical only — a bottom deck
+// dismisses on a downward drag, a top deck on an upward one (the axis the deck is anchored on). Same
+// displacement-threshold model as the drawer's grabber (drawer-styles), kept in the toast's own module
+// so the two blocks stay decoupled and the toast can fade as it goes. Both renderers share these pure
+// helpers so the twins can't drift; they only track the pointer and feed the offset back in as `drag`.
+export const TOAST_SWIPE_THRESHOLD = 45 // px toward the edge that dismisses; a shorter drag snaps back
+
+// The distance dragged toward the edge (the dismiss direction), never negative — dragging away is inert.
+export function toastSwipeOffset(side, dy) {
+  return side === 'top' ? Math.max(0, -dy) : Math.max(0, dy)
+}
+
+// Whether releasing at this offset dismisses (crossed the threshold) vs snaps back.
+export const toastShouldDismiss = (offset, threshold = TOAST_SWIPE_THRESHOLD) => offset >= threshold
+
+// The toast fades as it is swiped: full at rest, ~half at the threshold, gone by twice it.
+export const toastSwipeFade = (offset, threshold = TOAST_SWIPE_THRESHOLD) => Math.max(0, 1 - offset / (threshold * 2))
+
 // The positioned transform for one toast in the deck. `index` is its depth (0 = front / newest);
 // `heightsInFront` is the summed height (+gap) of the toasts closer to the edge, used to spread the
 // expanded list; `hidden` drops the ones past TOAST_VISIBLE when collapsed; `show` gates the enter
 // (false on mount, flipped true after a frame) and the exit (false once the store marks it dismissed).
-export function toastStackStyle({ index, total, side, expanded, heightsInFront, hidden, show }) {
+// `drag` (px) is the live swipe offset toward the edge: it follows the finger and suppresses the easing
+// while the pointer is down, and fades the toast as it goes.
+export function toastStackStyle({ index, total, side, expanded, heightsInFront, hidden, show, drag = 0 }) {
   const dir = side === 'top' ? 1 : -1 // bottom decks stack upward (negative Y), top decks downward
   const baseY = expanded ? dir * heightsInFront : dir * index * TOAST_GAP
   const scale = expanded ? 1 : Math.max(0.9, 1 - index * SCALE_STEP)
   const enterY = show ? 0 : -dir * ENTER_SHIFT // slide in from / out toward the region edge
+  const swipeY = -dir * drag // follow the finger toward the edge (the exit direction)
+  const dragging = drag > 0
   return {
     position: 'absolute',
     [side]: 0,
@@ -81,10 +104,10 @@ export function toastStackStyle({ index, total, side, expanded, heightsInFront, 
     right: 0,
     boxSizing: 'border-box',
     transformOrigin: side, // pin the anchored edge while scaling
-    transform: `translateY(${baseY + enterY}px) scale(${scale})`,
+    transform: `translateY(${baseY + enterY + swipeY}px) scale(${scale})`,
     zIndex: total - index,
-    opacity: show && !hidden ? 1 : 0,
-    transition: `transform ${TOAST_ENTER_MS}ms ${EASE}, opacity ${TOAST_ENTER_MS}ms ease`,
+    opacity: (show && !hidden ? 1 : 0) * (dragging ? toastSwipeFade(drag) : 1),
+    transition: dragging ? 'none' : `transform ${TOAST_ENTER_MS}ms ${EASE}, opacity ${TOAST_ENTER_MS}ms ease`,
   }
 }
 
@@ -104,6 +127,9 @@ export function toastCardStyle(intent) {
   const { accent } = resolveToastIntent(intent)
   return {
     pointerEvents: 'auto',
+    touchAction: 'none', // the card is a swipe surface — keep touch drags from scrolling the page
+    userSelect: 'none', // ...and a mouse drag from selecting the toast text instead of swiping
+    WebkitUserSelect: 'none',
     display: 'flex',
     alignItems: 'flex-start',
     gap: '0.6rem',
