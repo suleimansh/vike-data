@@ -11,5 +11,11 @@ export default {
   extends: [vikeReact],
   Layout,
   title: 'vike-blocks × Mantine',
+  // Mantine keys its colors off `[data-mantine-color-scheme]` on <html>. MantineProvider only sets
+  // that attribute on the client (on mount), so without this the first paint uses fallback colors
+  // and then shifts once hydration lands. Setting it in the SSR HTML (we force light) makes Mantine's
+  // color rules match from the first byte — no flash. (Nothing to do with vike-themes; Mantine has
+  // its own theming.)
+  htmlAttributes: { 'data-mantine-color-scheme': 'light' },
   // Mantine components (Modal, Tabs) rely on client hydration; SSR renders their static shell.
 }
