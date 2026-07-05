@@ -21,19 +21,35 @@ function tableFor(props, tables) {
   return table
 }
 
+// Each block declares describeBlock/blockCatalog discovery metadata (category/summary/params/
+// example) so an agent enumerating the catalog learns these are schema-derived and need a `table`
+// prop, without reading this source. `params` lists the keys each block reads: the required table
+// name plus its own refinement array and the shared `slots` map.
 registerBlock('list', {
+  category: 'data',
+  summary: "A schema-derived table of a resource's rows (columns come from the composed schema).",
+  params: [{ name: 'table', required: true }, { name: 'list' }, { name: 'slots' }],
+  example: "{ block: 'list', table: 'posts' }",
   resolve({ props, tables }) {
     const table = tableFor(props, tables)
     return { table: props.table, columns: viewColumns(crud(props), table) }
   },
 })
 registerBlock('record', {
+  category: 'data',
+  summary: 'A schema-derived read-only detail view of one row of a resource.',
+  params: [{ name: 'table', required: true }, { name: 'record' }, { name: 'slots' }],
+  example: "{ block: 'record', table: 'posts' }",
   resolve({ props, tables }) {
     const table = tableFor(props, tables)
     return { table: props.table, fields: viewRecord(crud(props), table) }
   },
 })
 registerBlock('form', {
+  category: 'data',
+  summary: 'A schema-derived create/edit form for a resource (fields come from the composed schema).',
+  params: [{ name: 'table', required: true }, { name: 'form' }, { name: 'slots' }],
+  example: "{ block: 'form', table: 'posts' }",
   resolve({ props, tables }) {
     const table = tableFor(props, tables)
     return { table: props.table, fields: viewFields(crud(props), table) }

@@ -6,6 +6,10 @@
 // schema-derived blocks. No React, no Vike.
 import './schema-blocks.js' // side-effect: registers the list / record / form blocks
 export { definePage, resolvePage, registerBlock, getBlock, hasBlock, listBlocks, defineBlock, text, heading, badge, divider, link } from 'vike-blocks'
+// The catalog contract (machine-readable block discovery) — re-exported so an agent enumerating
+// the schema-derived list/record/form blocks can do it through this umbrella, without reaching
+// into vike-blocks internals.
+export { describeBlock, describeBlocks, blockCatalog, CATALOG_CONTRACT_VERSION } from 'vike-blocks'
 // `resolveView` is the schema-app's name for the generic `resolvePage` (kept for continuity).
 export { resolvePage as resolveView } from 'vike-blocks'
 export { crudBlocks } from './schema-blocks.js'
