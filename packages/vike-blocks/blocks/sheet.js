@@ -13,7 +13,7 @@
 //
 // The body sections are ordinary blocks (built-ins or custom), so sheets compose recursively.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 const SIDES = ['right', 'left', 'top', 'bottom']
 
@@ -80,7 +80,7 @@ registerBlock('sheet', {
   container: true,
   example: "sheet().trigger('Filters').side('right').sections([field('Status').control(input())])",
   resolve({ props, tables }) {
-    const sections = resolvePage({ sections: collapse(props.sections) }, tables).sections
+    const sections = containerResolve(props.sections, tables)
     return {
       title: props.title ?? '',
       description: props.description ?? null,

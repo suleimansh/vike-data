@@ -10,7 +10,7 @@
 //
 //   field('Password').error('Too short').control(input().type('password'))
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSection as collapse } from '../core/page.js'
+import { containerResolveOne, collapseSection as collapse } from '../core/page.js'
 
 // Collapse a builder to its plain descriptor (definePage does this for top-level sections; a field's
 // nested control needs the same so `resolve` gets a `{ block, ...props }` object).
@@ -56,7 +56,7 @@ registerBlock('field', {
   summary: 'A labelled shell (label / description / error) around one control.',
   example: "field('Email').control(input().type('email').required())",
   resolve({ props, tables }) {
-    const control = props.control ? resolvePage({ sections: [collapse(props.control)] }, tables).sections[0] : null
+    const control = containerResolveOne(props.control, tables)
     return {
       label: props.label ?? null,
       description: props.description ?? null,

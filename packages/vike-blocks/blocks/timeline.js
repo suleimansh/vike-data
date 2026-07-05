@@ -9,7 +9,7 @@
 //     .item('Shipped', { time: 'Mar 3', body: 'Carrier: UPS' })
 //     .item('Out for delivery', { tone: 'muted', filled: false, body: [text('ETA 5pm')] })
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 // A body is omitted, a plain string, or a nested block composition (collapsed now so nested builders
 // become descriptors, like accordion's items).
@@ -53,7 +53,7 @@ registerBlock('timeline', {
         tone: it.tone ?? 'default',
         filled: it.filled ?? true,
         blocks: nested,
-        body: nested ? resolvePage({ sections: collapse(it.body) }, tables).sections : (it.body ?? null),
+        body: nested ? containerResolve(it.body, tables) : (it.body ?? null),
       }
     })
     return { items }

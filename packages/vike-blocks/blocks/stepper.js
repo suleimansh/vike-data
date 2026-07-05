@@ -14,7 +14,7 @@
 // Next is omitted on the last step, so the final step's own content (e.g. a form's submit button)
 // finishes the flow — the block stays display + navigation only (mutating is the actions axis #385).
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 // A fluent builder. `.step(title, sections, { description })` appends a step (its sections collapse now
 // so nested builders become descriptors, like tabs); `.current(i)` sets the initial step; the label
@@ -66,7 +66,7 @@ registerBlock('stepper', {
     const steps = (props.steps ?? []).map((s) => ({
       title: s.title ?? '',
       description: s.description ?? null,
-      sections: resolvePage({ sections: collapse(s.sections) }, tables).sections,
+      sections: containerResolve(s.sections, tables),
     }))
     const raw = Number.isInteger(props.current) ? props.current : 0
     const current = steps.length ? Math.min(Math.max(0, raw), steps.length - 1) : 0

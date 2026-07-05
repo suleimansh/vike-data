@@ -6,7 +6,7 @@
 //   bubble('How do I add a migration?').from('user')
 //   bubble([markdown('Run **`pnpm rudder migrate`**.')]).from('assistant')
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 
 // A fluent builder for a bubble. `content` is a string (plain text) or an array of blocks (rich body).
@@ -42,7 +42,7 @@ registerBlock('bubble', {
     return {
       from: props.from === 'user' ? 'user' : 'assistant',
       text: props.text ?? null,
-      sections: props.sections ? resolvePage({ sections: collapse(props.sections) }, tables).sections : null,
+      sections: props.sections ? containerResolve(props.sections, tables) : null,
     }
   },
 })

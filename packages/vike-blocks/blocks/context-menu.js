@@ -16,7 +16,7 @@
 // the mutating behaviour is the actions axis #385), `.separator()`, `.heading(text)`. `.on(block)` wraps
 // the right-click region (like tooltip); omit it for a default affordance box.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSection as collapse } from '../core/page.js'
+import { containerResolveOne, collapseSection as collapse } from '../core/page.js'
 
 // A fluent accumulating builder (like dropdown). Items push in order; `.on()` sets the region block.
 export function contextMenu() {
@@ -58,7 +58,7 @@ registerBlock('context-menu', {
   summary: "A right-click context menu over a region.",
   example: "contextMenu().item('Open', { to: '/file/1' }).on(card([text('Right-click me')]))",
   resolve({ props, tables }) {
-    const trigger = props.trigger ? resolvePage({ sections: [collapse(props.trigger)] }, tables).sections[0] : null
+    const trigger = containerResolveOne(props.trigger, tables)
     return {
       items: (props.items ?? []).map((i) => ({ ...i })),
       trigger,

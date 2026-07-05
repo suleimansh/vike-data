@@ -14,7 +14,7 @@
 //
 // The body/footer sections are ordinary blocks (built-ins or custom), so dialogs compose recursively.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 // Collapse a section that is a builder to its plain descriptor (definePage does this for top-level
 // sections; the body/footer sections need the same so `resolve` gets `{ block, ...props }` objects).
@@ -79,8 +79,8 @@ registerBlock('dialog', {
   summary: 'A modal dialog opened by a trigger button, holding nested sections.',
   example: "dialog().title('Delete post').trigger('Delete').sections([text('Are you sure?')])",
   resolve({ props, tables }) {
-    const sections = resolvePage({ sections: collapse(props.sections) }, tables).sections
-    const footer = props.footer ? resolvePage({ sections: collapse(props.footer) }, tables).sections : []
+    const sections = containerResolve(props.sections, tables)
+    const footer = props.footer ? containerResolve(props.footer, tables) : []
     return {
       title: props.title ?? '',
       description: props.description ?? null,
