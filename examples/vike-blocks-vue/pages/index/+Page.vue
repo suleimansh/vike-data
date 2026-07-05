@@ -7,6 +7,7 @@ const demos = [
   { href: '/collapsible', label: 'Collapsible', note: 'Single-panel expand/collapse (the accordion sibling). Closed panels stay collapsed from first paint.' },
   { href: '/dialog', label: 'Dialog', note: 'Modal overlay: focus trap, Escape / backdrop / × close, scroll-lock. Focus returns after the exit.' },
   { href: '/dropdown', label: 'Dropdown', note: 'Anchored popover menu: edge-aware placement, outside-click / Escape close.' },
+  { href: '/tree-view', label: 'Tree-view', note: 'Arbitrary-depth nested hierarchy: per-branch expand/collapse, .current auto-opens the active branch, roving arrow-key focus. Open state seeded so branches render correctly from first paint.' },
 ]
 </script>
 <template>
