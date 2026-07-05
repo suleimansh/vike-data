@@ -1,10 +1,11 @@
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 
 const ROOT_ID = 'vike-toolbar-root'
 const ITEMS_ID = 'vike-toolbar-items'
 
 export function useToolbarSlot() {
   const slot = ref(undefined) // PENDING on server + first client render
+  let obs = null
   onMounted(() => {
     const items = document.getElementById(ITEMS_ID)
     if (items) {
@@ -15,7 +16,7 @@ export function useToolbarSlot() {
       slot.value = null
       return
     }
-    const obs = new MutationObserver(() => {
+    obs = new MutationObserver(() => {
       const node = document.getElementById(ITEMS_ID)
       if (node) {
         slot.value = node
@@ -24,5 +25,7 @@ export function useToolbarSlot() {
     })
     obs.observe(document.body, { childList: true, subtree: true })
   })
+  // Disconnect if we unmount before the toolbar panel ever portals in (matches the react twin).
+  onUnmounted(() => obs?.disconnect())
   return slot
 }
