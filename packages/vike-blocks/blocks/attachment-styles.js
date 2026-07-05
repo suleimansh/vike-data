@@ -105,6 +105,6 @@ export function attachmentRemoveStyle() {
 // The static <style> for the interactive states: hover + focus-within on the zone, a hover on the
 // remove button, and a dimmed disabled zone.
 export const ATTACHMENT_STYLE_TAG =
-  '.vike-blocks-attachment:not([aria-disabled="true"]):hover{border-color:var(--color-primary,#2563eb)}' +
+  '.vike-blocks-attachment:not([aria-disabled=true]):hover{border-color:var(--color-primary,#2563eb)}' +
   '.vike-blocks-attachment:focus-within{outline:none;border-color:var(--color-primary,#2563eb);box-shadow:0 0 0 3px var(--color-ring,rgba(37,99,235,.25))}' +
   '.vike-blocks-attachment-x:hover{color:var(--color-danger,#dc2626);background:var(--color-surface,#f1f5f9)}'

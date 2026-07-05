@@ -54,4 +54,4 @@ export const SELECT_STYLE_TAG =
   '.vike-blocks-select{transition:border-color .15s ease,box-shadow .15s ease}' +
   '.vike-blocks-select:focus-visible{border-color:var(--color-ring,var(--color-primary,#2563eb));box-shadow:0 0 0 3px color-mix(in srgb,var(--color-ring,var(--color-primary,#2563eb)) 25%,transparent)}' +
   '.vike-blocks-select:disabled{opacity:.5;cursor:default;background:var(--color-surface,#f1f5f9)}' +
-  '.vike-blocks-select[data-placeholder="true"]{color:var(--color-muted,#94a3b8)}'
+  '.vike-blocks-select[data-placeholder=true]{color:var(--color-muted,#94a3b8)}'

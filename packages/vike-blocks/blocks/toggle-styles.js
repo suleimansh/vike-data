@@ -57,6 +57,6 @@ export function groupPosition(i, count) {
 // The static <style> for the interactive states: a muted hover tint on an off button and a
 // focus-visible ring, plus a dimmed disabled state.
 export const TOGGLE_STYLE_TAG =
-  '.vike-blocks-toggle:not([aria-pressed="true"]):not(:disabled):hover{background:color-mix(in srgb,var(--color-muted,#64748b) 12%,transparent)}' +
+  '.vike-blocks-toggle:not([aria-pressed=true]):not(:disabled):hover{background:color-mix(in srgb,var(--color-muted,#64748b) 12%,transparent)}' +
   '.vike-blocks-toggle:focus-visible{outline:none;z-index:2;box-shadow:0 0 0 2px var(--color-bg,#fff),0 0 0 4px var(--color-ring,var(--color-primary,#2563eb))}' +
   '.vike-blocks-toggle:disabled{opacity:.5}'

@@ -81,4 +81,4 @@ export const sliderThumbStyle = (pct) => ({
 // disabled rail.
 export const SLIDER_STYLE_TAG =
   '.vike-blocks-slider-thumb:focus-visible{outline:none;box-shadow:0 0 0 2px var(--color-bg,#fff),0 0 0 4px var(--color-ring,var(--color-primary,#2563eb))}' +
-  '.vike-blocks-slider[aria-disabled="true"]{cursor:default}'
+  '.vike-blocks-slider[aria-disabled=true]{cursor:default}'

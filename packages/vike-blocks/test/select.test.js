@@ -78,5 +78,5 @@ test('select styles: theme-native box + chevron + the states style tag', () => {
   assert.equal(selectStyle(false).appearance, 'none') // native arrow stripped
   assert.match(selectChevronStyle().color, /var\(--color-muted/)
   assert.match(SELECT_STYLE_TAG, /vike-blocks-select:focus-visible/)
-  assert.match(SELECT_STYLE_TAG, /data-placeholder="true"/)
+  assert.match(SELECT_STYLE_TAG, /data-placeholder=true/) // unquoted: Vue escapes " inside <style>, breaking the selector
 })
