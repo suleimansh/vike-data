@@ -11,6 +11,7 @@ const demos = [
   { href: '/context-menu', label: 'Context-menu', note: 'Right-click menu at the cursor: Teleported to <body>, flips at the viewport edge, reuses the dropdown chrome. Non-modal, closes on outside-click / Escape / scroll. Menu is open-gated so SSR emits only the trigger.' },
   { href: '/stepper', label: 'Stepper', note: 'Multi-step wizard: numbered progress header (complete / current / upcoming) over one step, Back / Next nav, steps compose any blocks. Step state seeded so SSR renders the initial step with no flash.' },
   { href: '/description-list', label: 'Description-list', note: 'Key-value metadata grid (Ant Descriptions): term/value pairs, values compose blocks (a badge, a link), columns / bordered / span. Static, semantic <dl>, responsive.' },
+  { href: '/rating', label: 'Rating', note: 'Star rating: hover to preview, click to set, arrow keys to adjust. Half-stars, read-only display, hidden input for submit. Value seeded so SSR matches the first client render.' },
 ]
 </script>
 <template>
