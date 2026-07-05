@@ -36,7 +36,7 @@ export const StepperView = {
 
       const header = h(
         'div',
-        { role: 'list', style: stepperHeaderStyle() },
+        { role: 'group', 'aria-label': 'Progress', style: stepperHeaderStyle() },
         steps.map((s, i) => {
           const state = stepState(i, active.value)
           return h(
@@ -45,7 +45,6 @@ export const StepperView = {
               key: i,
               type: 'button',
               class: 'vike-blocks-step-head',
-              role: 'listitem',
               'aria-current': state === 'current' ? 'step' : undefined,
               onClick: () => (active.value = i),
               style: { ...stepperItemStyle(), border: 0, background: 'transparent', padding: 0, font: 'inherit' },
@@ -64,7 +63,7 @@ export const StepperView = {
       )
 
       const panel = h('div', { style: { marginTop: '1.5rem' } }, [
-        h('div', { key: active.value, class: 'vike-blocks-step-panel', role: 'tabpanel', style: { animation: 'vike-blocks-step-in 0.25s ease' } }, activeStep ? [h(Blocks, { sections: activeStep.sections })] : []),
+        h('div', { key: active.value, class: 'vike-blocks-step-panel', style: { animation: 'vike-blocks-step-in 0.25s ease' } }, activeStep ? [h(Blocks, { sections: activeStep.sections })] : []),
       ])
 
       const nav = h('div', { style: { marginTop: '1.5rem', display: 'flex', justifyContent: 'space-between', gap: '0.75rem' } }, [

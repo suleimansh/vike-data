@@ -85,7 +85,7 @@ export const RatingView = {
             'aria-valuemin': interactive ? 0 : undefined,
             'aria-valuemax': interactive ? max : undefined,
             'aria-valuenow': interactive ? val.value : undefined,
-            'aria-valuetext': !interactive ? `${val.value} out of ${max}` : undefined,
+            'aria-valuetext': `${val.value} out of ${max}`,
             'aria-disabled': props.disabled || undefined,
             style: ratingRowStyle(interactive),
             onPointermove: onPointerMove,

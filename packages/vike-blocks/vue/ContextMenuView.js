@@ -128,7 +128,7 @@ export const ContextMenuView = {
         ])
       }
 
-      return h('span', { 'data-slot': 'context-menu', style: { display: 'inline-block' } }, [region, menu])
+      return h('div', { 'data-slot': 'context-menu', style: { display: 'inline-block' } }, [region, menu])
     }
   },
 }

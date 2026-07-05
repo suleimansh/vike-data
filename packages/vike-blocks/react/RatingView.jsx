@@ -86,7 +86,7 @@ export function RatingView({ label, value, max = 5, allowHalf = false, readOnly 
         aria-valuemin={interactive ? 0 : undefined}
         aria-valuemax={interactive ? max : undefined}
         aria-valuenow={interactive ? val : undefined}
-        aria-valuetext={!interactive ? `${val} out of ${max}` : undefined}
+        aria-valuetext={`${val} out of ${max}`}
         aria-disabled={disabled || undefined}
         style={ratingRowStyle(interactive)}
         onPointerMove={onPointerMove}
