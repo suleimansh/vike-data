@@ -135,6 +135,14 @@ function MantineDocsShell({ slots }) {
   )
 }
 
+// A tiny example-local block: an invisible scroll target so the docs-shell sidebar TOC anchors
+// (#requirements, #setup, …) land BELOW the sticky navbar. `anchor('requirements')` sits just before
+// its heading; scrollMarginTop clears the ~57px sticky header. Same custom-block seam as callout —
+// an app-defined block is a peer of the built-ins.
+export function MantineAnchor({ id }) {
+  return <span id={id} aria-hidden="true" style={{ display: 'block', height: 0, scrollMarginTop: 72 }} />
+}
+
 // The swap. Importing this module runs these — later-wins over the built-in shadcn renderers.
 registerBlockRenderer('button', MantineButton)
 registerBlockRenderer('card', MantineCard)
@@ -142,4 +150,5 @@ registerBlockRenderer('tabs', MantineTabs)
 registerBlockRenderer('alert', MantineAlert)
 registerBlockRenderer('dialog', MantineDialog)
 registerBlockRenderer('input', MantineInput)
+registerBlockRenderer('anchor', MantineAnchor)
 registerLayoutShell('docs', MantineDocsShell)

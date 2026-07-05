@@ -4,15 +4,12 @@
 // two-column documentation frame is drawn by Mantine while the sidebar/headings fall through to
 // built-ins and the article's alert/button are Mantine. Same layout("docs") IR as the built-in
 // DocsShell — swap the renderer, keep the block (#420).
-import { Box } from '@mantine/core'
+//
+// It fills the page (no artificial frame): the shell's own sticky navbar is the page header — the app
+// chrome header is hidden on this route (see pages/Layout.jsx) so the shell reads as a real doc site.
 import { Page } from 'vike-blocks/react'
 import { docsPage } from '../../shared-page.js'
 
 export default function DocsPage() {
-  // A bordered, resizable frame so the sticky navbar + sidebar are visible without leaving the app nav.
-  return (
-    <Box m="lg" style={{ height: 560, overflow: 'auto', border: '1px solid var(--mantine-color-default-border)', borderRadius: 12, resize: 'vertical' }}>
-      <Page page={docsPage} />
-    </Box>
-  )
+  return <Page page={docsPage} />
 }

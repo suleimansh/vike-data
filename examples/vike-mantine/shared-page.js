@@ -3,7 +3,11 @@
 // pages/card, pages/tabs, pages/dialog, pages/alert, pages/input; the docs shell from pages/doc-nav).
 // There is nothing Mantine here: it's just blocks. What draws them is decided entirely by which
 // renderers are registered (mantine-blocks.jsx registers Mantine), which is the whole thesis.
-import { definePage, heading, text, badge, button, card, tabs, alert, dialog, input, layout, docNav, link, list } from 'vike-blocks'
+import { definePage, defineBlock, heading, text, badge, button, card, tabs, alert, dialog, input, layout, docNav, link, list } from 'vike-blocks'
+
+// An example-local block: an invisible scroll target (renderer in mantine-blocks.jsx). Placed before
+// a heading so the sidebar TOC's #anchors scroll to it. `anchor('setup')` -> { block:'anchor', id }.
+const anchor = defineBlock('anchor', { build: (id) => ({ id }) })
 
 // An account-settings panel that exercises every swapped content token: card (container) + tabs
 // (container, nested blocks) + alert + input + dialog + button, plus built-in primitives
@@ -50,24 +54,26 @@ export const contentPage = definePage({
   ],
 })
 
-// One shared documentation tree, current page = /guide/setup — copied from the vike-blocks doc-nav
-// gallery page. Rendered here, `layout('docs')` resolves through the built-in LayoutView to the
-// Mantine `docs` shell we registered, and the article's `alert`/`button` draw as Mantine while the
-// sidebar `docNav` and the headings/text fall through to their built-in renderers.
+// A single-page documentation TOC — every sidebar link is an on-page #anchor (a real, working scroll
+// target: `anchor(id)` sits before each heading), so the whole nav is clickable without a multi-page
+// doc site. `.current('#setup')` highlights the active item and splices its sub-sections beneath it.
 const tree = () =>
   docNav()
-    .current('/guide/setup')
+    .current('#setup')
     .group('Getting started', [
-      ['Introduction', '/guide/intro'],
-      ['Installation', '/guide/install'],
-      ['Setup', '/guide/setup', [['Requirements', '#requirements'], ['Config file', '#config']]],
+      ['Introduction', '#introduction'],
+      ['Installation', '#installation'],
+      ['Setup', '#setup', [['Requirements', '#requirements'], ['Config file', '#config']]],
     ])
     .group('Guides', [
-      ['Routing', '/guide/routing'],
-      ['Data fetching', '/guide/data'],
-      ['Deployment', '/guide/deploy'],
+      ['Routing', '#routing'],
+      ['Data fetching', '#data'],
+      ['Deployment', '#deploy'],
     ])
-    .group('API', [['CLI', '/api/cli'], ['Config', '/api/config']])
+    .group('API', [['CLI', '#cli'], ['Configuration', '#api-config']])
+
+// One article section: an invisible anchor target + heading + body. Reused so every TOC link scrolls.
+const section = (id, title, level, ...body) => [anchor(id), heading(title).level(level), ...body]
 
 export const docsPage = definePage({
   sections: [
@@ -75,14 +81,38 @@ export const docsPage = definePage({
       .slot('header', [link('◈ Acme Docs').to('/docs'), link('Gallery').to('/'), link('GitHub ↗').to('https://github.com/suleimansh/vike-data')])
       .slot('sidebar', [tree()])
       .slot('article', [
-        heading('Setup').level(1),
-        text('This whole shell — the sticky navbar and the two-column [sidebar | article] frame — is the vike-blocks `docs` layout, drawn by a Mantine renderer. The sidebar tree and these headings are built-in blocks; the notice and button below are Mantine.'),
-        alert('Same block IR').intent('success').body('The built-in DocsShell and this Mantine shell render the identical layout("docs") descriptor. That is the swappable-renderer thesis, in shell form.'),
-        heading('Requirements').level(2),
-        list(['Node.js 20+', 'A package manager (pnpm / npm / yarn)', 'A terminal']),
-        heading('Config file').level(2),
-        text('Add a config file at the project root, then run the dev server. Scroll the frame — the navbar and sidebar stick while the article scrolls under them.'),
-        button('Get started').variant('primary').to('/'),
+        ...section('introduction', 'Introduction', 1,
+          text('This whole shell — the sticky navbar and the two-column [sidebar | article] frame — is the vike-blocks `docs` layout, drawn by a Mantine renderer. The sidebar tree and these headings are built-in blocks; the notice and button below are Mantine. Every link in the sidebar scrolls to a section here.'),
+          alert('Same block IR').intent('success').body('The built-in DocsShell and this Mantine shell render the identical layout("docs") descriptor. That is the swappable-renderer thesis, in shell form.'),
+        ),
+        ...section('installation', 'Installation', 2,
+          text('Install the packages, then import <Page> and the block builders. There is no Mantine in the descriptor tree — only which renderers are registered decides how it draws.'),
+        ),
+        ...section('setup', 'Setup', 1,
+          text('Configure your project before the first run. This is the active TOC item, so its sub-sections (Requirements, Config file) splice in beneath it in the sidebar.'),
+        ),
+        ...section('requirements', 'Requirements', 2,
+          list(['Node.js 20+', 'A package manager (pnpm / npm / yarn)', 'A terminal']),
+        ),
+        ...section('config', 'Config file', 2,
+          text('Add a config file at the project root, then run the dev server. Scroll the article — the navbar and sidebar stick while the body scrolls under them.'),
+        ),
+        ...section('routing', 'Routing', 1,
+          text('File-based routing lives under pages/. Each route is a folder with a +Page component.'),
+        ),
+        ...section('data', 'Data fetching', 2,
+          text('Load data in +data and read it in the page. Server-side by default, streamed to the client.'),
+        ),
+        ...section('deploy', 'Deployment', 2,
+          text('Build once, deploy the server bundle anywhere Node runs — or prerender to static files.'),
+        ),
+        ...section('cli', 'CLI', 1,
+          text('The CLI scaffolds pages, runs the dev server, and builds for production.'),
+        ),
+        ...section('api-config', 'Configuration', 2,
+          text('Every config key is typed. Extensions contribute their own keys through the same cumulative config point.'),
+          button('Back to the gallery').variant('primary').to('/'),
+        ),
       ]),
   ],
 })
