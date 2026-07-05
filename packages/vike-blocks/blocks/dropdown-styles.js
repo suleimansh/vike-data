@@ -50,8 +50,11 @@ export const dropdownSeparatorStyle = () => ({ height: '1px', margin: '0.35rem -
 export const dropdownHeadingStyle = () => ({ padding: '0.4rem 0.6rem 0.2rem', fontSize: '12px', fontWeight: 600, color: 'var(--color-muted, #64748b)' })
 
 // Static <style> for the item hover / focus states, on the shared class so both twins share one rule.
+// The attribute value is UNQUOTED (`[aria-disabled=true]`, valid CSS) on purpose: Vue HTML-escapes the
+// text of a `<style>` element, so a double-quoted `="true"` would become `=&quot;true&quot;` — an
+// invalid selector that silently breaks the rule in Vue. Unquoted survives in both React and Vue.
 export const DROPDOWN_STYLE_TAG =
-  '.vike-blocks-menuitem:not([aria-disabled="true"]):hover,.vike-blocks-menuitem:not([aria-disabled="true"]):focus-visible{background:var(--color-surface,#f1f5f9);outline:none}'
+  '.vike-blocks-menuitem:not([aria-disabled=true]):hover,.vike-blocks-menuitem:not([aria-disabled=true]):focus-visible{background:var(--color-surface,#f1f5f9);outline:none}'
 
 // Roving focus: given the menu container element and the key, move focus among the enabled menu items.
 // Returns true if it handled the key (so the caller can preventDefault). Wraps at both ends; Home/End

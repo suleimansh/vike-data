@@ -56,6 +56,7 @@ import './blocks/command.js' // side-effect: register the command block
 import './blocks/layout.js' // side-effect: register the layout container block + the slot placeholder block
 import './blocks/doc-nav.js' // side-effect: register the doc-nav block (documentation sidebar tree)
 import './blocks/tree-view.js' // side-effect: register the tree-view block (nested collapsible hierarchy)
+import './blocks/context-menu.js' // side-effect: register the context-menu block (right-click, cursor-anchored)
 
 export { definePage, resolvePage } from './core/page.js'
 export { registerBlock, getBlock, hasBlock, listBlocks, defineBlock } from './core/registry.js'
@@ -115,3 +116,5 @@ export { docNav } from './blocks/doc-nav.js'
 export { groupLeveledItems, resolveDocNav } from './blocks/doc-nav-styles.js'
 export { tree } from './blocks/tree-view.js'
 export { resolveTree } from './blocks/tree-view-styles.js'
+export { contextMenu } from './blocks/context-menu.js'
+export { clampMenuPosition } from './blocks/context-menu-styles.js'
