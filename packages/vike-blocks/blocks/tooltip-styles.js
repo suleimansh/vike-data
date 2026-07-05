@@ -34,19 +34,19 @@ export const TOOLTIP_STYLE_TAG =
   '.vike-blocks-tooltip-tip{position:absolute;z-index:50;white-space:nowrap;pointer-events:none;padding:0.3rem 0.55rem;font-size:12px;line-height:1.3;border-radius:6px;' +
   'background:var(--color-tooltip-bg,var(--color-text,#0f172a));color:var(--color-tooltip-text,var(--color-bg,#ffffff));box-shadow:0 4px 12px rgba(0,0,0,0.18);opacity:0;transition:opacity .14s ease,transform .14s ease}' +
   // hidden "from" position per side
-  '.vike-blocks-tooltip-tip[data-side="top"]{bottom:100%;left:50%;margin-bottom:7px;transform:translate(-50%,4px) scale(.96)}' +
-  '.vike-blocks-tooltip-tip[data-side="bottom"]{top:100%;left:50%;margin-top:7px;transform:translate(-50%,-4px) scale(.96)}' +
-  '.vike-blocks-tooltip-tip[data-side="left"]{right:100%;top:50%;margin-right:7px;transform:translate(4px,-50%) scale(.96)}' +
-  '.vike-blocks-tooltip-tip[data-side="right"]{left:100%;top:50%;margin-left:7px;transform:translate(-4px,-50%) scale(.96)}' +
+  '.vike-blocks-tooltip-tip[data-side=top]{bottom:100%;left:50%;margin-bottom:7px;transform:translate(-50%,4px) scale(.96)}' +
+  '.vike-blocks-tooltip-tip[data-side=bottom]{top:100%;left:50%;margin-top:7px;transform:translate(-50%,-4px) scale(.96)}' +
+  '.vike-blocks-tooltip-tip[data-side=left]{right:100%;top:50%;margin-right:7px;transform:translate(4px,-50%) scale(.96)}' +
+  '.vike-blocks-tooltip-tip[data-side=right]{left:100%;top:50%;margin-left:7px;transform:translate(-4px,-50%) scale(.96)}' +
   // reveal on hover / keyboard focus, settling into place
   '.vike-blocks-tooltip:hover .vike-blocks-tooltip-tip,.vike-blocks-tooltip:focus-within .vike-blocks-tooltip-tip{opacity:1}' +
-  '.vike-blocks-tooltip:hover .vike-blocks-tooltip-tip[data-side="top"],.vike-blocks-tooltip:focus-within .vike-blocks-tooltip-tip[data-side="top"]{transform:translate(-50%,0) scale(1)}' +
-  '.vike-blocks-tooltip:hover .vike-blocks-tooltip-tip[data-side="bottom"],.vike-blocks-tooltip:focus-within .vike-blocks-tooltip-tip[data-side="bottom"]{transform:translate(-50%,0) scale(1)}' +
-  '.vike-blocks-tooltip:hover .vike-blocks-tooltip-tip[data-side="left"],.vike-blocks-tooltip:focus-within .vike-blocks-tooltip-tip[data-side="left"]{transform:translate(0,-50%) scale(1)}' +
-  '.vike-blocks-tooltip:hover .vike-blocks-tooltip-tip[data-side="right"],.vike-blocks-tooltip:focus-within .vike-blocks-tooltip-tip[data-side="right"]{transform:translate(0,-50%) scale(1)}' +
+  '.vike-blocks-tooltip:hover .vike-blocks-tooltip-tip[data-side=top],.vike-blocks-tooltip:focus-within .vike-blocks-tooltip-tip[data-side=top]{transform:translate(-50%,0) scale(1)}' +
+  '.vike-blocks-tooltip:hover .vike-blocks-tooltip-tip[data-side=bottom],.vike-blocks-tooltip:focus-within .vike-blocks-tooltip-tip[data-side=bottom]{transform:translate(-50%,0) scale(1)}' +
+  '.vike-blocks-tooltip:hover .vike-blocks-tooltip-tip[data-side=left],.vike-blocks-tooltip:focus-within .vike-blocks-tooltip-tip[data-side=left]{transform:translate(0,-50%) scale(1)}' +
+  '.vike-blocks-tooltip:hover .vike-blocks-tooltip-tip[data-side=right],.vike-blocks-tooltip:focus-within .vike-blocks-tooltip-tip[data-side=right]{transform:translate(0,-50%) scale(1)}' +
   // the rotated-square arrow, inheriting the tip surface
   '.vike-blocks-tooltip-arrow{position:absolute;width:8px;height:8px;background:inherit;transform:rotate(45deg)}' +
-  '.vike-blocks-tooltip-tip[data-side="top"] .vike-blocks-tooltip-arrow{bottom:-3px;left:50%;margin-left:-4px}' +
-  '.vike-blocks-tooltip-tip[data-side="bottom"] .vike-blocks-tooltip-arrow{top:-3px;left:50%;margin-left:-4px}' +
-  '.vike-blocks-tooltip-tip[data-side="left"] .vike-blocks-tooltip-arrow{right:-3px;top:50%;margin-top:-4px}' +
-  '.vike-blocks-tooltip-tip[data-side="right"] .vike-blocks-tooltip-arrow{left:-3px;top:50%;margin-top:-4px}'
+  '.vike-blocks-tooltip-tip[data-side=top] .vike-blocks-tooltip-arrow{bottom:-3px;left:50%;margin-left:-4px}' +
+  '.vike-blocks-tooltip-tip[data-side=bottom] .vike-blocks-tooltip-arrow{top:-3px;left:50%;margin-left:-4px}' +
+  '.vike-blocks-tooltip-tip[data-side=left] .vike-blocks-tooltip-arrow{right:-3px;top:50%;margin-top:-4px}' +
+  '.vike-blocks-tooltip-tip[data-side=right] .vike-blocks-tooltip-arrow{left:-3px;top:50%;margin-top:-4px}'

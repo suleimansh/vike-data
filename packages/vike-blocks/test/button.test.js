@@ -64,5 +64,5 @@ test('buttonStyle wires the hover color and disabled cursor', () => {
 test('the states style tag covers hover, focus-visible and disabled', () => {
   assert.match(BUTTON_STYLE_TAG, /:hover\{background:var\(--btn-bg-hover\)\}/)
   assert.match(BUTTON_STYLE_TAG, /:focus-visible/)
-  assert.match(BUTTON_STYLE_TAG, /aria-disabled="true"\]\{opacity:\.5/)
+  assert.match(BUTTON_STYLE_TAG, /aria-disabled=true\]\{opacity:\.5/) // unquoted: Vue escapes " inside <style>, breaking the selector
 })

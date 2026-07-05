@@ -42,5 +42,5 @@ test('resolve with no trigger yields null (renderer draws the default marker)', 
 test('the style tag reveals on hover + focus-within and positions by data-side', () => {
   assert.match(TOOLTIP_STYLE_TAG, /:hover .vike-blocks-tooltip-tip/)
   assert.match(TOOLTIP_STYLE_TAG, /:focus-within .vike-blocks-tooltip-tip/)
-  assert.match(TOOLTIP_STYLE_TAG, /\[data-side="bottom"\]/)
+  assert.match(TOOLTIP_STYLE_TAG, /\[data-side=bottom\]/) // unquoted: Vue escapes " inside <style>, breaking the selector
 })

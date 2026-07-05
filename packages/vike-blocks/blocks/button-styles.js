@@ -66,6 +66,6 @@ export function buttonStyle(variant, size, disabled) {
 export const BUTTON_STYLE_TAG =
   '.vike-blocks-btn{transition:background-color .15s ease,box-shadow .15s ease,color .15s ease}' +
   '.vike-blocks-btn:hover{background:var(--btn-bg-hover)}' +
-  '.vike-blocks-btn[data-variant="link"]:hover{text-decoration:underline}' +
+  '.vike-blocks-btn[data-variant=link]:hover{text-decoration:underline}' +
   '.vike-blocks-btn:focus-visible{outline:none;box-shadow:0 0 0 2px var(--color-bg,#fff),0 0 0 4px var(--color-ring,var(--color-primary,#2563eb))}' +
-  '.vike-blocks-btn:disabled,.vike-blocks-btn[aria-disabled="true"]{opacity:.5;pointer-events:none}'
+  '.vike-blocks-btn:disabled,.vike-blocks-btn[aria-disabled=true]{opacity:.5;pointer-events:none}'

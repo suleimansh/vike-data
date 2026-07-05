@@ -134,6 +134,6 @@ export function calendarDayStyle({ selected, outside, today, disabled }) {
 
 // Static <style> for the interactive states: a hover fill on selectable days and a focus-visible ring.
 export const CALENDAR_STYLE_TAG =
-  '.vike-blocks-cal-day:not(:disabled):not([aria-selected="true"]):hover{background:var(--color-surface,#f1f5f9)}' +
+  '.vike-blocks-cal-day:not(:disabled):not([aria-selected=true]):hover{background:var(--color-surface,#f1f5f9)}' +
   '.vike-blocks-cal-day:focus-visible{outline:none;box-shadow:0 0 0 2px var(--color-bg,#fff),0 0 0 4px var(--color-ring,var(--color-primary,#2563eb))}' +
   '.vike-blocks-cal-nav:hover{background:var(--color-surface,#f1f5f9)}'
