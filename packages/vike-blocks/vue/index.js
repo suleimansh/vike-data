@@ -54,6 +54,7 @@ import './SlotView.js' // side-effect: register the slot placeholder renderer
 import './DocNavView.js' // side-effect: register the doc-nav renderer
 import './TreeView.js' // side-effect: register the tree-view renderer
 import './ContextMenuView.js' // side-effect: register the context-menu renderer
+import './StepperView.js' // side-effect: register the stepper renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
 export { ACTION_RUNNER_KEY, useActionRunner, provideActionRunner } from './action-context.js' // the actions seam (#385)
 export { Blocks, Page } from './Blocks.js' // importing Blocks registers the built-in blocks
@@ -113,3 +114,4 @@ export { SlotView } from './SlotView.js'
 export { DocNavView } from './DocNavView.js'
 export { TreeView } from './TreeView.js'
 export { ContextMenuView } from './ContextMenuView.js'
+export { StepperView } from './StepperView.js'

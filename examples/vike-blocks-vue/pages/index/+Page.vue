@@ -9,6 +9,7 @@ const demos = [
   { href: '/dropdown', label: 'Dropdown', note: 'Anchored popover menu: edge-aware placement, outside-click / Escape close.' },
   { href: '/tree-view', label: 'Tree-view', note: 'Arbitrary-depth nested hierarchy: per-branch expand/collapse, .current auto-opens the active branch, roving arrow-key focus. Open state seeded so branches render correctly from first paint.' },
   { href: '/context-menu', label: 'Context-menu', note: 'Right-click menu at the cursor: Teleported to <body>, flips at the viewport edge, reuses the dropdown chrome. Non-modal, closes on outside-click / Escape / scroll. Menu is open-gated so SSR emits only the trigger.' },
+  { href: '/stepper', label: 'Stepper', note: 'Multi-step wizard: numbered progress header (complete / current / upcoming) over one step, Back / Next nav, steps compose any blocks. Step state seeded so SSR renders the initial step with no flash.' },
 ]
 </script>
 <template>
