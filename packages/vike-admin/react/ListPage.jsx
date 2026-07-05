@@ -85,10 +85,13 @@ export default function ListPage() {
   // route via a query param; in 'route' mode (the default) they navigate to the /admin/:table/... pages.
   const isDialog = mode === 'dialog'
   const st = { page, sort, dir }
+  // Route-mode hrefs encode the id (a pk can contain a space / `/` / `#` / unicode) — matching the
+  // Vue twin and this file's own dialogHref, which already encode.
+  const enc = (id) => encodeURIComponent(String(id))
   const newHref = isDialog ? dialogHref(table, st, 'create') : `/admin/${table}/new`
-  const viewHref = (id) => (isDialog ? dialogHref(table, st, 'view', id) : `/admin/${table}/${id}`)
-  const editHref = (id) => (isDialog ? dialogHref(table, st, 'edit', id) : `/admin/${table}/${id}/edit`)
-  const deleteAction = (id) => `/admin/${table}/${id}/edit` // the write path is the edit route in both modes
+  const viewHref = (id) => (isDialog ? dialogHref(table, st, 'view', id) : `/admin/${table}/${enc(id)}`)
+  const editHref = (id) => (isDialog ? dialogHref(table, st, 'edit', id) : `/admin/${table}/${enc(id)}/edit`)
+  const deleteAction = (id) => `/admin/${table}/${enc(id)}/edit` // the write path is the edit route in both modes
   // Per-row permission (#581): the data hook stamped `_canView` / `_canEdit` / `_canDelete` on each
   // row. A row links to its detail view when viewable; the actions column (Edit + Delete) shows only
   // when at least one row is actionable, and each per-row callback gates its own cell.

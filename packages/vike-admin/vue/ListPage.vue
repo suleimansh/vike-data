@@ -94,7 +94,7 @@ const rowActions = anyActions
       <h1 :style="{ margin: 0, fontSize: '22px' }">{{ data.label }}</h1>
       <a v-if="data.canCreate" :href="newHref" :style="{ background: 'var(--color-primary)', color: 'var(--color-primary-text, #fff)', padding: '0.45rem 0.9rem', borderRadius: 'var(--radius, 8px)', textDecoration: 'none', fontSize: '14px' }">+ New</a>
     </div>
-    <div :style="{ overflowX: 'auto', border: '1px solid var(--color-border)', borderRadius: 'var(--radius, 10px)', overflow: 'hidden', background: 'var(--color-surface)' }">
+    <div :style="{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius, 10px)', overflow: 'hidden', background: 'var(--color-surface)' }">
       <ListView
         :table="data.table"
         :columns="data.columns"
