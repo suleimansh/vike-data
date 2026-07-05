@@ -18,6 +18,7 @@
     "./nav-menu": "./blocks/nav-menu.js",
     "./doc-nav": "./blocks/doc-nav.js",
     "./tree-view": "./blocks/tree-view.js",
+    "./context-menu": "./blocks/context-menu.js",
     "./toast": "./blocks/toast-store.js",
     "./chart": "./blocks/chart.js",
     "./card": "./blocks/card.js",
@@ -63,6 +64,7 @@
     "./react/SlotView": "./react/SlotView.jsx",
     "./react/DocNavView": "./react/DocNavView.jsx",
     "./react/TreeView": "./react/TreeView.jsx",
+    "./react/ContextMenuView": "./react/ContextMenuView.jsx",
     "./vue": "./vue/index.js",
     "./vue/registry": "./vue/registry.js",
     "./vue/action-context": "./vue/action-context.js",
@@ -93,7 +95,8 @@
     "./vue/LayoutView": "./vue/LayoutView.js",
     "./vue/SlotView": "./vue/SlotView.js",
     "./vue/DocNavView": "./vue/DocNavView.js",
-    "./vue/TreeView": "./vue/TreeView.js"
+    "./vue/TreeView": "./vue/TreeView.js",
+    "./vue/ContextMenuView": "./vue/ContextMenuView.js"
   },
   "scripts": {
     "test": "node --test"
