@@ -1,5 +1,5 @@
 <script setup>
-import { h, ref, computed, provide } from 'vue'
+import { h, ref, computed, provide, watch } from 'vue'
 import { themeToAppearanceCss, baseCss, presets, APPEARANCES } from '../runtime.js'
 import { THEME_KEY } from './context.js'
 
@@ -13,6 +13,12 @@ const names = computed(() => Object.keys(props.themes))
 const themeName = ref(props.themes[props.theme] ? props.theme : names.value[0])
 const appearance = ref(APPEARANCES.includes(props.appearance) ? props.appearance : 'system')
 const theme = computed(() => props.themes[themeName.value])
+
+// Props are re-derived per page (cookie or a page-level config override), so a
+// client-side nav can hand us a new theme/appearance; sync it. A user selection
+// still wins because it is written to the cookie and comes back as the next prop.
+watch(() => props.theme, (next) => { if (props.themes[next]) themeName.value = next })
+watch(() => props.appearance, (next) => { if (APPEARANCES.includes(next)) appearance.value = next })
 
 const css = computed(() =>
   `${themeToAppearanceCss(theme.value, appearance.value, ':root')}\n${baseCss}`
