@@ -7,7 +7,7 @@
 // cookies off pageContext and passes them in), so first paint matches and there is
 // no flash. `system` is applied via the core's `@media (prefers-color-scheme)` CSS,
 // so it follows the OS even before hydration.
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect } from 'react'
 import { themeToAppearanceCss, baseCss, presets, APPEARANCES } from '../runtime.js'
 import { ThemeCtx } from './context.js'
 
@@ -21,6 +21,16 @@ export function ThemeProvider({ themes = presets, theme: initialTheme = 'default
   const [themeName, setThemeName] = useState(themes[initialTheme] ? initialTheme : names[0])
   const [appearance, setApp] = useState(APPEARANCES.includes(initialAppearance) ? initialAppearance : 'system')
   const theme = themes[themeName]
+
+  // Props are re-derived per page (cookie or a page-level config override), so a
+  // client-side nav can hand us a new theme/appearance; sync it. A user selection
+  // still wins because it is written to the cookie and comes back as the next prop.
+  useEffect(() => {
+    if (themes[initialTheme]) setThemeName(initialTheme)
+  }, [initialTheme, themes])
+  useEffect(() => {
+    if (APPEARANCES.includes(initialAppearance)) setApp(initialAppearance)
+  }, [initialAppearance])
 
   const setTheme = useCallback(
     (next) => {
