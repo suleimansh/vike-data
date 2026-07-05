@@ -132,6 +132,7 @@ import { defineBlock } from 'vike-blocks'
 export const rating = defineBlock('rating', {
   build:  (value) => ({ value }),                       // rating(3) -> { block:'rating', value:3 }
   refine: { max: (n) => ({ max: n }), readonly: () => ({ readonly: true }) },
+  params: [{ name: 'value', required: true }],          // optional: describeBlock discovery
 })
 // author usage:  rating(3).max(5).readonly()
 ```
@@ -146,6 +147,25 @@ registerBlockRenderer('rating', Rating)
 Define once (builder + descriptor + registry entry), render once per framework. The built-in
 blocks (`text`/`heading`/`badge`/`divider`/`link`/`list`) are defined through this same seam, so
 your custom block is a peer, not a special case.
+
+### Discover the catalog programmatically
+
+Because a page is data, the catalog is introspectable — tools and AI agents can enumerate every
+block and learn how to compose it without reading source:
+
+```js
+import { listBlocks, describeBlock, describeBlocks } from 'vike-blocks'
+
+listBlocks()             // ['text', 'heading', 'rating', 'form', ...]
+describeBlock('rating')  // { type:'rating', passThrough:true,
+                         //   builder:{ methods:['value','max','allowHalf','readOnly','disabled','name'], arity:1 },
+                         //   params:[{ name:'value', required:true }] }
+describeBlocks()         // the whole catalog as descriptors
+```
+
+`builder.methods` are the chainable refinements, `builder.arity` the positional builder args, and
+`params` any descriptor the block author declared. `passThrough` is false when a block has a
+`resolve` step (it is schema/data-aware) rather than rendering its props directly.
 
 ## Rendering — `vike-blocks/react` (and `/vue`)
 
