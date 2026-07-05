@@ -68,6 +68,9 @@ export function select() {
 // required, it stays selectable so the field can be cleared. The renderer owns the live state;
 // `value` is only the INITIAL selection.
 registerBlock('select', {
+  category: 'form',
+  summary: 'A single-choice dropdown over a list of options (native <select>).',
+  example: "select().option('free', 'Free').option('pro', 'Pro').value('pro')",
   resolve({ props }) {
     const options = resolveOptions(props.options, { withDisabled: true })
     return {

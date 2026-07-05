@@ -73,6 +73,10 @@ export function form({ action, method, fields, onSubmit } = {}) {
 // container. action/method/submitLabel pass through (normalized); the renderer draws the <form>, the
 // fields, and the submit button.
 registerBlock('form', {
+  category: 'form',
+  container: true,
+  summary: 'A native <form> (method + action) wrapping field controls.',
+  example: "form({ action: '/members', method: 'post' }).fields([field('Name').control(input().name('name'))])",
   resolve({ props, tables }) {
     return {
       action: props.action ?? null,

@@ -13,4 +13,7 @@ export const alert = defineBlock('alert', {
     intent: (intent) => ({ intent }),
     body: (text) => ({ body: text }),
   },
+  category: 'feedback',
+  summary: 'A tone-styled callout banner (info/success/warning/danger).',
+  example: "alert('Heads up').intent('warning').body('Your trial ends soon.')",
 })

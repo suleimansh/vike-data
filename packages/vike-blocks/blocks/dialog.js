@@ -74,6 +74,10 @@ export function dialog() {
 // that makes the dialog a container), and pass the modal chrome through. The renderer owns the live
 // open/closed state; `defaultOpen` is only the INITIAL state.
 registerBlock('dialog', {
+  category: 'overlay',
+  container: true,
+  summary: 'A modal dialog opened by a trigger button, holding nested sections.',
+  example: "dialog().title('Delete post').trigger('Delete').sections([text('Are you sure?')])",
   resolve({ props, tables }) {
     const sections = resolvePage({ sections: collapse(props.sections) }, tables).sections
     const footer = props.footer ? resolvePage({ sections: collapse(props.footer) }, tables).sections : []

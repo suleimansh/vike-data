@@ -58,6 +58,10 @@ export function card(sections = []) {
 // makes the card a container. The header text passes through; the renderer draws the box, header,
 // body, and footer.
 registerBlock('card', {
+  category: 'layout',
+  container: true,
+  summary: 'A bordered surface with an optional header/footer wrapping nested blocks.',
+  example: "card([text('Manage access.')]).title('Settings')",
   resolve({ props, tables }) {
     return {
       title: props.title ?? null,

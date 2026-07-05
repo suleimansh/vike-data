@@ -28,9 +28,19 @@ export function registerBlock(type, def = {}) {
   if (def.params != null && !Array.isArray(def.params)) {
     throw new Error(`registerBlock(${JSON.stringify(type)}): def.params must be an array of param descriptors`)
   }
-  // `params`/`builder` are discovery metadata (see describeBlock) — a block that
-  // declares neither still registers, it just describes as an opaque pass-through.
-  REGISTRY.set(type, { type, resolve: def.resolve ?? null, params: def.params ?? null, builder: def.builder ?? null })
+  // `params`/`builder` + the doc fields (category/summary/container/example) are
+  // discovery metadata (see describeBlock + blockCatalog) — all optional, a block that
+  // declares none still registers, it just describes as an opaque pass-through.
+  REGISTRY.set(type, {
+    type,
+    resolve: def.resolve ?? null,
+    params: def.params ?? null,
+    builder: def.builder ?? null,
+    category: def.category ?? null,
+    summary: def.summary ?? null,
+    container: def.container ?? false,
+    example: def.example ?? null,
+  })
   return def
 }
 
@@ -40,23 +50,49 @@ export const listBlocks = () => [...REGISTRY.keys()]
 
 /**
  * Describe a registered block for PROGRAMMATIC discovery — this is the machine seam
- * behind "UI as data": an agent or tool can enumerate the catalog (describeBlocks)
- * and, per type, learn how to compose it WITHOUT reading the block's source. Returns
- * null for an unknown type. Shape:
- *   { type, passThrough, builder: { methods, arity } | null, params: [...] | null }
- * `passThrough` = the block has no resolve step (its model is its props). `builder`
- * is present for blocks defined via defineBlock: `methods` are the chainable prop
- * refinements and `arity` is the positional argument count of the builder. `params`
- * is any descriptor list the author declared (name/required/etc.).
+ * behind "UI as data": an agent or tool can enumerate the catalog (describeBlocks /
+ * blockCatalog) and, per type, learn how to compose it WITHOUT reading the block's
+ * source. Returns null for an unknown type. Shape:
+ *   { type, category, summary, container, passThrough,
+ *     builder: { methods, arity } | null, params: [...] | null, example }
+ * `passThrough` = no resolve step (its model is its props). `container` = it holds a
+ * nested composition of blocks. `builder` is present for defineBlock blocks (`methods`
+ * are the chainable refinements, `arity` the positional arg count). `category`,
+ * `summary`, `params` and `example` are optional author-declared doc metadata.
  */
 export function describeBlock(type) {
   const entry = REGISTRY.get(type)
   if (!entry) return null
-  return { type: entry.type, passThrough: !entry.resolve, builder: entry.builder, params: entry.params }
+  return {
+    type: entry.type,
+    category: entry.category,
+    summary: entry.summary,
+    container: entry.container,
+    passThrough: !entry.resolve,
+    builder: entry.builder,
+    params: entry.params,
+    example: entry.example,
+  }
 }
 
 /** The whole catalog as descriptors — one describeBlock() per registered type. */
 export const describeBlocks = () => [...REGISTRY.keys()].map(describeBlock)
+
+/**
+ * The version of the block-catalog contract (the describeBlock descriptor shape).
+ * Bumped when the descriptor shape changes in a breaking way, so an agent consuming
+ * blockCatalog() can guard on it.
+ */
+export const CATALOG_CONTRACT_VERSION = 1
+
+/**
+ * The whole catalog as a single serializable object for an AI agent / tool to consume:
+ * `{ contractVersion, blocks }`. This is the stable seam the agent-side composition
+ * flow codes against — it never needs to import vike-blocks internals.
+ */
+export function blockCatalog() {
+  return { contractVersion: CATALOG_CONTRACT_VERSION, blocks: describeBlocks() }
+}
 
 // Define a BLOCK with a fluent authoring builder — in ONE call. This is the
 // high-DX seam: a package ships a new block (its builder + descriptor shape + registry
@@ -66,17 +102,20 @@ export const describeBlocks = () => [...REGISTRY.keys()].map(describeBlock)
 //   export const rating = defineBlock('rating', {
 //     build:  (value) => ({ value }),                 // rating(3) -> { block:'rating', value:3 }
 //     refine: { max: (n) => ({ max: n }), readonly: () => ({ readonly: true }) },
-//     params: [{ name: 'value', required: true }],    // optional: for describeBlock discovery
+//     category: 'form', summary: 'A star-rating input.',   // optional: agent-catalog metadata
+//     example: 'rating(3).max(5)',
+//     params: [{ name: 'value', required: true }],
 //   })
 //   // author usage:  rating(3).max(5).readonly()
 //
 // `build(...args)` produces the base props; `refine` maps chainable method names to prop
-// patches; `resolve` (optional) makes the block schema/data-aware instead of a pass-through;
-// `params` (optional) is a descriptor list surfaced by describeBlock for agents/tooling.
+// patches; `resolve` (optional) makes the block schema/data-aware instead of a pass-through.
+// The optional doc fields (`category`, `summary`, `container`, `example`, `params`) are
+// surfaced by describeBlock / blockCatalog so an agent can choose and fill the block.
 // Returns the builder FACTORY; calling it yields a chainable builder whose `.build()` collapses
 // to a `{ block, ...props }` descriptor — exactly what a view's `sections` accepts. The refine
 // method names and build arity are recorded so describeBlock can report the builder surface.
-export function defineBlock(type, { build, refine = {}, resolve, params } = {}) {
+export function defineBlock(type, { build, refine = {}, resolve, params, category, summary, container, example } = {}) {
   if (build != null && typeof build !== 'function') throw new Error(`defineBlock(${JSON.stringify(type)}): build must be a function`)
   if (refine == null || typeof refine !== 'object') throw new Error(`defineBlock(${JSON.stringify(type)}): refine must be an object of functions`)
   // Validate each refinement up front, so a typo (`refine: { max: 5 }`) throws HERE, where the
@@ -87,6 +126,10 @@ export function defineBlock(type, { build, refine = {}, resolve, params } = {}) 
   registerBlock(type, {
     ...(resolve ? { resolve } : {}),
     ...(params ? { params } : {}),
+    ...(category ? { category } : {}),
+    ...(summary ? { summary } : {}),
+    ...(container ? { container } : {}),
+    ...(example ? { example } : {}),
     builder: { methods: Object.keys(refine), arity: build ? build.length : 0 },
   })
   return (...args) => {

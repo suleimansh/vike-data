@@ -59,8 +59,21 @@ export interface ResolveContext {
   tables?: unknown
 }
 
+/**
+ * Optional doc metadata a block declares for the agent catalog (describeBlock / blockCatalog).
+ * `category` groups the block for selection (e.g. 'content' | 'form' | 'data' | 'layout' |
+ * 'overlay' | 'feedback' | 'navigation' | 'action' | 'escape-hatch'); `container` marks a block
+ * that holds a nested composition of blocks; `example` is a copy-pasteable snippet.
+ */
+export interface BlockDoc {
+  category?: string
+  summary?: string
+  container?: boolean
+  example?: string
+}
+
 /** A block definition passed to registerBlock. */
-export interface BlockDef {
+export interface BlockDef extends BlockDoc {
   resolve?: (ctx: ResolveContext) => unknown
   params?: ParamDescriptor[]
   builder?: BuilderMeta
@@ -72,12 +85,21 @@ export interface BlockEntry {
   resolve: ((ctx: ResolveContext) => unknown) | null
   params: ParamDescriptor[] | null
   builder: BuilderMeta | null
+  category: string | null
+  summary: string | null
+  container: boolean
+  example: string | null
 }
 
 /** An author-declared param descriptor surfaced by describeBlock. */
 export interface ParamDescriptor {
   name: string
   required?: boolean
+  /** 'string' | 'number' | 'boolean' | 'array' | 'object' | 'enum'. */
+  type?: string
+  /** The allowed values when `type` is 'enum'. */
+  enum?: string[]
+  summary?: string
   [key: string]: unknown
 }
 
@@ -89,13 +111,21 @@ export interface BuilderMeta {
   arity: number
 }
 
-/** A block descriptor for programmatic discovery (describeBlock / describeBlocks). */
+/** A block descriptor for programmatic discovery (describeBlock / describeBlocks / blockCatalog). */
 export interface BlockManifest {
   type: string
+  /** Grouping for selection, or null (e.g. 'content' | 'form' | 'data' | 'overlay' | ...). */
+  category: string | null
+  /** One-line description of what the block is / when to use it, or null. */
+  summary: string | null
+  /** True when the block holds a nested composition of blocks. */
+  container: boolean
   /** True when the block has no resolve step (its model is its props). */
   passThrough: boolean
   builder: BuilderMeta | null
   params: ParamDescriptor[] | null
+  /** A copy-pasteable usage snippet, or null. */
+  example: string | null
 }
 
 /** Register (or override) a block type. */
@@ -111,8 +141,20 @@ export function describeBlock(type: string): BlockManifest | null
 /** The whole catalog as descriptors. */
 export function describeBlocks(): BlockManifest[]
 
-/** Options for defineBlock: the builder factory, its refinements, an optional resolve + params. */
-export interface DefineBlockDef {
+/** The version of the block-catalog contract (the describeBlock descriptor shape). */
+export const CATALOG_CONTRACT_VERSION: number
+
+/** The serializable catalog an AI agent / tool consumes to compose pages from blocks. */
+export interface BlockCatalog {
+  contractVersion: number
+  blocks: BlockManifest[]
+}
+
+/** The whole catalog as one serializable object: `{ contractVersion, blocks }`. */
+export function blockCatalog(): BlockCatalog
+
+/** Options for defineBlock: the builder factory, its refinements, an optional resolve + doc metadata. */
+export interface DefineBlockDef extends BlockDoc {
   build?: (...args: any[]) => Record<string, unknown>
   refine?: Record<string, (...args: any[]) => Record<string, unknown>>
   resolve?: (ctx: ResolveContext) => unknown
