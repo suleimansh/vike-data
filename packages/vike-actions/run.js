@@ -10,6 +10,13 @@ import { getAction } from './registry.js'
 import { runGuard } from './guard.js'
 import { validateInput } from './validate.js'
 
+// A thrown error's message reaches the client ONLY when the error opts in with an explicit integer
+// `status` (the documented `throw Object.assign(new Error('gone'), { status: 404 })` path). An
+// unexpected throw — a TypeError, a DB driver error whose message carries schema detail — has no
+// status, so it stays a generic fallback and never leaks internal detail. Mirrors how the endpoint's
+// outer catch already sanitizes resolveUser/buildContext failures to 'Internal error'.
+const clientError = (e, fallback) => (Number.isInteger(e?.status) && e?.message ? e.message : fallback)
+
 // `onSuccess` is a client-effect HINT the binding runs after a 200 (reload / redirect / toast). It's
 // usually a static string/object, but can be a `(result, ctx) => hint` FUNCTION so the effect can use
 // the write result (e.g. toast the created row's name). A function is evaluated HERE, server-side, so
@@ -43,8 +50,9 @@ export async function runAction({ name, input = {}, user = null, ...rest } = {})
   try {
     allowed = await runGuard(action.guard, ctx)
   } catch (e) {
-    // A guard that throws is a deny, not a 500 — treat a broken predicate as "not allowed".
-    return { ok: false, status: 403, error: e.message ?? 'Forbidden' }
+    // A guard that throws is a deny, not a 500 — treat a broken predicate as "not allowed". A broken
+    // predicate's message never leaks (only an error opting into a status is surfaced).
+    return { ok: false, status: Number.isInteger(e?.status) ? e.status : 403, error: clientError(e, 'Forbidden') }
   }
   if (!allowed) return { ok: false, status: 403, error: 'Forbidden' }
 
@@ -52,7 +60,9 @@ export async function runAction({ name, input = {}, user = null, ...rest } = {})
     const result = await action.run(ctx)
     return { ok: true, status: 200, result: result ?? null, onSuccess: await resolveOnSuccess(action.onSuccess, result, ctx) }
   } catch (e) {
-    // An action can opt into a specific status (e.g. throw an error with `.status = 404`); default 500.
-    return { ok: false, status: Number.isInteger(e?.status) ? e.status : 500, error: e?.message ?? 'Action failed' }
+    // An action can opt into a specific status (e.g. throw an error with `.status = 404`) and its
+    // message is surfaced; an unexpected throw is a 500 with a generic message so a driver/internal
+    // error's detail never leaks to the client.
+    return { ok: false, status: Number.isInteger(e?.status) ? e.status : 500, error: clientError(e, 'Action failed') }
   }
 }

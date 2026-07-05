@@ -52,7 +52,9 @@ test('guard denies -> 403, allows -> runs; a throwing guard is a deny (403), not
   assert.equal((await runAction({ name: 'editor', user: { role: 'editor' } })).result, 'done')
 
   defineAction('boom', { guard: () => { throw new Error('nope') }, run: async () => 'x' })
-  assert.equal((await runAction({ name: 'boom' })).status, 403)
+  const denied = await runAction({ name: 'boom' })
+  assert.equal(denied.status, 403)
+  assert.equal(denied.error, 'Forbidden') // a broken guard's message never leaks
 })
 
 test("the 'authed' named guard requires a user", async () => {
@@ -95,10 +97,12 @@ test('onSuccess: a throwing hint is a no-op (null), the write still succeeds', a
 
 test('a throwing run -> 500 by default, or the error\'s own status', async () => {
   defineAction('boom', { run: async () => { throw new Error('kaboom') } })
-  assert.equal((await runAction({ name: 'boom' })).status, 500)
+  const crashed = await runAction({ name: 'boom' })
+  assert.equal(crashed.status, 500)
+  assert.equal(crashed.error, 'Action failed') // an unexpected throw's message never leaks to the client
 
   defineAction('missing', { run: async () => { const e = new Error('gone'); e.status = 404; throw e } })
   const out = await runAction({ name: 'missing' })
   assert.equal(out.status, 404)
-  assert.equal(out.error, 'gone')
+  assert.equal(out.error, 'gone') // an error opting into a status DOES surface its message
 })
