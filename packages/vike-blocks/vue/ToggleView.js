@@ -12,23 +12,23 @@ export const ToggleButtonView = {
   props: ['label', 'pressed', 'disabled'],
   setup(props) {
     const on = ref(!!props.pressed)
-    return () =>
-      h('span', { style: { display: 'contents' } }, [
-        h('style', TOGGLE_STYLE_TAG),
-        h(
-          'button',
-          {
-            type: 'button',
-            class: 'vike-blocks-toggle',
-            'data-slot': 'toggle',
-            'aria-pressed': on.value,
-            disabled: props.disabled || undefined,
-            onClick: () => (on.value = !on.value),
-            style: toggleButtonStyle(on.value, !!props.disabled),
-          },
-          props.label ?? null,
-        ),
-      ])
+    // Fragment (array) to match the React twin, which returns <>style + button</> with no wrapper.
+    return () => [
+      h('style', TOGGLE_STYLE_TAG),
+      h(
+        'button',
+        {
+          type: 'button',
+          class: 'vike-blocks-toggle',
+          'data-slot': 'toggle',
+          'aria-pressed': on.value,
+          disabled: props.disabled || undefined,
+          onClick: () => (on.value = !on.value),
+          style: toggleButtonStyle(on.value, !!props.disabled),
+        },
+        props.label ?? null,
+      ),
+    ]
   },
 }
 
@@ -60,10 +60,11 @@ export const ToggleGroupView = {
           it.label,
         )
       })
-      return h('span', { style: { display: 'contents' } }, [
+      // Fragment (array) to match the React twin, which returns <>style + group</> with no wrapper.
+      return [
         h('style', TOGGLE_STYLE_TAG),
         h('div', { role: 'group', 'data-slot': 'toggle-group', style: toggleGroupStyle() }, rows),
-      ])
+      ]
     }
   },
 }

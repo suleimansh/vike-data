@@ -53,7 +53,8 @@ export const SheetView = {
         { default: () => panelChildren },
       )
 
-      return h('span', { 'data-slot': 'sheet' }, [triggerBtn, overlay])
+      // Fragment (array) to match the React twin, which returns <>trigger + overlay</> with no wrapper.
+      return [triggerBtn, overlay]
     }
   },
 }

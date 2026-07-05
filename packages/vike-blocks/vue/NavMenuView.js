@@ -47,7 +47,8 @@ export const NavMenuView = {
             )
           : h('a', { key: i, href: it.to ?? '#', class: 'vike-blocks-navlink', style: navLinkStyle() }, it.label),
       )
-      return h('nav', { 'data-slot': 'nav-menu', style: navRootStyle() }, [h('style', NAV_STYLE_TAG), ...bar])
+      // Style sits OUTSIDE the <nav> (fragment sibling) to match the React twin's <>style + nav</>.
+      return [h('style', NAV_STYLE_TAG), h('nav', { 'data-slot': 'nav-menu', style: navRootStyle() }, bar)]
     }
   },
 }

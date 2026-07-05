@@ -73,7 +73,8 @@ export const DialogView = {
         { default: () => panelChildren },
       )
 
-      return h('span', { 'data-slot': 'dialog' }, [triggerBtn, overlay])
+      // Fragment (array) to match the React twin, which returns <>trigger + overlay</> with no wrapper.
+      return [triggerBtn, overlay]
     }
   },
 }

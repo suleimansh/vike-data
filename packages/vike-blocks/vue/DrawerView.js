@@ -90,7 +90,8 @@ export const DrawerView = {
         { default: () => panelChildren },
       )
 
-      return h('span', { 'data-slot': 'drawer' }, [triggerBtn, overlay])
+      // Fragment (array) to match the React twin, which returns <>trigger + overlay</> with no wrapper.
+      return [triggerBtn, overlay]
     }
   },
 }

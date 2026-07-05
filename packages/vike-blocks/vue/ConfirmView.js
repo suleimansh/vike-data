@@ -68,7 +68,8 @@ export const ConfirmView = {
       // Form mode: a real <form> that submits with no JS; hydrated, the submit opens the dialog first.
       if (props.action) {
         const hidden = (props.fields ?? []).map((f, i) => h('input', { key: i, type: 'hidden', name: f.name, value: f.value }))
-        return h('span', { 'data-slot': 'confirm' }, [
+        // Fragment (array) to match the React twin, which returns <>style + form + overlay</> with no wrapper.
+        return [
           h('style', BUTTON_STYLE_TAG),
           h(
             'form',
@@ -85,15 +86,15 @@ export const ConfirmView = {
             [...hidden, h('button', { type: 'submit', class: props.link ? undefined : 'vike-blocks-btn', style: triggerStyle }, label)],
           ),
           overlay,
-        ])
+        ]
       }
 
-      // Nav / display mode: the trigger just opens the dialog.
-      return h('span', { 'data-slot': 'confirm' }, [
+      // Nav / display mode: the trigger just opens the dialog. Fragment (array) to match the React twin.
+      return [
         h('style', BUTTON_STYLE_TAG),
         h('button', { type: 'button', class: props.link ? undefined : 'vike-blocks-btn', style: triggerStyle, onClick: () => (open.value = true) }, label),
         overlay,
-      ])
+      ]
     }
   },
 }
