@@ -26,23 +26,44 @@
     "vike-translate": "./bin/vike-translate.js"
   },
   "peerDependencies": {
+    "@anthropic-ai/sdk": ">=0.30",
     "react": ">=18",
+    "react-dom": ">=18",
     "vike": "^0.4.0",
     "vike-react": ">=0.6",
-    "react-dom": ">=18",
-    "@anthropic-ai/sdk": ">=0.30",
-    "vue": ">=3",
-    "vike-vue": ">=0.9"
+    "vike-vue": ">=0.9",
+    "vue": ">=3"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "vike-react": { "optional": true },
-    "react-dom": { "optional": true },
-    "@anthropic-ai/sdk": { "optional": true },
-    "vue": { "optional": true },
-    "vike-vue": { "optional": true }
+    "react": {
+      "optional": true
+    },
+    "vike-react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "@anthropic-ai/sdk": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    },
+    "vike-vue": {
+      "optional": true
+    }
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "test:components": "vitest run"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@vitejs/plugin-react": "^5.2.0",
+    "@vitejs/plugin-vue": "^6.0.7",
+    "@vue/test-utils": "^2.4.11",
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.9"
   }
 }
