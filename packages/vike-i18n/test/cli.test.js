@@ -40,6 +40,35 @@ test('parseArgs handles flags, =forms, and lists', () => {
   assert.equal(parseArgs(['--help']).help, true)
 })
 
+test('parseArgs collects unrecognized flags instead of silently dropping them', () => {
+  // a typo like `--locale` (missing the s) must surface, not vanish
+  assert.deepEqual(parseArgs(['--locale', 'fr']).unknown, ['--locale'])
+  assert.deepEqual(parseArgs(['--check', '--nope']).unknown, ['--nope'])
+  assert.equal('unknown' in parseArgs(['--check']), false)
+})
+
+test('a locale that throws is skipped; the locales that succeeded are still written', async () => {
+  const root = makeApp({ 'auth.signIn': 'Sign in', 'auth.email': 'Email' })
+  // Provider succeeds for fr, throws for ar (simulate a rate-limit / parse error).
+  const translate = async ({ locale, items }) => {
+    if (locale === 'ar') throw new Error('boom')
+    const out = {}
+    for (const { key, source } of items) out[key] = `[${locale}] ${source}`
+    return out
+  }
+  try {
+    const res = await runTranslate({ root, locales: ['fr', 'ar'], translate, log: silent })
+    assert.equal(res.written, true) // fr's work was persisted
+    assert.deepEqual(res.failures, ['ar'])
+    assert.equal(res.ok, false) // so `main` exits non-zero and CI/agents notice
+    const file = JSON.parse(readFileSync(join(root, 'translation.json'), 'utf8'))
+    assert.equal(file.fr['auth.signIn'], '[fr] Sign in')
+    assert.notEqual(file.ar?.['auth.signIn'], '[ar] Sign in') // the failed locale got no real translation
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
 test('write mode translates the long tail and writes translation.json', async () => {
   const root = makeApp({ 'auth.signIn': 'Sign in to {app}', 'auth.email': 'Email' })
   const { translate, calls } = fakeProvider()
