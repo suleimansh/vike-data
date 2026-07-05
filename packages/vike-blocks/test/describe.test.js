@@ -98,6 +98,31 @@ test('every catalog example is valid: it builds to a real descriptor', () => {
   }
 })
 
+test('the catalog is self-sufficient: a page composed from its own examples resolves', () => {
+  // The AX payoff of "UI as data": an agent reads blockCatalog(), composes a page from the
+  // per-block `example`s, and hands it to resolvePage — with NO source access and NO schema.
+  // This pins that the loop closes: every builder-form example resolves to a real view-model,
+  // so an agent that follows the catalog can never assemble a page vike-blocks then rejects.
+  const scope = Object.keys(B)
+  const vals = scope.map((k) => B[k])
+  const sections = []
+  for (const b of B.blockCatalog().blocks) {
+    if (b.type.startsWith('test-')) continue // fixtures other tests register
+    if (!b.example || b.example.trim().startsWith('{')) continue // descriptor-form examples are literal
+    const built = new Function(...scope, `const _e = (${b.example}); return _e && typeof _e.build === 'function' ? _e.build() : _e;`)(...vals)
+    // an example may build one block or an array of them — flatten either into the page
+    sections.push(...(Array.isArray(built) ? built : [built]))
+  }
+  assert.ok(sections.length > 40, 'sanity: composed a page from most of the catalog')
+  // resolve with an EMPTY schema — an agent composing from the catalog has no tables to lean on
+  const page = B.resolvePage({ sections }, {})
+  assert.equal(page.sections.length, sections.length) // no section silently dropped
+  for (const s of page.sections) {
+    assert.equal(typeof s.block, 'string')
+    assert.ok(s.resolved !== undefined, `block '${s.block}' produced no view-model`)
+  }
+})
+
 test('blockCatalog is a versioned, serializable snapshot of the whole catalog', () => {
   const cat = blockCatalog()
   assert.equal(cat.contractVersion, CATALOG_CONTRACT_VERSION)

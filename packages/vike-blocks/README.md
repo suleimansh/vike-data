@@ -183,6 +183,32 @@ blockCatalog()
 Guard on `contractVersion` (exported as `CATALOG_CONTRACT_VERSION`); it bumps only when the
 descriptor shape changes in a breaking way.
 
+The payoff closes a loop: an agent reads `blockCatalog()`, composes a page from the per-block
+`example`s (and `builder` surface), and resolves it — no source access, no schema:
+
+```js
+import { definePage, resolvePage } from 'vike-blocks'
+
+// 1. the agent picks blocks from blockCatalog() and emits their example-shaped builders:
+const page = definePage({
+  route: '/welcome',
+  sections: [
+    heading('Welcome').level(1),
+    card([text('Your workspace is ready.')]).title('Getting started'),
+    button('Create your first project').variant('primary'),
+  ],
+})
+
+// 2. and hands the page to the renderer via resolvePage — every section becomes a view-model:
+resolvePage(page)  // { route:'/welcome', sections:[{ block, props, resolved }, ...] }
+```
+
+Every builder-form `example` in the catalog is a real, resolvable composition (pinned by the
+package tests), so an agent that follows the catalog can never assemble a page vike-blocks then
+rejects. The runtime agent wiring — feeding this catalog into an AI page-composition flow — lives in
+the GemStack ai-autopilot compose work; this package owns only the stable, serializable contract
+that wiring codes against.
+
 ## Rendering — `vike-blocks/react` (and `/vue`)
 
 > `vike-blocks/vue` is the exact Vue twin — same `registerBlockRenderer` + `<Blocks>`/`<Page>` + primitive components, over the shared `blocks`/`vue` registry slot.
