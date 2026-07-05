@@ -105,15 +105,15 @@ Every built-in builder, by group. Each imports from `vike-blocks` and has a live
 | Primitives | `text` `heading` `badge` `divider` `link` `list` |
 | Content | `markdown` `code` |
 | Buttons | `button` |
-| Form controls | `input` `textarea` `checkbox` `radio` `select` `combobox` `tagInput` `toggle` `toggleButton` `toggleGroup` `slider` `calendar` `datePicker` `attachment` |
+| Form controls | `input` `textarea` `checkbox` `radio` `select` `combobox` `tagInput` `toggle` `toggleButton` `toggleGroup` `slider` `calendar` `datePicker` `attachment` `rating` |
 | Form structure | `field` `form` |
-| Data display | `table` `dataTable` `chart` `pagination` `stat` `timeline` |
+| Data display | `table` `dataTable` `chart` `pagination` `stat` `timeline` `descriptionList` |
 | Feedback | `alert` `skeleton` `progress` `spinner` `tooltip` `emptyState` |
-| Overlays | `dialog` `confirm` `sheet` `drawer` `popover` `dropdown` `navMenu` |
-| Navigation | `breadcrumb` `docNav` `command` `tabs` `accordion` `collapsible` |
+| Overlays | `dialog` `confirm` `sheet` `drawer` `popover` `dropdown` `navMenu` `contextMenu` |
+| Navigation | `breadcrumb` `docNav` `command` `tabs` `accordion` `collapsible` `tree` |
 | Identity + misc | `avatar` `avatarGroup` `kbd` `item` |
 | Chat | `bubble` `message` `messageScroller` |
-| Containers + layout | `card` `layout` `slot` |
+| Containers + layout | `card` `layout` `slot` `stepper` |
 | Escape hatch | `custom` |
 
 `toast` is not in the table because it is not a `sections` block — it is an imperative API you
