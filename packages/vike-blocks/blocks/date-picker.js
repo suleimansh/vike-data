@@ -14,6 +14,9 @@ import { defineBlock } from '../core/registry.js'
 import { calendarBuild, calendarRefine } from './_shared.js'
 
 export const datePicker = defineBlock('date-picker', {
+  category: 'form',
+  summary: "A popover date input.",
+  example: "datePicker().placeholder('Due date').name('due')",
   build: calendarBuild,
   refine: {
     ...calendarRefine,

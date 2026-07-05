@@ -58,6 +58,10 @@ export function stepper() {
 // clamp the initial step into range. The renderer draws the progress header + the active step's resolved
 // sections + the Back/Next controls; `current` is only the INITIAL step (the renderer owns live state).
 registerBlock('stepper', {
+  category: 'layout',
+  summary: "A multi-step wizard; each step holds nested blocks.",
+  container: true,
+  example: "stepper().step('Account', [field('Email').control(input())]).current(0)",
   resolve({ props, tables }) {
     const steps = (props.steps ?? []).map((s) => ({
       title: s.title ?? '',

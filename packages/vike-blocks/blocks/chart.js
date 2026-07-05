@@ -14,6 +14,9 @@ import { defineBlock } from '../core/registry.js'
 const TYPES = new Set(['bar', 'line', 'area'])
 
 export const chart = defineBlock('chart', {
+  category: 'data',
+  summary: "A simple bar / line / area chart from data points.",
+  example: "chart([{ label: 'Mon', value: 12 }, { label: 'Tue', value: 18 }]).type('line')",
   build: (data) => ({ data: Array.isArray(data) ? data : [] }),
   refine: {
     type: (t) => ({ type: TYPES.has(t) ? t : 'bar' }),

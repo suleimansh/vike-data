@@ -81,6 +81,9 @@ export function toggleGroup() {
 }
 
 registerBlock('toggle-button', {
+  category: 'form',
+  summary: "A single pressable toggle button.",
+  example: "toggleButton('Bold').pressed()",
   resolve({ props }) {
     return {
       label: props.label ?? null,
@@ -95,6 +98,9 @@ registerBlock('toggle-button', {
 // treats single/multiple uniformly (single = the array holds 0 or 1). A bare declared string becomes a
 // one-element array; an array stays (single-select keeps only its first). The renderer owns live state.
 registerBlock('toggle-group', {
+  category: 'form',
+  summary: "A segmented single- or multi-select toggle group.",
+  example: "toggleGroup().item('list', 'List').item('grid', 'Grid').value('list')",
   resolve({ props }) {
     const items = resolveOptions(props.items)
     const multiple = props.multiple ?? false

@@ -61,6 +61,10 @@ export function layout(initialVariant) {
 // layout a container, same as tabs' panels). `variant` defaults to 'stack' — the neutral shell
 // that stacks its regions — so a variant-less layout still renders.
 registerBlock('layout', {
+  category: 'layout',
+  summary: "A page layout whose named slots hold blocks.",
+  container: true,
+  example: "layout('landing').slot('main', [heading('Hi').level(1)])",
   resolve({ props, tables }) {
     const slots = {}
     for (const [name, sections] of Object.entries(props.slots ?? {})) {
@@ -121,6 +125,10 @@ export function slot(name, sections = []) {
 // (for a config nav) narrows to the leading (`start`) or trailing (`end`) items — how a shell puts
 // some nav items by the logo and others by the user menu.
 registerBlock('slot', {
+  category: 'layout',
+  summary: "A named placeholder filled by config or child blocks.",
+  container: true,
+  example: "slot('nav').from('config')",
   resolve({ props, tables }) {
     const sections = props.sections ? resolvePage({ sections: collapse(props.sections) }, tables).sections : []
     return {

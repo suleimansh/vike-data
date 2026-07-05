@@ -34,6 +34,10 @@ export function bubble(content) {
 // Resolve the sender + the body (a nested block composition resolves recursively; a plain string
 // passes through). The renderer aligns and colors the bubble by sender.
 registerBlock('bubble', {
+  category: 'chat',
+  summary: "A chat message bubble (user or assistant).",
+  container: true,
+  example: "bubble('How do I add a migration?').from('user')",
   resolve({ props, tables }) {
     return {
       from: props.from === 'user' ? 'user' : 'assistant',

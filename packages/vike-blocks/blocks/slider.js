@@ -10,6 +10,9 @@
 import { defineBlock } from '../core/registry.js'
 
 export const slider = defineBlock('slider', {
+  category: 'form',
+  summary: "A range slider.",
+  example: "slider('Volume').min(0).max(100).value(40)",
   build: (label) => (label !== undefined ? { label } : {}),
   refine: {
     min: (n) => ({ min: n }),

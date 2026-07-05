@@ -11,6 +11,9 @@
 import { defineBlock } from '../core/registry.js'
 
 export const attachment = defineBlock('attachment', {
+  category: 'form',
+  summary: "A file upload / attachment control.",
+  example: "attachment('Drop your resume').accept('.pdf,.doc')",
   build: (label) => (label !== undefined ? { label } : {}),
   refine: {
     accept: (a) => ({ accept: a }),

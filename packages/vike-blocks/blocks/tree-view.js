@@ -67,6 +67,9 @@ export function tree(nodes = []) {
 // Resolve the hierarchy into view-models: each branch learns whether it holds the active node (so the
 // renderer auto-opens that branch), each leaf whether it is the current page. Pure structure otherwise.
 registerBlock('tree-view', {
+  category: 'navigation',
+  summary: "A collapsible file / hierarchy tree.",
+  example: "tree().node('src', { open: true }, [{ label: 'index.js', href: '/src/index.js' }])",
   resolve({ props }) {
     return {
       collapsible: props.collapsible !== false,

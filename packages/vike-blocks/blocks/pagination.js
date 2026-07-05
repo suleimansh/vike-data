@@ -54,6 +54,9 @@ export function pagination(page, pageCount) {
 // Resolve the current page / total + the href template + labels. The renderer computes which page
 // numbers to show (paginationRange) and draws the links; there's no live state.
 registerBlock('pagination', {
+  category: 'navigation',
+  summary: "A page navigator (current of total).",
+  example: "pagination(3, 10)",
   resolve({ props }) {
     return {
       page: props.page ?? 1,

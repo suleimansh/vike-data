@@ -37,6 +37,9 @@ export function breadcrumb() {
 // Resolve the crumb list + the (optional) custom separator. The renderer links every crumb that has a
 // `to` except the last (always the current page), and draws the separator between them.
 registerBlock('breadcrumb', {
+  category: 'navigation',
+  summary: "A breadcrumb trail.",
+  example: "breadcrumb().crumb('Home', '/').crumb('Posts', '/posts').crumb('Edit')",
   resolve({ props }) {
     return {
       items: (props.items ?? []).map((i) => ({ label: i.label, ...(i.to != null ? { to: i.to } : {}) })),

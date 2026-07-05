@@ -75,6 +75,10 @@ export function sheet() {
 // container), and pass the chrome through. The renderer owns the live open/closed state; `defaultOpen`
 // is only the INITIAL state.
 registerBlock('sheet', {
+  category: 'overlay',
+  summary: "A side panel holding nested sections.",
+  container: true,
+  example: "sheet().trigger('Filters').side('right').sections([field('Status').control(input())])",
   resolve({ props, tables }) {
     const sections = resolvePage({ sections: collapse(props.sections) }, tables).sections
     return {

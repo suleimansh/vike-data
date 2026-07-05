@@ -55,6 +55,9 @@ export function skeleton() {
 // Resolve the box dimensions + line count. A null radius lets the renderer fall back to the theme
 // radius. The renderer draws one bar, or a stack when `lines > 1`.
 registerBlock('skeleton', {
+  category: 'feedback',
+  summary: "A loading placeholder shape.",
+  example: "skeleton().lines(3)",
   resolve({ props }) {
     return {
       width: props.width ?? '100%',

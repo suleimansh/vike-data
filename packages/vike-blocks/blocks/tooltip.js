@@ -43,6 +43,9 @@ export function tooltip(text) {
 // Resolve the tip text + placement + the (optional) wrapped trigger block — the recursive step that
 // lets a tooltip annotate any block. The renderer draws the trigger, then the CSS-revealed tip.
 registerBlock('tooltip', {
+  category: 'overlay',
+  summary: "A hover / focus tooltip wrapping a trigger.",
+  example: "tooltip('Save your changes').on(button('Save'))",
   resolve({ props, tables }) {
     const trigger = props.trigger ? resolvePage({ sections: [collapse(props.trigger)] }, tables).sections[0] : null
     return {

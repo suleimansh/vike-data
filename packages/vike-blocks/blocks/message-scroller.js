@@ -35,6 +35,10 @@ export function messageScroller(messages = []) {
 // Resolve the message list (the recursive step that makes it a container) + the viewport height. The
 // renderer draws the scroll container, sticks it to the bottom, and shows a jump-to-latest button.
 registerBlock('message-scroller', {
+  category: 'chat',
+  summary: "A scrollable, auto-sticking chat transcript of messages.",
+  container: true,
+  example: "messageScroller([message().from('user').body('Hi')]).height('20rem')",
   resolve({ props, tables }) {
     return {
       messages: resolvePage({ sections: collapse(props.messages) }, tables).sections,

@@ -28,6 +28,10 @@ export function collapsible(label, sections = []) {
 // Resolve the panel's blocks into view-models (the recursive step) and the initial open state. The
 // renderer draws the trigger + panel and owns the live open/closed state; `open` is only the start.
 registerBlock('collapsible', {
+  category: 'layout',
+  summary: "A single show/hide disclosure around nested blocks.",
+  container: true,
+  example: "collapsible('Details', [text('The fine print.')])",
   resolve({ props, tables }) {
     return {
       label: props.label ?? '',

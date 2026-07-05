@@ -49,6 +49,9 @@ export function message() {
 // Resolve the sender + metadata + the nested bubble (resolved recursively). The renderer draws the
 // avatar, the author/timestamp header, and the bubble, aligned by sender.
 registerBlock('message', {
+  category: 'chat',
+  summary: "A chat message with author, time and body.",
+  example: "message().from('user').author('You').body('How do I add a migration?')",
   resolve({ props, tables }) {
     return {
       from: props.from === 'user' ? 'user' : 'assistant',

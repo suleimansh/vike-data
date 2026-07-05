@@ -78,6 +78,9 @@ export function docNav() {
 // renderer can open the right category, highlight the current page, and splice its sections. A
 // pass-through of declared structure otherwise.
 registerBlock('doc-nav', {
+  category: 'navigation',
+  summary: "A documentation sidebar navigation tree.",
+  example: "docNav().current('/guide/setup').group('Guide', [{ label: 'Setup', href: '/guide/setup' }])",
   resolve({ props }) {
     return {
       collapsible: props.collapsible !== false,

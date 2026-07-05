@@ -12,6 +12,9 @@
 import { defineBlock } from '../core/registry.js'
 
 export const rating = defineBlock('rating', {
+  category: 'form',
+  summary: "A star-rating input.",
+  example: "rating('Rate your order').value(4).name('score')",
   build: (label) => (label !== undefined ? { label } : {}),
   refine: {
     value: (v) => ({ value: v }),

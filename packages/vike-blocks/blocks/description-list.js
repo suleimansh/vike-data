@@ -61,6 +61,9 @@ export function descriptionList() {
 // (`blocks` tells the renderer which shape it got), and a span is clamped to the column count. The
 // renderer draws the <dl> grid + the optional title.
 registerBlock('description-list', {
+  category: 'data',
+  summary: "A key-value metadata list.",
+  example: "descriptionList().item('Status', badge('Paid')).item('Customer', 'Ada Lovelace')",
   resolve({ props, tables }) {
     const columns = Math.max(1, Math.floor(props.columns) || 1)
     const items = (props.items ?? []).map((it) => {
