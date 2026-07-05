@@ -16,6 +16,18 @@ export const resolveOptions = (list, opts) => (list ?? []).map((o) => normalizeO
 // Clamp n into [lo, hi].
 export const clamp = (n, lo, hi) => Math.min(Math.max(n, lo), hi)
 
+// Compare two paths for "same page": drop any query/hash + a trailing slash, so `/a/b`, `/a/b/`, and
+// `/a/b#x` all match. Exact by design: a link lights up only on its own page, never a descendant.
+// Shared by the nav-style blocks (doc-nav, tree-view) so their matcher can't drift.
+export function samePath(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string') return false
+  const strip = (p) => {
+    const noHash = p.replace(/[?#].*$/, '')
+    return noHash.length > 1 ? noHash.replace(/\/+$/, '') : noHash
+  }
+  return strip(a) === strip(b)
+}
+
 // Resolve a key against a known-values map: keep it when known, else `dflt`.
 export const keyResolver = (map, dflt) => (x) => (map[x] ? x : dflt)
 

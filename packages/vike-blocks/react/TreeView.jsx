@@ -89,7 +89,7 @@ function TreeNode({ node, depth, tabbable }) {
       )}
       {branch && open && (
         <div role="group">
-          {node.children.map((child, i) => (
+          {(node.children ?? []).map((child, i) => (
             <TreeNode key={child.href ?? i} node={child} depth={depth + 1} tabbable={false} />
           ))}
         </div>

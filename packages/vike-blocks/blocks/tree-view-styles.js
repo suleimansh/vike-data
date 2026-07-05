@@ -2,16 +2,10 @@
 // vue renderers so the twins can't drift. Owns the pure model work (active/relevant computation +
 // auto-open seeding), the DOM roving-focus helper the arrow keys use, and the theme-native styles.
 
-// Compare two paths for "same page": drop any query/hash + trailing slash, so `/a/b`, `/a/b/`, and
-// `/a/b#x` all match. A leaf lights up only on its own href, never a descendant (that's the branch's job).
-export function samePath(a, b) {
-  if (typeof a !== 'string' || typeof b !== 'string') return false
-  const strip = (p) => {
-    const noHash = p.replace(/[?#].*$/, '')
-    return noHash.length > 1 ? noHash.replace(/\/+$/, '') : noHash
-  }
-  return strip(a) === strip(b)
-}
+// The "same page" matcher lives in _shared (doc-nav uses it too); re-export it as part of this module's
+// surface. A leaf lights up only on its own href, never a descendant (that's the branch's job).
+export { samePath } from './_shared.js'
+import { samePath } from './_shared.js'
 
 // Resolve one node against the current path (recursively). A node is active when its own href matches;
 // it is "relevant" (holds the active node) when itself or any descendant is active. `open` seeds the

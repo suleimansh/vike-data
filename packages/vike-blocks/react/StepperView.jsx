@@ -37,7 +37,7 @@ export function StepperView({ steps = [], current = 0, nextLabel = 'Next', backL
     <div data-slot="stepper" style={stepperRootStyle()}>
       <style>{STEPPER_STYLE_TAG}</style>
 
-      <div role="list" style={stepperHeaderStyle()}>
+      <div role="group" aria-label="Progress" style={stepperHeaderStyle()}>
         {steps.map((s, i) => {
           const state = stepState(i, active)
           return (
@@ -45,7 +45,6 @@ export function StepperView({ steps = [], current = 0, nextLabel = 'Next', backL
               key={i}
               type="button"
               className="vike-blocks-step-head"
-              role="listitem"
               aria-current={state === 'current' ? 'step' : undefined}
               onClick={() => setActive(i)}
               style={{ ...stepperItemStyle(), border: 0, background: 'transparent', padding: 0, font: 'inherit' }}
@@ -63,7 +62,7 @@ export function StepperView({ steps = [], current = 0, nextLabel = 'Next', backL
       </div>
 
       <div style={{ marginTop: '1.5rem' }}>
-        <div key={active} className="vike-blocks-step-panel" role="tabpanel" style={{ animation: 'vike-blocks-step-in 0.25s ease' }}>
+        <div key={active} className="vike-blocks-step-panel" style={{ animation: 'vike-blocks-step-in 0.25s ease' }}>
           {activeStep && <Blocks sections={activeStep.sections} />}
         </div>
       </div>

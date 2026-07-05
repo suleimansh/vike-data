@@ -3,17 +3,10 @@
 // work — active/relevant computation (resolveDocNav), the leveled -> grouped adapter
 // (groupLeveledItems) a doc framework like DocPress feeds in, and the theme-native styles.
 
-// Compare two paths for "same page": drop any query/hash and a trailing slash, so `/guide/setup`,
-// `/guide/setup/`, and `/guide/setup#install` all match. Exact by design — a page link lights up only
-// on its own page, never on a descendant (that is the group's job).
-export function samePath(a, b) {
-  if (typeof a !== 'string' || typeof b !== 'string') return false
-  const strip = (p) => {
-    const noHash = p.replace(/[?#].*$/, '')
-    return noHash.length > 1 ? noHash.replace(/\/+$/, '') : noHash
-  }
-  return strip(a) === strip(b)
-}
+// The "same page" matcher lives in _shared (tree-view uses it too); re-export it as part of this
+// module's surface. Exact by design: a page link lights up only on its own page, not a descendant.
+export { samePath } from './_shared.js'
+import { samePath } from './_shared.js'
 
 // Resolve one page link against the current path: mark it active on its own page, and pass its
 // on-page sections (level-3 hash links) through. The renderer reveals a link's sections only when the
