@@ -1,0 +1,22 @@
+{
+  "name": "app-vike-mantine",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Swappable-renderer proof for vike-blocks: register Mantine components against the same block descriptors, so one block IR is drawn by a whole different component kit. React only (Mantine is React). Sibling to the DocPress shell PoC.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mantine/core": "^9.4.1",
+    "@mantine/hooks": "^9.4.1",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "vike": "^0.4.0",
+    "vike-react": "^0.6.25",
+    "vike-blocks": "workspace:*",
+    "vite": "^7.1.0"
+  }
+}
