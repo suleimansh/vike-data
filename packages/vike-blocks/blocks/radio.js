@@ -2,9 +2,9 @@
 // selection, built with a fluent accumulating builder (like tabs). `.option(value, label)` appends a
 // choice; `.value()` sets the INITIAL selection, `.name()` the form name, `.disabled()` disables the
 // group. The renderer tracks the selected value as local UI state (like tabs/checkbox); selection +
-// submit is the data/actions axis (#385).
+// submit is the data/actions axis (#385). The builder is named `radio` to match the block type.
 //
-//   radioGroup()
+//   radio()
 //     .option('free', 'Free')
 //     .option('pro', 'Pro')
 //     .option('team', 'Team')
@@ -13,7 +13,7 @@ import { registerBlock } from '../core/registry.js'
 import { normalizeOption, resolveOptions } from './_shared.js'
 
 // A fluent builder for a radio group. `.option()` appends a choice (label defaults to the value).
-export function radioGroup() {
+export function radio() {
   const options = []
   let selected
   let name
