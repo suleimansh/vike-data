@@ -26,8 +26,12 @@ export default function ConfigLayout({ children }) {
   const resolved = defineLayout({
     shell: config.layout,
     logo: config.logo,
-    // `nav` is cumulative -> an array of each source's contribution; flatten.
+    userMenu: config.userMenu,
+    // `nav`, `footer` and `toolbar` are cumulative -> an array of each source's
+    // contribution; flatten before handing them to the shell.
     nav: (config.nav || []).flat(),
+    footer: (config.footer || []).flat(),
+    toolbar: (config.toolbar || []).flat(),
   })
   const chrome = {
     ...resolved.slots, // logo / nav / footer / userMenu / toolbar (filtered to the shell)

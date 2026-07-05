@@ -97,3 +97,16 @@ test('+config declares the layout selection + slot config points', () => {
   assert.equal(config.meta.nav.cumulative, true) // extensions can contribute nav links
   assert.equal(config.layout, 'centered') // safe public default
 })
+
+test('+config declares every slot defineLayout resolves (footer/userMenu/toolbar)', () => {
+  // Without these meta keys Vike never collects the config values, so the slots
+  // stay empty no matter what a page sets — the seam defineLayout resolves must
+  // match the seam +config exposes.
+  for (const key of ['footer', 'userMenu', 'toolbar']) {
+    assert.ok(config.meta[key], `meta.${key} must be declared`)
+    assert.equal(config.meta[key].env.client, true)
+  }
+  assert.equal(config.meta.footer.cumulative, true) // extensions can add footer links
+  assert.equal(config.meta.toolbar.cumulative, true) // vike-toolbar contributes here
+  assert.equal(config.meta.userMenu.cumulative, undefined) // single selection, like logo
+})
