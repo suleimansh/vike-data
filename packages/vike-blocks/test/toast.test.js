@@ -6,7 +6,7 @@
 import { test, mock } from 'node:test'
 import assert from 'node:assert/strict'
 import { toast, emitToast, dismissToast, subscribeToasts } from '../index.js'
-import { TOAST_EXIT_MS, resolveToastIntent } from '../blocks/toast-styles.js'
+import { TOAST_EXIT_MS, TOAST_SWIPE_THRESHOLD, resolveToastIntent, toastSwipeOffset, toastShouldDismiss, toastSwipeFade, toastStackStyle } from '../blocks/toast-styles.js'
 
 // The store is a module singleton, so every test cleans up its own toasts (dismiss + tick past the exit
 // window) before it ends, leaving the store empty for the next.
@@ -114,4 +114,38 @@ test('resolveToastIntent maps variants to alert accents; neutral has no icon', (
   assert.ok(resolveToastIntent('success').accent)
   assert.ok(resolveToastIntent('error').accent) // aliases to danger
   assert.ok(resolveToastIntent('success').icon)
+})
+
+// --- swipe to dismiss -------------------------------------------------------
+
+test('swipe offset is the drag toward the edge, keyed by deck side; away is inert', () => {
+  assert.equal(toastSwipeOffset('bottom', 60), 60) // a bottom deck dismisses on a downward drag
+  assert.equal(toastSwipeOffset('bottom', -60), 0) // up is away from the bottom edge
+  assert.equal(toastSwipeOffset('top', -60), 60) // a top deck dismisses on an upward drag
+  assert.equal(toastSwipeOffset('top', 60), 0) // down is away from the top edge
+})
+
+test('a swipe past the threshold dismisses; a shorter one snaps back', () => {
+  assert.equal(toastShouldDismiss(TOAST_SWIPE_THRESHOLD - 1), false)
+  assert.equal(toastShouldDismiss(TOAST_SWIPE_THRESHOLD), true)
+  assert.equal(toastShouldDismiss(TOAST_SWIPE_THRESHOLD + 40), true)
+})
+
+test('a swipe fades the toast: full at rest, half at the threshold, gone (clamped) by twice it', () => {
+  assert.equal(toastSwipeFade(0), 1)
+  assert.equal(toastSwipeFade(TOAST_SWIPE_THRESHOLD), 0.5)
+  assert.equal(toastSwipeFade(TOAST_SWIPE_THRESHOLD * 2), 0)
+  assert.equal(toastSwipeFade(TOAST_SWIPE_THRESHOLD * 3), 0) // never negative
+})
+
+test('a dragged toast follows the finger toward the edge, drops the easing, and fades', () => {
+  const base = { index: 0, total: 1, side: 'bottom', expanded: false, heightsInFront: 0, hidden: false, show: true }
+  const rest = toastStackStyle(base)
+  assert.match(rest.transform, /translateY\(0px\)/)
+  assert.match(rest.transition, /transform/) // eased at rest
+  assert.equal(rest.opacity, 1)
+  const dragged = toastStackStyle({ ...base, drag: 30 })
+  assert.match(dragged.transform, /translateY\(30px\)/) // moved down toward the bottom edge
+  assert.equal(dragged.transition, 'none') // no easing while the finger is down
+  assert.ok(dragged.opacity > 0 && dragged.opacity < 1) // fading as it goes
 })

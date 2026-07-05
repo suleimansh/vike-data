@@ -19,13 +19,17 @@ import {
   toastTitleStyle,
   toastDescStyle,
   toastCloseStyle,
+  toastSwipeOffset,
+  toastShouldDismiss,
   TOAST_VISIBLE,
   TOAST_GAP,
   TOAST_STYLE_TAG,
 } from '../blocks/toast-styles.js'
 
-function ToastRow({ toast, side, index, total, expanded, heightsInFront, hidden, onMeasure }) {
+function ToastRow({ toast, side, index, total, expanded, heightsInFront, hidden, onMeasure, onDragChange }) {
   const [entered, setEntered] = useState(false)
+  const [drag, setDrag] = useState(0) // px swiped toward the edge; 0 = not dragging
+  const startRef = useRef(null)
   const ref = useRef(null)
   useEffect(() => {
     const id = requestAnimationFrame(() => setEntered(true)) // flip to visible next frame -> enter animates
@@ -36,10 +40,39 @@ function ToastRow({ toast, side, index, total, expanded, heightsInFront, hidden,
   useLayoutEffect(() => {
     if (ref.current) onMeasure(toast.id, ref.current.offsetHeight)
   })
+  // Swipe to dismiss: track the pointer, follow the finger toward the edge, flick closed past the
+  // threshold (else snap back). Skip the close button so its click still lands.
+  const onPointerDown = (e) => {
+    if (e.button !== 0 || e.target.closest('button')) return
+    startRef.current = { x: e.clientX, y: e.clientY }
+    e.currentTarget.setPointerCapture?.(e.pointerId)
+    onDragChange(true)
+  }
+  const onPointerMove = (e) => {
+    if (startRef.current) setDrag(toastSwipeOffset(side, e.clientY - startRef.current.y))
+  }
+  const onPointerUp = (e) => {
+    const start = startRef.current
+    if (!start) return
+    startRef.current = null
+    e.currentTarget.releasePointerCapture?.(e.pointerId)
+    setDrag(0)
+    onDragChange(false)
+    if (toastShouldDismiss(toastSwipeOffset(side, e.clientY - start.y))) dismissToast(toast.id)
+  }
   const show = entered && !toast.dismissed
   const { icon } = resolveToastIntent(toast.intent)
   return (
-    <div ref={ref} role="status" aria-live="polite" style={{ ...toastCardStyle(toast.intent), ...toastStackStyle({ index, total, side, expanded, heightsInFront, hidden, show }) }}>
+    <div
+      ref={ref}
+      role="status"
+      aria-live="polite"
+      style={{ ...toastCardStyle(toast.intent), ...toastStackStyle({ index, total, side, expanded, heightsInFront, hidden, show, drag }) }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+    >
       {icon != null && <span aria-hidden="true" style={toastIconStyle(toast.intent)}>{icon}</span>}
       <div style={{ minWidth: 0 }}>
         <div style={toastTitleStyle()}>{toast.message}</div>
@@ -55,6 +88,7 @@ function ToastRow({ toast, side, index, total, expanded, heightsInFront, hidden,
 function ToastRegion({ position, toasts }) {
   const [side] = position.split('-')
   const [expanded, setExpanded] = useState(false)
+  const [dragging, setDragging] = useState(false) // a row is mid-swipe: don't let the deck collapse under it
   const [heights, setHeights] = useState({}) // toast id -> measured px
   const onMeasure = (id, h) => setHeights((prev) => (prev[id] === h ? prev : { ...prev, [id]: h }))
 
@@ -68,7 +102,9 @@ function ToastRegion({ position, toasts }) {
       data-slot="toaster"
       style={toastRegionStyle(position, extent)}
       onMouseEnter={() => setExpanded(true)}
-      onMouseLeave={() => setExpanded(false)}
+      onMouseLeave={() => {
+        if (!dragging) setExpanded(false)
+      }}
       onFocusCapture={() => setExpanded(true)}
       onBlurCapture={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget)) setExpanded(false)
@@ -85,6 +121,7 @@ function ToastRegion({ position, toasts }) {
           heightsInFront={inFront[i]}
           hidden={!expanded && i >= TOAST_VISIBLE}
           onMeasure={onMeasure}
+          onDragChange={setDragging}
         />
       ))}
     </div>
