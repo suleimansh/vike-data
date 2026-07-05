@@ -112,7 +112,8 @@
     "./vue/RatingView": "./vue/RatingView.js"
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "test:components": "vitest run"
   },
   "dependencies": {
     "@vike-data/kit": "workspace:*"
@@ -120,8 +121,8 @@
   "peerDependencies": {
     "react": ">=18",
     "vike-react": ">=0.6",
-    "vue": ">=3.5",
-    "vike-vue": ">=0.9"
+    "vike-vue": ">=0.9",
+    "vue": ">=3.5"
   },
   "peerDependenciesMeta": {
     "react": {
@@ -136,5 +137,12 @@
     "vike-vue": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@vitejs/plugin-react": "^5.2.0",
+    "@vue/test-utils": "^2.4.11",
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.9"
   }
 }

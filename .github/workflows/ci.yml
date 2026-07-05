@@ -50,6 +50,11 @@ jobs:
       - name: Unit tests
         run: pnpm -r test
 
+      # Render tests for the react/vue bindings (jsdom + vitest), in the packages
+      # that define a `test:components` script (vike-themes/blocks/i18n).
+      - name: Component render tests
+        run: pnpm -r test:components
+
       # Drift gate: committed artifacts must match what generation would emit,
       # for every target ORM.
       - name: Artifact drift gate
