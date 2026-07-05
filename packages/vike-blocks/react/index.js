@@ -56,6 +56,7 @@ import './DocNavView.jsx' // side-effect: register the doc-nav renderer
 import './TreeView.jsx' // side-effect: register the tree-view renderer
 import './ContextMenuView.jsx' // side-effect: register the context-menu renderer
 import './StepperView.jsx' // side-effect: register the stepper renderer
+import './DescriptionListView.jsx' // side-effect: register the description-list renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
 export { ActionRunnerContext, ActionRunnerProvider, useActionRunner } from './action-context.js' // the actions seam (#385)
 export { Blocks, Page } from './Blocks.jsx' // importing Blocks registers the built-in blocks
@@ -116,3 +117,4 @@ export { DocNavView } from './DocNavView.jsx'
 export { TreeView } from './TreeView.jsx'
 export { ContextMenuView } from './ContextMenuView.jsx'
 export { StepperView } from './StepperView.jsx'
+export { DescriptionListView } from './DescriptionListView.jsx'

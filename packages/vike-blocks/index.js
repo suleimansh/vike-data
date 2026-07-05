@@ -58,6 +58,7 @@ import './blocks/doc-nav.js' // side-effect: register the doc-nav block (documen
 import './blocks/tree-view.js' // side-effect: register the tree-view block (nested collapsible hierarchy)
 import './blocks/context-menu.js' // side-effect: register the context-menu block (right-click, cursor-anchored)
 import './blocks/stepper.js' // side-effect: register the stepper block (multi-step wizard)
+import './blocks/description-list.js' // side-effect: register the description-list block (key-value metadata)
 
 export { definePage, resolvePage } from './core/page.js'
 export { registerBlock, getBlock, hasBlock, listBlocks, defineBlock } from './core/registry.js'
@@ -121,3 +122,4 @@ export { contextMenu } from './blocks/context-menu.js'
 export { clampMenuPosition } from './blocks/context-menu-styles.js'
 export { stepper } from './blocks/stepper.js'
 export { stepState } from './blocks/stepper-styles.js'
+export { descriptionList } from './blocks/description-list.js'
