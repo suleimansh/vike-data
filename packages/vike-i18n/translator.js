@@ -111,7 +111,14 @@ export function createAnthropicTranslator(opts = {}) {
     })
 
     const text = response.content.filter((b) => b.type === 'text').map((b) => b.text).join('')
-    const parsed = JSON.parse(text)
+    let parsed
+    try {
+      parsed = JSON.parse(text)
+    } catch {
+      // A truncated (hit max_tokens) or non-JSON response would otherwise throw a
+      // bare SyntaxError; name the locale so the caller can skip and retry it.
+      throw new Error(`[vike translate] could not parse model output for ${locale} (got ${text.length} char(s)).`)
+    }
     const out = {}
     for (const { key, value } of parsed.translations || []) out[key] = value
     return out

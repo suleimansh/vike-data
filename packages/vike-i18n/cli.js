@@ -10,7 +10,7 @@
 //
 // This module is the I/O + orchestration shell; the policy is the pure core
 // (translate.js) and discovery (texts.js), and the AI call is the provider
-// (translator.js, swappable via `--provider` / an injected `translate`).
+// (translator.js, swappable via an injected `translate`).
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve, join } from 'node:path'
 import { discoverTextCatalogs, mergeSources } from './texts.js'
@@ -94,14 +94,22 @@ export async function runTranslate(options = {}) {
     return { ok: true, mode: 'write', written: false, plan, locales }
   }
 
-  // Translate only the gaps, one batch per locale.
+  // Translate only the gaps, one batch per locale. A locale that throws (network,
+  // rate-limit, unparseable output) is logged and skipped so the locales that DID
+  // succeed are still written — one flaky locale must not discard the whole run.
   const provider = createAnthropicTranslator(options)
   const results = []
+  const failures = []
   for (const [locale, items] of groupByLocale(plan.items)) {
     log(`[vike translate] translating ${items.length} string(s) -> ${locale} ...`)
-    const map = await provider({ locale, items })
-    for (const { key } of items) {
-      if (map[key] != null) results.push({ locale, key, value: map[key] })
+    try {
+      const map = await provider({ locale, items })
+      for (const { key } of items) {
+        if (map[key] != null) results.push({ locale, key, value: map[key] })
+      }
+    } catch (err) {
+      failures.push(locale)
+      log(`[vike translate] locale ${locale} failed: ${err.message}. Skipping it; other locales continue.`)
     }
   }
 
@@ -113,13 +121,17 @@ export async function runTranslate(options = {}) {
       ? `[vike translate] wrote ${out} (${results.length} translated, ${plan.removedKeys.length} pruned).`
       : '[vike translate] translation.json already up to date.',
   )
-  return { ok: true, mode: 'write', written: changed, translation: merged, plan, locales }
+  if (failures.length) log(`[vike translate] ${failures.length} locale(s) failed: ${failures.join(', ')}. Re-run to retry them.`)
+  // ok is false when a locale failed so `main` exits non-zero (CI/agents see it),
+  // even though the successful locales were written.
+  return { ok: failures.length === 0, mode: 'write', written: changed, translation: merged, plan, locales, failures }
 }
 
 // Minimal flag parser — `--root <dir>`, `--out <file>`, `--locales a,b,c` (or
 // `--locales=a,b`), `--check`, `--model <id>`, `--node-modules <dir>`, `--help`.
 export function parseArgs(argv) {
   const opts = {}
+  const unknown = []
   const list = (v) => v.split(',').map((s) => s.trim()).filter(Boolean)
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]
@@ -151,9 +163,13 @@ export function parseArgs(argv) {
         opts.help = true
         break
       default:
+        // Collect dash-prefixed flags we don't recognize so the caller can warn
+        // instead of silently ignoring a typo like `--locale` (missing the `s`).
+        if (flag.startsWith('-')) unknown.push(flag)
         break
     }
   }
+  if (unknown.length) opts.unknown = unknown
   return opts
 }
 
@@ -181,6 +197,9 @@ export async function main(argv = process.argv.slice(2)) {
   if (opts.help) {
     process.stdout.write(HELP + '\n')
     return 0
+  }
+  if (opts.unknown) {
+    process.stderr.write(`[vike translate] ignoring unknown flag(s): ${opts.unknown.join(', ')}. Run --help for usage.\n`)
   }
   const result = await runTranslate(opts)
   return result.ok ? 0 : 1
