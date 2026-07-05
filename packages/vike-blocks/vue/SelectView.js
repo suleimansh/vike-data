@@ -19,28 +19,31 @@ export const SelectView = {
       for (const opt of options) {
         optionNodes.push(h('option', { key: String(opt.value), value: opt.value, disabled: opt.disabled || undefined }, opt.label))
       }
-      return h('span', { style: selectWrapStyle() }, [
+      // Style sits OUTSIDE the wrap span (fragment sibling) to match the React twin's <>style + span</>.
+      return [
         h('style', SELECT_STYLE_TAG),
-        h(
-          'select',
-          {
-            class: 'vike-blocks-select',
-            'data-slot': 'select',
-            'data-placeholder': onPlaceholder ? 'true' : undefined,
-            id: props.id,
-            name: props.name,
-            disabled: props.disabled || undefined,
-            required: props.required || undefined,
-            value: selected.value ?? '',
-            onChange: (e) => (selected.value = e.target.value),
-            style: selectStyle(props.disabled),
-          },
-          optionNodes,
-        ),
-        h('span', { 'aria-hidden': 'true', style: selectChevronStyle() }, [
-          h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, [h('path', { d: CHEVRON_DOWN_PATH })]),
+        h('span', { style: selectWrapStyle() }, [
+          h(
+            'select',
+            {
+              class: 'vike-blocks-select',
+              'data-slot': 'select',
+              'data-placeholder': onPlaceholder ? 'true' : undefined,
+              id: props.id,
+              name: props.name,
+              disabled: props.disabled || undefined,
+              required: props.required || undefined,
+              value: selected.value ?? '',
+              onChange: (e) => (selected.value = e.target.value),
+              style: selectStyle(props.disabled),
+            },
+            optionNodes,
+          ),
+          h('span', { 'aria-hidden': 'true', style: selectChevronStyle() }, [
+            h('svg', { width: 16, height: 16, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', 'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, [h('path', { d: CHEVRON_DOWN_PATH })]),
+          ]),
         ]),
-      ])
+      ]
     }
   },
 }

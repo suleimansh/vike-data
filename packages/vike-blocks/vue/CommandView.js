@@ -121,11 +121,12 @@ export const CommandView = {
         h('div', { role: 'listbox', 'data-slot': 'command-list', style: commandListStyle() }, listChildren),
       ])
 
-      return h('span', { 'data-slot': 'command-root' }, [
+      // Fragment (array) to match the React twin, which returns <>style + trigger + overlay</> with no wrapper.
+      return [
         h('style', COMMAND_STYLE_TAG),
         triggerBtn,
         h(Overlay, { open: open.value, onClose: () => (open.value = false), role: 'dialog', containerStyle: { alignItems: 'flex-start', justifyContent: 'center', padding: '1rem', paddingTop: '12vh' }, panelStyle }, { default: () => panel }),
-      ])
+      ]
     }
   },
 }

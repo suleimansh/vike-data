@@ -21,7 +21,7 @@ export const List = (props) =>
   h(
     props.ordered ? 'ol' : 'ul',
     { style: listStyle(props.ordered) },
-    (props.items ?? []).map((item) => h('li', { style: listItemStyle }, item)),
+    (props.items ?? []).map((item, i) => h('li', { key: i, style: listItemStyle }, item)),
   )
 List.props = ['items', 'ordered']
 
