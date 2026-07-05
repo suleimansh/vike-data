@@ -27,7 +27,15 @@ export default {
     const pageContext = usePageContext()
     const resolved = computed(() => {
       const config = pageContext.config || {}
-      return defineLayout({ shell: config.layout, logo: config.logo, nav: (config.nav || []).flat() })
+      // nav/footer/toolbar are cumulative -> array of each source's contribution; flatten.
+      return defineLayout({
+        shell: config.layout,
+        logo: config.logo,
+        userMenu: config.userMenu,
+        nav: (config.nav || []).flat(),
+        footer: (config.footer || []).flat(),
+        toolbar: (config.toolbar || []).flat(),
+      })
     })
     const chrome = computed(() => ({ ...resolved.value.slots, dir: resolved.value.dir, currentPath: pageContext.urlPathname || '' }))
     return () =>
