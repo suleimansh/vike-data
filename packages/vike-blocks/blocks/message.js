@@ -6,7 +6,7 @@
 //   message().from('user').author('You').at('9:41 AM').body('How do I add a migration?')
 //   message().from('assistant').author('Rudder').body([{ block: 'markdown', source: 'Run `migrate`.' }])
 import { registerBlock } from '../core/registry.js'
-import { resolvePage } from '../core/page.js'
+import { containerResolveOne } from '../core/page.js'
 import { bubble } from './bubble.js'
 
 // A fluent builder for a message. The body is folded into a nested `bubble` descriptor at build time,
@@ -57,7 +57,7 @@ registerBlock('message', {
       from: props.from === 'user' ? 'user' : 'assistant',
       author: props.author ?? null,
       at: props.at ?? null,
-      bubble: props.bubble ? resolvePage({ sections: [props.bubble] }, tables).sections[0] : null,
+      bubble: containerResolveOne(props.bubble, tables),
     }
   },
 })

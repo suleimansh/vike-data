@@ -7,7 +7,7 @@
 //   collapsible('Details', [text('The fine print.')])              // starts closed
 //   collapsible('Advanced', [field('Key').control(input())]).open()   // starts open
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 // A fluent builder: the trigger label + the panel's blocks (collapsed now so a nested builder becomes
 // a descriptor). `.open()` starts it expanded.
@@ -36,7 +36,7 @@ registerBlock('collapsible', {
     return {
       label: props.label ?? '',
       open: props.open ?? false,
-      sections: resolvePage({ sections: collapse(props.sections ?? []) }, tables).sections,
+      sections: containerResolve(props.sections, tables),
     }
   },
 })

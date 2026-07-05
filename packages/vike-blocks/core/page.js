@@ -79,3 +79,17 @@ export function resolvePage(page, tables) {
   })
   return { route: page?.route ?? null, sections }
 }
+
+// The recursive step every CONTAINER block shares: collapse a nested block array (builders or
+// plain descriptors) and resolve it into serializable view-models. card/tabs/dialog/sheet/drawer/
+// accordion/collapsible/form all wrap their nested sections through this — one place, so the
+// collapse + resolve step can't drift block to block.
+export function containerResolve(sections, tables) {
+  return resolvePage({ sections: collapseSections(sections) }, tables).sections
+}
+
+// Same, for a SINGLE nested child (a field's control, a tooltip/menu trigger, an icon): resolves
+// one block and returns its view-model, or null when absent.
+export function containerResolveOne(entry, tables) {
+  return entry ? resolvePage({ sections: [collapseSection(entry)] }, tables).sections[0] : null
+}

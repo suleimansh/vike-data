@@ -9,7 +9,7 @@
 //     message().from('assistant').body('Hello!'),
 //   ]).height('20rem')
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 
 // A fluent builder for a message scroller. The messages are collapsed now so builders compose.
@@ -41,7 +41,7 @@ registerBlock('message-scroller', {
   example: "messageScroller([message().from('user').body('Hi')]).height('20rem')",
   resolve({ props, tables }) {
     return {
-      messages: resolvePage({ sections: collapse(props.messages) }, tables).sections,
+      messages: containerResolve(props.messages, tables),
       maxHeight: props.maxHeight ?? '24rem',
     }
   },

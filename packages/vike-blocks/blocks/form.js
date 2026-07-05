@@ -20,7 +20,7 @@
 // is present the renderer submits the form's values to that action via JS; otherwise the native
 // `action`/`method` POST is the progressive-enhancement fallback, so a form works with no client JS.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 // Collapse builders to plain descriptors (a no-op for descriptors already), so `.fields([...])`
 // accepts fluent builders and `resolve` gets `{ block, ...props }` objects — same as card's sections.
@@ -83,7 +83,7 @@ registerBlock('form', {
       method: String(props.method ?? 'post').toLowerCase(),
       submitLabel: props.submitLabel === undefined ? 'Save' : props.submitLabel,
       onSubmit: props.onSubmit ?? null,
-      sections: resolvePage({ sections: collapse(props.fields) }, tables).sections,
+      sections: containerResolve(props.fields, tables),
     }
   },
 })

@@ -21,7 +21,7 @@
 //                               contribution at render time (the vike-layouts chrome seam), so an
 //                               extension still adds a nav/toolbar item without editing pages.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 // Collapse a section that is a builder to its plain descriptor (definePage does this for top-level
 // sections; a region's nested sections need the same so `resolve` gets `{ block, ...props }`).
@@ -68,7 +68,7 @@ registerBlock('layout', {
   resolve({ props, tables }) {
     const slots = {}
     for (const [name, sections] of Object.entries(props.slots ?? {})) {
-      slots[name] = resolvePage({ sections: collapse(sections) }, tables).sections
+      slots[name] = containerResolve(sections, tables)
     }
     return { variant: props.variant ?? 'stack', slots }
   },
@@ -130,7 +130,7 @@ registerBlock('slot', {
   container: true,
   example: "slot('nav').from('config')",
   resolve({ props, tables }) {
-    const sections = props.sections ? resolvePage({ sections: collapse(props.sections) }, tables).sections : []
+    const sections = props.sections ? containerResolve(props.sections, tables) : []
     return {
       name: props.name ?? null,
       from: props.from ?? 'children',

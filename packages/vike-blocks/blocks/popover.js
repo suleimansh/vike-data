@@ -10,7 +10,7 @@
 // `.trigger(block)` supplies any block as the opener. `.content([...])` is the panel body (nested
 // blocks, resolved recursively like a card). `.side('top'|'bottom')` + `.align('start'|'end')` place it.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSection, collapseSections } from '../core/page.js'
+import { containerResolve, containerResolveOne, collapseSection, collapseSections } from '../core/page.js'
 import { normalizeSide, normalizeAlign } from './_shared.js'
 import { variantKey } from './button-styles.js'
 
@@ -69,10 +69,10 @@ registerBlock('popover', {
   container: true,
   example: "popover('Filters').content([checkbox('Published only'), button('Apply')])",
   resolve({ props, tables }) {
-    const trigger = props.trigger ? resolvePage({ sections: [collapseSection(props.trigger)] }, tables).sections[0] : null
+    const trigger = containerResolveOne(props.trigger, tables)
     return {
       label: props.label ?? 'Open',
-      content: resolvePage({ sections: collapseSections(props.content) }, tables).sections,
+      content: containerResolve(props.content, tables),
       trigger,
       variant: variantKey(props.variant ?? 'outline'),
       side: normalizeSide(props.side, POPOVER_SIDES, 'bottom'),

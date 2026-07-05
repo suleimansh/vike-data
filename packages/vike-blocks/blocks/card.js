@@ -11,7 +11,7 @@
 //
 // The body (and footer) sections are ordinary blocks, so cards compose recursively.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 // Collapse a section that is a builder to its plain descriptor (definePage does this for top-level
 // sections; a card's nested sections need the same so `resolve` gets `{ block, ...props }` objects).
@@ -66,8 +66,8 @@ registerBlock('card', {
     return {
       title: props.title ?? null,
       description: props.description ?? null,
-      sections: resolvePage({ sections: collapse(props.sections) }, tables).sections,
-      footer: props.footer ? resolvePage({ sections: collapse(props.footer) }, tables).sections : null,
+      sections: containerResolve(props.sections, tables),
+      footer: props.footer ? containerResolve(props.footer, tables) : null,
     }
   },
 })

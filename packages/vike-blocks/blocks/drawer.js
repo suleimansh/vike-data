@@ -12,7 +12,7 @@
 //
 // The body sections are ordinary blocks (built-ins or custom), so drawers compose recursively.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 const SIDES = ['bottom', 'top', 'left', 'right']
 
@@ -79,7 +79,7 @@ registerBlock('drawer', {
   container: true,
   example: "drawer().trigger('Menu').side('bottom').sections([item('Share'), item('Delete')])",
   resolve({ props, tables }) {
-    const sections = resolvePage({ sections: collapse(props.sections) }, tables).sections
+    const sections = containerResolve(props.sections, tables)
     return {
       title: props.title ?? '',
       description: props.description ?? null,

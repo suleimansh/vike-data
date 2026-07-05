@@ -10,7 +10,7 @@
 // With no `.icon(block)` the renderer draws a built-in inbox icon; pass any block (an avatar, a custom
 // illustration) to override it.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSection, collapseSections } from '../core/page.js'
+import { containerResolve, containerResolveOne, collapseSection, collapseSections } from '../core/page.js'
 
 // A fluent builder for an empty-state block. The icon collapses like tooltip's `.on()`; the actions
 // collapse like a card's footer, so nested builders resolve recursively.
@@ -52,12 +52,12 @@ registerBlock('empty-state', {
   summary: "An empty-state placeholder with a message.",
   example: "emptyState('No posts yet')",
   resolve({ props, tables }) {
-    const icon = props.icon ? resolvePage({ sections: [collapseSection(props.icon)] }, tables).sections[0] : null
+    const icon = containerResolveOne(props.icon, tables)
     return {
       title: props.title ?? '',
       description: props.description ?? null,
       icon,
-      actions: props.actions ? resolvePage({ sections: collapseSections(props.actions) }, tables).sections : [],
+      actions: props.actions ? containerResolve(props.actions, tables) : [],
     }
   },
 })

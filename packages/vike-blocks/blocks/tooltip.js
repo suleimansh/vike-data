@@ -8,7 +8,7 @@
 //   tooltip('We never share your email')            // default "?" marker trigger
 //   tooltip('Shown below').side('bottom').on(badge('Beta'))
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSection as collapse } from '../core/page.js'
+import { containerResolveOne, collapseSection as collapse } from '../core/page.js'
 import { normalizeSide } from './_shared.js'
 
 const SIDES = ['top', 'bottom', 'left', 'right']
@@ -47,7 +47,7 @@ registerBlock('tooltip', {
   summary: "A hover / focus tooltip wrapping a trigger.",
   example: "tooltip('Save your changes').on(button('Save'))",
   resolve({ props, tables }) {
-    const trigger = props.trigger ? resolvePage({ sections: [collapse(props.trigger)] }, tables).sections[0] : null
+    const trigger = containerResolveOne(props.trigger, tables)
     return {
       text: props.text ?? '',
       side: normalizeSide(props.side, SIDES, 'top'),

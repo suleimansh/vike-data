@@ -15,7 +15,7 @@
 // `.item(term, value, { span })` appends a pair (span lets one item take several columns); `.columns(n)`
 // sets the grid width; `.bordered()` draws the table-like cell borders; `.title()` adds a heading.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 // A value is a plain string (passes through) or a nested block composition (collapsed now so nested
 // builders become descriptors, resolved later).
@@ -71,7 +71,7 @@ registerBlock('description-list', {
       return {
         term: it.term ?? '',
         blocks: nested,
-        value: nested ? resolvePage({ sections: collapse(it.value) }, tables).sections : (it.value ?? null),
+        value: nested ? containerResolve(it.value, tables) : (it.value ?? null),
         span: Math.min(columns, Math.max(1, it.span ?? 1)),
       }
     })

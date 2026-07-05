@@ -10,7 +10,7 @@
 //
 // A panel's sections are ordinary blocks (built-ins or custom), so tabs compose recursively.
 import { registerBlock } from '../core/registry.js'
-import { resolvePage, collapseSections as collapse } from '../core/page.js'
+import { containerResolve, collapseSections as collapse } from '../core/page.js'
 
 // Collapse a section that is a builder to its plain descriptor (definePage does this for top-level
 // sections; a panel's sections need the same so `resolve` gets `{ block, ...props }` objects).
@@ -49,7 +49,7 @@ registerBlock('tabs', {
     const panels = (props.tabs ?? []).map((t) => ({
       value: t.value,
       label: t.label ?? t.value,
-      sections: resolvePage({ sections: collapse(t.sections) }, tables).sections,
+      sections: containerResolve(t.sections, tables),
     }))
     return { tabs: panels, activeValue: props.defaultValue ?? panels[0]?.value ?? null }
   },
