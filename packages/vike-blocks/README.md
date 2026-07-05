@@ -154,18 +154,34 @@ Because a page is data, the catalog is introspectable — tools and AI agents ca
 block and learn how to compose it without reading source:
 
 ```js
-import { listBlocks, describeBlock, describeBlocks } from 'vike-blocks'
+import { listBlocks, describeBlock, describeBlocks, blockCatalog } from 'vike-blocks'
 
 listBlocks()             // ['text', 'heading', 'rating', 'form', ...]
-describeBlock('rating')  // { type:'rating', passThrough:true,
-                         //   builder:{ methods:['value','max','allowHalf','readOnly','disabled','name'], arity:1 },
-                         //   params:[{ name:'value', required:true }] }
+describeBlock('dialog')  // { type:'dialog', category:'overlay', summary:'A modal dialog ...',
+                         //   container:true, passThrough:false, builder:null, params:null,
+                         //   example:"dialog().title('Delete post').trigger('Delete').sections([...])" }
 describeBlocks()         // the whole catalog as descriptors
 ```
 
-`builder.methods` are the chainable refinements, `builder.arity` the positional builder args, and
-`params` any descriptor the block author declared. `passThrough` is false when a block has a
-`resolve` step (it is schema/data-aware) rather than rendering its props directly.
+Each descriptor carries: `category` (grouping for selection), `summary` (one line), `container`
+(true when it nests sections), `passThrough` (false when the block has a `resolve` step and is
+schema/data-aware), `builder` (`methods` are the chainable refinements, `arity` the positional
+args), `params` (author-declared `{ name, required, type, enum }`), and a copy-pasteable `example`.
+`category`/`summary`/`example`/`params` are optional metadata a block declares via `defineBlock`.
+
+#### The agent contract — `blockCatalog()`
+
+`blockCatalog()` returns the whole catalog as one versioned, JSON-serializable object — the stable
+seam an AI agent (or an MCP tool) consumes to compose a page from blocks without importing any
+vike-blocks internals:
+
+```js
+blockCatalog()
+// { contractVersion: 1, blocks: [ /* one describeBlock() descriptor per registered type */ ] }
+```
+
+Guard on `contractVersion` (exported as `CATALOG_CONTRACT_VERSION`); it bumps only when the
+descriptor shape changes in a breaking way.
 
 ## Rendering — `vike-blocks/react` (and `/vue`)
 

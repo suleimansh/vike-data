@@ -45,6 +45,9 @@ export const table = defineBlock('table', {
     empty: (label) => ({ empty: label }),
     rowActions: (actions) => ({ rowActions: collapse(actions) }),
   },
+  category: 'data',
+  summary: 'A static data table; columns are explicit or derived from the first row.',
+  example: "table().columns(['name', 'role']).rows([{ name: 'Ada', role: 'Admin' }])",
   // A serializable view-model: normalized columns (explicit, else derived from the first row's
   // keys) + the rows passed through + the row-action descriptors (collapsed to plain specs). All
   // plain data, so both renderers stay thin.

@@ -51,6 +51,10 @@ export function field(label) {
 // the field a container. The label / description / error text passes through; the renderer draws the
 // label above the control, then the description, then the error (an error takes visual precedence).
 registerBlock('field', {
+  category: 'form',
+  container: true,
+  summary: 'A labelled shell (label / description / error) around one control.',
+  example: "field('Email').control(input().type('email').required())",
   resolve({ props, tables }) {
     const control = props.control ? resolvePage({ sections: [collapse(props.control)] }, tables).sections[0] : null
     return {

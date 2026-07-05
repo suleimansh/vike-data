@@ -23,4 +23,7 @@ export const button = defineBlock('button', {
     action: (name) => ({ action: name }),
     params: (params) => ({ params }),
   },
+  category: 'action',
+  summary: 'A button that navigates (.to) or fires a named action (.action).',
+  example: "button('Save').variant('primary').action('save')",
 })

@@ -23,6 +23,9 @@ import { defineBlock } from './registry.js'
 export const text = defineBlock('text', {
   build: (value) => ({ value }),
   refine: { variant: (v) => ({ variant: v }), tone: (token) => ({ tone: token }) },
+  category: 'content',
+  summary: 'A run of body text with an optional style variant and tone.',
+  example: "text('Body copy').tone('muted')",
 })
 
 // A list, unordered by default. `.ordered()` makes it a numbered (<ol>) list. `items` is an array
@@ -30,12 +33,18 @@ export const text = defineBlock('text', {
 export const list = defineBlock('list', {
   build: (items) => ({ items: items ?? [], ordered: false }),
   refine: { ordered: () => ({ ordered: true }) },
+  category: 'content',
+  summary: 'A bulleted (or numbered) list of strings.',
+  example: "list(['First', 'Second']).ordered()",
 })
 
 // A section heading. `.level()` sets the rank (1-6); defaults to 2.
 export const heading = defineBlock('heading', {
   build: (value) => ({ value, level: 2 }),
   refine: { level: (n) => ({ level: n }) },
+  category: 'content',
+  summary: 'A section heading, rank 1-6 (default 2).',
+  example: "heading('Overview').level(2)",
 })
 
 // A small status pill on the shadcn Base badge surface. `.variant()` picks the surface
@@ -44,14 +53,25 @@ export const heading = defineBlock('heading', {
 export const badge = defineBlock('badge', {
   build: (value) => ({ value }),
   refine: { variant: (v) => ({ variant: v }), tone: (token) => ({ tone: token }) },
+  category: 'content',
+  summary: 'A small status pill.',
+  example: "badge('Beta').tone('info')",
 })
 
 // A horizontal rule. Terminal today, but still a builder so it composes uniformly.
-export const divider = defineBlock('divider', { build: () => ({}) })
+export const divider = defineBlock('divider', {
+  build: () => ({}),
+  category: 'content',
+  summary: 'A horizontal rule.',
+  example: 'divider()',
+})
 
 // A navigation link. `.to()` is a declarative path (no closure, stays serializable) — the
 // display-only stand-in for an action until the actions layer lands. `.tone()` styles it.
 export const link = defineBlock('link', {
   build: (label) => ({ label }),
   refine: { to: (path) => ({ to: path }), tone: (token) => ({ tone: token }) },
+  category: 'content',
+  summary: 'A declarative navigation link.',
+  example: "link('Docs').to('/docs')",
 })

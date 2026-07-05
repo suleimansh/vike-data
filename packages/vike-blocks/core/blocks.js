@@ -4,5 +4,13 @@
 // (text/heading/badge/divider/link/code/markdown) are registered by their own modules through defineBlock.
 import { registerBlock } from './registry.js'
 
-registerBlock('stat', {}) // { title, source|value }
-registerBlock('custom', {}) // { component } — the renderer imports the component
+registerBlock('stat', {
+  category: 'data',
+  summary: 'A single key metric with a title and a value (or a data source).',
+  example: "{ block: 'stat', title: 'Revenue', value: '$12k' }",
+}) // { title, source|value }
+registerBlock('custom', {
+  category: 'escape-hatch',
+  summary: 'Renders your own component by name; the escape hatch for the long tail.',
+  example: "{ block: 'custom', component: 'MyChart' }",
+}) // { component } — the renderer imports the component

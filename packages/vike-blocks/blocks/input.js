@@ -19,4 +19,7 @@ export const input = defineBlock('input', {
     disabled: () => ({ disabled: true }),
     required: () => ({ required: true }),
   },
+  category: 'form',
+  summary: 'A single-line text input; pair with field for its label/error shell.',
+  example: "input().type('email').name('email').required()",
 })

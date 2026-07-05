@@ -62,7 +62,7 @@ import './blocks/description-list.js' // side-effect: register the description-l
 import './blocks/rating.js' // side-effect: register the rating block (star rating input)
 
 export { definePage, resolvePage } from './core/page.js'
-export { registerBlock, getBlock, hasBlock, listBlocks, describeBlock, describeBlocks, defineBlock } from './core/registry.js'
+export { registerBlock, getBlock, hasBlock, listBlocks, describeBlock, describeBlocks, blockCatalog, CATALOG_CONTRACT_VERSION, defineBlock } from './core/registry.js'
 export { resolveParams, resolveToken } from './core/params.js'
 export { text, heading, badge, divider, link, list } from './core/primitives.js'
 export { button } from './blocks/button.js'
