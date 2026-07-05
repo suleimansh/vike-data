@@ -3,13 +3,11 @@
 // enter/exit lifecycle live there, so dialog/sheet/drawer can't drift). Dialog supplies only what makes
 // it a dialog: the centered backdrop alignment, a flip-in + scale enter transform, and the header /
 // close / body / footer content. Theme-native; the body/footer sections are drawn with <Blocks>.
-import { h, ref } from 'vue'
+import { h, ref, useId } from 'vue'
 import { Blocks } from './Blocks.js'
 import { registerBlockRenderer } from './registry.js'
 import { Overlay, overlayTriggerStyle } from './overlay.js'
 import { overlayPanelStyle } from '../core/overlay-motion.js'
-
-let uid = 0
 
 // The centered dialog panel: the shared tilt-in modal surface (blur + perspective flip + scale).
 const panelStyle = (visible) => overlayPanelStyle(visible, { maxWidth: 440 })
@@ -18,7 +16,7 @@ export const DialogView = {
   props: ['title', 'description', 'trigger', 'sections', 'footer', 'defaultOpen'],
   setup(props) {
     const open = ref(!!props.defaultOpen)
-    const titleId = `vike-blocks-dialog-${uid++}`
+    const titleId = `vike-blocks-dialog-${useId()}`
 
     return () => {
       const sections = props.sections ?? []

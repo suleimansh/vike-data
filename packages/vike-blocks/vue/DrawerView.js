@@ -3,14 +3,12 @@
 // geometry (sheet-styles). Drawer adds only its grabber affordance: drag it toward the anchored edge to
 // flick it closed (past the threshold it dismisses; short of it, it snaps back). Open/close + drag are
 // local UI state; the body is drawn with <Blocks>. Keyboard users close via the × button.
-import { h, ref } from 'vue'
+import { h, ref, useId } from 'vue'
 import { Blocks } from './Blocks.js'
 import { registerBlockRenderer } from './registry.js'
 import { Overlay, overlayTriggerStyle } from './overlay.js'
 import { sheetContainerStyle, sheetPanelStyle } from '../blocks/sheet-styles.js'
 import { dismissOffset, dismissTransform, shouldDismiss, drawerHandleStyle } from '../blocks/drawer-styles.js'
-
-let uid = 0
 
 export const DrawerView = {
   props: ['title', 'description', 'trigger', 'side', 'sections', 'defaultOpen'],
@@ -18,7 +16,7 @@ export const DrawerView = {
     const open = ref(!!props.defaultOpen)
     const drag = ref(null) // { offset } while dragging, null when resting
     let start = null
-    const titleId = `vike-blocks-drawer-${uid++}`
+    const titleId = `vike-blocks-drawer-${useId()}`
 
     return () => {
       const sections = props.sections ?? []
