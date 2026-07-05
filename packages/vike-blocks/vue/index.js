@@ -52,6 +52,7 @@ import './CommandView.js' // side-effect: register the command renderer
 import './LayoutView.js' // side-effect: register the layout container renderer
 import './SlotView.js' // side-effect: register the slot placeholder renderer
 import './DocNavView.js' // side-effect: register the doc-nav renderer
+import './TreeView.js' // side-effect: register the tree-view renderer
 export { registerBlockRenderer, getBlockRenderer, blockRendererTokens } from './registry.js'
 export { ACTION_RUNNER_KEY, useActionRunner, provideActionRunner } from './action-context.js' // the actions seam (#385)
 export { Blocks, Page } from './Blocks.js' // importing Blocks registers the built-in blocks
@@ -109,3 +110,4 @@ export { CommandView } from './CommandView.js'
 export { LayoutView, LayoutConfigProvider, useLayoutConfig, LAYOUT_CONFIG_KEY, LAYOUT_CONTENT_KEY, useLayoutContent, NavRegion, registerLayoutShell } from './LayoutView.js'
 export { SlotView } from './SlotView.js'
 export { DocNavView } from './DocNavView.js'
+export { TreeView } from './TreeView.js'
