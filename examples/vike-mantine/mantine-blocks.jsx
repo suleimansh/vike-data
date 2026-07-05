@@ -17,7 +17,7 @@
 // falls through to its built-in renderer, so a Mantine card can hold a built-in heading with zero
 // extra work. That fall-through is the proof the registry composes: you swap the tokens you care
 // about and inherit the rest.
-import { MantineProvider, Button, Card, Tabs, Alert, Modal, TextInput, PasswordInput, Title, Text, Group, Box } from '@mantine/core'
+import { MantineProvider, Button, Card, Tabs, Alert, Modal, TextInput, PasswordInput, Title, Text, Group, Box, Anchor } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { Blocks, registerBlockRenderer, registerLayoutShell } from 'vike-blocks/react'
 import '@mantine/core/styles.css'
@@ -103,6 +103,19 @@ export function MantineDialog({ title = '', description, trigger = 'Open', secti
   )
 }
 
+// link: a Mantine Anchor (clean, no permanent underline), instead of the built-in plain <a>. Used in
+// the docs-shell header — this is what makes that navbar look native instead of raw browser links.
+// (Safe to override globally: `link` blocks only appear in the docs header here; the sidebar draws
+// its own anchors via docNav and articles use buttons.)
+export function MantineLink({ label, to }) {
+  const external = typeof to === 'string' && /^https?:\/\//.test(to)
+  return (
+    <Anchor href={to} size="sm" underline="hover" {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}>
+      {label}
+    </Anchor>
+  )
+}
+
 // input: a Mantine TextInput (PasswordInput for type=password). Display-only: `value` is the initial
 // value (uncontrolled), matching the built-in — value binding is the actions axis (#385).
 export function MantineInput({ type = 'text', placeholder, value, name, disabled = false, required = false }) {
@@ -120,7 +133,9 @@ function MantineDocsShell({ slots }) {
     <Box style={{ minHeight: '100%', background: 'var(--mantine-color-body)', color: 'var(--mantine-color-text)' }}>
       {slots.header && (
         <Box component="header" style={{ position: 'sticky', top: 0, zIndex: 50, borderBottom: '1px solid var(--mantine-color-default-border)', background: 'var(--mantine-color-body)' }}>
-          <Group px="md" py="sm" gap="lg" maw={1300} mx="auto"><Blocks sections={slots.header} /></Group>
+          {/* First header link is the brand: bold, in the text color, and pushed left so the rest sit right. */}
+          <style>{'.vm-doc-nav>a:first-of-type{font-weight:700;font-size:15px;color:var(--mantine-color-text);margin-right:auto}'}</style>
+          <Group className="vm-doc-nav" px="md" py="sm" gap="lg" maw={1300} mx="auto"><Blocks sections={slots.header} /></Group>
         </Box>
       )}
       <Box style={{ display: 'grid', gridTemplateColumns: hasSidebar ? '260px minmax(0, 1fr)' : 'minmax(0, 1fr)', maxWidth: 1300, margin: '0 auto' }}>
@@ -150,5 +165,6 @@ registerBlockRenderer('tabs', MantineTabs)
 registerBlockRenderer('alert', MantineAlert)
 registerBlockRenderer('dialog', MantineDialog)
 registerBlockRenderer('input', MantineInput)
+registerBlockRenderer('link', MantineLink)
 registerBlockRenderer('anchor', MantineAnchor)
 registerLayoutShell('docs', MantineDocsShell)
