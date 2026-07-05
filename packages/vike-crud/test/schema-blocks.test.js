@@ -4,7 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { defineSchema } from '@vike-data/vike-schema/schema'
-import { definePage, resolveView, crudBlocks, resolveViewTables } from '../index.js'
+import { definePage, resolveView, crudBlocks, resolveViewTables, describeBlock, blockCatalog } from '../index.js'
 
 const posts = defineSchema('posts', (t) => {
   t.uuid('id').primary()
@@ -44,6 +44,21 @@ test('crudBlocks descriptors are independent and carry no functions (serializabl
   assert.deepEqual(record, { block: 'record', table: 'posts' })
   assert.deepEqual(form, { block: 'form', table: 'posts' })
   for (const b of [list, record, form]) for (const v of Object.values(b)) assert.notEqual(typeof v, 'function')
+})
+
+test('the schema-derived blocks describe themselves in the catalog (agent discovery)', () => {
+  for (const type of ['list', 'record', 'form']) {
+    const d = describeBlock(type)
+    assert.equal(d.category, 'data')
+    assert.equal(typeof d.summary, 'string')
+    assert.equal(d.passThrough, false) // they have a resolve step
+    assert.deepEqual(d.params?.[0], { name: 'table', required: true })
+    assert.ok(d.example.includes(`block: '${type}'`))
+  }
+  // and the whole catalog is reachable through the vike-crud umbrella (not just vike-blocks)
+  const cat = blockCatalog()
+  assert.equal(cat.contractVersion, 1)
+  assert.ok(cat.blocks.some((b) => b.type === 'list' && b.category === 'data'))
 })
 
 test('resolveView without the composed tables gives an actionable error', () => {
