@@ -71,6 +71,13 @@ test('a record block with an id fills its row', async () => {
   assert.equal(out.sections[0].resolved.row.title, 'Alice One')
 })
 
+test('a record block resolves FK labels for the row (so RecordView shows the title, not the key)', async () => {
+  const view = definePage({ sections: [{ block: 'record', table: 'posts', id: 'p1' }] })
+  const out = await hydrateView(view, { tables: tables(), db })
+  const rec = out.sections[0].resolved
+  assert.equal(rec.fkLabels.author_id[rec.row.author_id], 'alice@x.com')
+})
+
 test('createRow inserts, fills a uuid pk, and forces the owner scope', async () => {
   const fields = [{ name: 'title', type: 'text' }, { name: 'user_id', type: 'text' }]
   const scope = () => ({ user_id: 'u1' })

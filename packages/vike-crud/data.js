@@ -105,7 +105,10 @@ async function hydrateRecord(section, opts) {
   if (id == null) return { ...section, resolved: { ...section.resolved, row: null, pk } }
   const owned = { ...scopeFor(scope, table, ctx), [pk]: id }
   const row = await db[table].findOne(owned)
-  return { ...section, resolved: { ...section.resolved, row: row ? projectRow(row, { columns: fields, pk }) : null, pk } }
+  // FK label map ({ field: { value: label } }), same shape the list block uses, so a record view shows
+  // the referenced row's title instead of the raw key. Only computed when there's a row to label.
+  const fkLabels = row ? await fkLabelsFor(fields, schemaTable, { db, tables, scope, ctx }) : {}
+  return { ...section, resolved: { ...section.resolved, row: row ? projectRow(row, { columns: fields, pk }) : null, fkLabels, pk } }
 }
 
 // The form block's pre-fill values. With an id (the edit screen) it loads the owned row and fills
