@@ -28,7 +28,9 @@ export function ContextMenuView({ items = [], trigger = null }) {
 
   const openAt = (e) => {
     e.preventDefault()
-    if (typeof document !== 'undefined') lastFocused.current = document.activeElement
+    // Capture the opener only on a fresh open — re-right-clicking while open must not overwrite it with
+    // a menu item that unmounts on close (which would drop focus instead of restoring it).
+    if (!open && typeof document !== 'undefined') lastFocused.current = document.activeElement
     setCursor({ x: e.clientX, y: e.clientY })
     setVisible(false)
     setOpen(true)
@@ -42,7 +44,9 @@ export function ContextMenuView({ items = [], trigger = null }) {
     const rect = panelRef.current.getBoundingClientRect()
     setPos(clampMenuPosition(cursor, { width: rect.width, height: rect.height }, { width: window.innerWidth, height: window.innerHeight }))
     setVisible(true)
-    menuRef.current?.querySelector('[role="menuitem"]:not([aria-disabled="true"])')?.focus()
+    // Focus the first enabled item, else the menu panel itself, so an empty / all-disabled menu still
+    // takes focus (Escape closes it, screen readers announce it) instead of leaving focus behind.
+    ;(menuRef.current?.querySelector('[role="menuitem"]:not([aria-disabled="true"])') || panelRef.current)?.focus()
   }, [open, cursor])
 
   // Close on an outside pointer-down / Escape / scroll / resize.
@@ -82,7 +86,7 @@ export function ContextMenuView({ items = [], trigger = null }) {
   const menu =
     open && mounted
       ? createPortal(
-          <div ref={panelRef} role="menu" style={{ ...popoverSurfaceStyle(), ...contextPanelStyle(pos, visible) }} onKeyDown={onMenuKeyDown} onContextMenu={(e) => e.preventDefault()}>
+          <div ref={panelRef} role="menu" tabIndex={-1} style={{ ...popoverSurfaceStyle(), ...contextPanelStyle(pos, visible) }} onKeyDown={onMenuKeyDown} onContextMenu={(e) => e.preventDefault()}>
             <style>{DROPDOWN_STYLE_TAG}</style>
             <div ref={menuRef}>
               {items.map((it, i) => {
