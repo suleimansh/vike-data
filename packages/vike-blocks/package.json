@@ -3,9 +3,13 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "types": "./index.d.ts",
   "description": "vike-blocks: composable UI as data. The framework-agnostic substrate for building a page out of BLOCKS — a block descriptor IR + an open registry, the definePage composer, primitive blocks (text/heading/badge/divider/link, stat/markdown/custom), and the defineBlock seam so any package can ship a new block with high DX. Per-framework bindings (vike-blocks/react and vike-blocks/vue) draw the blocks; vike-crud layers schema-driven blocks on top.",
   "exports": {
-    ".": "./index.js",
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
     "./tabs": "./blocks/tabs.js",
     "./accordion": "./blocks/accordion.js",
     "./collapsible": "./blocks/collapsible.js",
