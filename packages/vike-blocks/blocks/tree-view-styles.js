@@ -36,7 +36,11 @@ export function resolveTree(items, current) {
   return (items ?? []).map((n) => resolveNode(n, current))
 }
 
-// ---- roving focus (DOM helper, reused by both renderers) ------------------------------------------
+// ---- roving focus (DOM helpers, reused by both renderers) -----------------------------------------
+// The renderers own the single tab stop as state (activePath) and derive each row's tabIndex from it;
+// these helpers only LOCATE the element to move to. The caller focuses it, and the row's onFocus hands
+// it the tab stop. So a collapse that unmounts the old target can't strand the tree: the branch you
+// collapse is focused first, moving the tab stop onto it before its descendants unmount.
 
 // The treeitems currently visible (a collapsed branch's descendants have no layout box). `offsetParent`
 // is null for a display:none / detached node, so this skips rows inside closed branches.
@@ -44,11 +48,10 @@ function visibleItems(rootEl) {
   return Array.from(rootEl.querySelectorAll('[role="treeitem"]')).filter((el) => el.offsetParent !== null)
 }
 
-// Move roving focus among visible treeitems on Up/Down/Home/End: focus the target and hand it the single
-// tab stop (tabIndex 0), demoting the previous one. Returns true when it handled the key. Left/Right
-// (expand/collapse) stay in the renderer since they toggle its local open state.
-export function moveTreeFocus(rootEl, currentEl, key) {
-  if (!rootEl) return false
+// The next visible treeitem to focus for Up/Down/Home/End (null for any other key or when there's no
+// move). Vertical roving over the flattened visible rows.
+export function rovingTarget(rootEl, currentEl, key) {
+  if (!rootEl) return null
   const items = visibleItems(rootEl)
   const i = items.indexOf(currentEl)
   let next = -1
@@ -56,14 +59,26 @@ export function moveTreeFocus(rootEl, currentEl, key) {
   else if (key === 'ArrowUp') next = i < 0 ? 0 : Math.max(0, i - 1)
   else if (key === 'Home') next = 0
   else if (key === 'End') next = items.length - 1
-  else return false
+  else return null
   const target = items[next]
-  if (target && target !== currentEl) {
-    if (currentEl) currentEl.tabIndex = -1
-    target.tabIndex = 0
-    target.focus()
-  }
-  return true
+  return target && target !== currentEl ? target : null
+}
+
+// The first child treeitem of an open branch row (ArrowRight on an expanded branch moves INTO it), or
+// null when the row isn't an open branch. The row's next sibling is its `role="group"` of children.
+export function firstChildItem(currentEl) {
+  const group = currentEl.nextElementSibling
+  if (!group || group.getAttribute('role') !== 'group') return null
+  return group.querySelector('[role="treeitem"]')
+}
+
+// The parent treeitem of a row (ArrowLeft on a leaf / collapsed branch moves OUT to it), or null at the
+// top level. A row lives in its parent's `role="group"`, whose previous sibling is the parent row.
+export function parentItem(currentEl) {
+  const group = currentEl.closest('[role="group"]')
+  if (!group) return null
+  const prev = group.previousElementSibling
+  return prev && prev.getAttribute('role') === 'treeitem' ? prev : null
 }
 
 // ---- styles (theme-native) ------------------------------------------------------------------------

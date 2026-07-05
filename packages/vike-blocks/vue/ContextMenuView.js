@@ -28,7 +28,9 @@ export const ContextMenuView = {
     const close = () => (open.value = false)
     const openAt = (e) => {
       e.preventDefault()
-      if (typeof document !== 'undefined') lastFocused = document.activeElement
+      // Capture the opener only on a fresh open — re-right-clicking while open must not overwrite it with
+      // a menu item that unmounts on close (which would drop focus instead of restoring it).
+      if (!open.value && typeof document !== 'undefined') lastFocused = document.activeElement
       cursor.value = { x: e.clientX, y: e.clientY }
       visible.value = false
       open.value = true
@@ -63,7 +65,9 @@ export const ContextMenuView = {
       pos.value = clampMenuPosition(cursor.value, { width: rect.width, height: rect.height }, { width: window.innerWidth, height: window.innerHeight })
       visible.value = true
       await nextTick()
-      menuEl.value?.querySelector('[role="menuitem"]:not([aria-disabled="true"])')?.focus()
+      // Focus the first enabled item, else the menu panel itself, so an empty / all-disabled menu still
+      // takes focus (Escape closes it, screen readers announce it) instead of leaving focus behind.
+      ;(menuEl.value?.querySelector('[role="menuitem"]:not([aria-disabled="true"])') || panelEl.value)?.focus()
     }
 
     watch(open, (isOpen) => {
@@ -119,6 +123,7 @@ export const ContextMenuView = {
             {
               ref: (el) => (panelEl.value = el),
               role: 'menu',
+              tabindex: -1,
               style: { ...popoverSurfaceStyle(), ...contextPanelStyle(pos.value, visible.value) },
               onKeydown: onMenuKeydown,
               onContextmenu: (e) => e.preventDefault(),
