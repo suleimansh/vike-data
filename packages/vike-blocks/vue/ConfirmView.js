@@ -4,13 +4,11 @@
 // (a themed window.confirm). Without an action it navigates on confirm (`to`) or just closes. The
 // buttons reuse the button block's styles. SSR renders only the form/trigger (the dialog is client +
 // open-gated), so there's no hydration mismatch.
-import { h, ref } from 'vue'
+import { h, ref, useId } from 'vue'
 import { registerBlockRenderer } from './registry.js'
 import { Overlay } from './overlay.js'
 import { overlayPanelStyle } from '../core/overlay-motion.js'
 import { buttonStyle, BUTTON_STYLE_TAG } from '../blocks/button-styles.js'
-
-let uid = 0
 
 // The centered panel — the same shared tilt-in modal surface as the dialog block.
 const panelStyle = (visible) => overlayPanelStyle(visible, { maxWidth: 420 })
@@ -30,7 +28,7 @@ export const ConfirmView = {
   setup(props) {
     const open = ref(false)
     const formEl = ref(null)
-    const titleId = `vike-blocks-confirm-${uid++}`
+    const titleId = `vike-blocks-confirm-${useId()}`
 
     const doConfirm = () => {
       open.value = false

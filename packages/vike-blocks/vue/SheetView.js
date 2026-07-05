@@ -3,19 +3,17 @@
 // scroll-lock + enter/exit live there, so sheet/dialog/drawer can't drift). Sheet supplies only the
 // edge-anchored backdrop alignment and the slide-in transform (from sheet-styles, by side), plus the
 // header + body. Theme-native; the body is drawn with <Blocks>.
-import { h, ref } from 'vue'
+import { h, ref, useId } from 'vue'
 import { Blocks } from './Blocks.js'
 import { registerBlockRenderer } from './registry.js'
 import { Overlay, overlayTriggerStyle } from './overlay.js'
 import { sheetContainerStyle, sheetPanelStyle } from '../blocks/sheet-styles.js'
 
-let uid = 0
-
 export const SheetView = {
   props: ['title', 'description', 'trigger', 'side', 'sections', 'defaultOpen'],
   setup(props) {
     const open = ref(!!props.defaultOpen)
-    const titleId = `vike-blocks-sheet-${uid++}`
+    const titleId = `vike-blocks-sheet-${useId()}`
 
     return () => {
       const sections = props.sections ?? []
