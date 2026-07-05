@@ -41,6 +41,9 @@ export function timeline() {
 // string body passes through). `blocks` tells the renderer which body shape it got. The renderer draws
 // the rail (dots + connectors) and the rows.
 registerBlock('timeline', {
+  category: 'data',
+  summary: "A vertical timeline of events.",
+  example: "timeline().item('Order placed', { time: '09:41', tone: 'success' })",
   resolve({ props, tables }) {
     const items = (props.items ?? []).map((it) => {
       const nested = Array.isArray(it.body)

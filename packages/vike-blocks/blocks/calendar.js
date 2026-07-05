@@ -12,6 +12,9 @@ import { defineBlock } from '../core/registry.js'
 import { calendarBuild, calendarRefine } from './_shared.js'
 
 export const calendar = defineBlock('calendar', {
+  category: 'form',
+  summary: "An inline calendar date picker.",
+  example: "calendar().value('2026-07-04').min('2026-07-01').max('2026-07-31')",
   build: calendarBuild,
   refine: calendarRefine,
 })

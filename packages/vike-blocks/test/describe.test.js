@@ -4,6 +4,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { describeBlock, describeBlocks, listBlocks, getBlock, defineBlock, blockCatalog, CATALOG_CONTRACT_VERSION } from '../index.js'
+import * as B from '../index.js' // namespace, for evaluating catalog examples against every builder
 // Importing ../index.js above registers the whole built-in catalog as a side effect.
 
 test('describeBlock reports a fluent block builder surface (methods + arity)', () => {
@@ -78,6 +79,23 @@ test('defineBlock records inline doc metadata', () => {
   assert.equal(d.category, 'data')
   assert.equal(d.summary, 'A test widget.')
   assert.equal(d.example, 'widget(1)')
+})
+
+test('every catalog example is valid: it builds to a real descriptor', () => {
+  // An agent copies `example` verbatim, so a wrong builder method there is a real bug.
+  // Eval each builder-form example against the actual builders and assert it collapses
+  // to a { block, ... } descriptor (or an array of them). Descriptor-form examples
+  // (starting with `{`) are literal and skipped.
+  const scope = Object.keys(B)
+  const vals = scope.map((k) => B[k])
+  for (const b of B.blockCatalog().blocks) {
+    if (b.type.startsWith('test-')) continue // skip fixtures registered by other tests in this file
+    if (!b.example || b.example.trim().startsWith('{')) continue
+    const fn = new Function(...scope, `const _e = (${b.example}); return _e && typeof _e.build === 'function' ? _e.build() : _e;`)
+    let out
+    assert.doesNotThrow(() => (out = fn(...vals)), `example for '${b.type}' threw: ${b.example}`)
+    assert.ok(out && (out.block !== undefined || Array.isArray(out)), `example for '${b.type}' did not build a descriptor`)
+  }
 })
 
 test('blockCatalog is a versioned, serializable snapshot of the whole catalog', () => {

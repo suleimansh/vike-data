@@ -90,6 +90,9 @@ export function confirm(label) {
 // Resolve the labels + intent + the action/nav target. The renderer owns the live open state; this is
 // a pass-through of the declared confirmation.
 registerBlock('confirm', {
+  category: 'overlay',
+  summary: "A confirm dialog gating an action or navigation.",
+  example: "confirm('Delete')",
   resolve({ props }) {
     return {
       label: props.label ?? 'Confirm',

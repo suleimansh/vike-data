@@ -48,6 +48,9 @@ export function emptyState(title) {
 // the recursive step that makes it a container. The renderer draws the medallion (a built-in icon when
 // there's no custom one), the copy, and the action row.
 registerBlock('empty-state', {
+  category: 'feedback',
+  summary: "An empty-state placeholder with a message.",
+  example: "emptyState('No posts yet')",
   resolve({ props, tables }) {
     const icon = props.icon ? resolvePage({ sections: [collapseSection(props.icon)] }, tables).sections[0] : null
     return {

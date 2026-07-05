@@ -51,6 +51,9 @@ export function radio() {
 // Resolve the options + the initial selection (declared `value`, else the first option). The renderer
 // draws the radio group; `value` is only the INITIAL selection (the renderer owns the live state).
 registerBlock('radio', {
+  category: 'form',
+  summary: "A radio group: pick one of several options.",
+  example: "radio().option('free', 'Free').option('pro', 'Pro').value('pro')",
   resolve({ props }) {
     const options = resolveOptions(props.options)
     return {

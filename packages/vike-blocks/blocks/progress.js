@@ -53,6 +53,9 @@ export function progress(value) {
 // Resolve the value into a clamped percent (null when indeterminate). The renderer draws the track + the
 // fill (or the animated segment) and the optional caption row.
 registerBlock('progress', {
+  category: 'feedback',
+  summary: "A progress bar (determinate or indeterminate).",
+  example: "progress(66)",
   resolve({ props }) {
     const max = props.max ?? 100
     const indeterminate = props.indeterminate ?? false

@@ -9,6 +9,9 @@
 import { defineBlock } from '../core/registry.js'
 
 export const checkbox = defineBlock('checkbox', {
+  category: 'form',
+  summary: "A single checkbox with a label.",
+  example: "checkbox('Accept the terms').checked()",
   build: (label) => (label !== undefined ? { label } : {}),
   refine: {
     checked: () => ({ checked: true }),

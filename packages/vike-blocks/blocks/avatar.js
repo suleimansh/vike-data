@@ -79,6 +79,9 @@ export function avatarGroup(list) {
 // Resolve one avatar: derive the initials from the name and default the alt to the name. The renderer
 // draws the surface, the image over it (hidden on load error), and the optional status dot.
 registerBlock('avatar', {
+  category: 'data',
+  summary: "A user avatar with an initials fallback.",
+  example: "avatar().src('/me.png').name('Ada Lovelace').status('online')",
   resolve({ props }) {
     const name = props.name ?? null
     return {
@@ -94,6 +97,9 @@ registerBlock('avatar', {
 
 // Resolve a group: cap the visible avatars at `max`, resolve each recursively, and count the overflow.
 registerBlock('avatarGroup', {
+  category: 'data',
+  summary: "A stack of overlapping avatars with a +N overflow.",
+  example: "avatarGroup([avatar().name('Ada'), avatar().name('Grace')]).max(2)",
   resolve({ props, tables }) {
     const all = (props.avatars ?? []).map(collapse)
     const max = props.max != null && props.max > 0 ? props.max : all.length

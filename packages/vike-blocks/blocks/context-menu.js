@@ -54,6 +54,9 @@ export function contextMenu() {
 // right-click any block). The renderer owns the live open state + cursor position; this is a
 // pass-through of the declared menu.
 registerBlock('context-menu', {
+  category: 'overlay',
+  summary: "A right-click context menu over a region.",
+  example: "contextMenu().item('Open', { to: '/file/1' }).on(card([text('Right-click me')]))",
   resolve({ props, tables }) {
     const trigger = props.trigger ? resolvePage({ sections: [collapse(props.trigger)] }, tables).sections[0] : null
     return {

@@ -64,6 +64,10 @@ export function popover(label) {
 // Resolve the trigger label (or the nested trigger block) + the content sections + the placement. The
 // renderer owns the live open state; this is a pass-through of the declared panel.
 registerBlock('popover', {
+  category: 'overlay',
+  summary: "A click-triggered popover holding nested blocks.",
+  container: true,
+  example: "popover('Filters').content([checkbox('Published only'), button('Apply')])",
   resolve({ props, tables }) {
     const trigger = props.trigger ? resolvePage({ sections: [collapseSection(props.trigger)] }, tables).sections[0] : null
     return {

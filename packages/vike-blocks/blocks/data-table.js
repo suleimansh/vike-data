@@ -17,6 +17,9 @@ import { defineBlock } from '../core/registry.js'
 import { normalizeColumn } from './table-styles.js'
 
 export const dataTable = defineBlock('data-table', {
+  category: 'data',
+  summary: "A data table with sortable columns and row actions.",
+  example: "dataTable({ columns: ['name', 'role'], rows: [{ name: 'Ada', role: 'Admin' }] })",
   build: ({ columns, rows } = {}) => ({
     ...(columns !== undefined ? { columns } : {}),
     ...(rows !== undefined ? { rows } : {}),

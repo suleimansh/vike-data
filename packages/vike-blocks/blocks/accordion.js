@@ -58,6 +58,10 @@ export function accordion() {
 // declared default opens; a multi-open accordion keeps them all. The renderer draws the item
 // headers + panels and owns the live open/closed state; `openValues` is only the starting point.
 registerBlock('accordion', {
+  category: 'layout',
+  summary: "Collapsible sections; each item holds nested blocks.",
+  container: true,
+  example: "accordion().item('shipping', 'Shipping', [text('Ships in 2-3 days.')])",
   resolve({ props, tables }) {
     const items = (props.items ?? []).map((it) => ({
       value: it.value,

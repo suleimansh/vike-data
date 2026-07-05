@@ -43,6 +43,9 @@ export function spinner() {
 // tiny one keeps a 2px minimum), the tone, and the optional label. The renderer draws the ring (with
 // a status role) and the caption.
 registerBlock('spinner', {
+  category: 'feedback',
+  summary: "A loading spinner.",
+  example: "spinner().size(32).label('Loading orders...')",
   resolve({ props }) {
     const size = props.size ?? 20
     return {

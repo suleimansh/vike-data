@@ -22,6 +22,9 @@ import { tokenizeLines, parseMarkers } from './code-highlight.js'
 const toLineArray = (v) => (Array.isArray(v) ? v : v != null ? [v] : [])
 
 export const code = defineBlock('code', {
+  category: 'content',
+  summary: "A syntax-highlighted code block.",
+  example: "code('const x = 1').lang('ts').filename('demo.ts')",
   build: (code) => ({ code: code ?? '' }),
   refine: {
     lang: (l) => ({ lang: l }),

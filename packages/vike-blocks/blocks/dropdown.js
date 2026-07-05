@@ -60,6 +60,9 @@ export function dropdown(label) {
 // Resolve the trigger label + the item list + the placement. The renderer owns the live open state;
 // this stays a pass-through of the declared menu.
 registerBlock('dropdown', {
+  category: 'overlay',
+  summary: "A dropdown menu of actions and links.",
+  example: "dropdown('Options').item('Profile', { to: '/profile' }).separator().item('Sign out')",
   resolve({ props }) {
     return {
       label: props.label ?? 'Menu',

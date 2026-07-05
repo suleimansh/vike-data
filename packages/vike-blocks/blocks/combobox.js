@@ -72,6 +72,9 @@ export function combobox() {
 // Resolve the options + the initial selection + the (defaulted) text labels. The renderer owns the
 // live open/query/selection state; this stays a pass-through of the declared list.
 registerBlock('combobox', {
+  category: 'form',
+  summary: "A searchable single-choice dropdown.",
+  example: "combobox().placeholder('Assign to...').option('ada', 'Ada Lovelace').option('alan', 'Alan Turing')",
   resolve({ props }) {
     const options = resolveOptions(props.options)
     return {

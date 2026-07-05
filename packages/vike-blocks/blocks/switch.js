@@ -10,6 +10,9 @@
 import { defineBlock } from '../core/registry.js'
 
 export const toggle = defineBlock('switch', {
+  category: 'form',
+  summary: "A boolean on/off switch.",
+  example: "toggle('Dark mode').checked()",
   build: (label) => (label !== undefined ? { label } : {}),
   refine: {
     checked: () => ({ checked: true }),

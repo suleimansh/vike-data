@@ -43,6 +43,9 @@ export function navMenu() {
 // Resolve the bar items. The renderer owns which section is open; this is a pass-through of the
 // declared links + groups.
 registerBlock('nav-menu', {
+  category: 'navigation',
+  summary: "A horizontal nav menu with links and grouped submenus.",
+  example: "navMenu().link('Home', '/').group('Products', [['Analytics', '/products/analytics']])",
   resolve({ props }) {
     return {
       items: (props.items ?? []).map((i) => ({ ...i, ...(i.links ? { links: i.links.map((l) => ({ ...l })) } : {}) })),

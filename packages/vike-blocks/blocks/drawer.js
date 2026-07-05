@@ -74,6 +74,10 @@ export function drawer() {
 // container), and pass the chrome through. The renderer owns the live open/closed + drag state;
 // `defaultOpen` is only the INITIAL state.
 registerBlock('drawer', {
+  category: 'overlay',
+  summary: "An edge-anchored panel with nested sections.",
+  container: true,
+  example: "drawer().trigger('Menu').side('bottom').sections([item('Share'), item('Delete')])",
   resolve({ props, tables }) {
     const sections = resolvePage({ sections: collapse(props.sections) }, tables).sections
     return {

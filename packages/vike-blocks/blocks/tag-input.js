@@ -63,6 +63,9 @@ export function tagInput() {
 // Resolve the initial tags + suggestions (coerced to strings) + the placeholder / name / max. The
 // renderer owns the live tag list + query; `value` is only the INITIAL selection.
 registerBlock('tag-input', {
+  category: 'form',
+  summary: "A multi-value tag input with suggestions.",
+  example: "tagInput().value(['react']).suggestions(['react', 'vue', 'svelte']).name('frameworks')",
   resolve({ props }) {
     const max = typeof props.max === 'number' && props.max > 0 ? props.max : null
     return {

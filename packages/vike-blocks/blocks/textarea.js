@@ -8,6 +8,9 @@
 import { defineBlock } from '../core/registry.js'
 
 export const textarea = defineBlock('textarea', {
+  category: 'form',
+  summary: "A multi-line text input.",
+  example: "textarea().placeholder('Write a bio...').rows(5)",
   build: () => ({}),
   refine: {
     placeholder: (p) => ({ placeholder: p }),

@@ -8,5 +8,8 @@
 import { defineBlock } from '../core/registry.js'
 
 export const kbd = defineBlock('kbd', {
+  category: 'content',
+  summary: "A keyboard-shortcut key hint.",
+  example: "kbd(['Cmd', 'K'])",
   build: (keys) => ({ keys: Array.isArray(keys) ? keys : keys != null ? [keys] : [] }),
 })

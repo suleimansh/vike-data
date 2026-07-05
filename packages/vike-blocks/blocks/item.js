@@ -8,6 +8,9 @@
 import { defineBlock } from '../core/registry.js'
 
 export const item = defineBlock('item', {
+  category: 'content',
+  summary: "A list row with media, title, description and trailing content.",
+  example: "item('Billing').description('Manage your plan').media('💳').trailing('Pro')",
   build: (title) => (title !== undefined ? { title } : {}),
   refine: {
     description: (d) => ({ description: d }),

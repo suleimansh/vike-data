@@ -9,5 +9,8 @@
 import { defineBlock } from '../core/registry.js'
 
 export const markdown = defineBlock('markdown', {
+  category: 'content',
+  summary: "A block of rendered Markdown.",
+  example: "markdown('# Notes')",
   build: (source) => ({ source: source ?? '' }),
 })

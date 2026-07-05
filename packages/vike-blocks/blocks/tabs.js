@@ -41,6 +41,10 @@ export function tabs() {
 // draws the tab list + the active panel's resolved sections; `activeValue` is only the INITIAL open
 // tab (the renderer owns the live state).
 registerBlock('tabs', {
+  category: 'layout',
+  summary: "Tabbed panels; each tab holds nested blocks.",
+  container: true,
+  example: "tabs().tab('account', 'Account', [text('Your profile.')]).defaultValue('account')",
   resolve({ props, tables }) {
     const panels = (props.tabs ?? []).map((t) => ({
       value: t.value,

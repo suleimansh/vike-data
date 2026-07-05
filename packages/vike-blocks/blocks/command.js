@@ -72,6 +72,9 @@ export function command() {
 // Resolve the palette chrome + the groups/items with defaults. The renderer owns the live open / query /
 // active state; this is a pass-through of the declared commands.
 registerBlock('command', {
+  category: 'overlay',
+  summary: "A command palette of searchable actions.",
+  example: "command().group('Navigation').item('Dashboard', { to: '/' })",
   resolve({ props }) {
     return {
       placeholder: props.placeholder ?? 'Type a command or search...',
