@@ -25,13 +25,38 @@ export function registerBlock(type, def = {}) {
   if (def.resolve != null && typeof def.resolve !== 'function') {
     throw new Error(`registerBlock(${JSON.stringify(type)}): def.resolve must be a function`)
   }
-  REGISTRY.set(type, { type, resolve: def.resolve ?? null })
+  if (def.params != null && !Array.isArray(def.params)) {
+    throw new Error(`registerBlock(${JSON.stringify(type)}): def.params must be an array of param descriptors`)
+  }
+  // `params`/`builder` are discovery metadata (see describeBlock) — a block that
+  // declares neither still registers, it just describes as an opaque pass-through.
+  REGISTRY.set(type, { type, resolve: def.resolve ?? null, params: def.params ?? null, builder: def.builder ?? null })
   return def
 }
 
 export const getBlock = (type) => REGISTRY.get(type) ?? null
 export const hasBlock = (type) => REGISTRY.has(type)
 export const listBlocks = () => [...REGISTRY.keys()]
+
+/**
+ * Describe a registered block for PROGRAMMATIC discovery — this is the machine seam
+ * behind "UI as data": an agent or tool can enumerate the catalog (describeBlocks)
+ * and, per type, learn how to compose it WITHOUT reading the block's source. Returns
+ * null for an unknown type. Shape:
+ *   { type, passThrough, builder: { methods, arity } | null, params: [...] | null }
+ * `passThrough` = the block has no resolve step (its model is its props). `builder`
+ * is present for blocks defined via defineBlock: `methods` are the chainable prop
+ * refinements and `arity` is the positional argument count of the builder. `params`
+ * is any descriptor list the author declared (name/required/etc.).
+ */
+export function describeBlock(type) {
+  const entry = REGISTRY.get(type)
+  if (!entry) return null
+  return { type: entry.type, passThrough: !entry.resolve, builder: entry.builder, params: entry.params }
+}
+
+/** The whole catalog as descriptors — one describeBlock() per registered type. */
+export const describeBlocks = () => [...REGISTRY.keys()].map(describeBlock)
 
 // Define a BLOCK with a fluent authoring builder — in ONE call. This is the
 // high-DX seam: a package ships a new block (its builder + descriptor shape + registry
@@ -41,14 +66,17 @@ export const listBlocks = () => [...REGISTRY.keys()]
 //   export const rating = defineBlock('rating', {
 //     build:  (value) => ({ value }),                 // rating(3) -> { block:'rating', value:3 }
 //     refine: { max: (n) => ({ max: n }), readonly: () => ({ readonly: true }) },
+//     params: [{ name: 'value', required: true }],    // optional: for describeBlock discovery
 //   })
 //   // author usage:  rating(3).max(5).readonly()
 //
 // `build(...args)` produces the base props; `refine` maps chainable method names to prop
-// patches; `resolve` (optional) makes the block schema/data-aware instead of a pass-through.
+// patches; `resolve` (optional) makes the block schema/data-aware instead of a pass-through;
+// `params` (optional) is a descriptor list surfaced by describeBlock for agents/tooling.
 // Returns the builder FACTORY; calling it yields a chainable builder whose `.build()` collapses
-// to a `{ block, ...props }` descriptor — exactly what a view's `sections` accepts.
-export function defineBlock(type, { build, refine = {}, resolve } = {}) {
+// to a `{ block, ...props }` descriptor — exactly what a view's `sections` accepts. The refine
+// method names and build arity are recorded so describeBlock can report the builder surface.
+export function defineBlock(type, { build, refine = {}, resolve, params } = {}) {
   if (build != null && typeof build !== 'function') throw new Error(`defineBlock(${JSON.stringify(type)}): build must be a function`)
   if (refine == null || typeof refine !== 'object') throw new Error(`defineBlock(${JSON.stringify(type)}): refine must be an object of functions`)
   // Validate each refinement up front, so a typo (`refine: { max: 5 }`) throws HERE, where the
@@ -56,7 +84,11 @@ export function defineBlock(type, { build, refine = {}, resolve } = {}) {
   for (const name of Object.keys(refine)) {
     if (typeof refine[name] !== 'function') throw new Error(`defineBlock(${JSON.stringify(type)}): refine.${name} must be a function`)
   }
-  registerBlock(type, resolve ? { resolve } : {})
+  registerBlock(type, {
+    ...(resolve ? { resolve } : {}),
+    ...(params ? { params } : {}),
+    builder: { methods: Object.keys(refine), arity: build ? build.length : 0 },
+  })
   return (...args) => {
     const spec = build ? { ...build(...args) } : { ...(args[0] ?? {}) }
     const self = {}
