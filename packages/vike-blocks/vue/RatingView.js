@@ -35,24 +35,30 @@ const star = (fill) =>
 export const RatingView = {
   props: ['label', 'value', 'max', 'allowHalf', 'readOnly', 'disabled', 'name'],
   setup(props) {
-    const max = props.max ?? 5
-    const allowHalf = !!props.allowHalf
-    const interactive = !props.readOnly && !props.disabled
-    const unit = allowHalf ? 0.5 : 1
-    const val = ref(snapRating(props.value ?? 0, max, allowHalf))
+    // Read the config props fresh on every call so a re-render with new
+    // max/allowHalf/readOnly is picked up (they are the actions axis #385, not
+    // cached in setup); `value` is still only the INITIAL rating.
+    const cfg = () => {
+      const allowHalf = !!props.allowHalf
+      return { max: props.max ?? 5, allowHalf, interactive: !props.readOnly && !props.disabled, unit: allowHalf ? 0.5 : 1 }
+    }
+    const val = ref(snapRating(props.value ?? 0, cfg().max, cfg().allowHalf))
     const hover = ref(null)
     const rowEl = ref(null)
 
     const onPointerMove = (e) => {
+      const { max, allowHalf, interactive } = cfg()
       if (!interactive) return
       hover.value = ratingValueAt(e.clientX, rowEl.value?.getBoundingClientRect(), max, allowHalf)
     }
     const onClick = (e) => {
+      const { max, allowHalf, interactive } = cfg()
       if (!interactive) return
       const v = ratingValueAt(e.clientX, rowEl.value?.getBoundingClientRect(), max, allowHalf)
       if (v != null) val.value = v
     }
     const onKeydown = (e) => {
+      const { max, allowHalf, interactive, unit } = cfg()
       if (!interactive) return
       let next = val.value
       if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = val.value - unit
@@ -65,6 +71,7 @@ export const RatingView = {
     }
 
     return () => {
+      const { max, interactive } = cfg()
       const display = hover.value ?? val.value
       const stars = Array.from({ length: max }, (_, i) => star(starFill(i, display)))
 
