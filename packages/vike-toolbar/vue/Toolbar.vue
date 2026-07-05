@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import logoSvg from './vike-logo.svg?raw'
 import { TOOLBAR_ROOT_ID, TOOLBAR_ITEMS_ID } from '../index.js'
 
@@ -12,15 +12,19 @@ const root = ref(null)
 
 const logoMarkup = logoSvg.replace('width="38"', 'width="24"').replace('height="38"', 'height="24"')
 
+// Hoisted so onUnmounted can disconnect it — otherwise unmounting before the root node
+// appears (HMR / route churn in dev) leaks an observer on document.body forever.
+let obs = null
 onMounted(() => {
   const el = document.getElementById(TOOLBAR_ROOT_ID)
   if (el) { root.value = el; return }
-  const obs = new MutationObserver(() => {
+  obs = new MutationObserver(() => {
     const node = document.getElementById(TOOLBAR_ROOT_ID)
     if (node) { root.value = node; obs.disconnect() }
   })
   obs.observe(document.body, { childList: true, subtree: true })
 })
+onUnmounted(() => obs?.disconnect())
 
 const FIXED = { position: 'fixed', insetInlineStart: '16px', zIndex: 50, fontFamily: 'var(--font-sans)' }
 </script>
