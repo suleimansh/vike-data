@@ -39,7 +39,10 @@ entirely by which renderers are registered.
 - `/` — a same-viewport **parity strip** (button / alert / input drawn from the identical resolved
   descriptor, built-in on the left, Mantine on the right) above the full `contentPage` tree drawn
   entirely in Mantine.
-- `/docs` — the `layout('docs')` shell drawn by Mantine.
+- `/docs` + `/docs/:slug` — a small **multi-page docs site** on the `layout('docs')` shell, drawn by
+  Mantine. One dynamic route (`pages/docs/@slug`) renders every page from a content registry
+  (`docs-content.js`); the sidebar links to the real routes, highlights the active page, splices its
+  on-page anchors, and each page has prev/next. Add a page by adding one entry to `DOC_PAGES`.
 
 To see the same trees as shadcn-style built-ins, run `examples/vike-blocks`.
 
