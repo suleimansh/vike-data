@@ -10,7 +10,7 @@
 // and imports none of the server module.
 export default {
   name: 'vike-push',
-  extends: ['import:@vike-data/vike-schema/config:default', 'import:vike-auth/config:default'],
+  extends: ['import:@vike-data/vike-schema/config:default', 'import:vike-auth/config:default', 'import:vike-csrf/config:default'],
   // The `push_subscriptions` table is contributed as a COMPUTED schema — a function Vike calls
   // with the resolved config so the FK follows `pushOwner` (#250; default unset = the
   // default-subject table on `user_id`, byte-for-byte today's schema). Wired as a POINTER IMPORT
