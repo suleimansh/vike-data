@@ -9,7 +9,7 @@
 // the per-framework bell lives in vike-notifications/react and /vue and imports none of it.
 export default {
   name: 'vike-notifications',
-  extends: ['import:@vike-data/vike-schema/config:default', 'import:vike-auth/config:default'],
+  extends: ['import:@vike-data/vike-schema/config:default', 'import:vike-auth/config:default', 'import:vike-csrf/config:default'],
   // `notificationsGuard` (#279 / #207 P3): the named guard whose subject the in-app feed binds
   // to, defaulting to the default subject (`users`) so the common single-subject app is unchanged.
   // `notificationsOwner` (#250 / #283): `{ table?, column? }`, the owner BINDING — own the feed by

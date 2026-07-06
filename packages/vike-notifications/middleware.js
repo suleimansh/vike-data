@@ -8,6 +8,7 @@
 // Contributed through the cumulative `middleware` config from +config.js, so it composes
 // alongside vike-auth's (and vike-push's) endpoints.
 import { enhance, MiddlewareOrder } from '@universal-middleware/core'
+import { csrfGuard, requireJsonContent } from 'vike-csrf'
 import { getAdapter } from '@universal-orm/core'
 import { jsonResponse as json, readJsonSafe as readJson, resolveOwnerId as resolveOwnerIdShared } from '@vike-data/kit'
 import { resolveGuardedUser, resolveGuardSubjectTable } from 'vike-auth/server'
@@ -54,6 +55,14 @@ export function createNotificationsMiddleware() {
     }
 
     if (url.pathname === '/notifications/read' && request.method === 'POST') {
+      // CSRF (#706): the mark-read write rides the session cookie, so verify the caller before
+      // resolving the user; the JSON check kills the text/plain form-POST trick. Policy from
+      // the app's csrf/csrfExempt config.
+      const denied = csrfGuard(request)
+      if (denied) return denied
+      const jsonBody = requireJsonContent(request)
+      if (!jsonBody.ok) return json(415, { error: jsonBody.reason })
+
       const user = await resolveFeedUser(request)
       if (!user) return json(401, { error: 'not-signed-in' })
       const ownerId = await resolveOwnerId(user)
