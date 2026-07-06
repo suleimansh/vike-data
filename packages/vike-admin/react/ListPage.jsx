@@ -129,7 +129,7 @@ export default function ListPage() {
           marginTop: 'var(--space-md, 1rem)',
           border: '1px solid var(--color-border)',
           borderRadius: 'var(--radius, 10px)',
-          overflow: 'hidden',
+          overflowX: 'auto',
           background: 'var(--color-surface)',
         }}
       >

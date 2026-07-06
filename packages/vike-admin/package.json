@@ -7,6 +7,7 @@
   "exports": {
     "./config": "./+config.js",
     "./define": "./define.js",
+    "./project": "./project.js",
     "./resolve": "./resolve.js",
     "./data": "./data.js",
     "./guard": "./guard.js",
@@ -15,6 +16,7 @@
     "./react": "./react/+config.js",
     "./react/widgets": "./react/widgets.jsx",
     "./react/widget-registry": "./react/widget-registry.js",
+    "./react/FormFields": "./react/FormFields.jsx",
     "./react/DashboardPage": "./react/DashboardPage.jsx",
     "./react/ListPage": "./react/ListPage.jsx",
     "./react/NewPage": "./react/NewPage.jsx",

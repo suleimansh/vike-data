@@ -4,7 +4,7 @@
 // and returns a PLAIN, serializable view-model the React page renders via useData().
 // No ORM is imported; no SQL is written. The create hook also OWNS its POST: the request
 // is surfaced to the hook (as a Web Request on server adapters, the raw Node request under
-// `vite dev` — normalized by ./request.js), so the same route renders the form (GET) and
+// `vite dev` — normalized by vike-crud/request), so the same route renders the form (GET) and
 // performs the insert (POST). No separate endpoint, and no middleware that can't see the
 // composed schema.
 import { randomUUID } from 'node:crypto'
@@ -338,9 +338,9 @@ export async function listData(pageContext) {
 
   // Dialog mode (#596): a `mode: 'dialog'` resource hosts view/create/edit as an overlay on THIS
   // route. Hydrate the active dialog (if the URL asks for one) so it survives a refresh; `mode` tells
-  // the list renderer to point its links at `?view=/?edit=/?create` instead of the sub-routes. On
-  // Vue (no dialog host) `mode` is ignored and links stay route-based, so a dialog resource falls
-  // back to route mode. Route resources compute nothing here.
+  // the list renderer to point its links at `?view=/?edit=/?create` instead of the sub-routes. Both
+  // renderers host the overlay (React AdminDialog.jsx, Vue AdminDialog.vue, #598). Route resources
+  // compute nothing here.
   const mode = resourceMode(resource)
   const dialog = mode === 'dialog' ? await loadDialogPayload(pageContext, { resource, table, tables, schemaTable, db, ctx, search }) : null
 
@@ -369,7 +369,7 @@ export async function listData(pageContext) {
 }
 
 // /admin/:table/new — renders the create form (GET) and performs the insert (POST). The
-// POST reads the normalized form data (./request.js), coerces each value by its field
+// POST reads the normalized form data (vike-crud/request), coerces each value by its field
 // type, fills a missing string/uuid primary key, inserts through universal-orm, and
 // redirects back to the list. universal-orm rejects unknown columns, so a stray field is
 // a clear error.

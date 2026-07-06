@@ -23,7 +23,7 @@ const action = () => `${detail()}/edit`
     </form>
     <form method="post" :action="action()" :style="{ marginTop: 'var(--space-md, 1rem)' }">
       <input type="hidden" name="_action" value="delete" />
-      <button type="submit" :style="{ border: '1px solid #dc2626', color: '#dc2626', background: 'transparent', padding: '0.45rem 0.9rem', borderRadius: 'var(--radius, 8px)', fontSize: '14px', cursor: 'pointer' }">Delete</button>
+      <button type="submit" :style="{ border: '1px solid var(--color-danger, #c0392b)', color: 'var(--color-danger, #c0392b)', background: 'transparent', padding: '0.45rem 0.9rem', borderRadius: 'var(--radius, 8px)', fontSize: '14px', cursor: 'pointer' }">Delete</button>
     </form>
   </div>
 </template>
