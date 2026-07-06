@@ -12,9 +12,11 @@
 // shared extension and this meta stays the single declaration. Adopters contribute VALUES
 // (`csrfExempt: [...]`), never re-declare the meta.
 //
-// The onCreateGlobalContext hook (bootstrap.js) bridges the resolved values to the runtime
-// settings, because a universal middleware cannot read config. Both keys are `global` so
-// they resolve app-wide and are readable off globalContext.config in that hook.
+// There is deliberately NO hook here (#718): a hook would be a pointer-import, and the
+// client+server ones land in the CLIENT entry, where a transitively-installed package is
+// unresolvable. The guard instead reads the resolved values lazily off vike's globalContext
+// (index.js), server-only. Both keys are `global` so they resolve app-wide and are readable
+// there.
 export default {
   name: 'vike-csrf',
   meta: {
@@ -23,5 +25,4 @@ export default {
     csrfExempt: { env: { server: true }, cumulative: true, global: true },
   },
   csrfExempt: [],
-  onCreateGlobalContext: 'import:vike-csrf/bootstrap:default',
 }
