@@ -11,7 +11,8 @@
     "./react/ConfigLayout": "./react/ConfigLayout.jsx",
     "./react/Layout": "./react/Layout.jsx",
     "./vue": "./vue/+config.js",
-    "./vue/ConfigLayout": "./vue/ConfigLayout.vue"
+    "./vue/ConfigLayout": "./vue/ConfigLayout.vue",
+    "./vue/Layout": "./vue/Layout.vue"
   },
   "peerDependencies": {
     "react": ">=18",
