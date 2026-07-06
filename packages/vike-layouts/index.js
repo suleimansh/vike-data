@@ -43,6 +43,10 @@ export function isAppShell(name) {
   return SHELLS[name]?.kind === 'app'
 }
 
+// Slots whose value is a CUMULATIVE list (many sources contribute), so they default to
+// [] when unset; every other slot is a single selection and defaults to null.
+const LIST_SLOTS = new Set(['nav', 'footer'])
+
 // isActivePath — the framework-agnostic "you are here" nav match. It lives in
 // vike-blocks (where the config-fed nav slots render through it); re-exported
 // here so layout consumers reach it from one place and the two can't drift.
@@ -64,23 +68,34 @@ export { isActivePath } from 'vike-blocks'
 export function defineLayout(config = {}) {
   const shell = config.shell && SHELLS[config.shell] ? config.shell : 'centered'
   const spec = SHELLS[shell]
+  // Resolve ONE key per slot the shell declares — including any slot a custom shell
+  // registered (nav/logo/footer/userMenu are just the built-in set). A slot the shell
+  // doesn't declare is absent from `slots`, so it never reaches the shell: that is how a
+  // centered (public) shell silently drops the nav/userMenu an app passed for app shells.
+  const slots = {}
+  for (const name of spec.slots) {
+    slots[name] = config[name] ?? (LIST_SLOTS.has(name) ? [] : null)
+  }
   return {
     shell,
     kind: spec.kind,
     dir: config.dir === 'rtl' || config.dir === 'ltr' ? config.dir : undefined,
-    // Only the slots this shell actually renders are kept, so a centered shell
-    // silently ignores nav/userMenu an app passed for its app shells.
-    slots: {
-      logo: spec.slots.includes('logo') ? config.logo ?? null : null,
-      nav: spec.slots.includes('nav') ? config.nav ?? [] : [],
-      footer: spec.slots.includes('footer') ? config.footer ?? [] : [],
-      userMenu: spec.slots.includes('userMenu') ? config.userMenu ?? null : null,
-      // toolbar — the composable CHROME slot (spike #122, epic #120): a cumulative
-      // list of settings items a SEPARATE extension (vike-toolbar, #121) contributes
-      // into, exactly like `nav`. Resolved here only for shells that opt into it, so
-      // chrome composes by SEAM — no package split, no wrapper-layout extension.
-      // Public shells don't list it, so auth/marketing pages carry no app chrome.
-      toolbar: spec.slots.includes('toolbar') ? config.toolbar ?? [] : [],
-    },
+    slots,
   }
+}
+
+/**
+ * Pull the config value for each slot the SELECTED shell declares, flattening the
+ * cumulative (array-of-arrays) ones into a single list. The per-framework ConfigLayout
+ * feeds this into defineLayout so a page's raw config maps to the shell's slots — including
+ * any slot a custom shell added, so custom slots flow end to end with no per-slot wiring.
+ */
+export function shellSlotConfig(config = {}) {
+  const shell = config.layout && SHELLS[config.layout] ? config.layout : 'centered'
+  const out = {}
+  for (const name of SHELLS[shell].slots) {
+    const value = config[name]
+    out[name] = Array.isArray(value) ? value.flat() : value
+  }
+  return out
 }

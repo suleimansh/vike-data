@@ -3,7 +3,7 @@
 
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { shells, registerShell, isAppShell, defineLayout, isActivePath } from '../index.js'
+import { shells, registerShell, isAppShell, defineLayout, shellSlotConfig, isActivePath } from '../index.js'
 import config from '../+config.js'
 
 test('ships the three preset shells with kinds', () => {
@@ -47,11 +47,10 @@ test('an app shell keeps the slots it renders', () => {
   assert.deepEqual(l.slots.footer, ['x'])
 })
 
-test('the centered shell ignores app-only slots (nav/userMenu/footer)', () => {
+test('a shell exposes ONLY the slots it declares (undeclared slots are absent)', () => {
   const l = defineLayout({ shell: 'centered', logo: 'Acme', nav: [{ label: 'X', href: '/x' }], userMenu: 'm' })
   assert.equal(l.slots.logo, 'Acme') // centered renders logo
-  assert.deepEqual(l.slots.nav, []) // but not nav
-  assert.equal(l.slots.userMenu, null)
+  assert.deepEqual(Object.keys(l.slots), ['logo']) // and nothing else -- nav/userMenu never reach the shell
 })
 
 test('registerShell adds a 4th shell (open registry)', () => {
@@ -59,7 +58,28 @@ test('registerShell adds a 4th shell (open registry)', () => {
   assert.equal(isAppShell('split'), true)
   const l = defineLayout({ shell: 'split', logo: 'L', nav: [{ label: 'A', href: '/a' }], userMenu: 'ignored' })
   assert.equal(l.shell, 'split')
-  assert.equal(l.slots.userMenu, null) // not in this shell's slots
+  assert.equal(l.slots.userMenu, undefined) // not in this shell's slots
+  assert.deepEqual(l.slots.nav, [{ label: 'A', href: '/a' }])
+})
+
+test('a custom shell can declare a CUSTOM slot and defineLayout threads it', () => {
+  // The extensibility contract: slots are not a fixed list. A shell that registers an
+  // `aside` slot receives its value like any built-in; a cumulative-shaped one still
+  // defaults to [] via LIST_SLOTS only for the known lists, so a custom single slot is null.
+  registerShell('with-aside', { kind: 'app', slots: ['logo', 'aside'] })
+  const filled = defineLayout({ shell: 'with-aside', logo: 'L', aside: 'widgets' })
+  assert.equal(filled.slots.aside, 'widgets')
+  const empty = defineLayout({ shell: 'with-aside', logo: 'L' })
+  assert.equal(empty.slots.aside, null) // unset custom single slot defaults to null
+})
+
+test('shellSlotConfig reads + flattens only the selected shell slots off raw config', () => {
+  // Cumulative config arrives as an array of per-source arrays; flatten to one list. Slots
+  // the shell does not declare are skipped, so a page can carry extras with no leakage.
+  const out = shellSlotConfig({ layout: 'topbar', logo: 'L', nav: [[{ href: '/a' }], [{ href: '/b' }]], unrelated: 'x' })
+  assert.equal(out.logo, 'L')
+  assert.deepEqual(out.nav, [{ href: '/a' }, { href: '/b' }]) // flattened
+  assert.equal('unrelated' in out, false) // not a declared slot
 })
 
 test('registerShell validates its arguments', () => {
@@ -81,15 +101,16 @@ test('+config declares the layout selection + slot config points', () => {
   assert.equal(config.layout, 'centered') // safe public default
 })
 
-test('+config declares every slot defineLayout resolves (footer/userMenu/toolbar)', () => {
+test('+config declares every built-in slot the shells render (logo/nav/footer/userMenu)', () => {
   // Without these meta keys Vike never collects the config values, so the slots
   // stay empty no matter what a page sets — the seam defineLayout resolves must
   // match the seam +config exposes.
-  for (const key of ['footer', 'userMenu', 'toolbar']) {
+  for (const key of ['logo', 'nav', 'footer', 'userMenu']) {
     assert.ok(config.meta[key], `meta.${key} must be declared`)
     assert.equal(config.meta[key].env.client, true)
   }
   assert.equal(config.meta.footer.cumulative, true) // extensions can add footer links
-  assert.equal(config.meta.toolbar.cumulative, true) // vike-toolbar contributes here
   assert.equal(config.meta.userMenu.cumulative, undefined) // single selection, like logo
+  // toolbar is NOT a layout slot — vike-toolbar composes via its own `toolbarItems` seam.
+  assert.equal(config.meta.toolbar, undefined)
 })

@@ -12,7 +12,7 @@
 // active item without the block layer taking a vike dependency; it re-provides on every navigation.
 import { usePageContext } from 'vike-react/usePageContext'
 import { LayoutConfigProvider, LayoutView, registerLayoutShell } from 'vike-blocks/react/LayoutView'
-import { defineLayout } from '../index.js'
+import { defineLayout, shellSlotConfig } from '../index.js'
 import { TopbarShell } from './shells/TopbarShell.jsx'
 import { SidebarShell } from './shells/SidebarShell.jsx'
 
@@ -23,16 +23,9 @@ registerLayoutShell('sidebar', SidebarShell)
 export default function ConfigLayout({ children }) {
   const pageContext = usePageContext()
   const config = pageContext.config || {}
-  const resolved = defineLayout({
-    shell: config.layout,
-    logo: config.logo,
-    userMenu: config.userMenu,
-    // `nav`, `footer` and `toolbar` are cumulative -> an array of each source's
-    // contribution; flatten before handing them to the shell.
-    nav: (config.nav || []).flat(),
-    footer: (config.footer || []).flat(),
-    toolbar: (config.toolbar || []).flat(),
-  })
+  // Read EVERY slot the chosen shell declares (built-in or custom) straight off config,
+  // flattening the cumulative ones (they arrive as an array of per-source contributions).
+  const resolved = defineLayout({ shell: config.layout, ...shellSlotConfig(config) })
   const chrome = {
     ...resolved.slots, // logo / nav / footer / userMenu / toolbar (filtered to the shell)
     dir: resolved.dir,

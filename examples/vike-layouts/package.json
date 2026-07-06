@@ -1,0 +1,21 @@
+{
+  "name": "app-vike-layouts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "vike": "^0.4.0",
+    "vike-blocks": "workspace:*",
+    "vike-layouts": "workspace:*",
+    "vike-react": "^0.6.25",
+    "vike-themes": "workspace:*",
+    "vike-toolbar": "workspace:*",
+    "vite": "^7.1.0"
+  }
+}

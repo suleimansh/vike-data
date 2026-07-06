@@ -14,7 +14,7 @@
 import { computed, h } from 'vue'
 import { usePageContext } from 'vike-vue/usePageContext'
 import { LayoutConfigProvider, LayoutView, registerLayoutShell } from 'vike-blocks/vue/LayoutView'
-import { defineLayout } from '../index.js'
+import { defineLayout, shellSlotConfig } from '../index.js'
 import TopbarShell from './shells/TopbarShell.vue'
 import SidebarShell from './shells/SidebarShell.vue'
 
@@ -26,16 +26,10 @@ export default {
   setup(_, { slots }) {
     const pageContext = usePageContext()
     const resolved = computed(() => {
+      // Read every slot the chosen shell declares (built-in or custom) straight off config,
+      // flattening the cumulative ones (they arrive as an array of per-source contributions).
       const config = pageContext.config || {}
-      // nav/footer/toolbar are cumulative -> array of each source's contribution; flatten.
-      return defineLayout({
-        shell: config.layout,
-        logo: config.logo,
-        userMenu: config.userMenu,
-        nav: (config.nav || []).flat(),
-        footer: (config.footer || []).flat(),
-        toolbar: (config.toolbar || []).flat(),
-      })
+      return defineLayout({ shell: config.layout, ...shellSlotConfig(config) })
     })
     const chrome = computed(() => ({ ...resolved.value.slots, dir: resolved.value.dir, currentPath: pageContext.urlPathname || '' }))
     return () =>
