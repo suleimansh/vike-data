@@ -23,6 +23,7 @@
 // pageContext, the two halves collapse into one hook.
 import { enhance, MiddlewareOrder } from '@universal-middleware/core'
 import { sendMail } from 'vike-mail'
+import { csrfGuard } from 'vike-csrf'
 import { SESSION_COOKIE } from './constants.js'
 import { parseCookies, serializeCookie } from './cookie.js'
 import { sanitizeNext } from './safe-redirect.js'
@@ -71,6 +72,13 @@ export async function handleAuthRequest(request, { auth, cookieName = SESSION_CO
 
   const url = new URL(request.url)
   if (!url.pathname.startsWith(`${basePath}/`)) return // fall through to Vike
+
+  // CSRF (#701): the auth POSTs are the classic targets (login CSRF included). The guard reads
+  // the app's csrf/csrfExempt config; safe methods (the GET callback) pass. This surface is
+  // HTML, so the guard's JSON 403 is reshaped.
+  if (csrfGuard(request)) {
+    return html(403, `<p>Cross-origin request rejected.</p><p><a href="/">Back</a></p>`)
+  }
 
   // --- issue a magic link -------------------------------------------------
   if (url.pathname === `${basePath}/request` && request.method === 'POST') {

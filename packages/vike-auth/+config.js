@@ -29,7 +29,7 @@
 
 export default {
   name: 'vike-auth',
-  extends: ['import:@vike-data/vike-schema/config:default'],
+  extends: ['import:@vike-data/vike-schema/config:default', 'import:vike-csrf/config:default'],
   middleware: 'import:vike-auth/middleware:default',
   onCreatePageContext: 'import:vike-auth/onCreatePageContext:default',
   meta: {
