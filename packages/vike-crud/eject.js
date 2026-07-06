@@ -95,8 +95,10 @@ function dataFile({ route, sections, scope, pkg }) {
   return `// Ejected from vike-crud — this page's data layer is now YOURS. There is no generated
 // viewData or \`views\` config dispatch: the view descriptor, the row-scope, and the read/write
 // path all live here. Edit the sections, change the query, add fields — nothing regenerates.
-import { redirect } from 'vike/abort'
+import { redirect, render } from 'vike/abort'
+import { csrfGuard } from 'vike-csrf'
 import { resolveViewTables, buildDb, hydrateView, createRow, updateRow, definePage, resolvePage, findSection } from '${pkg}'
+import { csrfRequestOf } from '${pkg}/request'
 
 const ROUTE = ${quote(route)}
 
@@ -145,6 +147,9 @@ export async function data(pageContext) {
 
   const req = readForm(pageContext)
   if (req.method === 'POST') {
+    // Cross-site form POSTs are rejected (vike-csrf); policy from the app's csrf config key.
+    const surfaced = csrfRequestOf(pageContext)
+    if (surfaced && csrfGuard(surfaced)) throw render(403)
     const form = await req.formData()
     const table = form.get('_table')
     const fields = table ? formFields(tables, table) : null
