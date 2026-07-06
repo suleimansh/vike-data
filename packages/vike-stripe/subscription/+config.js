@@ -15,7 +15,7 @@
 // upserts the subscriptions row through universal-orm on its webhook.
 export default {
   name: 'vike-stripe-subscription',
-  extends: ['import:vike-teams/config:default'],
+  extends: ['import:vike-teams/config:default', 'import:vike-csrf/config:default'],
   meta: {
     segment: { env: { config: true, server: true } },
     // Optional override for the subject FK's TARGET table (the app passes a renamed
@@ -26,4 +26,8 @@ export default {
   segment: 'b2b',
   schemas: 'import:vike-stripe/subscription/schemas:default',
   middleware: 'import:vike-stripe/subscription/middleware:default',
+  // CSRF (#707): the webhook is signature-verified and not cookie-authenticated, so it
+  // self-declares on vike-csrf's cumulative exemption seam; apps never list it. The literal
+  // mirrors SUBSCRIPTION_WEBHOOK_PATH (middleware.js), which config can't import (it pulls the runtime tier).
+  csrfExempt: ['/stripe/subscription/webhook'],
 }

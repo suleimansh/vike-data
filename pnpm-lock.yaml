@@ -1319,6 +1319,9 @@ importers:
       vike-auth:
         specifier: workspace:*
         version: link:../vike-auth
+      vike-csrf:
+        specifier: workspace:*
+        version: link:../vike-csrf
       vike-teams:
         specifier: workspace:*
         version: link:../vike-teams
