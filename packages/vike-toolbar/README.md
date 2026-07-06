@@ -2,14 +2,14 @@
 
 A small, fixed toolbar surface for vike-data: a logo button + a settings popover that
 other extensions drop their controls into (the locale switcher, the theme picker).
-Framework-agnostic core (the item shape + composition); the React binding
-(`vike-toolbar/react`) renders the button + panel + a teleport surface.
+Framework-agnostic core (the item shape + composition); the per-framework bindings
+(`vike-toolbar/react`, `vike-toolbar/vue`) render the button + panel + a teleport surface.
 
 ## Usage
 
 ```js
 // +config.js
-import toolbarExt from 'vike-toolbar/react'
+import toolbarExt from 'vike-toolbar/react' // or 'vike-toolbar/vue'
 
 export default {
   extends: [toolbarExt],   // self-installs the core
@@ -31,12 +31,14 @@ export default { extends: ['import:vike-toolbar/config:default'], toolbarItems: 
 |---|---|
 | `.` | The core: `defineToolbarItems()` / `allToolbarItems()` (normalize + sort + de-dupe by id), plus the canonical DOM-id constants `TOOLBAR_ROOT_ID` (`vike-toolbar-root`) and `TOOLBAR_ITEMS_ID` (`vike-toolbar-items`) that consumers teleport into. |
 | `./config` | The Vike config: the cumulative `toolbarItems` registry + the `bodyHtmlEnd` mount node. |
-| `./react`, `./react/Toolbar`, `./react/ToolbarWrapper` | The button + portalled panel + teleport surface. |
+| `./react`, `./react/Toolbar`, `./react/ToolbarWrapper` | React: the button + portalled panel + teleport surface. |
+| `./vue`, `./vue/Toolbar`, `./vue/ToolbarWrapper` | Vue: the same button + teleported panel + teleport surface. |
+| `./react/useToolbarSlot`, `./vue/useToolbarSlot` | The slot hook a provider-bound control calls to decide where to render (teleport into the popover / standalone / pending). Leak-safe; import it instead of hand-copying the resolve + observer + cleanup. |
 
 ## Key concepts
 
 - **Two composition paths.** *Teleport* — a provider-bound control (e.g. the theme
-  picker) teleports into the panel's `#vike-toolbar-items` node, keeping its React
+  picker) teleports into the panel's `#vike-toolbar-items` node, keeping its framework
   context. *Static items* — context-free controls contributed via the cumulative
   `toolbarItems` registry, rendered directly.
 - **Out-of-hydration-root portal.** The panel portals into a `bodyHtmlEnd` node outside

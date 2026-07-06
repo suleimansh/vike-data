@@ -18,7 +18,7 @@
 // `bodyHtmlEnd` is global + cumulative + server-env (it is SSR'd HTML); `toolbarItems`
 // is server + client (NOT config: an entry's `Control` is .jsx, which Vike can't load
 // during plain-Node config resolution). Framework-agnostic: no UI is imported here; the
-// React Wrapper is pulled in by the vike-toolbar/react subpath.
+// per-framework Wrapper is pulled in by the vike-toolbar/react or vike-toolbar/vue subpath.
 import { TOOLBAR_ROOT_ID } from './index.js'
 
 export default {
