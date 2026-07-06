@@ -25,7 +25,10 @@ export default function DashboardPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 'var(--space-md, 1rem)' }}>
           {resources.map((r) => (
             <a key={r.table} href={`/admin/${r.table}`} style={card}>
-              <div style={{ fontSize: 16, fontWeight: 600 }}>{r.label}</div>
+              <div style={{ fontSize: 16, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
+                {r.icon ? <span aria-hidden="true">{r.icon}</span> : null}
+                <span>{r.label}</span>
+              </div>
               <div style={{ color: 'var(--color-muted)', fontSize: 13, marginTop: 4 }}>
                 <code>{r.table}</code>
               </div>

@@ -36,7 +36,7 @@ export function findResource(config, table) {
 // gives each screen its own /admin/:table/... page; 'dialog' opens them as an overlay on the list
 // route (?view= / ?edit= / ?create). Matches vike-crud's `mode` authoring key, but admin defaults
 // to 'route' (route-per-page is admin's natural UX) rather than crud's 'dialog'. Dialog rendering
-// is React-only; on Vue a 'dialog' resource falls back to route mode. Anything unknown -> 'route'.
+// works on both renderers (React AdminDialog.jsx, Vue AdminDialog.vue, #598). Anything unknown -> 'route'.
 export function resourceMode(resource) {
   return resource?.mode === 'dialog' ? 'dialog' : 'route'
 }

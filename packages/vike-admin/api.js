@@ -43,10 +43,11 @@ export function pageRouteFor(pathname) {
 }
 
 // Map a write request (method + `/admin*.json` path) to the page route that performs it and
-// the action to hand the hook, or null when it isn't a valid write endpoint.
-//   POST   /admin/<table>.json      -> { /admin/<table>/new,       create }
-//   PATCH  /admin/<table>/<id>.json -> { /admin/<table>/<id>/edit, update }
-//   DELETE /admin/<table>/<id>.json -> { /admin/<table>/<id>/edit, delete }
+// the action to hand the hook, or null when it isn't a valid write endpoint. PUT is accepted as
+// an alias of PATCH (both a partial update of the supplied fields; there is no full-replace verb).
+//   POST         /admin/<table>.json      -> { /admin/<table>/new,       create }
+//   PATCH | PUT  /admin/<table>/<id>.json -> { /admin/<table>/<id>/edit, update }
+//   DELETE       /admin/<table>/<id>.json -> { /admin/<table>/<id>/edit, delete }
 // (writes render the EDIT page route, which owns the update/delete hook; the bare `@id` route is
 // the read-only VIEW page.)
 export function writeTargetFor(pathname, method) {

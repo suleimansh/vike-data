@@ -29,7 +29,7 @@ export const usersResource = defineResource({
   label: 'Users',
   // The screen vocabulary matches defineCrud: index (list), view (detail), edit (the form).
   index: [
-    column('email').sortable().searchable(),
+    column('email').sortable(),
     column('created_at').format('since'),
   ],
   view: [display('email'), display('name')],
@@ -91,7 +91,7 @@ The same admin, as machine-readable JSON, for an AI agent (or any HTTP client) a
 Write (the row scope is forced, so a caller only ever writes their **own** rows):
 
 - `POST /admin/<table>.json` with a JSON body: create a row. `201` + the created row.
-- `PATCH /admin/<table>/<id>.json` with a JSON body: update a row by its primary key (partial, only the supplied fields). `200` + the updated row.
+- `PATCH /admin/<table>/<id>.json` with a JSON body: update a row by its primary key (partial, only the supplied fields). `200` + the updated row. `PUT` is accepted as an alias (also a partial update; there is no full-replace verb).
 - `DELETE /admin/<table>/<id>.json`: delete a row by its primary key. `200` `{ "deleted": true }`.
 
 ```bash
@@ -121,7 +121,9 @@ It reuses the session cookie; API-token auth for headless agents is a follow-up.
 engine (schema → columns/fields derivation, projection, the validated list query, the
 owner-scoped reads/writes, and the `ListView` / `FormFields` / widget renderers); several
 `vike-admin/*` entry points (`define`, `project`, `query`, `react/widgets`, `react/FormFields`)
-are thin re-exports of it. vike-admin adds only the admin-specific pieces on top: the cumulative
+are thin re-exports of it. The `react/widgets` / `react/widget-registry` / `react/FormFields`
+shims are React-only; a Vue app imports the same renderers from `vike-crud/vue` directly. vike-admin
+adds only the admin-specific pieces on top: the cumulative
 `adminResources` seam, the `/admin/*` pages + auth guard, and the JSON agent API. Splits the
 usual way: `vike-admin` core (framework-agnostic) + `vike-admin/react` (and `/vue`) for the UI.
 

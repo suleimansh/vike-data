@@ -13,7 +13,10 @@ const data = useData()
         :href="`/admin/${r.table}`"
         :style="{ display: 'block', border: '1px solid var(--color-border)', background: 'var(--color-surface)', borderRadius: 'var(--radius, 10px)', padding: 'var(--space-md, 1rem) var(--space-lg, 1.5rem)', textDecoration: 'none', color: 'var(--color-text)' }"
       >
-        <div :style="{ fontSize: '16px', fontWeight: 600 }">{{ r.label }}</div>
+        <div :style="{ fontSize: '16px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }">
+          <span v-if="r.icon" aria-hidden="true">{{ r.icon }}</span>
+          <span>{{ r.label }}</span>
+        </div>
         <div :style="{ color: 'var(--color-muted)', fontSize: '13px', marginTop: '4px' }"><code>{{ r.table }}</code></div>
       </a>
     </div>
