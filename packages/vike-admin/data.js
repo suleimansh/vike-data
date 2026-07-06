@@ -35,19 +35,37 @@ import {
 // `onCreate(ctx)` and the `canX` gates all read `ctx.user`; kept server-side (never serialized).
 const ctxOf = (pageContext) => ({ user: pageContext.user })
 
-// Read the rows of a foreign-key TARGET table that the user is allowed to see, together
-// with the column its rows are labelled by. The single place the FK scope (#141) is
-// enforced: the lookup is bounded by the TARGET resource's own `scope(user)` — the same
-// filter that bounds its own list — so a scoped user can only ever surface rows they would
-// be allowed to see in the referenced table, never the whole table. A target with no
-// registered resource or no scope is unbounded (the original behaviour), so this is purely
-// additive. Returns null when the referenced table isn't in the schema (no lookup possible).
-async function scopedFkRows(ref, { db, config, tables, ctx }) {
+// Read the rows of a foreign-key TARGET table that the user is allowed to see, together with the
+// column its rows are labelled by. The single place the FK scope (#141, #676) is enforced. FK
+// enrichment MIRRORS the user's list access to the target: only a registered resource the user may
+// `canIndex` is read, bounded by that resource's own `query` scope — the exact gate `listData` uses
+// — so a user can never surface, through a FK dropdown or label map, a row they could not see by
+// visiting the target's own list. A target that is NOT a registered, indexable resource yields no
+// rows (raw keys render instead), so a scoped user who can edit `projects` can't enumerate every
+// `users` row (e.g. every email) via a `projects.owner_id -> users` FK.
+//
+// `values` (the FK values on the already-scope-bounded source rows) narrows a label lookup to just
+// the referenced keys: the map never serializes an unreferenced target row, and reads at most as
+// many rows as the page references (not the whole in-scope table). Omit `values` for the form
+// picker, which enumerates the in-scope target to populate its options.
+// Returns null when the referenced table isn't in the schema (no lookup possible).
+async function scopedFkRows(ref, { db, config, tables, ctx }, values) {
   const targetTable = tableNamed(tables, ref.table)
   if (!targetTable) return null
   const targetResource = findResource(config, ref.table)
   const titleCol = recordTitleColumn(targetResource, targetTable)
-  const rows = await db[ref.table].find(queryFilter(targetResource, ctx))
+  // Deny by default: only a registered resource the user may list is enumerable (#676). An
+  // unregistered target, or one gated away by `canIndex`, gets no rows here.
+  if (!targetResource || !(await allow(targetResource.canIndex, ctx))) return { rows: [], titleCol }
+  const scope = queryFilter(targetResource, ctx)
+  const rows = await db[ref.table].find(scope)
+  if (values) {
+    // Label path: keep only the scope-visible target rows actually referenced on this page, so the
+    // serialized map carries no unreferenced target row. Filtered in JS (not a merged `in`) because
+    // the scope may already constrain `ref.column` — a merge would clobber it and re-widen (#676).
+    const keys = new Set(values.filter((v) => v != null))
+    return { rows: rows.filter((r) => keys.has(r[ref.column])), titleCol }
+  }
   return { rows, titleCol }
 }
 
@@ -55,7 +73,8 @@ async function scopedFkRows(ref, { db, config, tables, ctx }) {
 // row becomes `{ value: <ref column>, label: <recordTitle of the target> }`. The target's
 // label column comes from its resource's `recordTitle` (else a schema default), so a
 // `user_id` field shows users by email instead of by uuid. Plain + serializable. Bounded
-// by the target's scope via scopedFkRows (#141).
+// by the target's list access via scopedFkRows (#141, #676) — a FK whose target is not a
+// registered, indexable resource gets no options and falls back to a raw key input.
 async function loadFkOptions(fields, deps) {
   return Promise.all(
     fields.map(async (f) => {
@@ -68,19 +87,20 @@ async function loadFkOptions(fields, deps) {
   )
 }
 
-// For the list: a per-column map of FK value -> human title, so a FK cell shows the
-// referenced row's title instead of the raw key. Only the list's foreign-key columns get
-// an entry; everything else renders as-is. Like loadFkOptions, the lookup is bounded by the
-// target resource's own `scope(user)` via scopedFkRows (#141), so the title map never
-// serializes rows of the referenced table the user could not otherwise see (an in-scope FK
-// value with no matching in-scope target row simply falls back to rendering the raw key).
-async function fkLabelsFor(columns, schemaTable, deps) {
+// For the list/view: a per-column map of FK value -> human title, so a FK cell shows the
+// referenced row's title instead of the raw key. Only the given `rows`' foreign-key columns get an
+// entry; everything else renders as-is. The lookup is bounded by the target's list access AND to
+// the FK values actually present in `rows` via scopedFkRows (#141, #676), so the title map never
+// serializes a target row the user could not see in the target's own list, nor one not referenced
+// on this page (an in-scope FK value with no matching in-scope target row simply falls back to the
+// raw key).
+async function fkLabelsFor(columns, schemaTable, deps, rows) {
   const byName = new Map(schemaTable.columns.map((c) => [c.name, c]))
   const labels = {}
   for (const col of columns) {
     const ref = byName.get(col.name)?.references
     if (!ref) continue
-    const lookup = await scopedFkRows(ref, deps)
+    const lookup = await scopedFkRows(ref, deps, rows.map((r) => r[col.name]))
     if (!lookup) continue
     labels[col.name] = Object.fromEntries(
       lookup.rows.map((r) => [r[ref.column], String(r[lookup.titleCol] ?? r[ref.column])]),
@@ -197,7 +217,7 @@ async function loadDialogPayload(pageContext, { resource, table, tables, schemaT
     if (!row || !(await allow(resource.canView, row, ctx))) return null
     // Label FK values from the target table (bounded by its scope), then project to the visible
     // fields (+pk) before returning - the same leak guard as viewData (#228).
-    const fkLabels = await fkLabelsFor(fields, schemaTable, deps)
+    const fkLabels = await fkLabelsFor(fields, schemaTable, deps, [row])
     const values = projectRow(row, { columns: fields, pk })
     for (const [col, map] of Object.entries(fkLabels)) {
       if (values[col] != null && map[values[col]] != null) values[`${col}_label`] = map[values[col]]
@@ -300,7 +320,7 @@ export async function listData(pageContext) {
   const page = pageSize > 0 ? Math.min(Math.floor(offset / pageSize) + 1, pageCount) : 1
 
   const rows = await db[table].find(where, { limit: pageSize, offset, orderBy })
-  const fkLabels = await fkLabelsFor(columns, schemaTable, { db, config: pageContext.config, tables, ctx })
+  const fkLabels = await fkLabelsFor(columns, schemaTable, { db, config: pageContext.config, tables, ctx }, rows)
 
   // Per-row permission (#581): `canView`/`canEdit`/`canDelete` are record-level `(record, ctx)`,
   // evaluated here on the server (predicates never serialize) and stamped onto each projected row
@@ -423,7 +443,7 @@ export async function viewData(pageContext) {
   // Label FK values from the target table (bounded by its scope), then project to the visible
   // fields (+pk) before returning — the same leak guard as the list (#228). The `_label` keys are
   // added AFTER projection so the read-only cell can show the referenced row's title.
-  const fkLabels = await fkLabelsFor(fields, schemaTable, { db, config: pageContext.config, tables, ctx })
+  const fkLabels = await fkLabelsFor(fields, schemaTable, { db, config: pageContext.config, tables, ctx }, [row])
   const values = projectRow(row, { columns: fields, pk })
   for (const [col, map] of Object.entries(fkLabels)) {
     if (values[col] != null && map[values[col]] != null) values[`${col}_label`] = map[values[col]]

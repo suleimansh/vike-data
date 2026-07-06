@@ -1,8 +1,9 @@
-// FK option scoping (#141): a foreign-key <select> (and the list's FK label map) must not
+// FK option scoping (#141, #676): a foreign-key <select> (and the list's FK label map) must not
 // enumerate the WHOLE referenced table for a scoped, non-admin user — that crosses the same
 // row-scope boundary the rest of the module enforces and serializes the target rows (often
-// emails / names) into the page view-model. The FK lookup is bounded by the TARGET resource's
-// own `scope(user)`: a user only sees, in an FK dropdown, rows they could see in that table.
+// emails / names) into the page view-model. FK enrichment mirrors the user's LIST access to the
+// target: only a registered resource the user may `canIndex` is read, bounded by its own
+// `scope(user)`. An unregistered / index-gated target yields no options and no labels (#676).
 import { test, beforeEach } from 'node:test'
 import assert from 'node:assert/strict'
 import { defineSchema } from '@vike-data/vike-schema/schema'
@@ -84,14 +85,45 @@ test('list: the FK label map only includes in-scope target rows (no email leak)'
   assert.equal(asAdmin.fkLabels.owner_id.u2, 'u2@example.com') // admin sees all labels
 })
 
-test('an FK to a table with no registered resource is unbounded (additive, original behaviour)', async () => {
-  // Drop the users resource: the FK target is now an un-scoped, un-registered table.
+test('list: the FK label map only carries REFERENCED target rows, not every in-scope row (#676)', async () => {
+  await seed()
+  // admin@example.com references no project, so its email must not ride along in the map even
+  // though the admin may see it. Only the two owners actually shown (u1, u2) get a label.
+  const asAdmin = await listData(ctx(ADMIN))
+  assert.deepEqual(asAdmin.fkLabels.owner_id, { u1: 'u1@example.com', u2: 'u2@example.com' })
+  assert.equal(asAdmin.fkLabels.owner_id.admin, undefined)
+})
+
+test('an FK to a table with NO registered resource yields no options and no labels (#676)', async () => {
+  // Drop the users resource: the FK target is now an un-registered table. It must NOT enumerate.
   const cfg = { schemas: [usersSchema, projectsSchema], adminResources: [projects] }
   clearAdapter()
   setAdapter(createMemoryAdapter())
   const db = buildDb(resolveAdminTables(cfg))
   await db.users.insert({ id: 'u1', email: 'u1@example.com' })
   await db.users.insert({ id: 'u2', email: 'u2@example.com' })
-  const data = await newData({ routeParams: { table: 'projects' }, config: cfg, user: USER, urlParsed: { search: {} } })
-  assert.deepEqual(data.fields.find((f) => f.name === 'owner_id').options.map((o) => o.value).sort(), ['u1', 'u2'])
+  await db.projects.insert({ id: 'p1', owner_id: 'u1', name: 'mine' })
+  const pc = (routeParams = { table: 'projects' }) => ({ routeParams, config: cfg, user: USER, urlParsed: { search: {} } })
+  const created = await newData(pc())
+  assert.deepEqual(created.fields.find((f) => f.name === 'owner_id').options, []) // no email dump
+  const listed = await listData(pc())
+  assert.deepEqual(listed.fkLabels.owner_id, {}) // no email leak in the list either
+})
+
+test('an FK target the user may not canIndex yields no options / labels (#676)', async () => {
+  // users is registered but index-gated to admins; a non-admin editing projects must not enumerate.
+  const gatedUsers = defineResource({ table: 'users', recordTitle: 'email', canIndex: (c) => c.user?.role === 'admin' })
+  const cfg = { schemas: [usersSchema, projectsSchema], adminResources: [gatedUsers, projects] }
+  clearAdapter()
+  setAdapter(createMemoryAdapter())
+  const db = buildDb(resolveAdminTables(cfg))
+  await db.users.insert({ id: 'u1', email: 'u1@example.com' })
+  await db.users.insert({ id: 'u2', email: 'u2@example.com' })
+  await db.projects.insert({ id: 'p1', owner_id: 'u1', name: 'mine' })
+  const pc = (user) => ({ routeParams: { table: 'projects' }, config: cfg, user, urlParsed: { search: {} } })
+  const asUser = await newData(pc(USER))
+  assert.deepEqual(asUser.fields.find((f) => f.name === 'owner_id').options, []) // denied: no dump
+  assert.deepEqual((await listData(pc(USER))).fkLabels.owner_id, {})
+  const asAdmin = await newData(pc(ADMIN))
+  assert.deepEqual(asAdmin.fields.find((f) => f.name === 'owner_id').options.map((o) => o.value).sort(), ['u1', 'u2'])
 })
