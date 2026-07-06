@@ -71,6 +71,8 @@ export function viewColumns(view, table) {
     return view.list.map((entry) => {
       const spec = typeof entry?.build === 'function' ? entry.build() : entry
       const schemaCol = byName.get(spec.name)
+      const slot = slotFor(view, spec.name, spec)
+      warnUnknownColumn(byName, spec.name, slot, table, 'list')
       return {
         name: spec.name,
         label: spec.label ?? titleCase(spec.name),
@@ -78,7 +80,7 @@ export function viewColumns(view, table) {
         sortable: !!spec.sortable,
         searchable: !!spec.searchable,
         format: spec.format ?? null,
-        slot: slotFor(view, spec.name, spec),
+        slot,
         // `.when(ctx)` visibility predicate (#581); carried through, evaluated + stripped by the
         // data layer (keepVisible) before the resolved view-model serializes to the client.
         ...(typeof spec.when === 'function' ? { when: spec.when } : {}),
@@ -101,6 +103,19 @@ const fkOf = (col) => (col?.references ? { table: col.references.table, column: 
 // derived cell/control when no component is registered.
 const slotFor = (view, name, spec) => spec?.slot ?? view?.slots?.[name] ?? null
 
+// Guard against a typo'd column name in an explicit list/record/form spec. A name that isn't
+// in the schema and has no slot to render it silently falls back to type:'string' and renders
+// an always-empty column; warn naming it (the table name is already validated loudly). A
+// slot-only spec (a custom cell with no schema backing) is intentional, so it's exempt.
+const warnUnknownColumn = (byName, name, slot, table, where) => {
+  if (name && !byName.has(name) && !slot) {
+    console.warn(
+      `[vike-crud] ${where}: column "${name}" is not in table "${table.table}" and has no slot; ` +
+        `it will render empty. Check the name, or add .slot(token) for a custom cell.`,
+    )
+  }
+}
+
 // Derive the RECORD (detail) fields for a view — the READ-ONLY display of one row. With
 // `view.record`, honor that selection (label/format refinements); otherwise every
 // non-hidden schema column, in schema order. Each field carries the schema `type`, a
@@ -110,17 +125,19 @@ const slotFor = (view, name, spec) => spec?.slot ?? view?.slots?.[name] ?? null
 // form's FK select). Plain + serializable.
 export function viewRecord(view, table) {
   const byName = new Map(table.columns.map((c) => [c.name, c]))
-  const toField = (name, spec = {}) => {
+  const toField = (name, spec = {}, explicit = false) => {
     const schemaCol = byName.get(name)
     const fk = fkOf(schemaCol)
     const { widget } = fieldRender(schemaCol, fk, undefined)
+    const slot = slotFor(view, name, spec)
+    if (explicit) warnUnknownColumn(byName, name, slot, table, 'record')
     return {
       name,
       label: spec.label ?? titleCase(name),
       type: schemaCol?.type ?? 'string',
       widget,
       format: spec.format ?? null,
-      slot: slotFor(view, name, spec),
+      slot,
       ...(fk ? { fk } : {}),
       ...(typeof spec.when === 'function' ? { when: spec.when } : {}),
     }
@@ -128,7 +145,7 @@ export function viewRecord(view, table) {
   if (view.record?.length) {
     return view.record.map((entry) => {
       const spec = typeof entry?.build === 'function' ? entry.build() : entry
-      return toField(spec.name, spec)
+      return toField(spec.name, spec, true)
     })
   }
   return table.columns.filter((c) => !isHiddenColumn(c.name)).map((c) => toField(c.name))
@@ -148,13 +165,15 @@ export function viewFields(view, table) {
       const schemaCol = byName.get(spec.name)
       const fk = fkOf(schemaCol)
       const { type, widget, options } = fieldRender(schemaCol, fk, spec.type)
+      const slot = slotFor(view, spec.name, spec)
+      warnUnknownColumn(byName, spec.name, slot, table, 'form')
       return {
         name: spec.name,
         label: spec.label ?? titleCase(spec.name),
         type,
         widget,
         required: spec.required ?? requiredBySchema(schemaCol),
-        slot: slotFor(view, spec.name, spec),
+        slot,
         ...(fk ? { fk } : {}),
         ...(options ? { options } : {}),
         ...(typeof spec.when === 'function' ? { when: spec.when } : {}),

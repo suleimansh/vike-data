@@ -26,6 +26,26 @@ export default {
 Set `layout` per page (a page can override the app default), and the shell renders only
 the slots it declares — slot values for a shell that doesn't render them are ignored.
 
+### Two ways to mount a shell
+
+- **Config path (recommended).** The `layout:` config above; Vike mounts `ConfigLayout` for you
+  and it reads the resolved config off `pageContext` (so a config-fed nav highlights the active
+  item). Add a custom shell to it with the global `registerLayoutShell()` — the mount has no call
+  site to pass shells into.
+- **Manual wrapper.** Import `Layout` (`vike-layouts/react/Layout` or `vike-layouts/vue/Layout`) and
+  render it yourself when a page mounts its own shell instead of the `layout:` config. It takes the
+  same slot config as props plus a per-call `shells` prop — a `{ variant: Component }` map that
+  overrides the registered shells for this mount only (handy for one-off frames without a global
+  register). It has no `pageContext`, so a config nav won't highlight; prefer the config path when
+  you want active-nav.
+
+  ```jsx
+  import { Layout } from 'vike-layouts/react/Layout' // or 'vike-layouts/vue/Layout'
+  <Layout shell="topbar" logo="◆ Acme" nav={[{ label: 'Home', href: '/' }]}>
+    <Page />
+  </Layout>
+  ```
+
 ## Exports
 
 | Subpath | What |
@@ -33,7 +53,7 @@ the slots it declares — slot values for a shell that doesn't render them are i
 | `.` | The core: `shells()` / `registerShell()` / `defineLayout()` / `shellSlotConfig()` + the slot model. |
 | `./config` | The Vike config: the `layout` selection + the `logo` / `nav` slot config (and the cumulative `nav`). |
 | `./react`, `./react/ConfigLayout`, `./react/Layout` | The React Layout: registers the `topbar` / `sidebar` frames as block variants and renders through vike-blocks' `LayoutView` (`centered` is the block builtin). |
-| `./vue`, `./vue/ConfigLayout` | The Vue twin. |
+| `./vue`, `./vue/ConfigLayout`, `./vue/Layout` | The Vue twin. |
 
 ## Key concepts
 

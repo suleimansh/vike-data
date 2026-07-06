@@ -6,6 +6,7 @@
 // ({ table, fields, fkLabels }) plus optional `row`.
 import './widgets.jsx' // side-effect: registers the built-in widgets (and any app slot registers alongside)
 import { getFieldWidget } from './widget-registry.js'
+import { booleanLabel } from '../list-format.js'
 
 const rowStyle = { display: 'flex', gap: '1rem', padding: '0.5rem 0', borderBottom: '1px solid var(--color-border)', fontSize: 14 }
 const labelStyle = { color: 'var(--color-muted)', minWidth: 160 }
@@ -14,7 +15,7 @@ function display(field, row, fkLabels) {
   if (!row) return ''
   const raw = row[field.name]
   if (raw == null) return ''
-  if (field.widget === 'boolean') return raw ? 'Yes' : 'No'
+  if (field.widget === 'boolean') return booleanLabel(raw)
   if (field.fk) return String(fkLabels?.[field.name]?.[raw] ?? raw) // fk label if the data layer set it
   return String(raw)
 }

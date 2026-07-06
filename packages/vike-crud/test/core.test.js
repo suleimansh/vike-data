@@ -5,6 +5,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { defineSchema } from '@vike-data/vike-schema/schema'
+import { formatValue, booleanLabel } from '../list-format.js'
 import {
   crud,
   column,
@@ -148,4 +149,51 @@ test('parseListQuery validates against the view columns and rejects unknown/unso
   assert.deepEqual(parseListQuery('{"filter":{"email":"a@b.c"}}', cols), { filter: { email: 'a@b.c' } })
   assert.throws(() => parseListQuery('{"filter":{"nope":1}}', cols), QueryError)
   assert.throws(() => parseListQuery('{"orderBy":"name"}', cols), /not sortable/)
+})
+
+// --- typo'd column name warns (#680) ------------------------------------------
+
+// Run `fn` capturing anything it sends to console.warn, restoring the original after.
+function withWarnings(fn) {
+  const warnings = []
+  const original = console.warn
+  console.warn = (msg) => warnings.push(String(msg))
+  try {
+    fn()
+  } finally {
+    console.warn = original
+  }
+  return warnings
+}
+
+test('an explicit list/record/form column not in the schema warns, naming it', () => {
+  const listWarns = withWarnings(() => viewColumns(crud({ table: 'users', list: [column('emial')] }), usersTable()))
+  assert.equal(listWarns.length, 1)
+  assert.match(listWarns[0], /"emial".*not in table "users"/)
+
+  const recordWarns = withWarnings(() => viewRecord(crud({ table: 'users', record: [display('naem')] }), usersTable()))
+  assert.match(recordWarns[0], /"naem".*not in table "users"/)
+
+  const formWarns = withWarnings(() => viewFields(crud({ table: 'users', form: [field('activ')] }), usersTable()))
+  assert.match(formWarns[0], /"activ".*not in table "users"/)
+})
+
+test('a slot-only custom column (no schema backing) does not warn', () => {
+  const warns = withWarnings(() => viewColumns(crud({ table: 'users', list: [column('actions').slot('row-actions')] }), usersTable()))
+  assert.deepEqual(warns, [])
+})
+
+test('the schema-default derivation never warns', () => {
+  const warns = withWarnings(() => viewColumns(crud({ table: 'users' }), usersTable()))
+  assert.deepEqual(warns, [])
+})
+
+// --- shared boolean label (#680) ----------------------------------------------
+
+test('booleanLabel and formatValue render Yes/No, matching the record view', () => {
+  assert.equal(booleanLabel(true), 'Yes')
+  assert.equal(booleanLabel(false), 'No')
+  assert.equal(formatValue(true), 'Yes')
+  assert.equal(formatValue(false), 'No')
+  assert.equal(formatValue(null), '')
 })
