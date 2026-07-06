@@ -10,7 +10,7 @@
 // (next PR) and import none of the server module.
 export default {
   name: 'vike-storage',
-  extends: ['import:@vike-data/vike-schema/config:default', 'import:vike-auth/config:default'],
+  extends: ['import:@vike-data/vike-schema/config:default', 'import:vike-auth/config:default', 'import:vike-csrf/config:default'],
   // `storageGuard` (#278 / #207 P3): the named guard whose subject OWNS uploads, defaulting
   // to the default subject (`users`) so the common single-subject app is unchanged.
   // `storageOwner` (#250 / #285): `{ table?, column? }`, the owner BINDING — own uploads by a
