@@ -91,14 +91,22 @@ crud({
   list:   [column('title').sortable(), column('created_at').format('since')],
   record: [display('title'), display('body'), display('author_id')],
   form:   [field('title').required(), field('status').type('select')],
-  canView: (user) => !!user,
-  canEdit: (user) => user?.role === 'admin',
-  scope:  (table, ctx) => (ctx.user?.role === 'admin' ? null : { user_id: ctx.user.id }), // row scoping (#104)
 })
 ```
 
-Note the two signatures: `canView` / `canEdit` take `(user)`, but `scope` takes `(table, ctx)`
-(with `ctx.user`) so one predicate can scope several tables at request time.
+`crud()` shapes the UI only. Row scoping and `can*` gates are a **resource** concern, enforced
+server-side by `defineCrud` — not by `crudBlocks()`, whose block descriptors are serializable and
+cannot carry a function. Passing `scope` / `query` / `canView` / `canEdit` to `crudBlocks()` throws.
+Declare an enforced resource instead:
+
+```js
+import { defineCrud } from 'vike-crud'
+
+defineCrud('posts', {
+  query:   (q, ctx) => q.where('author_id', ctx.user.id),   // row scope, AND-merged server-side
+  canEdit: (row, ctx) => ctx.user?.role === 'admin',        // per-row gate, evaluated server-side
+})
+```
 
 Everything is optional except `table` — omit `list`/`record`/`form` and each is derived
 from the schema (every non-hidden column). `id`, `*_hash`, and the `created_at`/`updated_at`

@@ -144,14 +144,13 @@ export function field(name) {
 //     // Slot overrides (tier 2): a view-level map from field name -> a registered component
 //     // token, applied across list/record/form. A per-field `.slot()` above wins over this.
 //     slots:  { author: 'author-chip' },
-//     canView: (user) => !!user,
-//     canEdit: (user) => user?.role === 'admin',
-//     // Row scoping (#104): bound a user to their OWN rows. The contract is `(table, ctx) ->`
-//     // filter (ctx carries `user`); return a universal-orm filter, or a falsy value for full
-//     // access (encode the admin bypass here). AND-merged into list/load/update/delete, forced
-//     // onto inserts. NOTE canView/canEdit above take `(user)`; scope takes `(table, ctx)`.
-//     scope: (table, ctx) => (ctx.user?.role === 'admin' ? null : { user_id: ctx.user.id }),
 //   })
+//
+// crud() shapes the UI only. Row scoping and `can*` gates are a RESOURCE concern, enforced
+// server-side by `defineCrud` (page meta read by viewData) or vike-admin's `defineResource` (its
+// data layer) — NOT by `crudBlocks()`, whose serializable descriptors can't carry a function.
+// Passing `scope`/`query`/`canView`/`canEdit`/... to `crudBlocks()` throws; declare an enforced
+// resource instead: `defineCrud('posts', { query, canEdit })`.
 export function crud(def) {
   if (!def || typeof def !== 'object') {
     throw new Error('crud: expected a definition object, e.g. crud({ table: "posts" })')

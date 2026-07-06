@@ -56,15 +56,29 @@ registerBlock('form', {
   },
 })
 
+// Resource-level authorization keys. They are enforced SERVER-SIDE by `defineCrud` (on page meta,
+// read by viewData) or vike-admin's `defineResource` (in its data layer) — never by the block path.
+// A block descriptor is serializable data handed to the renderer/client, so a function can't ride in
+// it; crudBlocks would have to STRIP these, silently shipping an unscoped/ungated page. Reject them
+// loudly instead and point at the enforced resource helper (#690).
+const RESOURCE_AUTH_KEYS = ['scope', 'query', 'onCreate', 'canIndex', 'canView', 'canCreate', 'canEdit', 'canDelete']
+
 // The crud PRESET as blocks: expand a table into its list + record + form block descriptors,
 // so `sections: crudBlocks({ table: 'posts' })` drops the full CRUD triad into a page. Each
 // block carries ONLY the keys it reads (its own refinement array), so the three descriptors
-// share no nested references and — crucially — the crud config's `scope`/`canView`/`canEdit`
-// FUNCTIONS never ride into a block descriptor (those are server-side data concerns; a block
-// descriptor is serializable data handed to the renderer/client). Row scoping for a rendered
-// crud page is wired server-side through the data layer, not through the serialized block.
+// share no nested references. crudBlocks shapes the UI only — row scoping and `can*` gates are a
+// resource concern (see RESOURCE_AUTH_KEYS above) and are rejected here rather than silently dropped.
 export function crudBlocks(opts) {
   const cfg = crud(opts) // validates `table`
+  const authKey = RESOURCE_AUTH_KEYS.find((k) => cfg[k] !== undefined)
+  if (authKey) {
+    throw new Error(
+      `crudBlocks: \`${authKey}\` is a resource-level authorization option and is NOT enforced on a ` +
+        `crudBlocks() page — the block descriptors are serializable and would silently drop it, shipping ` +
+        `rows unscoped/ungated. Declare an enforced resource instead: ` +
+        `defineCrud('${cfg.table}', { ${authKey}: ... }).`,
+    )
+  }
   // Collapse the column()/display()/field() BUILDERS in a refinement array to plain specs, so the
   // block descriptor stays serializable: it rides in a section's `props`, which Vike serializes to
   // the client, and a builder carries function methods (.sortable(), .build()) that can't cross

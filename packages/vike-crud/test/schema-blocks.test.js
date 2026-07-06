@@ -38,12 +38,25 @@ test('a table block against a missing table is a clear error', () => {
 })
 
 test('crudBlocks descriptors are independent and carry no functions (serializable)', () => {
-  const [list, record, form] = crudBlocks({ table: 'posts', list: [{ name: 'title' }], scope: () => ({ x: 1 }), canEdit: () => true })
-  // only the key each block reads, no cross-block sharing, no scope/canEdit functions leaked
+  const [list, record, form] = crudBlocks({ table: 'posts', list: [{ name: 'title' }], record: [{ name: 'body' }] })
+  // only the key each block reads, no cross-block sharing
   assert.deepEqual(list, { block: 'list', table: 'posts', list: [{ name: 'title' }] })
-  assert.deepEqual(record, { block: 'record', table: 'posts' })
+  assert.deepEqual(record, { block: 'record', table: 'posts', record: [{ name: 'body' }] })
   assert.deepEqual(form, { block: 'form', table: 'posts' })
   for (const b of [list, record, form]) for (const v of Object.values(b)) assert.notEqual(typeof v, 'function')
+})
+
+test('crudBlocks rejects resource-level auth keys instead of silently dropping them (#690)', () => {
+  // the block path can't enforce these — they must go on defineCrud, not crudBlocks
+  for (const key of ['scope', 'query', 'onCreate', 'canIndex', 'canView', 'canCreate', 'canEdit', 'canDelete']) {
+    assert.throws(
+      () => crudBlocks({ table: 'posts', [key]: () => true }),
+      new RegExp(`\`${key}\`.*NOT enforced.*defineCrud`, 's'),
+      `crudBlocks should throw on \`${key}\``,
+    )
+  }
+  // UI-only config is still fine
+  assert.doesNotThrow(() => crudBlocks({ table: 'posts', list: [{ name: 'title' }], slots: { author: 'author-chip' } }))
 })
 
 test('the schema-derived blocks describe themselves in the catalog (agent discovery)', () => {
