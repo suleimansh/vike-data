@@ -4,8 +4,7 @@
 // a guard that lets Stripe through while everything else stays protected.
 import { test, beforeEach } from 'node:test'
 import assert from 'node:assert/strict'
-import { csrfGuard, resetCsrf } from 'vike-csrf'
-import bootstrapCsrf from 'vike-csrf/bootstrap'
+import { csrfGuard, configureCsrf, resetCsrf, settingsFromConfig } from 'vike-csrf'
 import purchaseConfig from '../purchase/+config.js'
 import subscriptionConfig from '../subscription/+config.js'
 import { PURCHASE_WEBHOOK_PATH } from '../purchase/middleware.js'
@@ -27,11 +26,10 @@ test('both models self-install vike-csrf; values only, no meta re-declaration', 
 })
 
 test('the seam end-to-end: Stripe reaches the webhook, a forged POST elsewhere still 403s', () => {
-  // What Vike hands the hook when both models are installed: one cumulative entry per source.
-  bootstrapCsrf({
-    isClientSide: false,
-    config: { csrfExempt: [purchaseConfig.csrfExempt, subscriptionConfig.csrfExempt] },
-  })
+  // What Vike resolves when both models are installed: one cumulative entry per source.
+  configureCsrf(
+    settingsFromConfig({ csrfExempt: [purchaseConfig.csrfExempt, subscriptionConfig.csrfExempt] }),
+  )
 
   // Stripe's delivery is server-to-server (no Origin header), but even a browser-shaped
   // cross-origin POST passes on the exempted path: signature verification is the defense here.
