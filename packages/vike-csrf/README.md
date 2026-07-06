@@ -103,11 +103,14 @@ the meta.
 
 ## How the config reaches the guard
 
-A universal middleware cannot read Vike config (there is no pageContext). vike-csrf wires
-an `onCreateGlobalContext` hook (`bootstrap.js`) that copies the resolved `csrf` +
-`csrfExempt` values into module-level settings once, at globalContext creation, which
-happens before any request reaches a middleware. Unconfigured means the secure default:
-enforce on, no extra origins, no exemptions.
+A universal middleware cannot read Vike config (there is no pageContext). The guard reads
+the resolved `csrf` + `csrfExempt` values lazily off vike's `getGlobalContextSync()`,
+server-only; `vike` is an optional peer imported dynamically, so the package still works
+outside a Vike app (unit tests, plain node), where an explicit `configureCsrf()` call is
+the override. Deliberately NOT a config hook: hooks are pointer-imports, the
+client+server ones land in the client entry, and a transitively-installed package is not
+resolvable from the app there. Unconfigured means the secure default: enforce on, no
+extra origins, no exemptions.
 
 ## Proxies
 

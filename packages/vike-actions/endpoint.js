@@ -9,6 +9,7 @@
 // action's run reads `{ input, user, db }` instead of importing its own repo).
 import { enhance, MiddlewareOrder } from '@universal-middleware/core'
 import { jsonResponse } from '@vike-data/kit'
+import { csrfGuard, requireJsonContent } from 'vike-csrf'
 import { runAction } from './run.js'
 import { getAction } from './registry.js'
 
@@ -38,6 +39,13 @@ export function createActionsHandler({ resolveUser = defaultResolveUser, buildCo
     if (request.method !== 'POST') return json(405, { error: `Method ${request.method} not allowed` })
     if (handled.has(request)) return
     handled.add(request)
+
+    // Defense-in-depth (#677): cookie-authenticated + state-mutating, so verify the caller before
+    // touching the registry or the body. Policy comes from the app's csrf/csrfExempt config.
+    const denied = csrfGuard(request)
+    if (denied) return denied
+    const jsonBody = requireJsonContent(request)
+    if (!jsonBody.ok) return json(415, { error: jsonBody.reason })
 
     const name = decodeURIComponent(match[1])
     if (!getAction(name)) return json(404, { error: `Unknown action "${name}"` })

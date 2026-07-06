@@ -1,14 +1,13 @@
 // The config seam and the DIAMOND: many endpoint extensions extend vike-csrf, so the meta
 // declaration must exist exactly once (here), adopters contribute values only, and the
-// cumulative csrfExempt contributions must merge to one flat list through bootstrap. Same
+// cumulative csrfExempt contributions must merge to one flat list (settingsFromConfig). Same
 // composition proof style as vike-teams' config.test.js; the Vike-level dedupe of a shared
 // `extends` target is the mechanism vike-schema's `schemas` already exercises in every app
 // that installs auth + admin + queue together.
 import { test, beforeEach } from 'node:test'
 import assert from 'node:assert/strict'
 import csrfConfig from '../+config.js'
-import bootstrapCsrf from '../bootstrap.js'
-import { csrfGuard, csrfSettings, resetCsrf } from '../index.js'
+import { csrfGuard, csrfSettings, configureCsrf, resetCsrf, settingsFromConfig } from '../index.js'
 
 beforeEach(() => resetCsrf())
 
@@ -25,8 +24,10 @@ test('declares both keys once: csrf app-wide, csrfExempt cumulative, both global
   assert.deepEqual(csrfConfig.csrfExempt, [])
 })
 
-test('wires the config -> runtime bridge as a pointer-import hook', () => {
-  assert.equal(csrfConfig.onCreateGlobalContext, 'import:vike-csrf/bootstrap:default')
+test('carries NO hook and NO pointer-import: nothing for a client bundle to resolve (#718)', () => {
+  const pointers = JSON.stringify(csrfConfig).match(/import:[^"]+/g) || []
+  assert.deepEqual(pointers, [])
+  assert.equal(csrfConfig.onCreateGlobalContext, undefined)
 })
 
 test('extends nothing: the keystone sits at the bottom of the diamond', () => {
@@ -55,34 +56,31 @@ test('adopters contribute values, never a second meta declaration', () => {
 })
 
 test('the cumulative contributions merge to one flat exemption list', () => {
-  // What Vike hands the hook for a cumulative config: one entry per contributing source
+  // What Vike hands out for a cumulative config: one entry per contributing source
   // (vike-csrf's default [] included), in install order.
   const csrfExempt = [csrfConfig.csrfExempt, stripe.csrfExempt, push.csrfExempt]
-  bootstrapCsrf({ isClientSide: false, config: { csrfExempt } })
-  assert.deepEqual(csrfSettings().exempt, ['/webhooks/stripe', '/push/*'])
+  assert.deepEqual(settingsFromConfig({ csrfExempt }).exempt, ['/webhooks/stripe', '/push/*'])
 })
 
 test('a path two extensions both exempt survives once', () => {
-  bootstrapCsrf({ isClientSide: false, config: { csrfExempt: [['/hooks'], ['/hooks']] } })
-  assert.deepEqual(csrfSettings().exempt, ['/hooks'])
+  assert.deepEqual(settingsFromConfig({ csrfExempt: [['/hooks'], ['/hooks']] }).exempt, ['/hooks'])
 })
 
 // --- the bridge ------------------------------------------------------------------------
 
-test('bootstrap applies the app-wide csrf key alongside the merged exemptions', () => {
-  bootstrapCsrf({
-    isClientSide: false,
-    config: {
-      csrf: { allowedOrigins: ['https://admin.example.com'], enforce: true },
-      csrfExempt: [['/webhooks/stripe']],
-    },
+test('settingsFromConfig applies the app-wide csrf key alongside the merged exemptions', () => {
+  const derived = settingsFromConfig({
+    csrf: { allowedOrigins: ['https://admin.example.com'], enforce: true },
+    csrfExempt: [['/webhooks/stripe']],
   })
-  assert.deepEqual(csrfSettings(), {
+  assert.deepEqual(derived, {
     allowedOrigins: ['https://admin.example.com'],
     enforce: true,
     exempt: ['/webhooks/stripe'],
   })
 
+  // Fed through the holder, the guard honors it end-to-end.
+  configureCsrf(derived)
   const cross = (path) =>
     new Request(`https://app.example.com${path}`, {
       method: 'POST',
@@ -92,12 +90,15 @@ test('bootstrap applies the app-wide csrf key alongside the merged exemptions', 
   assert.ok(csrfGuard(cross('/api')) instanceof Response)
 })
 
-test('no csrf config at all leaves the secure default in place', () => {
-  bootstrapCsrf({ isClientSide: false, config: {} })
+test('no csrf config at all derives the secure default', () => {
+  assert.deepEqual(settingsFromConfig({}), { allowedOrigins: [], enforce: true, exempt: [] })
   assert.deepEqual(csrfSettings(), { allowedOrigins: [], enforce: true, exempt: [] })
 })
 
-test('the hook is a server hook: on the client it must not touch the settings', () => {
-  bootstrapCsrf({ isClientSide: true, config: { csrf: { enforce: false } } })
-  assert.deepEqual(csrfSettings(), { allowedOrigins: [], enforce: true, exempt: [] })
+test('outside a Vike app (this test) the guard runs on the holder: secure default', () => {
+  // The lazy vike bridge finds no globalContext here, so the holder rules.
+  const denied = csrfGuard(
+    new Request('https://app.example.com/api', { method: 'POST', headers: { origin: 'https://evil.example.com' } }),
+  )
+  assert.ok(denied instanceof Response)
 })

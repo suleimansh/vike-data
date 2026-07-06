@@ -85,6 +85,15 @@ A hint that throws is a no-op — the write already succeeded, so a bad UX hint 
 
 or `{ "ok": false, "error": "..." }` with the matching status. The endpoint never touches the DB itself — it calls the pure `runAction` (see below).
 
+### CSRF
+
+Actions require a same-origin JSON fetch. The endpoint self-installs
+[vike-csrf](../vike-csrf) and calls its guard by default: a cross-origin browser POST gets
+a 403 (verified via `Origin` / `Sec-Fetch-Site`; non-browser callers pass), and a
+non-`application/json` body gets a 415, which kills the `text/plain` form-POST trick.
+Policy (extra `allowedOrigins`, `enforce`) comes from the app-wide `csrf` config key; the
+client bindings already send the right header.
+
 ### Injecting a `db` (or a custom user resolver)
 
 The default endpoint gives an action `{ input, user }`; an action's `run` can import its own repo. To have the endpoint hand every action a `db` (or swap how the user is resolved), build the handler yourself:

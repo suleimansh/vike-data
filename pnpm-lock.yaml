@@ -802,6 +802,9 @@ importers:
       vike-blocks:
         specifier: workspace:*
         version: link:../vike-blocks
+      vike-csrf:
+        specifier: workspace:*
+        version: link:../vike-csrf
       vike-react:
         specifier: '>=0.6'
         version: 0.6.25(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)))
@@ -981,7 +984,11 @@ importers:
         specifier: '>=3.5'
         version: 3.5.38(typescript@5.9.3)
 
-  packages/vike-csrf: {}
+  packages/vike-csrf:
+    dependencies:
+      vike:
+        specifier: 0.4.259-commit-f6ecfb2
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
 
   packages/vike-drizzle:
     dependencies:
