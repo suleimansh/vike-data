@@ -27,6 +27,7 @@
     "@vike-data/universal-schema": "workspace:*",
     "@vike-data/vike-schema": "workspace:*",
     "vike-auth": "workspace:*",
+    "vike-csrf": "workspace:*",
     "vike-teams": "workspace:*"
   },
   "devDependencies": {
