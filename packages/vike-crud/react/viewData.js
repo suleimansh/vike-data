@@ -6,9 +6,10 @@
 // resource's index. No separate endpoint — a plain SSR form post.
 import { render, redirect } from 'vike/abort'
 import { resolveViewTables, buildDb, hydrateView, createRow, updateRow, deleteRow, loadOwnedRow, queryScope, allow, keepVisible } from '../index.js'
+import { csrfGuard } from 'vike-csrf'
 import { resolveViewRequest, formFieldsFor, activeDialog } from './pages.js'
 import { findSection } from '../walk.js'
-import { readFormRequest } from '../request.js'
+import { readFormRequest, csrfRequestOf } from '../request.js'
 
 export async function viewData(pageContext) {
   const config = pageContext.config
@@ -28,6 +29,10 @@ export async function viewData(pageContext) {
 
   const req = readFormRequest(pageContext)
   if (req.method === 'POST') {
+    // CSRF (#703): a plain SSR form post is exactly what a cross-site page can forge, so verify
+    // the caller before reading the body. Policy comes from the app's csrf/csrfExempt config.
+    const surfaced = csrfRequestOf(pageContext)
+    if (surfaced && csrfGuard(surfaced)) throw render(403)
     const form = await req.formData()
     const table = form.get('_table') ?? crud.table ?? null
     // A `.when`-hidden field is not writable: drop it before coercing, so a forged hidden field

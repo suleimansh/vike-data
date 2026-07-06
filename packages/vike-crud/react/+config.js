@@ -20,7 +20,7 @@
 // `views`, at request time, on the server.
 export default {
   name: 'vike-crud-react',
-  extends: ['import:@vike-data/vike-schema/config:default'],
+  extends: ['import:@vike-data/vike-schema/config:default', 'import:vike-csrf/config:default'],
   meta: {
     views: { env: { server: true }, cumulative: true },
   },
