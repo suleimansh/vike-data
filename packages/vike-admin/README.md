@@ -79,6 +79,7 @@ Dialog rendering works on **React and Vue** (both reuse vike-blocks' `Overlay`).
 - **Data**: reads/writes go through [universal-orm](../universal-orm) (`db.<table>.find` / `.insert`) on whatever adapter the app registered (memory for dev, Drizzle for real). No ORM is imported.
 - **Write POSTs**: the write routes own their own POST. Vike hands the Web Request as `pageContext._reqWeb`, so `/admin/:table/new` renders the form (GET) and inserts (POST), and `/admin/:table/:id` renders the edit form (GET) and updates or deletes (POST), then redirects. No separate endpoint.
 - **Auth**: a `guard` fences `/admin/*` to signed-in users (`pageContext.user`, from vike-auth); per-resource `canIndex` / `canCreate` / `canView` / `canEdit` / `canDelete` refine access per screen, and `query` / `onCreate` (above) bound which rows a user sees and can write.
+- **Foreign-key labels & pickers**: a FK column is shown by its target's `recordTitle` (a `owner_id` renders the owner's email, not a uuid) and a FK form field becomes a `<select>` of the target rows. This enrichment mirrors the user's **list access** to the target: the target must be a registered resource the user may `canIndex`, and it is bounded by that resource's own `query` scope. A FK whose target is not a registered, indexable resource shows the raw key and offers no picker options (it never enumerates a table the user couldn't list) — register the target as a resource to enable the label/picker.
 
 ## Agent API (JSON)
 
