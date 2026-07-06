@@ -4,7 +4,7 @@
 // viewRecord / viewFields) — the same derivation the crud preset uses, no second copy.
 // Importing this module registers the three blocks into the shared registry.
 import { registerBlock } from 'vike-blocks'
-import { crud } from './define.js'
+import { crud, plainSpecs } from './define.js'
 import { tableNamed, viewColumns, viewRecord, viewFields } from './resolve.js'
 
 // A table-derived block treats its own props as a crud() config (table + the same
@@ -79,12 +79,11 @@ export function crudBlocks(opts) {
         `defineCrud('${cfg.table}', { ${authKey}: ... }).`,
     )
   }
-  // Collapse the column()/display()/field() BUILDERS in a refinement array to plain specs, so the
-  // block descriptor stays serializable: it rides in a section's `props`, which Vike serializes to
-  // the client, and a builder carries function methods (.sortable(), .build()) that can't cross
-  // that boundary. resolve.js already accepts either a builder or a plain spec, so nothing downstream
-  // changes. (A view built by hand can also pass plain specs directly.)
-  const plain = (arr) => arr?.map((e) => (typeof e?.build === 'function' ? e.build() : e))
+  // Collapse the column()/display()/field() BUILDERS in a refinement array to plain specs (shared
+  // `plainSpecs`), so the block descriptor stays serializable: it rides in a section's `props`,
+  // which Vike serializes to the client, and a builder carries function methods (.sortable(),
+  // .build()) that can't cross that boundary. resolve.js accepts either a builder or a plain spec.
+  const plain = plainSpecs
   // A view-level `slots: { field: token }` map is plain, serializable data (string tokens,
   // not components), so it rides into each block descriptor and the field derivation reads it.
   const slots = cfg.slots ? { slots: cfg.slots } : {}

@@ -20,11 +20,15 @@ export function relativeTime(value) {
   return 'just now'
 }
 
-// A named client-side formatter token -> a display transform; booleans read yes/no. Unknown
+// The one place a boolean renders as text, shared by the list cell and the record field so the
+// two twins can't drift (list read lowercase, record read Yes/No before this).
+export const booleanLabel = (value) => (value ? 'Yes' : 'No')
+
+// A named client-side formatter token -> a display transform; booleans read Yes/No. Unknown
 // tokens render the raw value.
 export function formatValue(value, format) {
   if (value == null) return ''
   if (format === 'since') return relativeTime(value)
-  if (typeof value === 'boolean') return value ? 'yes' : 'no'
+  if (typeof value === 'boolean') return booleanLabel(value)
   return String(value)
 }
