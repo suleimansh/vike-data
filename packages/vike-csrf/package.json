@@ -1,0 +1,15 @@
+{
+  "name": "vike-csrf",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "vike-csrf: CSRF defense for the extension family. Origin verification (Origin / Sec-Fetch-Site) is the primary check, no token machinery; requireJsonContent kills the text/plain form-POST trick. Declares the app-wide `csrf` config key (allowedOrigins, enforce) and the cumulative `csrfExempt` seam that extensions contribute their signature-verified webhook paths to. Endpoint extensions depend on it transitively and call csrfGuard by default, so installing one of them is protected with no opt-in. Zero dependencies, server-only.",
+  "exports": {
+    ".": "./index.js",
+    "./config": "./+config.js",
+    "./bootstrap": "./bootstrap.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}
