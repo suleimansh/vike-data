@@ -11,6 +11,7 @@
 // most blob stores use - per-object ACLs / private buckets are a follow-up. Contributed through
 // the cumulative `middleware` config from +config.js.
 import { enhance, MiddlewareOrder } from '@universal-middleware/core'
+import { csrfGuard } from 'vike-csrf'
 import { getAdapter } from '@universal-orm/core'
 import { jsonResponse as json, resolveOwnerId as resolveOwnerIdShared } from '@vike-data/kit'
 import { resolveGuardedUser, resolveGuardSubjectTable } from 'vike-auth/server'
@@ -70,6 +71,12 @@ export function createStorageMiddleware() {
     const rest =
       url.pathname === '/uploads' ? '' : url.pathname.startsWith('/uploads/') ? url.pathname.slice('/uploads/'.length) : null
     if (rest === null) return
+
+    // CSRF (#704): the upload POST and DELETE ride the session cookie, so verify the caller
+    // before resolving the user. Safe methods (the GET reads) pass; policy from the app's
+    // csrf/csrfExempt config.
+    const denied = csrfGuard(request)
+    if (denied) return denied
 
     // POST /uploads - upload a file owned by the signed-in user (or their bound owner, e.g. org).
     if (request.method === 'POST' && rest === '') {

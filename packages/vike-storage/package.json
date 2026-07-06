@@ -24,7 +24,8 @@
     "@universal-orm/core": "workspace:*",
     "@vike-data/kit": "workspace:*",
     "@vike-data/vike-schema": "workspace:*",
-    "vike-auth": "workspace:*"
+    "vike-auth": "workspace:*",
+    "vike-csrf": "workspace:*"
   },
   "devDependencies": {
     "@universal-orm/memory": "workspace:*"
@@ -36,9 +37,17 @@
     "vike-vue": ">=0.9"
   },
   "peerDependenciesMeta": {
-    "react": { "optional": true },
-    "vike-react": { "optional": true },
-    "vue": { "optional": true },
-    "vike-vue": { "optional": true }
+    "react": {
+      "optional": true
+    },
+    "vike-react": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    },
+    "vike-vue": {
+      "optional": true
+    }
   }
 }
