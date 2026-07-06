@@ -19,6 +19,18 @@ test('runQuery: returning the builder unrefined is unscoped (the admin bypass)',
   assert.deepEqual(runQuery(undefined, {}), {}) // no query => unscoped
 })
 
+test('runQuery: a brace-body fn that touches the builder but forgets `return q` is still scoped (#691)', () => {
+  // The one-character mistake: `{ q.where(...) }` with no return. Must NOT fail open to all rows.
+  assert.deepEqual(
+    runQuery((q, ctx) => {
+      q.where('user_id', ctx.user.id)
+    }, { user: { id: 'u1' } }),
+    { user_id: 'u1' },
+  )
+  // An untouched builder with no return stays unscoped (nothing to honor).
+  assert.deepEqual(runQuery(() => {}, {}), {})
+})
+
 test('queryScope adapts query(q, ctx) into a scope(table, ctx) => filter', () => {
   const scope = queryScope((q, ctx) => q.where('user_id', ctx.user.id))
   assert.equal(typeof scope, 'function')

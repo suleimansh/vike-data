@@ -24,14 +24,16 @@ function queryBuilder() {
 
 // Run a resource `query(q, ctx)` and return the universal-orm filter it built. Returning the
 // builder unrefined (the admin bypass) yields `{}` = unscoped; returning a plain filter object is
-// honored as-is; anything else (including a falsy return) is unscoped.
+// honored as-is. A falsy return is fail-safe: if the builder was touched (a brace-body fn that
+// called `.where` but forgot `return q`) its filter is honored, so a missing `return` can't
+// silently drop row scoping; only an untouched builder is unscoped.
 export function runQuery(query, ctx) {
   if (typeof query !== 'function') return {}
   const q = queryBuilder()
   const out = query(q, ctx)
   if (out === q) return q._filter
   if (out && typeof out === 'object') return out._filter ?? out
-  return {}
+  return Object.keys(q._filter).length ? q._filter : {}
 }
 
 // Adapt a resource `query(q, ctx)` into the data layer's `scope(table, ctx) -> filter` shape, so
