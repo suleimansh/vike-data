@@ -8,6 +8,7 @@
 // Contributed through the cumulative `middleware` config from +config.js, so it composes
 // alongside vike-auth's endpoints.
 import { enhance, MiddlewareOrder } from '@universal-middleware/core'
+import { csrfGuard, requireJsonContent } from 'vike-csrf'
 import { getAdapter } from '@universal-orm/core'
 import { jsonResponse as json, readJsonSafe as readJson, resolveOwnerId as resolveOwnerIdShared } from '@vike-data/kit'
 import { resolveSessionUser } from 'vike-auth/server'
@@ -34,6 +35,17 @@ export function createPushMiddleware() {
   async function pushMiddleware(request) {
     const url = new URL(request.url)
     if (!url.pathname.startsWith('/push/')) return // fall through to Vike
+
+    // CSRF (#705): the subscribe/unsubscribe POSTs ride the session cookie, so verify the
+    // caller before resolving the user; the JSON check kills the text/plain form-POST trick
+    // on the two owned endpoints (an unknown path stays a 404). Policy from the app's
+    // csrf/csrfExempt config.
+    const denied = csrfGuard(request)
+    if (denied) return denied
+    if (url.pathname === '/push/subscribe' || url.pathname === '/push/unsubscribe') {
+      const jsonBody = requireJsonContent(request)
+      if (!jsonBody.ok) return json(415, { error: jsonBody.reason })
+    }
 
     if (url.pathname === '/push/subscribe' && request.method === 'POST') {
       const user = await resolveSessionUser(request)

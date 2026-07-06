@@ -1173,6 +1173,9 @@ importers:
       vike-auth:
         specifier: workspace:*
         version: link:../vike-auth
+      vike-csrf:
+        specifier: workspace:*
+        version: link:../vike-csrf
       vike-queue:
         specifier: workspace:*
         version: link:../vike-queue
