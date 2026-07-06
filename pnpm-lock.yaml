@@ -978,6 +978,8 @@ importers:
         specifier: '>=3.5'
         version: 3.5.38(typescript@5.9.3)
 
+  packages/vike-csrf: {}
+
   packages/vike-drizzle:
     dependencies:
       '@universal-orm/core':
