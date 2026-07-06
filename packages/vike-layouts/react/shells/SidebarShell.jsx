@@ -7,9 +7,10 @@ import { SlotView } from 'vike-blocks/react/SlotView'
 import { useLayoutConfig } from 'vike-blocks/react/LayoutView'
 
 export function SidebarShell() {
-  const { dir, logo } = useLayoutConfig()
+  const { dir, logo, footer } = useLayoutConfig()
   return (
-    <div dir={dir} style={{ minHeight: '100vh', display: 'flex', background: 'var(--color-bg)', color: 'var(--color-text)', fontFamily: 'var(--font-sans)' }}>
+    <div dir={dir} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--color-bg)', color: 'var(--color-text)', fontFamily: 'var(--font-sans)' }}>
+      <div style={{ flex: 1, display: 'flex', minHeight: 0 }}>
       <aside
         style={{
           width: 220,
@@ -32,6 +33,12 @@ export function SidebarShell() {
       <main style={{ flex: 1, padding: 'var(--space-lg, 2rem)' }}>
         <SlotView from="content" />
       </main>
+      </div>
+      {footer?.length > 0 && (
+        <footer style={{ padding: 'var(--space-md, 1rem) var(--space-lg, 2rem)', borderTop: '1px solid var(--color-border)' }}>
+          <SlotView name="footer" from="config" />
+        </footer>
+      )}
     </div>
   )
 }
