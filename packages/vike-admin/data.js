@@ -8,9 +8,10 @@
 // performs the insert (POST). No separate endpoint, and no middleware that can't see the
 // composed schema.
 import { randomUUID } from 'node:crypto'
-import { redirect } from 'vike/abort'
+import { redirect, render } from 'vike/abort'
 import { isInCondition } from '@universal-orm/core'
-import { readFormRequest } from 'vike-crud/request'
+import { readFormRequest, csrfRequestOf } from 'vike-crud/request'
+import { csrfGuard } from 'vike-csrf'
 // Shared, framework-agnostic helpers reused from vike-crud's data layer instead of a parallel copy:
 // the primary-key resolver and the form-row coercion (its widget-aware superset of what admin had).
 import { primaryKeyOf, rowFromForm } from 'vike-crud/data'
@@ -403,6 +404,9 @@ export async function newData(pageContext) {
 
   const req = readFormRequest(pageContext)
   if (req.method === 'POST') {
+    // CSRF (#702): a cross-site page can forge this form POST; verify before reading the body.
+    const surfaced = csrfRequestOf(pageContext)
+    if (surfaced && csrfGuard(surfaced)) throw render(403)
     const row = rowFromForm(fields, await req.formData())
     await performInsert(db, table, row, { schemaTable, resource, ctx })
     throw redirect(`/admin/${table}`)
@@ -511,6 +515,9 @@ export async function editData(pageContext) {
 
   const req = readFormRequest(pageContext)
   if (req.method === 'POST') {
+    // CSRF (#702): a cross-site page can forge this form POST; verify before reading the body.
+    const surfaced = csrfRequestOf(pageContext)
+    if (surfaced && csrfGuard(surfaced)) throw render(403)
     const form = await req.formData()
     const existing = await db[table].findOne(owned)
     const isDelete = form.get('_action') === 'delete'

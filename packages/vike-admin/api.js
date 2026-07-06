@@ -29,6 +29,7 @@
 import { enhance, MiddlewareOrder } from '@universal-middleware/core'
 import { renderPage } from 'vike/server'
 import { jsonResponse } from '@vike-data/kit'
+import { csrfGuard, requireJsonContent } from 'vike-csrf'
 import { projectRow } from './project.js'
 
 // Map a GET `/admin*.json` path to the admin PAGE route it mirrors, or null when it isn't a
@@ -183,6 +184,16 @@ async function adminApi(request) {
   }
   if (handled.has(request)) return
   handled.add(request)
+
+  // CSRF (#702): cookie-authenticated writes verify the caller first. Non-browser agents (no
+  // Origin / Sec-Fetch-Site) pass; the content-type check applies to the body-carrying verbs.
+  const denied = csrfGuard(request)
+  if (denied) return denied
+  if (target.hasBody) {
+    const jsonBody = requireJsonContent(request)
+    if (!jsonBody.ok) return json(415, { error: jsonBody.reason })
+  }
+
   try {
     return await handleWrite(request, target)
   } catch {
