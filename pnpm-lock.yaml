@@ -894,6 +894,9 @@ importers:
       vike:
         specifier: 0.4.259-commit-f6ecfb2
         version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
+      vike-csrf:
+        specifier: workspace:*
+        version: link:../vike-csrf
       vike-i18n:
         specifier: workspace:*
         version: link:../vike-i18n
@@ -987,7 +990,11 @@ importers:
         specifier: '>=3.5'
         version: 3.5.38(typescript@5.9.3)
 
-  packages/vike-csrf: {}
+  packages/vike-csrf:
+    dependencies:
+      vike:
+        specifier: 0.4.259-commit-f6ecfb2
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@8.1.0(@types/node@26.0.0)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4))
 
   packages/vike-drizzle:
     dependencies:
@@ -1334,6 +1341,9 @@ importers:
       vike-auth:
         specifier: workspace:*
         version: link:../vike-auth
+      vike-csrf:
+        specifier: workspace:*
+        version: link:../vike-csrf
       vike-teams:
         specifier: workspace:*
         version: link:../vike-teams

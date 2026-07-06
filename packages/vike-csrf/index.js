@@ -10,13 +10,14 @@
 //   requireJsonContent(request)                   pure verdict on the Content-Type
 //   csrfGuard(request, overrides?)                the composite adopters call: exemptions +
 //                                                 origin check + enforce knob, from the app's
-//                                                 `csrf` / `csrfExempt` config (bootstrap.js)
+//                                                 `csrf` / `csrfExempt` config (read lazily
+//                                                 off vike's globalContext, server-only)
 //
 // Endpoint extensions (vike-actions, vike-auth, ...) call csrfGuard by DEFAULT, so installing
 // one of them is protected with no opt-in. Settings unset means the SECURE default: enforce
 // on, no extra allowed origins, no exemptions.
 //
-// Server-only, zero dependencies.
+// Server-only. Zero hard dependencies; vike is an optional peer, imported lazily.
 
 const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS'])
 
@@ -76,32 +77,76 @@ export function requireJsonContent(request) {
 // ---------------------------------------------------------------------------
 // Runtime settings: the bridge from the app's `csrf` / `csrfExempt` config.
 //
-// A universal middleware cannot read Vike config (no pageContext), so the +config hook
-// (bootstrap.js) copies the resolved values here ONCE at globalContext creation, which happens
-// before any request reaches a middleware. Unconfigured means the secure default.
+// A universal middleware cannot read Vike config (no pageContext), so the guard reads the
+// app's resolved global config off vike's globalContext, lazily and SERVER-only (#718: it
+// must never be a config hook — onCreateGlobalContext is a client+server built-in, and a
+// client pointer-import to a transitively-installed package is unresolvable from the app).
+// An explicit configureCsrf() call (tests, manual wiring outside Vike) wins over the config;
+// neither present means the secure default.
 
 const DEFAULTS = Object.freeze({ allowedOrigins: [], enforce: true, exempt: [] })
 let settings = { ...DEFAULTS }
+let configured = false
 
 export function configureCsrf({ allowedOrigins, enforce, exempt } = {}) {
+  configured = true
   if (allowedOrigins !== undefined) settings.allowedOrigins = allowedOrigins
   if (enforce !== undefined) settings.enforce = enforce
   if (exempt !== undefined) settings.exempt = exempt
 }
 
-export function csrfSettings() {
-  return { ...settings, allowedOrigins: [...settings.allowedOrigins], exempt: [...settings.exempt] }
-}
-
 // Test seam, mirrors the kit ports' clear().
 export function resetCsrf() {
+  configured = false
   settings = { ...DEFAULTS }
+}
+
+// Derive the runtime settings from a resolved Vike config: the app-wide `csrf` value plus the
+// cumulative `csrfExempt` contributions (one entry per contributing extension), flattened and
+// deduped. Pure; exported for adopters' composition tests.
+export function settingsFromConfig(config = {}) {
+  const csrf = config.csrf || {}
+  return {
+    allowedOrigins: csrf.allowedOrigins ?? [],
+    enforce: csrf.enforce ?? DEFAULTS.enforce,
+    exempt: [...new Set((config.csrfExempt || []).flat().filter(Boolean))],
+  }
+}
+
+// The vike bridge. The import is dynamic and tolerated to fail so the package keeps working
+// outside a Vike app (unit tests, plain node); inside one it resolves during server boot,
+// long before the first request. `vike` is an optional peer, never a hard dependency.
+let getGlobalContextSync = null
+import('vike/server').then((m) => { getGlobalContextSync = m.getGlobalContextSync }, () => {})
+
+// The settings csrfGuard runs with: an explicit configureCsrf() wins; else the app's resolved
+// config (re-derived only when vike hands out a new config object, e.g. a dev reload); else
+// the secure default. getGlobalContextSync throws outside a Vike app -> the holder.
+let derived = null
+let derivedFrom = null
+function activeSettings() {
+  if (configured || !getGlobalContextSync) return settings
+  try {
+    const config = getGlobalContextSync().config
+    if (derivedFrom !== config) {
+      derived = settingsFromConfig(config)
+      derivedFrom = config
+    }
+    return derived
+  } catch {
+    return settings
+  }
+}
+
+export function csrfSettings() {
+  const active = activeSettings()
+  return { ...active, allowedOrigins: [...active.allowedOrigins], exempt: [...active.exempt] }
 }
 
 // An exemption entry is an exact pathname ('/webhooks/stripe') or a trailing-wildcard prefix
 // ('/webhooks/*'). Plain prefixes are deliberately NOT supported: '/webhooks/stripe' must not
 // also exempt '/webhooks/stripe-evil'.
-export function isExempt(pathname, exempt = settings.exempt) {
+export function isExempt(pathname, exempt = activeSettings().exempt) {
   return exempt.some((entry) =>
     entry.endsWith('/*')
       ? pathname === entry.slice(0, -2) || pathname.startsWith(entry.slice(0, -1))
@@ -117,7 +162,7 @@ export function isExempt(pathname, exempt = settings.exempt) {
 // Returns null (pass) or a 403 JSON Response. `overrides` (same keys as the `csrf` config)
 // is for direct callers and tests; extensions normally pass nothing and get the app config.
 export function csrfGuard(request, overrides) {
-  const active = overrides ? { ...settings, ...overrides } : settings
+  const active = overrides ? { ...activeSettings(), ...overrides } : activeSettings()
   const { pathname } = new URL(request.url)
   if (isExempt(pathname, active.exempt)) return null
 

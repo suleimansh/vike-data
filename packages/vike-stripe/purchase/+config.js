@@ -10,7 +10,7 @@
 // alongside the subscription model, or on its own — they are independent Lego pieces.
 export default {
   name: 'vike-stripe-purchase',
-  extends: ['import:vike-teams/config:default'],
+  extends: ['import:vike-teams/config:default', 'import:vike-csrf/config:default'],
   meta: {
     segment: { env: { config: true, server: true } },
     // Optional override for the subject FK's TARGET table (the app passes a renamed
@@ -21,4 +21,8 @@ export default {
   segment: 'b2b',
   schemas: 'import:vike-stripe/purchase/schemas:default',
   middleware: 'import:vike-stripe/purchase/middleware:default',
+  // CSRF (#707): the webhook is signature-verified and not cookie-authenticated, so it
+  // self-declares on vike-csrf's cumulative exemption seam; apps never list it. The literal
+  // mirrors PURCHASE_WEBHOOK_PATH (middleware.js), which config can't import (it pulls the runtime tier).
+  csrfExempt: ['/stripe/purchase/webhook'],
 }
