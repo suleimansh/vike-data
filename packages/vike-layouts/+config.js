@@ -11,8 +11,11 @@
 //                nav links, not just the app.
 //   - `footer` : the footer slot. CUMULATIVE, same reason as nav.
 //   - `userMenu`: the signed-in user menu slot (a single selection, like logo).
-//   - `toolbar`: the composable chrome slot (#120/#122). CUMULATIVE — vike-toolbar
-//                and other extensions contribute settings items into it, like nav.
+//
+// A custom shell (registerShell) that declares its own slot also adds a matching `meta`
+// key (from the app or its own extension) so Vike collects that slot's config value.
+// vike-toolbar is NOT a slot here: it composes through its own `toolbarItems` seam and a
+// global wrapper (see its README), independent of the layout shell.
 export default {
   name: 'vike-layouts',
   meta: {
@@ -21,7 +24,6 @@ export default {
     nav: { env: { config: true, server: true, client: true }, cumulative: true },
     footer: { env: { config: true, server: true, client: true }, cumulative: true },
     userMenu: { env: { config: true, server: true, client: true } },
-    toolbar: { env: { config: true, server: true, client: true }, cumulative: true },
   },
   layout: 'centered',
 }
