@@ -15,7 +15,7 @@
 // (config.pages), the same core/UI split as every extension.
 export default {
   name: 'vike-admin',
-  extends: ['import:@vike-data/vike-schema/config:default'],
+  extends: ['import:@vike-data/vike-schema/config:default', 'import:vike-csrf/config:default'],
   middleware: 'import:vike-admin/api:default',
   meta: {
     adminResources: {
