@@ -10,9 +10,11 @@
     "./react": "./react/+config.js",
     "./react/ToolbarWrapper": "./react/ToolbarWrapper.jsx",
     "./react/Toolbar": "./react/Toolbar.jsx",
+    "./react/useToolbarSlot": "./react/useToolbarSlot.js",
     "./vue": "./vue/+config.js",
     "./vue/ToolbarWrapper": "./vue/ToolbarWrapper.vue",
-    "./vue/Toolbar": "./vue/Toolbar.vue"
+    "./vue/Toolbar": "./vue/Toolbar.vue",
+    "./vue/useToolbarSlot": "./vue/useToolbarSlot.js"
   },
   "peerDependencies": {
     "react": ">=18",
@@ -29,6 +31,15 @@
     "vike-vue": { "optional": true }
   },
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "test:components": "vitest run"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.2",
+    "@vitejs/plugin-react": "^5.2.0",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vue/test-utils": "^2.4.11",
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.9"
   }
 }

@@ -5,7 +5,8 @@
   "type": "module",
   "description": "Theme extension: a framework-agnostic core (design tokens -> CSS variables; theme brand + appearance axes) plus per-framework bindings as subpaths (vike-themes/react, and vue/solid later). One package, install and import the subpath for your framework.",
   "dependencies": {
-    "chroma-js": "^3.2.0"
+    "chroma-js": "^3.2.0",
+    "vike-toolbar": "workspace:*"
   },
   "exports": {
     ".": "./index.js",

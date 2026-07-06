@@ -1,32 +1,4 @@
-import { ref, onMounted, onUnmounted } from 'vue'
-
-const ROOT_ID = 'vike-toolbar-root'
-const ITEMS_ID = 'vike-toolbar-items'
-
-export function useToolbarSlot() {
-  const slot = ref(undefined) // PENDING on server + first client render
-  let obs = null
-  onMounted(() => {
-    const items = document.getElementById(ITEMS_ID)
-    if (items) {
-      slot.value = items
-      return
-    }
-    if (!document.getElementById(ROOT_ID)) {
-      slot.value = null
-      return
-    }
-    // Toolbar installed but its panel hasn't portaled in yet -> wait, stay PENDING.
-    obs = new MutationObserver(() => {
-      const node = document.getElementById(ITEMS_ID)
-      if (node) {
-        slot.value = node
-        obs.disconnect()
-      }
-    })
-    obs.observe(document.body, { childList: true, subtree: true })
-  })
-  // Disconnect if we unmount before the toolbar panel ever portals in (matches the react twin).
-  onUnmounted(() => obs?.disconnect())
-  return slot
-}
+// Re-export the canonical hook from vike-toolbar. The resolve + observer + cleanup used to
+// be hand-copied here (that copy is how #671's observer leak slipped in); it now has a
+// single leak-safe source in vike-toolbar/vue so this package can't drift from it (#683).
+export { useToolbarSlot } from 'vike-toolbar/vue/useToolbarSlot'

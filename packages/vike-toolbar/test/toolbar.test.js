@@ -8,16 +8,53 @@ import config from '../+config.js'
 
 const ctrl = (name) => `<${name}>` // stand-in for a control component
 
+// Run `fn` with console.warn captured, returning the collected messages. defineToolbarItems
+// warns (in dev) when it drops a control-less entry, so tests that trigger that swallow it.
+function captureWarns(fn) {
+  const warnings = []
+  const orig = console.warn
+  console.warn = (msg) => warnings.push(msg)
+  try {
+    fn()
+  } finally {
+    console.warn = orig
+  }
+  return warnings
+}
+
 test('defineToolbarItems fills defaults and drops control-less entries', () => {
-  const items = defineToolbarItems([
-    { id: 'theme', label: 'Appearance', order: 10, Control: ctrl('Theme') },
-    { label: 'no id', Control: ctrl('X') },
-    { id: 'broken' }, // no Control -> dropped
-  ])
+  let items
+  captureWarns(() => {
+    items = defineToolbarItems([
+      { id: 'theme', label: 'Appearance', order: 10, Control: ctrl('Theme') },
+      { label: 'no id', Control: ctrl('X') },
+      { id: 'broken' }, // no Control -> dropped
+    ])
+  })
   assert.equal(items.length, 2)
   assert.deepEqual(items[0], { id: 'theme', label: 'Appearance', order: 10, Control: ctrl('Theme') })
   assert.equal(items[1].id, null) // no fabricated id — a unique fallback is assigned only by allToolbarItems
   assert.equal(items[1].order, 0) // default order
+})
+
+test('defineToolbarItems warns (dev) when it drops a control-less entry, naming the id', () => {
+  const warnings = captureWarns(() =>
+    defineToolbarItems([{ id: 'broken' }, { Control: ctrl('ok') }, { label: 'anon' }]),
+  )
+  assert.equal(warnings.length, 2) // both control-less entries reported
+  assert.match(warnings[0], /"broken"/) // named by its id
+  assert.match(warnings[1], /\(no id\)/) // anonymous entry flagged as having no id
+})
+
+test('auto fallback id cannot collide with a look-alike explicit id (unique render keys)', () => {
+  // An id-less item is filled with a namespaced fallback (`vike-toolbar-item-N`). If an app
+  // literally uses that string as an explicit id, the fallback must still resolve unique.
+  const composed = allToolbarItems([
+    [{ Control: ctrl('auto') }], // fabricated -> vike-toolbar-item-0
+    [{ id: 'vike-toolbar-item-0', Control: ctrl('explicit') }], // same literal, explicit
+  ])
+  assert.equal(composed.length, 2)
+  assert.equal(new Set(composed.map((i) => i.id)).size, 2) // no duplicate keys
 })
 
 test('id-less items from different extensions all survive (no auto-id collision)', () => {
