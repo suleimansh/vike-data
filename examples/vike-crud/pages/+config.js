@@ -6,17 +6,17 @@
 //     point the views derive from) and provides the generic ViewPage + data hook the generated
 //     pages point at.
 //
-// `schemas` contributes the `posts` table. The views themselves live in +views.js (they carry auth
-// functions, which Vike requires be in their own +file, not inline here). We import that same
-// array only to compute `pages: viewPages(views)` -- turning each view.route into a real page.
-// Nothing else -- no page components, no forms, no controllers.
+// `schemas` contributes the `posts` table. The resources themselves live in +resources.js (they
+// carry auth functions, which Vike requires be in their own +file, not inline here). We import that
+// same array only to compute `pages: viewPages(resources)` -- turning each page.route into a real
+// page. Nothing else -- no page components, no forms, no controllers.
 import vikeReact from 'vike-react/config'
 import vikeView from 'vike-crud/react/config'
 import { viewPages } from 'vike-crud/react/pages'
 import themesExt from 'vike-themes/react'
 import toolbarExt from 'vike-toolbar/react'
 import layoutsExt from 'vike-layouts/react'
-import views from './+views.js'
+import resources from './+resources.js'
 import { postsSchema } from './posts.schema.js'
 
 export default {
@@ -42,7 +42,7 @@ export default {
   ],
 
   schemas: [postsSchema],
-  pages: viewPages(views),
+  pages: viewPages(resources),
 
   // The actions endpoint. This local pointer imports pages/actions.js, which registers the `publish`
   // action AND provides the handler (with a demo user). A real app instead does

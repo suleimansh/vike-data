@@ -1,10 +1,10 @@
 // #579 — honouring `present` in the renderer. Two pure pieces the client ViewPage builds on:
 // `sectionHasContent` keeps an empty CRUD block off the page (no stray empty record / edit form),
-// and the `nav` descriptor defineCrud attaches to the index list tells the list how to reach each
+// and the `nav` descriptor resourcePages attaches to the index list tells the list how to reach each
 // screen (route URL vs `?screen=` query vs inline-on-page).
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { defineCrud } from '../index.js'
+import { defineResource, resourcePages } from '../index.js'
 import { sectionHasContent } from '../react/pages.js'
 
 const sec = (block, props, resolved) => ({ block, props, resolved })
@@ -26,9 +26,9 @@ test('sectionHasContent: a form renders unless it is an empty edit', () => {
   assert.equal(sectionHasContent(sec('form', { screen: 'edit' }, { values: { id: 'p1' }, pk: 'id' })), true) // edit with a row
 })
 
-const indexNav = (opts) => defineCrud('posts', opts)[0].sections[0].nav
+const indexNav = (opts) => resourcePages(defineResource({ table: 'posts', ...opts }))[0].sections[0].nav
 
-test('defineCrud attaches a nav descriptor to the index list per screen presentation', () => {
+test('resourcePages attaches a nav descriptor to the index list per screen presentation', () => {
   assert.deepEqual(indexNav({ mode: 'dialog' }), { base: '/posts', view: 'dialog', create: 'dialog', edit: 'dialog' })
   assert.deepEqual(indexNav({ mode: 'route' }), { base: '/posts', view: 'route', create: 'route', edit: 'route' })
   assert.deepEqual(indexNav({ mode: 'inline' }), { base: '/posts', view: 'inline', create: 'inline', edit: 'inline' })

@@ -7,8 +7,10 @@ import assert from 'node:assert/strict'
 import { defineSchema } from '@vike-data/vike-schema/schema'
 import { setAdapter, clearAdapter } from '@universal-orm/core'
 import { createMemoryAdapter } from '@universal-orm/memory'
-import { defineCrud, resolveViewTables, buildDb, hydrateView, updateRow, deleteRow } from '../index.js'
+import { defineResource, resourcePages, resolveViewTables, buildDb, hydrateView, updateRow, deleteRow } from '../index.js'
 import { resolveViewRequest, matchRoute, viewPages } from '../react/pages.js'
+
+const rp = () => resourcePages(defineResource({ table: 'posts', mode: 'route' }))
 
 const posts = defineSchema('posts', (t) => {
   t.uuid('id').primary()
@@ -41,7 +43,7 @@ test('matchRoute captures @params and rejects mismatched shapes', () => {
 })
 
 test('resolveViewRequest resolves each screen; static routes win over @param', () => {
-  const views = defineCrud('posts', { mode: 'route' })
+  const views = rp()
   assert.equal(resolveViewRequest(views, '/posts').view.crud.screen, 'index')
   assert.equal(resolveViewRequest(views, '/posts/new').view.crud.screen, 'create')
   const view = resolveViewRequest(views, '/posts/p1')
@@ -52,25 +54,25 @@ test('resolveViewRequest resolves each screen; static routes win over @param', (
 })
 
 test('viewPages emits the @id param route (Vike route string) for the generated pages', () => {
-  const pages = viewPages(defineCrud('posts', { mode: 'route' }))
+  const pages = viewPages(rp())
   assert.ok(pages.some((p) => p.route === '/posts/@id'))
   assert.ok(pages.every((p) => p.data && p.Page))
 })
 
 test('view screen loads one owner-scoped row by route id', async () => {
-  const view = resolveViewRequest(defineCrud('posts', { mode: 'route' }), '/posts/p1').view
+  const view = resolveViewRequest(rp(), '/posts/p1').view
   const out = await hydrate(view, 'p1')
   assert.equal(out.sections.find((s) => s.block === 'record').resolved.row.title, 'Alice')
 })
 
 test('a non-owned id does not leak (record row is null)', async () => {
-  const view = resolveViewRequest(defineCrud('posts', { mode: 'route' }), '/posts/p2').view
+  const view = resolveViewRequest(rp(), '/posts/p2').view
   const out = await hydrate(view, 'p2') // p2 is bob's; current user is u1
   assert.equal(out.sections.find((s) => s.block === 'record').resolved.row, null)
 })
 
 test('edit screen pre-fills the owned row; blank (null) for another owner', async () => {
-  const editView = resolveViewRequest(defineCrud('posts', { mode: 'route' }), '/posts/p1/edit').view
+  const editView = resolveViewRequest(rp(), '/posts/p1/edit').view
   const owned = await hydrate(editView, 'p1')
   assert.equal(owned.sections.find((s) => s.block === 'form').resolved.values.title, 'Alice')
   const notOwned = await hydrate(editView, 'p2')
@@ -78,7 +80,7 @@ test('edit screen pre-fills the owned row; blank (null) for another owner', asyn
 })
 
 test('create screen form is blank (no id)', async () => {
-  const createView = resolveViewRequest(defineCrud('posts', { mode: 'route' }), '/posts/new').view
+  const createView = resolveViewRequest(rp(), '/posts/new').view
   const out = await hydrate(createView, null)
   assert.deepEqual(out.sections.find((s) => s.block === 'form').resolved.values, {})
 })

@@ -8,7 +8,7 @@ import { defineSchema } from '@vike-data/vike-schema/schema'
 import { setAdapter, clearAdapter } from '@universal-orm/core'
 import { createMemoryAdapter } from '@universal-orm/memory'
 import { resetCsrf, configureCsrf } from 'vike-csrf'
-import { defineCrud, resolveViewTables, buildDb } from '../index.js'
+import { defineResource, resourcePages, resolveViewTables, buildDb } from '../index.js'
 import { viewData } from '../react/viewData.js'
 import { csrfRequestOf } from '../request.js'
 
@@ -17,12 +17,12 @@ const posts = defineSchema('posts', (t) => {
   t.string('title')
   t.timestamps()
 })
-const config = (views) => ({ schemas: [posts], views })
-const views = defineCrud('posts', { mode: 'route' })
+const config = (resources) => ({ schemas: [posts], resources })
+const resources = resourcePages(defineResource({ table: 'posts', mode: 'route' }))
 
 // The authorization.test.js pageContext, plus request headers (the CSRF signal).
 function pc({ pathname, method = 'GET', body, headers = {} }) {
-  const context = { config: config(views), urlPathname: pathname, urlParsed: { search: {} }, user: { id: 'u1' } }
+  const context = { config: config(resources), urlPathname: pathname, urlParsed: { search: {} }, user: { id: 'u1' } }
   if (method === 'POST') {
     context._reqWeb = new Request('http://x' + pathname, { method: 'POST', headers, body: new URLSearchParams(body) })
   }

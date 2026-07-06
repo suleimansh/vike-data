@@ -56,8 +56,8 @@ registerBlock('form', {
   },
 })
 
-// Resource-level authorization keys. They are enforced SERVER-SIDE by `defineCrud` (on page meta,
-// read by viewData) or vike-admin's `defineResource` (in its data layer) — never by the block path.
+// Resource-level authorization keys. They are enforced SERVER-SIDE by `defineResource` (on page
+// meta, read by viewData) or vike-admin's data layer — never by the block path.
 // A block descriptor is serializable data handed to the renderer/client, so a function can't ride in
 // it; crudBlocks would have to STRIP these, silently shipping an unscoped/ungated page. Reject them
 // loudly instead and point at the enforced resource helper (#690).
@@ -76,7 +76,7 @@ export function crudBlocks(opts) {
       `crudBlocks: \`${authKey}\` is a resource-level authorization option and is NOT enforced on a ` +
         `crudBlocks() page — the block descriptors are serializable and would silently drop it, shipping ` +
         `rows unscoped/ungated. Declare an enforced resource instead: ` +
-        `defineCrud('${cfg.table}', { ${authKey}: ... }).`,
+        `defineResource({ table: '${cfg.table}', ${authKey}: ... }).`,
     )
   }
   // Collapse the column()/display()/field() BUILDERS in a refinement array to plain specs (shared

@@ -6,9 +6,11 @@ import assert from 'node:assert/strict'
 import { defineSchema } from '@vike-data/vike-schema/schema'
 import { setAdapter, clearAdapter } from '@universal-orm/core'
 import { createMemoryAdapter } from '@universal-orm/memory'
-import { defineCrud, display, field, resolveViewTables, buildDb, hydrateView, createRow, queryScope } from '../index.js'
+import { defineResource, resourcePages, display, field, resolveViewTables, buildDb, hydrateView, createRow, queryScope } from '../index.js'
 import { resolveViewRequest } from '../react/pages.js'
 import { viewData } from '../react/viewData.js'
+
+const rp = (opts) => resourcePages(defineResource({ table: 'posts', ...opts }))
 
 const posts = defineSchema('posts', (t) => {
   t.uuid('id').primary()
@@ -17,7 +19,7 @@ const posts = defineSchema('posts', (t) => {
   t.uuid('user_id')
   t.timestamps()
 })
-const config = (views) => ({ schemas: [posts], views })
+const config = (resources) => ({ schemas: [posts], resources })
 const tables = () => resolveViewTables({ schemas: [posts] })
 const admin = { id: 'a1', role: 'admin' }
 const user = { id: 'u1', role: 'user' }
@@ -33,8 +35,8 @@ beforeEach(async () => {
 
 // --- query read scope (admin sees all, others see their own) ---
 test('query scope filters list rows; admin bypass returns all', async () => {
-  const views = defineCrud('posts', { mode: 'route', query: (q, c) => (c.user.role === 'admin' ? q : q.where('user_id', c.user.id)) })
-  const view = resolveViewRequest(views, '/posts').view
+  const resources = rp({ mode: 'route', query: (q, c) => (c.user.role === 'admin' ? q : q.where('user_id', c.user.id)) })
+  const view = resolveViewRequest(resources, '/posts').view
   const scope = queryScope(view.crud.query)
 
   const asUser = await hydrateView(view, { tables: tables(), db, scope, ctx: { user }, search: {} })
@@ -47,8 +49,8 @@ test('query scope filters list rows; admin bypass returns all', async () => {
 
 // --- .when field visibility (data never ships) ---
 test('.when hides a field AND its data server-side', async () => {
-  const views = defineCrud('posts', { mode: 'route', view: [display('title'), display('secret').when((c) => c.user.role === 'admin')] })
-  const view = resolveViewRequest(views, '/posts/p1').view
+  const resources = rp({ mode: 'route', view: [display('title'), display('secret').when((c) => c.user.role === 'admin')] })
+  const view = resolveViewRequest(resources, '/posts/p1').view
 
   const asUser = await hydrateView(view, { tables: tables(), db, ctx: { user }, id: 'p1' })
   const recU = asUser.sections.find((s) => s.block === 'record').resolved
@@ -73,25 +75,25 @@ test('onCreate forces the owner column, overriding a forged value', async () => 
 
 // --- can* gate enforced by the data hook ---
 test('canView denies the detail GET (throws); allows when the predicate passes', async () => {
-  const denied = defineCrud('posts', { mode: 'route', canView: () => false })
-  await assert.rejects(viewData(pc({ pathname: '/posts/p1', user, views: denied })))
+  const denied = rp({ mode: 'route', canView: () => false })
+  await assert.rejects(viewData(pc({ pathname: '/posts/p1', user, resources: denied })))
 
-  const allowed = defineCrud('posts', { mode: 'route', canView: () => true })
-  const out = await viewData(pc({ pathname: '/posts/p1', user, views: allowed }))
+  const allowed = rp({ mode: 'route', canView: () => true })
+  const out = await viewData(pc({ pathname: '/posts/p1', user, resources: allowed }))
   assert.equal(out.sections.find((s) => s.block === 'record').resolved.row.title, 'Alice')
 })
 
 test('canCreate denies the create POST — no row is written', async () => {
   const before = await db.posts.count({})
-  const views = defineCrud('posts', { mode: 'route', canCreate: () => false })
-  await assert.rejects(viewData(pc({ pathname: '/posts/new', user, views, method: 'POST', body: { title: 'Blocked' } })))
+  const resources = rp({ mode: 'route', canCreate: () => false })
+  await assert.rejects(viewData(pc({ pathname: '/posts/new', user, resources, method: 'POST', body: { title: 'Blocked' } })))
   assert.equal(await db.posts.count({}), before) // nothing inserted
 })
 
 test('a .when-hidden field is not writable via a forged POST', async () => {
   // secret is admin-only; u1 forging it on edit must not persist
-  const views = defineCrud('posts', { mode: 'route', edit: [field('title'), field('secret').when((c) => c.user.role === 'admin')] })
-  await assert.rejects(viewData(pc({ pathname: '/posts/p1/edit', user, views, method: 'POST', body: { title: 'Edited', secret: 'HACK' } })))
+  const resources = rp({ mode: 'route', edit: [field('title'), field('secret').when((c) => c.user.role === 'admin')] })
+  await assert.rejects(viewData(pc({ pathname: '/posts/p1/edit', user, resources, method: 'POST', body: { title: 'Edited', secret: 'HACK' } })))
   const row = await db.posts.findOne({ id: 'p1' })
   assert.equal(row.title, 'Edited') // visible field written
   assert.equal(row.secret, 's1') // hidden field NOT written despite being in the body
@@ -104,8 +106,8 @@ function form(obj) {
 
 // A minimal Vike pageContext for the data hook. POST bodies ride on a Web Request (_reqWeb), the
 // same surface readFormRequest reads on a server adapter.
-function pc({ pathname, user, views, method = 'GET', body }) {
-  const context = { config: config(views), urlPathname: pathname, urlParsed: { search: {} }, user }
+function pc({ pathname, user, resources, method = 'GET', body }) {
+  const context = { config: config(resources), urlPathname: pathname, urlParsed: { search: {} }, user }
   if (method === 'POST') context._reqWeb = new Request('http://x' + pathname, { method: 'POST', body: new URLSearchParams(body) })
   return context
 }
