@@ -48,6 +48,17 @@ test('hydrateView fills a list block with rows + FK labels', async () => {
   assert.equal(list.resolved.fkLabels.author_id.u1, 'alice@x.com')
 })
 
+test('FK labels are gated by the target resource canIndex when a resolveResource is given (#676, #727)', async () => {
+  const view = definePage({ sections: crudBlocks({ table: 'posts' }) })
+  const fkLabels = (out) => out.sections.find((s) => s.block === 'list').resolved.fkLabels
+  // A target resource that denies listing -> the FK label map for that column is empty (no leak).
+  const denied = await hydrateView(view, { tables: tables(), db, resolveResource: (t) => (t === 'users' ? { table: 'users', canIndex: () => false } : null) })
+  assert.deepEqual(fkLabels(denied).author_id, {})
+  // A target resource that allows listing -> labels resolve (value-narrowed to referenced rows).
+  const allowed = await hydrateView(view, { tables: tables(), db, resolveResource: (t) => (t === 'users' ? { table: 'users', canIndex: () => true } : null) })
+  assert.equal(fkLabels(allowed).author_id.u1, 'alice@x.com')
+})
+
 test('list rows are projected to the visible columns (no hidden leak)', async () => {
   const view = definePage({ sections: crudBlocks({ table: 'posts' }) })
   const out = await hydrateView(view, { tables: tables(), db })

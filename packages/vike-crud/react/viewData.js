@@ -7,7 +7,7 @@
 import { render, redirect } from 'vike/abort'
 import { resolveViewTables, buildDb, hydrateView, createRow, updateRow, deleteRow, loadOwnedRow, queryScope, allow, keepVisible } from '../index.js'
 import { csrfGuard } from 'vike-csrf'
-import { resolveViewRequest, formFieldsFor, activeDialog } from './pages.js'
+import { resolveViewRequest, formFieldsFor, activeDialog, normalizeViews } from './pages.js'
 import { findSection } from '../walk.js'
 import { readFormRequest, csrfRequestOf } from '../request.js'
 
@@ -22,10 +22,15 @@ export async function viewData(pageContext) {
   const db = buildDb(tables)
   const ctx = { user: pageContext.user }
   const id = params.id ?? null // a route param (the view / edit detail routes carry `@id`)
-  const crud = view.crud ?? {} // defineCrud auth + meta; empty for a hand-written / legacy view
-  // Row scope: a legacy view's `scope` (table, ctx) => filter, else the resource's `query` builder.
-  const scope = view.scope ?? queryScope(crud.query)
+  const crud = view.crud ?? {} // resource auth + meta; empty for a hand-written / legacy view
+  // Row scope from the resource's `query(q, ctx)` builder (#727: `query` everywhere — the legacy
+  // per-view `scope(table, ctx)` form is gone). `queryScope` adapts it to the data layer's filter.
+  const scope = queryScope(crud.query)
   const base = crud.base ?? pathname // where a write redirects back to (the resource index)
+  // Resolve a table -> its resource (the `crud` meta of the first page for that table), so FK
+  // enrichment gates on the TARGET resource's canIndex/query (#676), the same as vike-admin.
+  const pages = normalizeViews(config?.resources)
+  const resolveResource = (t) => pages.find((p) => p?.crud?.table === t)?.crud ?? null
 
   const req = readFormRequest(pageContext)
   if (req.method === 'POST') {
@@ -64,7 +69,7 @@ export async function viewData(pageContext) {
   // dialog-mode index page it's the dialog the URL opened (`?view=`/`?edit=`/`?create`). The active
   // id hydrates just that section, so the others (and the list) stay blank/closed.
   const active = id != null ? { screen: crud.screen ?? null, id } : activeDialog(search)
-  const hydrated = await hydrateView(view, { tables, db, scope, ctx, search, id: active?.id ?? null, activeScreen: active?.screen })
+  const hydrated = await hydrateView(view, { tables, db, scope, ctx, search, id: active?.id ?? null, activeScreen: active?.screen, resolveResource })
 
   // A detail ROUTE (`@id`) whose keyed record/form row is missing — never existed, or not the
   // user's — is a 404, not an empty detail. (A dialog `?view=` miss just leaves the dialog empty;

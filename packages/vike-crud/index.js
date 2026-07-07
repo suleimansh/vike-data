@@ -34,7 +34,10 @@ export {
 export { projectRow } from './project.js'
 export { parseListQuery, QueryError, MAX_LIMIT } from './query.js'
 // The server-side data layer: fill a view's blocks with rows/values, and the scoped write path.
-export { hydrateView, createRow, updateRow, deleteRow, rowFromForm, loadOwnedRow } from './data.js'
+// Plus the resource-aware pieces vike-admin's hooks share (#727): FK enrichment, the agent-API write
+// helpers, `in`-aware ownership forcing, and the dialog payload loader.
+export { hydrateView, createRow, updateRow, deleteRow, rowFromForm, loadOwnedRow, primaryKeyOf } from './data.js'
+export { queryFilter, applyScopeOwnership, loadFkOptions, fkLabelsFor, rowFromObject, performInsert, loadDialogPayload } from './data.js'
 export { findSection, walkSections, mapSections } from './walk.js' // nesting-aware section lookup (#574)
 // Authorization (#581): the query read-scope builder, can* predicate gate, and field visibility.
 export { queryScope, runQuery, allow, keepVisible } from './authz.js'
