@@ -12,7 +12,7 @@ import { useData } from 'vike-react/useData'
 import { usePageContext } from 'vike-react/usePageContext'
 import { Blocks, ListView } from './index.js'
 import { CrudDialog } from './CrudDialog.jsx'
-import { activeDialog, sectionHasContent } from './pages.js'
+import { activeDialog, dialogFromSection, sectionHasContent } from './pages.js'
 
 const newLinkStyle = { display: 'inline-block', marginBottom: '0.75rem', color: 'var(--color-primary, #2563eb)', textDecoration: 'none', fontWeight: 500 }
 const actionLinkStyle = { color: 'var(--color-primary, #2563eb)', textDecoration: 'none' }
@@ -29,10 +29,23 @@ export default function ViewPage() {
   const active = activeDialog(search)
   const activeSection = active ? (dialogs.find((s) => s.props?.screen === active.screen) ?? null) : null
 
+  // Feed the one CrudDialog host (#728) the flat payload it renders, adapted from the hydrated dialog
+  // section. A dialog-mode resource is a SINGLE page: create/edit forms post back to THIS list URL with
+  // `_table`/`_id` hidden, where viewData owns the write (no /new or /:id/edit sub-route). No editHref /
+  // `submit.delete`, so the view screen stays read-only here — Edit/Delete live on the list rows.
+  const dialog = dialogFromSection(activeSection, active)
+  const table = activeSection?.props?.table
+  const submit = table
+    ? {
+        create: { to: pathname, fields: [{ name: '_table', value: table }] },
+        edit: { to: pathname, fields: [{ name: '_table', value: table }, { name: '_id', value: active?.id }] },
+      }
+    : {}
+
   return (
     <>
       {inPlace.map((s, i) => (s.block === 'list' ? <ListSection key={i} section={s} pathname={pathname} /> : <Blocks key={i} sections={[s]} />))}
-      <CrudDialog section={activeSection} closeHref={pathname} />
+      <CrudDialog dialog={dialog} table={table} fkLabels={activeSection?.resolved?.fkLabels} closeHref={pathname} submit={submit} panelMaxWidth={480} />
     </>
   )
 }

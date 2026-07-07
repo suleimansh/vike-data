@@ -6,9 +6,9 @@
 // page/sort state; navigation is plain query-string links (`?page=&sort=&dir=`), so it works
 // without client JS.
 import { useData } from 'vike-react/useData'
-import { ListView } from 'vike-crud/react'
+import { ListView, CrudDialog } from 'vike-crud/react'
 import { ConfirmView, PaginationView } from 'vike-blocks/react'
-import { AdminDialog } from './AdminDialog.jsx'
+import { dialogTitles, adminSubmit } from '../text.js'
 
 const actionLinkStyle = { color: 'var(--color-primary, #2563eb)', textDecoration: 'none', fontSize: 14 }
 
@@ -165,14 +165,17 @@ export default function ListPage() {
 
       {/* Dialog mode (#596): the overlay is portalled, so it renders regardless of position. `dialog`
           is the URL-active screen the hook hydrated (or null = closed); Edit inside a view dialog
-          switches to the edit dialog for the same row. */}
+          switches to the edit dialog for the same row. The host is vike-crud's one CrudDialog (#728);
+          admin themes it — heading text via `titles`, and the write forms POST to the /admin/:table
+          sub-routes (where the create/update/delete hooks live) via `submit`. */}
       {isDialog && (
-        <AdminDialog
+        <CrudDialog
           dialog={dialog}
           table={table}
-          label={label}
+          titles={dialogTitles(label)}
           closeHref={listUrl(table, { page, sort, dir })}
           editHref={dialog?.id != null ? editHref(dialog.id) : null}
+          submit={adminSubmit(table, dialog?.id)}
         />
       )}
     </div>

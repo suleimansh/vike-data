@@ -27,13 +27,15 @@
     "./react/ListView": "./react/ListView.jsx",
     "./react/RecordView": "./react/RecordView.jsx",
     "./react/FormView": "./react/FormView.jsx",
+    "./react/CrudDialog": "./react/CrudDialog.jsx",
     "./vue": "./vue/index.js",
     "./vue/widget-registry": "./vue/widget-registry.js",
     "./vue/widgets": "./vue/widgets.js",
     "./vue/FormFields": "./vue/FormFields.js",
     "./vue/ListView": "./vue/ListView.js",
     "./vue/RecordView": "./vue/RecordView.js",
-    "./vue/FormView": "./vue/FormView.js"
+    "./vue/FormView": "./vue/FormView.js",
+    "./vue/CrudDialog": "./vue/CrudDialog.js"
   },
   "scripts": {
     "test": "node --test"

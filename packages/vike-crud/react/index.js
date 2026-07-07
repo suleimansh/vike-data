@@ -15,6 +15,8 @@ registerBlockRenderer('form', FormView)
 
 export { ListView, RecordView, FormView }
 export { FormFields } from './FormFields.jsx'
+// The URL-driven dialog host (#728): one component, themed by vike-crud's ViewPage and vike-admin.
+export { CrudDialog } from './CrudDialog.jsx'
 // The field-widget seam: register a control for a `.as()` semantic token (shared with vike-admin).
 export { registerFieldWidget, getFieldWidget, fieldWidgetTokens } from './widget-registry.js'
 // Re-export the dispatch surface (which also registers the primitive block renderers).

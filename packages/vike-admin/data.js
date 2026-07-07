@@ -162,7 +162,7 @@ export async function listData(pageContext) {
   // Dialog mode (#596): a `mode: 'dialog'` resource hosts view/create/edit as an overlay on THIS
   // route. Hydrate the active dialog (if the URL asks for one) so it survives a refresh; `mode` tells
   // the list renderer to point its links at `?view=/?edit=/?create` instead of the sub-routes. Both
-  // renderers host the overlay (React AdminDialog.jsx, Vue AdminDialog.vue, #598). Route resources
+  // renderers host the overlay through vike-crud's one CrudDialog (#728). Route resources
   // compute nothing here. The loader is vike-crud's, shared with a per-page dialog resource (#727).
   const mode = resourceMode(resource)
   const dialog = mode === 'dialog' ? await loadDialogPayload({ resource, table, tables, schemaTable, db, ctx, search, resolveResource }) : null

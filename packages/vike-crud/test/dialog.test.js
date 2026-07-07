@@ -8,7 +8,7 @@ import { defineSchema } from '@vike-data/vike-schema/schema'
 import { setAdapter, clearAdapter } from '@universal-orm/core'
 import { createMemoryAdapter } from '@universal-orm/memory'
 import { defineResource, resourcePages, resolveViewTables, buildDb } from '../index.js'
-import { activeDialog } from '../react/pages.js'
+import { activeDialog, dialogFromSection } from '../react/pages.js'
 import { viewData } from '../react/viewData.js'
 
 const rp = (opts = {}) => resourcePages(defineResource({ table: 'posts', ...opts }))
@@ -72,4 +72,34 @@ test('no query -> every dialog section is blank (all closed)', async () => {
   assert.equal(bySection(out, 'record', 'view').resolved.row, null)
   assert.deepEqual(bySection(out, 'form', 'edit').resolved.values, {})
   assert.deepEqual(bySection(out, 'form', 'create').resolved.values, {})
+})
+
+// #728 — the one CrudDialog host renders a flat payload; ViewPage adapts the hydrated dialog SECTION
+// into it. dialogFromSection is that adapter (the same shape loadDialogPayload / vike-admin produce).
+test('dialogFromSection maps a hydrated section to the flat dialog payload', async () => {
+  const out = await viewData(pc('/posts', { view: 'p1' }))
+  const rec = bySection(out, 'record', 'view')
+  assert.deepEqual(dialogFromSection(rec, { screen: 'view', id: 'p1' }), {
+    screen: 'view',
+    id: 'p1',
+    fields: rec.resolved.fields,
+    values: rec.resolved.row, // the record's row values
+  })
+})
+
+test('dialogFromSection maps an edit section (values, not row)', async () => {
+  const out = await viewData(pc('/posts', { edit: 'p1' }))
+  const form = bySection(out, 'form', 'edit')
+  const payload = dialogFromSection(form, { screen: 'edit', id: 'p1' })
+  assert.equal(payload.screen, 'edit')
+  assert.equal(payload.id, 'p1')
+  assert.equal(payload.values.title, 'Alice')
+  assert.equal(payload.fields, form.resolved.fields)
+})
+
+test('dialogFromSection: create carries fields but no id/values; null when closed', () => {
+  const create = { resolved: { fields: [{ name: 'title' }] } }
+  assert.deepEqual(dialogFromSection(create, { screen: 'create', id: null }), { screen: 'create', id: null, fields: [{ name: 'title' }] })
+  assert.equal(dialogFromSection(null, { screen: 'view', id: 'p1' }), null) // no section
+  assert.equal(dialogFromSection(create, null), null) // nothing open
 })

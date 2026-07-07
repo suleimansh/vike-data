@@ -83,6 +83,19 @@ export function activeDialog(search = {}) {
   return null
 }
 
+// Adapt a hydrated dialog SECTION (what viewData folds + fills) into the flat dialog payload the one
+// CrudDialog host renders (#728) — the same shape `loadDialogPayload` returns, so a per-page resource
+// and vike-admin feed the host identically. `active` is `activeDialog(search)` (the open screen + id).
+// A record section carries `resolved.row`; a form carries `resolved.values`; both carry `resolved.fields`
+// (form fields already have their FK options loaded). Returns null when nothing is open.
+export function dialogFromSection(section, active) {
+  if (!section || !active) return null
+  const r = section.resolved ?? {}
+  if (active.screen === 'view') return { screen: 'view', id: active.id, fields: r.fields ?? [], values: r.row ?? null }
+  if (active.screen === 'edit') return { screen: 'edit', id: active.id, fields: r.fields ?? [], values: r.values ?? {} }
+  return { screen: 'create', id: null, fields: r.fields ?? [] }
+}
+
 // Whether an in-place (non-dialog) section has something to render — the guard that keeps an empty
 // CRUD block off the page (the empty `<dl>` this whole epic set out to kill). A `record` needs a
 // row. A `form` renders UNLESS it is an EDIT screen with no loaded row (an empty edit on an index):
