@@ -1,21 +1,30 @@
-// The admin's server hooks — Vike `data` hooks (server-env), one per page. They are the
-// only place the admin touches the request: each resolves the merged schema + the
-// contributed resources from `pageContext.config`, builds a universal-orm repository,
-// and returns a PLAIN, serializable view-model the React page renders via useData().
-// No ORM is imported; no SQL is written. The create hook also OWNS its POST: the request
-// is surfaced to the hook (as a Web Request on server adapters, the raw Node request under
-// `vite dev` — normalized by vike-crud/request), so the same route renders the form (GET) and
-// performs the insert (POST). No separate endpoint, and no middleware that can't see the
-// composed schema.
-import { randomUUID } from 'node:crypto'
+// The admin's server hooks — Vike `data` hooks (server-env), one per page. They are the only place
+// the admin touches the request: each resolves the merged schema + the contributed resources from
+// `pageContext.config`, builds a universal-orm repository, and returns a PLAIN, serializable
+// view-model the page renders via useData(). No ORM is imported; no SQL is written.
+//
+// Since #727 these are THIN WRAPPERS over vike-crud's one data layer: the FK enrichment (canIndex-
+// gated, #676), the `in`-aware ownership forcing, the agent-API write helpers (rowFromObject /
+// performInsert), and the dialog payload loader all live in `vike-crud/data`. The hooks here own
+// only the admin route wiring, the paged list view-model, and the create/edit POST orchestration
+// (which surfaces the request via vike-crud/request so the same route renders the form (GET) and
+// performs the insert (POST) — no separate endpoint that can't see the composed schema).
 import { redirect, render } from 'vike/abort'
-import { isInCondition } from '@universal-orm/core'
 import { readFormRequest, csrfRequestOf } from 'vike-crud/request'
 import { csrfGuard } from 'vike-csrf'
-// Shared, framework-agnostic helpers reused from vike-crud's data layer instead of a parallel copy:
-// the primary-key resolver and the form-row coercion (its widget-aware superset of what admin had).
-import { primaryKeyOf, rowFromForm } from 'vike-crud/data'
-import { runQuery, allow, keepVisible } from 'vike-crud/authz'
+// The shared data layer (#727): scoping, FK enrichment, the agent-API write helpers, the dialog loader.
+import {
+  primaryKeyOf,
+  rowFromForm,
+  rowFromObject,
+  performInsert,
+  applyScopeOwnership,
+  queryFilter,
+  loadFkOptions,
+  fkLabelsFor,
+  loadDialogPayload,
+} from 'vike-crud/data'
+import { allow, keepVisible } from 'vike-crud/authz'
 import { parseListQuery, QueryError } from './query.js'
 import { projectRow } from './project.js'
 import {
@@ -24,7 +33,6 @@ import {
   findResource,
   tableNamed,
   resourceLabel,
-  recordTitleColumn,
   resourceMode,
   buildDb,
   viewColumns,
@@ -36,151 +44,9 @@ import {
 // `onCreate(ctx)` and the `canX` gates all read `ctx.user`; kept server-side (never serialized).
 const ctxOf = (pageContext) => ({ user: pageContext.user })
 
-// Read the rows of a foreign-key TARGET table that the user is allowed to see, together with the
-// column its rows are labelled by. The single place the FK scope (#141, #676) is enforced. FK
-// enrichment MIRRORS the user's list access to the target: only a registered resource the user may
-// `canIndex` is read, bounded by that resource's own `query` scope — the exact gate `listData` uses
-// — so a user can never surface, through a FK dropdown or label map, a row they could not see by
-// visiting the target's own list. A target that is NOT a registered, indexable resource yields no
-// rows (raw keys render instead), so a scoped user who can edit `projects` can't enumerate every
-// `users` row (e.g. every email) via a `projects.owner_id -> users` FK.
-//
-// `values` (the FK values on the already-scope-bounded source rows) narrows a label lookup to just
-// the referenced keys: the map never serializes an unreferenced target row, and reads at most as
-// many rows as the page references (not the whole in-scope table). Omit `values` for the form
-// picker, which enumerates the in-scope target to populate its options.
-// Returns null when the referenced table isn't in the schema (no lookup possible).
-async function scopedFkRows(ref, { db, config, tables, ctx }, values) {
-  const targetTable = tableNamed(tables, ref.table)
-  if (!targetTable) return null
-  const targetResource = findResource(config, ref.table)
-  const titleCol = recordTitleColumn(targetResource, targetTable)
-  // Deny by default: only a registered resource the user may list is enumerable (#676). An
-  // unregistered target, or one gated away by `canIndex`, gets no rows here.
-  if (!targetResource || !(await allow(targetResource.canIndex, ctx))) return { rows: [], titleCol }
-  const scope = queryFilter(targetResource, ctx)
-  const rows = await db[ref.table].find(scope)
-  if (values) {
-    // Label path: keep only the scope-visible target rows actually referenced on this page, so the
-    // serialized map carries no unreferenced target row. Filtered in JS (not a merged `in`) because
-    // the scope may already constrain `ref.column` — a merge would clobber it and re-widen (#676).
-    const keys = new Set(values.filter((v) => v != null))
-    return { rows: rows.filter((r) => keys.has(r[ref.column])), titleCol }
-  }
-  return { rows, titleCol }
-}
-
-// Fill the `options` of every foreign-key field by reading the referenced table: each
-// row becomes `{ value: <ref column>, label: <recordTitle of the target> }`. The target's
-// label column comes from its resource's `recordTitle` (else a schema default), so a
-// `user_id` field shows users by email instead of by uuid. Plain + serializable. Bounded
-// by the target's list access via scopedFkRows (#141, #676) — a FK whose target is not a
-// registered, indexable resource gets no options and falls back to a raw key input.
-async function loadFkOptions(fields, deps) {
-  return Promise.all(
-    fields.map(async (f) => {
-      if (!f.fk) return f
-      const lookup = await scopedFkRows(f.fk, deps)
-      if (!lookup) return f
-      const options = lookup.rows.map((r) => ({ value: r[f.fk.column], label: String(r[lookup.titleCol] ?? r[f.fk.column]) }))
-      return { ...f, options }
-    }),
-  )
-}
-
-// For the list/view: a per-column map of FK value -> human title, so a FK cell shows the
-// referenced row's title instead of the raw key. Only the given `rows`' foreign-key columns get an
-// entry; everything else renders as-is. The lookup is bounded by the target's list access AND to
-// the FK values actually present in `rows` via scopedFkRows (#141, #676), so the title map never
-// serializes a target row the user could not see in the target's own list, nor one not referenced
-// on this page (an in-scope FK value with no matching in-scope target row simply falls back to the
-// raw key).
-async function fkLabelsFor(columns, schemaTable, deps, rows) {
-  const byName = new Map(schemaTable.columns.map((c) => [c.name, c]))
-  const labels = {}
-  for (const col of columns) {
-    const ref = byName.get(col.name)?.references
-    if (!ref) continue
-    const lookup = await scopedFkRows(ref, deps, rows.map((r) => r[col.name]))
-    if (!lookup) continue
-    labels[col.name] = Object.fromEntries(
-      lookup.rows.map((r) => [r[ref.column], String(r[lookup.titleCol] ?? r[ref.column])]),
-    )
-  }
-  return labels
-}
-
-
-// Row-level scoping (#104, #581). A resource declares `query(q, ctx) -> q` — a query-builder
-// callback that reads like a query but only expresses what the ORM can execute (equality + `in`).
-// The filter it builds is AND-merged into list/count/load/update/delete and FORCED onto inserts,
-// so a non-admin only ever sees, edits, or creates their own rows. Returning the builder unrefined
-// means "no scoping" (full access) — the admin bypass is encoded in the function, e.g.
-// `(q, ctx) => (ctx.user.role === 'admin' ? q : q.where('user_id', ctx.user.id))`. A resource with
-// no `query` is unscoped. `runQuery` (vike-crud) turns the callback into the universal-orm filter.
-function queryFilter(resource, ctx) {
-  return resource ? runQuery(resource.query, ctx) : {}
-}
-
-// Force a scope's scalar owner columns onto a row/patch, so a scoped user can neither create
-// a row owned by someone else nor reassign ownership on edit (a forged `user_id` in the form
-// is overwritten). Only scalar equalities are forced; an `in`-style scope has no single value
-// to assign, so it bounds reads/edits but not writes. Returns the same object, mutated.
-function applyScopeOwnership(obj, scope) {
-  for (const [col, val] of Object.entries(scope)) {
-    if (val !== null && typeof val !== 'object') {
-      obj[col] = val // scalar scope: force the owner column
-    } else if (isInCondition(val)) {
-      // An `in`-style scope (e.g. `organization_id: { in: user.orgIds }`) has no single
-      // value to force, but a submitted value MUST be inside the allowed set — otherwise a
-      // scoped user could CREATE a row owned by, or REASSIGN a row to, a tenant they don't
-      // belong to (the owner column is a writable form field). Reject a forged value;
-      // absence is left to the column default.
-      if (col in obj && obj[col] != null && !val.in.includes(obj[col])) {
-        throw new QueryError(`scope: "${col}" must be one of the values you have access to`)
-      }
-    }
-  }
-  return obj
-}
-
-// Build a row from a JSON body (the agent API, #115). The twin of rowFromForm for typed
-// JSON instead of string form fields: only the resource's DECLARED fields are written
-// (an unknown key is ignored, never reaching the DB), and only keys PRESENT in the body
-// (partial-update semantics — a PATCH that omits a column leaves it untouched, unlike the
-// form where every field is submitted). Values arrive already typed; we still coerce a
-// boolean leniently and an empty string to null so create matches the form's results.
-function rowFromObject(fields, input = {}) {
-  const byName = new Map(fields.map((f) => [f.name, f]))
-  const row = {}
-  for (const [key, raw] of Object.entries(input ?? {})) {
-    const f = byName.get(key)
-    if (!f) continue
-    let value = raw
-    if (f.type === 'boolean') value = value === true || value === 'true'
-    else if (value === '') value = null
-    else if (f.type === 'integer' && value != null) value = Number(value)
-    row[key] = value
-  }
-  return row
-}
-
-// The insert orchestration shared by the create form POST and the agent API: fill a
-// client-generatable (uuid/string) primary key the caller didn't supply, FORCE the scope's
-// owner columns so a scoped user can only create rows they own (#104), then insert. Returns
-// the inserted row. universal-orm rejects unknown columns, so a stray field is a clear error.
-async function performInsert(db, table, row, { schemaTable, resource, ctx }) {
-  const pk = schemaTable.columns.find((c) => c.primary)
-  if (pk && row[pk.name] == null && (pk.type === 'uuid' || pk.type === 'string')) {
-    row[pk.name] = randomUUID()
-  }
-  applyScopeOwnership(row, queryFilter(resource, ctx))
-  // Write stamp (#581): `onCreate(ctx)` columns are forced onto the insert (e.g. `user_id`), so a
-  // scoped user can't create a row owned by someone else even if `query` allowed a wider read.
-  if (typeof resource?.onCreate === 'function') Object.assign(row, resource.onCreate(ctx) ?? {})
-  await db[table].insert(row)
-  return row
-}
+// Resolve a table -> its registered resource, so the shared FK enrichment can gate on the TARGET
+// resource's list access (#676). The admin's registry is the cumulative `adminResources` config.
+const resolveResourceFor = (config) => (table) => findResource(config, table)
 
 // /admin — the dashboard: the resources this install composed, filtered to the ones the signed-in
 // user may list (`canIndex(ctx)`). Each card links to its list.
@@ -198,50 +64,6 @@ export async function dashboardData(pageContext) {
 // The default rows-per-page for the admin list. Surfaced in the returned view-model
 // (no silent cap) so the page can show an honest "Page X of Y".
 const DEFAULT_PAGE_SIZE = 20
-
-// Dialog mode (#596): on a `mode: 'dialog'` resource the LIST route hosts view / create / edit as an
-// overlay, opened by a URL param (`?view=id` / `?edit=id` / `?create`). This hydrates the ACTIVE
-// dialog's payload on the list request so it survives refresh / share, reusing the SAME resolve
-// helpers and record-level gates as the standalone /:id, /:id/edit and /new pages. Precedence is
-// view > edit > create (a stray second param can't open two). The dialog's create/edit FORMS post to
-// those existing routes, so there is no new write path here - only this read. Returns null when no
-// dialog param is set, or the target row is missing / out of scope / not permitted (a stale param
-// then just renders no dialog, exactly like guessing another owner's id on the route pages).
-async function loadDialogPayload(pageContext, { resource, table, tables, schemaTable, db, ctx, search }) {
-  const pk = primaryKeyOf(schemaTable)
-  const deps = { db, config: pageContext.config, tables, ctx }
-
-  if (search.view != null) {
-    const id = String(search.view)
-    const fields = keepVisible(viewRecord(resource, schemaTable), ctx)
-    const row = await db[table].findOne({ ...queryFilter(resource, ctx), [pk]: id })
-    if (!row || !(await allow(resource.canView, row, ctx))) return null
-    // Label FK values from the target table (bounded by its scope), then project to the visible
-    // fields (+pk) before returning - the same leak guard as viewData (#228).
-    const fkLabels = await fkLabelsFor(fields, schemaTable, deps, [row])
-    const values = projectRow(row, { columns: fields, pk })
-    for (const [col, map] of Object.entries(fkLabels)) {
-      if (values[col] != null && map[values[col]] != null) values[`${col}_label`] = map[values[col]]
-    }
-    return { screen: 'view', id, fields, values, canEdit: await allow(resource.canEdit, row, ctx), canDelete: await allow(resource.canDelete, row, ctx) }
-  }
-
-  if (search.edit != null) {
-    const id = String(search.edit)
-    const fields = keepVisible(viewFields(resource, schemaTable), ctx)
-    const row = await db[table].findOne({ ...queryFilter(resource, ctx), [pk]: id })
-    if (!row || !(await allow(resource.canEdit, row, ctx))) return null
-    return { screen: 'edit', id, fields: await loadFkOptions(fields, deps), values: projectRow(row, { columns: fields, pk }) }
-  }
-
-  if (search.create != null) {
-    if (!(await allow(resource.canCreate, ctx))) return null
-    const fields = keepVisible(viewFields(resource, schemaTable), ctx)
-    return { screen: 'create', fields: await loadFkOptions(fields, deps) }
-  }
-
-  return null
-}
 
 // /admin/:table — the list, PAGED, SORTED and optionally FILTERED. Reads either:
 //   - the discrete params the list UI uses: `?page=` (1-based), `?sort=` (a sortable
@@ -269,6 +91,7 @@ export async function listData(pageContext) {
   const columns = keepVisible(viewColumns(resource, schemaTable), ctx)
   const pk = primaryKeyOf(schemaTable)
   const db = buildDb(tables)
+  const resolveResource = resolveResourceFor(pageContext.config)
 
   const search = pageContext.urlParsed?.search ?? {}
 
@@ -321,7 +144,7 @@ export async function listData(pageContext) {
   const page = pageSize > 0 ? Math.min(Math.floor(offset / pageSize) + 1, pageCount) : 1
 
   const rows = await db[table].find(where, { limit: pageSize, offset, orderBy })
-  const fkLabels = await fkLabelsFor(columns, schemaTable, { db, config: pageContext.config, tables, ctx }, rows)
+  const fkLabels = await fkLabelsFor(columns, schemaTable, { db, tables, ctx, resolveResource }, rows)
 
   // Per-row permission (#581): `canView`/`canEdit`/`canDelete` are record-level `(record, ctx)`,
   // evaluated here on the server (predicates never serialize) and stamped onto each projected row
@@ -340,9 +163,9 @@ export async function listData(pageContext) {
   // route. Hydrate the active dialog (if the URL asks for one) so it survives a refresh; `mode` tells
   // the list renderer to point its links at `?view=/?edit=/?create` instead of the sub-routes. Both
   // renderers host the overlay (React AdminDialog.jsx, Vue AdminDialog.vue, #598). Route resources
-  // compute nothing here.
+  // compute nothing here. The loader is vike-crud's, shared with a per-page dialog resource (#727).
   const mode = resourceMode(resource)
-  const dialog = mode === 'dialog' ? await loadDialogPayload(pageContext, { resource, table, tables, schemaTable, db, ctx, search }) : null
+  const dialog = mode === 'dialog' ? await loadDialogPayload({ resource, table, tables, schemaTable, db, ctx, search, resolveResource }) : null
 
   return {
     table,
@@ -368,11 +191,9 @@ export async function listData(pageContext) {
   }
 }
 
-// /admin/:table/new — renders the create form (GET) and performs the insert (POST). The
-// POST reads the normalized form data (vike-crud/request), coerces each value by its field
-// type, fills a missing string/uuid primary key, inserts through universal-orm, and
-// redirects back to the list. universal-orm rejects unknown columns, so a stray field is
-// a clear error.
+// /admin/:table/new — renders the create form (GET) and performs the insert (POST). The POST reads
+// the normalized form data (vike-crud/request), coerces each value by its field type, fills a
+// missing string/uuid primary key, inserts through universal-orm, and redirects back to the list.
 export async function newData(pageContext) {
   const { table } = pageContext.routeParams
   const ctx = ctxOf(pageContext)
@@ -387,10 +208,11 @@ export async function newData(pageContext) {
   // forged hidden field in the body is ignored (it isn't in the coercion set).
   const fields = keepVisible(viewFields(resource, schemaTable), ctx)
   const db = buildDb(tables)
+  const resolveResource = resolveResourceFor(pageContext.config)
 
-  // Agent API (#115): a create driven by a JSON body the middleware parsed and handed over
-  // on `pageContext.adminApiWrite`. Same `canCreate` gate (above) and same insert + scope
-  // ownership-forcing as the form POST below; returns the created row instead of redirecting.
+  // Agent API (#115): a create driven by a JSON body the middleware parsed and handed over on
+  // `pageContext.adminApiWrite`. Same `canCreate` gate (above) and same insert + scope
+  // ownership-forcing (performInsert) as the form POST below; returns the created row.
   if (pageContext.adminApiWrite) {
     try {
       const row = rowFromObject(fields, pageContext.adminApiWrite.input)
@@ -415,7 +237,7 @@ export async function newData(pageContext) {
   return {
     table,
     label: resourceLabel(resource),
-    fields: await loadFkOptions(fields, { db, config: pageContext.config, tables, ctx }),
+    fields: await loadFkOptions(fields, { db, tables, ctx, resolveResource }),
   }
 }
 
@@ -438,6 +260,7 @@ export async function viewData(pageContext) {
   const fields = keepVisible(viewRecord(resource, schemaTable), ctx)
   const pk = primaryKeyOf(schemaTable)
   const db = buildDb(tables)
+  const resolveResource = resolveResourceFor(pageContext.config)
 
   const owned = { ...queryFilter(resource, ctx), [pk]: id }
   const row = await db[table].findOne(owned)
@@ -447,7 +270,7 @@ export async function viewData(pageContext) {
   // Label FK values from the target table (bounded by its scope), then project to the visible
   // fields (+pk) before returning — the same leak guard as the list (#228). The `_label` keys are
   // added AFTER projection so the read-only cell can show the referenced row's title.
-  const fkLabels = await fkLabelsFor(fields, schemaTable, { db, config: pageContext.config, tables, ctx }, [row])
+  const fkLabels = await fkLabelsFor(fields, schemaTable, { db, tables, ctx, resolveResource }, [row])
   const values = projectRow(row, { columns: fields, pk })
   for (const [col, map] of Object.entries(fkLabels)) {
     if (values[col] != null && map[values[col]] != null) values[`${col}_label`] = map[values[col]]
@@ -484,6 +307,7 @@ export async function editData(pageContext) {
   const fields = keepVisible(viewFields(resource, schemaTable), ctx)
   const pk = primaryKeyOf(schemaTable)
   const db = buildDb(tables)
+  const resolveResource = resolveResourceFor(pageContext.config)
 
   // Row scoping (#104): every op keys on the primary key AND the query scope, so a scoped user
   // can only load / edit / delete a row they own — guessing another owner's id matches nothing.
@@ -535,7 +359,7 @@ export async function editData(pageContext) {
   // Deleted, never existed, not the user's, or not editable by them -> back to the list.
   if (!values || !(await allow(resource.canEdit, values, ctx))) throw redirect(`/admin/${table}`)
 
-  const withOptions = await loadFkOptions(fields, { db, config: pageContext.config, tables, ctx })
+  const withOptions = await loadFkOptions(fields, { db, tables, ctx, resolveResource })
   // Project to the form fields (+pk) before returning, for the same reason as the list: the
   // raw row is serialized into the client payload and would otherwise leak hidden columns
   // (#228). The edit form only pre-fills `values[field.name]`.
