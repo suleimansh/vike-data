@@ -63,8 +63,13 @@ test('mode passes through and resourceMode reads it; default is route (#596)', (
 })
 
 test('an invalid mode is a clear authoring error, not a silently-ignored key (#596)', () => {
-  assert.throws(() => defineResource({ table: 'users', mode: 'dailog' }), /mode.*must be 'route' or 'dialog'/)
-  assert.throws(() => defineResource({ table: 'users', mode: 'inline' }), /mode.*must be 'route' or 'dialog'/)
+  assert.throws(() => defineResource({ table: 'users', mode: 'dailog' }), /mode.*must be one of/)
+})
+
+test('inline is a valid (engine-only) mode; admin renders it route-style (#726)', () => {
+  // The resource API accepts route/dialog/inline; admin authors with route/dialog, so a resource
+  // that opts into inline degrades to admin's route rendering rather than throwing.
+  assert.equal(resourceMode(defineResource({ table: 'users', mode: 'inline' })), 'route')
 })
 
 test('label / recordTitle / auth keys pass through untouched', () => {

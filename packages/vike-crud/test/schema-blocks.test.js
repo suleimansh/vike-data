@@ -47,11 +47,11 @@ test('crudBlocks descriptors are independent and carry no functions (serializabl
 })
 
 test('crudBlocks rejects resource-level auth keys instead of silently dropping them (#690)', () => {
-  // the block path can't enforce these — they must go on defineCrud, not crudBlocks
+  // the block path can't enforce these — they must go on defineResource, not crudBlocks
   for (const key of ['scope', 'query', 'onCreate', 'canIndex', 'canView', 'canCreate', 'canEdit', 'canDelete']) {
     assert.throws(
       () => crudBlocks({ table: 'posts', [key]: () => true }),
-      new RegExp(`\`${key}\`.*NOT enforced.*defineCrud`, 's'),
+      new RegExp(`\`${key}\`.*NOT enforced.*defineResource`, 's'),
       `crudBlocks should throw on \`${key}\``,
     )
   }

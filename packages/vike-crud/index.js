@@ -15,7 +15,7 @@ export { resolvePage as resolveView } from 'vike-blocks'
 export { crudBlocks } from './schema-blocks.js'
 export { crudActions } from './actions.js' // register owner-scoped create/update/delete actions for a table
 export { crud, column, display, field, screenBlock, SCREEN_BLOCK } from './define.js'
-export { defineCrud } from './define-crud.js'
+export { defineResource, resourcePages } from './resource.js'
 export {
   resolveViewTables,
   tableNamed,

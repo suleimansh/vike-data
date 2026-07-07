@@ -14,7 +14,7 @@ import { readFormRequest, csrfRequestOf } from '../request.js'
 export async function viewData(pageContext) {
   const config = pageContext.config
   const pathname = pageContext.urlPathname
-  const match = resolveViewRequest(config?.views, pathname)
+  const match = resolveViewRequest(config?.resources, pathname)
   if (!match) return { route: pathname, sections: [] }
   const { view, params } = match
 

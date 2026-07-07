@@ -7,9 +7,11 @@ import assert from 'node:assert/strict'
 import { defineSchema } from '@vike-data/vike-schema/schema'
 import { setAdapter, clearAdapter } from '@universal-orm/core'
 import { createMemoryAdapter } from '@universal-orm/memory'
-import { defineCrud, resolveViewTables, buildDb } from '../index.js'
+import { defineResource, resourcePages, resolveViewTables, buildDb } from '../index.js'
 import { activeDialog } from '../react/pages.js'
 import { viewData } from '../react/viewData.js'
+
+const rp = (opts = {}) => resourcePages(defineResource({ table: 'posts', ...opts }))
 
 const posts = defineSchema('posts', (t) => {
   t.uuid('id').primary()
@@ -29,7 +31,7 @@ beforeEach(async () => {
   await db.posts.insert({ id: 'p2', title: 'Bob', user_id: 'u2' })
 })
 
-const pc = (pathname, search = {}) => ({ config: { schemas: [posts], views: defineCrud('posts') }, urlPathname: pathname, urlParsed: { search }, user })
+const pc = (pathname, search = {}) => ({ config: { schemas: [posts], resources: rp({ mode: 'dialog' }) }, urlPathname: pathname, urlParsed: { search }, user })
 const bySection = (out, block, screen) => out.sections.find((s) => s.block === block && s.props.screen === screen)
 
 test('activeDialog reads the open dialog from the query (view > edit > create)', () => {
@@ -40,8 +42,8 @@ test('activeDialog reads the open dialog from the query (view > edit > create)',
   assert.equal(activeDialog({}), null)
 })
 
-test('default defineCrud is one dialog-mode index page (list + folded view/create/edit)', () => {
-  const out = defineCrud('posts')
+test("mode: 'dialog' is one index page (list + folded view/create/edit)", () => {
+  const out = rp({ mode: 'dialog' })
   assert.equal(out.length, 1)
   assert.deepEqual(out[0].sections.map((s) => [s.block, s.screen, s.present]), [
     ['list', 'index', 'route'],

@@ -231,18 +231,18 @@ export function ejectView(view, opts = {}) {
   }
 }
 
-// ---- Resource eject: a `defineCrud` back into the explicit `definePage[]` it expands to ----
+// ---- Resource eject: a resource back into the explicit `definePage[]` it expands to ----
 //
-// `defineCrud('posts', { ... })` is INTENT; it derives the index/view/create/edit pages a resource
-// needs. `ejectCrud` reverses that sugar: given the page array `defineCrud` returned, it emits the
-// same pages as PLAIN, OWNED source, each built from the primitive tier — `definePage({ route,
-// sections })` with `crud.index / crud.view / crud.create / crud.edit` for the screens. The resource
-// helper is gone; you get the real pages, editable per-page (add a route, drop the edit dialog,
-// reorder folded sections), and it round-trips: the emitted array is the same object graph, so it
-// renders identically through the same `viewPages` + ViewPage + data hook.
+// `resourcePages(defineResource({ table: 'posts', ... }))` is INTENT; it derives the index/view/
+// create/edit pages a resource needs. `ejectCrud` reverses that sugar: given the page array
+// `resourcePages` returned, it emits the same pages as PLAIN, OWNED source, each built from the
+// primitive tier — `definePage({ route, sections })` with `crud.index / crud.view / crud.create /
+// crud.edit` for the screens. The resource helper is gone; you get the real pages, editable per-page
+// (add a route, drop the edit dialog, reorder folded sections), and it round-trips: the emitted array
+// is the same object graph, so it renders identically through the same `viewPages` + ViewPage + hook.
 //
 // This differs from `ejectView` (which de-generates ONE page down to its own +data hook): a resource
-// ejects to its `views` ARRAY, since crud pages route through `viewPages(views)`, not the filesystem.
+// ejects to its `resources` ARRAY, since crud pages route through `viewPages(resources)`, not the fs.
 
 // Resource-level, server-only auth carried on each page's `crud` meta — hoisted to named consts.
 const AUTH_KEYS = ['query', 'onCreate', 'canIndex', 'canView', 'canCreate', 'canEdit', 'canDelete']
@@ -328,23 +328,23 @@ function pageExpr(page, depth, fns) {
 }
 
 function crudHeader(pkg, base) {
-  return `// Ejected from vike-crud — the defineCrud resource for ${quote(base)} is now these explicit pages,
+  return `// Ejected from vike-crud — the resource for ${quote(base)} is now these explicit pages,
 // YOURS to edit. Each page is the primitive tier: definePage({ route, sections }) with
 // crud.index / crud.view / crud.create / crud.edit for the screens, plus the present / screen / nav /
-// crud metadata the resource attached. Spread this array into your app's \`views\` (or make it your
-// +views.js); it renders through the same viewPages path, so nothing about the output changes — you
-// have just traded the resource sugar for editable pages.
+// crud metadata the resource attached. Spread this array into your app's \`resources\` (or make it
+// your +resources.js); it renders through the same viewPages path, so nothing about the output
+// changes — you have just traded the resource sugar for editable pages.
 import { definePage, crud } from '${pkg}'
 `
 }
 
-// Eject a `defineCrud(...)` result (its `definePage[]`) to plain, owned source. Returns
+// Eject a `resourcePages(...)` result (its `definePage[]`) to plain, owned source. Returns
 // `{ slug, path, base, files: [{ path, source }] }`; the caller writes the file. `pkg` overrides the
 // import specifier (useful in-repo / for tests). The resource's server-only auth fns are hoisted to
 // named consts (deduped by reference — a route-mode resource repeats them across its four pages).
 export function ejectCrud(pages, opts = {}) {
   if (!Array.isArray(pages) || pages.length === 0 || !pages.every((p) => p && typeof p === 'object' && Array.isArray(p.sections))) {
-    throw new Error('ejectCrud: expected the definePage[] that defineCrud(...) returns')
+    throw new Error('ejectCrud: expected the definePage[] that resourcePages(...) returns')
   }
   const pkg = opts.pkg ?? 'vike-crud/react/pages'
   const indexPage = pages.find((p) => p.crud?.screen === 'index') ?? pages[0]

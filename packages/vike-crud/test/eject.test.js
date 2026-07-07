@@ -10,7 +10,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { ejectView, ejectCrud, routeToSlug } from '../eject.js'
-import { definePage, crudBlocks, defineCrud, column, display, field } from '../index.js'
+import { definePage, crudBlocks, defineResource, resourcePages, column, display, field } from '../index.js'
 
 function postsView() {
   return definePage({
@@ -127,14 +127,17 @@ const query = (q, ctx) => q.where('user_id', ctx.user.id)
 const onCreate = (ctx) => ({ user_id: ctx.user.id })
 
 function postsResource(mode = 'dialog') {
-  return defineCrud('posts', {
-    mode,
-    index: [column('title').sortable(), column('status')],
-    view: mode === 'inline' ? false : [display('title'), display('body')],
-    edit: [field('title').required(), field('body')],
-    query,
-    onCreate,
-  })
+  return resourcePages(
+    defineResource({
+      table: 'posts',
+      mode,
+      index: [column('title').sortable(), column('status')],
+      view: mode === 'inline' ? false : [display('title'), display('body')],
+      edit: [field('title').required(), field('body')],
+      query,
+      onCreate,
+    }),
+  )
 }
 
 // Deep-compare two page graphs, functions matched by source (an ejected fn is a fresh object).

@@ -9,7 +9,7 @@ export default function HomePage() {
       </p>
       <ul>
         <li>
-          <a href="/posts">/posts</a> -- a <strong>generated</strong> resource from one <code>defineCrud('posts')</code>,
+          <a href="/posts">/posts</a> -- a <strong>generated</strong> resource from one <code>defineResource({'{ table: "posts" }'})</code>,
           owner-scoped reads and writes. <code>mode: 'dialog'</code>: a list, with view / create / edit opening as dialogs
           over it. There is no page component for it.
         </li>
