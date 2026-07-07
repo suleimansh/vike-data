@@ -15,5 +15,7 @@ registerBlockRenderer('form', FormView)
 
 export { ListView, RecordView, FormView }
 export { FormFields } from './FormFields.js'
+// The URL-driven dialog host (#728): one component, themed by vike-crud's ViewPage and vike-admin.
+export { CrudDialog } from './CrudDialog.js'
 export { registerFieldWidget, getFieldWidget, fieldWidgetTokens } from './widget-registry.js'
 export { Blocks, Page, registerBlockRenderer, getBlockRenderer, blockRendererTokens } from 'vike-blocks/vue'

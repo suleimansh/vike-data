@@ -7,9 +7,9 @@
 // it works without client JS.
 import { h } from 'vue'
 import { useData } from 'vike-vue/useData'
-import { ListView } from 'vike-crud/vue'
+import { ListView, CrudDialog } from 'vike-crud/vue'
 import { ConfirmView, PaginationView } from 'vike-blocks/vue'
-import AdminDialog from './AdminDialog.vue'
+import { dialogTitles, adminSubmit } from '../text.js'
 
 const data = useData()
 
@@ -117,14 +117,16 @@ const rowActions = anyActions
 
     <!-- Dialog mode (#598): the overlay is portalled, so it renders regardless of position. `dialog`
          is the URL-active screen the hook hydrated (or null = closed); Edit inside a view dialog
-         switches to the edit dialog for the same row. -->
-    <AdminDialog
+         switches to the edit dialog for the same row. The host is vike-crud's one CrudDialog (#728);
+         admin themes it - heading via `titles`, write forms POST to the /admin/:table sub-routes via `submit`. -->
+    <CrudDialog
       v-if="isDialog"
       :dialog="data.dialog"
       :table="data.table"
-      :label="data.label"
+      :titles="dialogTitles(data.label)"
       :closeHref="closeHref"
       :editHref="data.dialog?.id != null ? editHref(data.dialog.id) : null"
+      :submit="adminSubmit(data.table, data.dialog?.id)"
     />
   </div>
 </template>
