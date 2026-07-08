@@ -66,3 +66,17 @@ test('send runs through vike-queue (it is a registered job)', async () => {
   await sendMail({ to: 'q@e.d', subject: 'Queued' })
   assert.equal(got.subject, 'Queued')
 })
+
+test('the dev console line includes the text body (the magic link, #747)', async (t) => {
+  reset()
+  const lines = []
+  t.mock.method(console, 'log', (msg) => lines.push(msg))
+  await sendMail({ to: 'erin@example.com', subject: 'Your sign-in link', text: 'Sign in: http://localhost/auth/callback?token=abc' })
+  const line = lines.find((l) => typeof l === 'string' && l.includes('[vike-mail]'))
+  assert.ok(line.includes('text="Sign in: http://localhost/auth/callback?token=abc"'), `line surfaces the body: ${line}`)
+  // A message with no text stays a short envelope line.
+  lines.length = 0
+  await sendMail({ to: 'erin@example.com', subject: 'HTML only', html: '<p>x</p>' })
+  const line2 = lines.find((l) => typeof l === 'string' && l.includes('[vike-mail]'))
+  assert.ok(!line2.includes('text='), 'no text key when the message has no text body')
+})

@@ -24,12 +24,15 @@ const JOB = 'vike-mail:send'
 
 // The zero-config default transport: records each message to a dev outbox and logs a one-liner,
 // so mail works with nothing wired (the "memory adapter" of mail). JSON.stringify guards against
-// a `to`/`subject` newline forging a log line (the values are user-influenced).
+// a `to`/`subject`/`text` newline forging a log line (the values are user-influenced). The text
+// body is included because in dev it IS the delivery: it carries the magic link the sign-in UI
+// tells the user to find in the server console (#747).
 const dev = createDevTransport({
   name: 'vike-mail',
   entry: (message) => message,
   line: (message) =>
-    `[vike-mail] (dev, no transport) to=${JSON.stringify(message.to)} subject=${JSON.stringify(message.subject)}`,
+    `[vike-mail] (dev, no transport) to=${JSON.stringify(message.to)} subject=${JSON.stringify(message.subject)}` +
+    (message.text ? ` text=${JSON.stringify(message.text)}` : ''),
 })
 
 /** Messages captured by the default console/outbox transport (dev/test inspection). */
