@@ -264,6 +264,94 @@ importers:
         specifier: ^4.19.2
         version: 4.22.4
 
+  examples/noticeboard:
+    dependencies:
+      '@electric-sql/pglite':
+        specifier: ^0.5.3
+        version: 0.5.3
+      '@universal-orm/core':
+        specifier: workspace:*
+        version: link:../../packages/universal-orm
+      '@universal-orm/drizzle':
+        specifier: workspace:*
+        version: link:../../packages/universal-orm-drizzle
+      '@vike-data/vike-schema':
+        specifier: workspace:*
+        version: link:../../packages/vike-schema
+      drizzle-orm:
+        specifier: ^0.45.2
+        version: 0.45.2(@electric-sql/pglite@0.5.3)(@types/better-sqlite3@7.6.13)(better-sqlite3@12.11.1)(postgres@3.4.9)
+      react:
+        specifier: ^19.2.0
+        version: 19.2.7
+      react-dom:
+        specifier: ^19.2.0
+        version: 19.2.7(react@19.2.7)
+      vike:
+        specifier: 0.4.259-commit-f6ecfb2
+        version: 0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4))
+      vike-actions:
+        specifier: workspace:*
+        version: link:../../packages/vike-actions
+      vike-admin:
+        specifier: workspace:*
+        version: link:../../packages/vike-admin
+      vike-auth:
+        specifier: workspace:*
+        version: link:../../packages/vike-auth
+      vike-blocks:
+        specifier: workspace:*
+        version: link:../../packages/vike-blocks
+      vike-drizzle:
+        specifier: workspace:*
+        version: link:../../packages/vike-drizzle
+      vike-i18n:
+        specifier: workspace:*
+        version: link:../../packages/vike-i18n
+      vike-layouts:
+        specifier: workspace:*
+        version: link:../../packages/vike-layouts
+      vike-mail:
+        specifier: workspace:*
+        version: link:../../packages/vike-mail
+      vike-notifications:
+        specifier: workspace:*
+        version: link:../../packages/vike-notifications
+      vike-notifications-mail:
+        specifier: workspace:*
+        version: link:../../packages/vike-notifications-mail
+      vike-notifications-push:
+        specifier: workspace:*
+        version: link:../../packages/vike-notifications-push
+      vike-push:
+        specifier: workspace:*
+        version: link:../../packages/vike-push
+      vike-rbac:
+        specifier: workspace:*
+        version: link:../../packages/vike-rbac
+      vike-react:
+        specifier: ^0.6.0
+        version: 0.6.25(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(vike@0.4.259-commit-f6ecfb2(@types/express@5.0.6)(react-streaming@0.4.20(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(srvx@0.11.17)(vite@7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)))
+      vike-theme-emerald:
+        specifier: workspace:*
+        version: link:../../packages/vike-theme-emerald
+      vike-themes:
+        specifier: workspace:*
+        version: link:../../packages/vike-themes
+      vike-toolbar:
+        specifier: workspace:*
+        version: link:../../packages/vike-toolbar
+      vite:
+        specifier: ^7.1.0
+        version: 7.3.6(@types/node@26.0.0)(jiti@2.7.0)(lightningcss@1.32.0)(tsx@4.22.4)
+    devDependencies:
+      drizzle-kit:
+        specifier: ^0.31.1
+        version: 0.31.10
+      tsx:
+        specifier: ^4.19.2
+        version: 4.22.4
+
   examples/react:
     dependencies:
       '@anthropic-ai/sdk':
