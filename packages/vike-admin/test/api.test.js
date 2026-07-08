@@ -15,6 +15,10 @@ test('pageRouteFor maps only /admin*.json paths to their page route', () => {
   assert.equal(pageRouteFor('/admin/users'), null)
   assert.equal(pageRouteFor('/admin/users/new.json'), null) // nested, not a resource list
   assert.equal(pageRouteFor('/other.json'), null)
+  // Vike's client-nav pageContext URLs are never admin endpoints (#749): they must fall
+  // through, or client-side navigation to /admin gets a 404 JSON and lands on the error page.
+  assert.equal(pageRouteFor('/admin/index.pageContext.json'), null)
+  assert.equal(pageRouteFor('/admin/users/index.pageContext.json'), null)
 })
 
 test('writeTargetFor maps a method + path to its page route, action and body need', () => {
@@ -27,6 +31,9 @@ test('writeTargetFor maps a method + path to its page route, action and body nee
   assert.equal(writeTargetFor('/admin/users/u1.json', 'POST'), null) // create has no id
   assert.equal(writeTargetFor('/admin.json', 'POST'), null) // dashboard isn't writable
   assert.equal(writeTargetFor('/admin/users.json', 'GET'), null) // GET is a read, not a write
+  // Vike's pageContext URLs are not write endpoints either (#749).
+  assert.equal(writeTargetFor('/admin/index.pageContext.json', 'POST'), null)
+  assert.equal(writeTargetFor('/admin/users/index.pageContext.json', 'DELETE'), null)
 })
 
 test('projectRows narrows each row to its visible columns plus the primary key', () => {

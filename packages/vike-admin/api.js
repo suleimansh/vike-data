@@ -32,11 +32,18 @@ import { jsonResponse } from '@vike-data/kit'
 import { csrfGuard, requireJsonContent } from 'vike-csrf'
 import { projectRow } from './project.js'
 
+// Vike's client-side navigation fetches `<path>/index.pageContext.json` — that suffix is
+// Vike's, never an admin endpoint. Without this bail, `/admin/index.pageContext.json` matches
+// the list pattern below (table = "index.pageContext"), the middleware answers 404, and every
+// client-side nav to /admin lands on the error page (#749).
+const isVikePageContextPath = (pathname) => pathname.endsWith('.pageContext.json')
+
 // Map a GET `/admin*.json` path to the admin PAGE route it mirrors, or null when it isn't a
 // readable admin JSON endpoint (so the request falls through to Vike untouched).
 //   /admin.json          -> /admin           (dashboard)
 //   /admin/<table>.json  -> /admin/<table>   (list)
 export function pageRouteFor(pathname) {
+  if (isVikePageContextPath(pathname)) return null
   if (pathname === '/admin.json') return '/admin'
   const m = pathname.match(/^\/admin\/([^/]+)\.json$/)
   return m ? `/admin/${m[1]}` : null
@@ -51,6 +58,7 @@ export function pageRouteFor(pathname) {
 // (writes render the EDIT page route, which owns the update/delete hook; the bare `@id` route is
 // the read-only VIEW page.)
 export function writeTargetFor(pathname, method) {
+  if (isVikePageContextPath(pathname)) return null
   const list = pathname.match(/^\/admin\/([^/]+)\.json$/)
   if (list && method === 'POST') return { pageRoute: `/admin/${list[1]}/new`, action: 'create', hasBody: true }
 
@@ -63,7 +71,8 @@ export function writeTargetFor(pathname, method) {
 
 // Any `/admin*.json` path (read or row), used to decide whether an unhandled method is a 405
 // (the path is ours but the verb is wrong) vs a fall-through (not our path at all).
-const isAdminJsonPath = (pathname) => pageRouteFor(pathname) !== null || /^\/admin\/[^/]+\/[^/]+\.json$/.test(pathname)
+const isAdminJsonPath = (pathname) =>
+  !isVikePageContextPath(pathname) && (pageRouteFor(pathname) !== null || /^\/admin\/[^/]+\/[^/]+\.json$/.test(pathname))
 
 // The shared JSON envelope, from kit (application/json; the charset param is the default and dropped).
 const json = jsonResponse
